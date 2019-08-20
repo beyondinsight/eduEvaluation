@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.philip.edu.test.mapper.Dao">
+	<resultMap id="userResultMap" type="com.philip.edu.test.bean.User">
+		<id property="id" column="id"/>
+		<result property="name" column="username"/>
+		<result property="password" column="password"/>
+		<result property="phone"  column="cellphone"/>
+	</resultMap>
+
+    <select id="getPwByUserNm" resultType="java.lang.String">
+        SELECT password FROM user WHERE username = #{name}
+    </select>
+    
+    <insert id="insertUser" parameterType="com.philip.edu.test.bean.User"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user(name,password,phone)
+		values(#{name},#{password},#{phone})
+	</insert>
+</mapper>
