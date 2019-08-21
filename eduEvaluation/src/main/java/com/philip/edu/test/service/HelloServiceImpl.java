@@ -7,12 +7,12 @@ import com.philip.edu.test.service.HelloService;
 @org.springframework.stereotype.Service("service_test")
 public class HelloServiceImpl implements HelloService {
 	
-	@Resource
-	private Dao dao;
+	//@Resource
+	//private Dao dao;
 	
 	public String getPwByUserNm(String name) {
 		// TODO Auto-generated method stub
-		return this.dao.getPwByUserNm(name);
+		return null;//this.dao.getPwByUserNm(name);
 	}
 	
 }

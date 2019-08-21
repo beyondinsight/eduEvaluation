@@ -10,7 +10,7 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
         destroy-method="close">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=UTF-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
+        <property name="url" value="jdbc:mysql://localhost:3306/education2?useUnicode=true&amp;characterEncoding=UTF-8&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC" />
         <property name="username" value="root" />
         <property name="password" value="1982214" />
         <!---->
@@ -35,11 +35,9 @@
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg index="0" ref="sqlSessionFactory"></constructor-arg>
     </bean>
-    
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">        
-        <property name="basePackage" value="com.philip.edu.test.mapper" />
+ 	
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">  
+        <property name="basePackage" value="com.philip.edu.eval.mapper" />    
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" /> 
     </bean> 
-
- 
 </beans>

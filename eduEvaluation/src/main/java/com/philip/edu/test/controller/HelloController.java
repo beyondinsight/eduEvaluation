@@ -1,5 +1,8 @@
 package com.philip.edu.test.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +30,13 @@ public class HelloController {
 		//HelloService service = (HelloService)context.getBean("service_test");
 		String password = service.getPwByUserNm(name);
 		
-		return new ResponseEntity<HelloBean>(new HelloBean(new String().format(template, password)), HttpStatus.OK);
+		List<String> test = new ArrayList();
+		test.add("I am 1.");
+		test.add("I am 2.");
+		test.add("I am 3.");
+		HelloBean bean = new HelloBean("hello test");
+		bean.setList(test);
+		
+		return new ResponseEntity<HelloBean>(bean, HttpStatus.OK);
 	}
 }

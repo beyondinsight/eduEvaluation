@@ -8,8 +8,8 @@ import com.philip.edu.eval.bean.School;
 public interface DictService {
 	//School:
 	public School getSchoolById(int school_id);
-	public boolean createSchool(School school);
-	public boolean updateSchool(School school);
+	public int createSchool(School school);
+	public int updateSchool(School school);
 	public boolean deleteSchool(int school_id);
 	public List<School> getSchoolList();
 	

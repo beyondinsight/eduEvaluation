@@ -7,8 +7,22 @@ public class School {
 	private String school_name;
 	private String school_code;
 	private String build_year;
+	private String build_year_s;
 	private char type;
+	private String type_s;
 	private String properties;
+	public String getBuild_year_s() {
+		return build_year_s;
+	}
+	public void setBuild_year_s(String build_year_s) {
+		this.build_year_s = build_year_s;
+	}
+	public String getType_s() {
+		return type_s;
+	}
+	public void setType_s(String type_s) {
+		this.type_s = type_s;
+	}
 	private int level;
 	private Date create_time;
 	private Date update_time;

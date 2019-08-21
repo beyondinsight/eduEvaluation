@@ -5,6 +5,33 @@
 <web-app>
   <display-name>Education Evaluation System</display-name>
   
+	<filter>
+    	<filter-name>CORS</filter-name>
+    	<filter-class>com.thetransactioncompany.cors.CORSFilter</filter-class>
+
+    <init-param>
+        <param-name>cors.allowOrigin</param-name>
+        <param-value>*</param-value>
+    </init-param>
+    <init-param>
+        <param-name>cors.supportsCredentials</param-name>
+        <param-value>false</param-value>
+    </init-param>
+    <init-param>
+        <param-name>cors.supportedHeaders</param-name>
+        <param-value>accept, authorization, origin</param-value>
+    </init-param>
+    <init-param>
+        <param-name>cors.supportedMethods</param-name>
+        <param-value>GET, POST, HEAD, OPTIONS</param-value>
+    </init-param>
+	</filter>
+	
+	<filter-mapping>
+    	<filter-name>CORS</filter-name>
+    	<url-pattern>/*</url-pattern>
+	</filter-mapping>
+  
   <servlet>
       <servlet-name>dispatcher</servlet-name>
       <servlet-class>
@@ -21,4 +48,5 @@
        <servlet-name>dispatcher</servlet-name>
        <url-pattern>/</url-pattern>
    </servlet-mapping>
+   
 </web-app>
