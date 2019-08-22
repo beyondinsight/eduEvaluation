@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>教学建设项目评估系统</title>
+  <link rel="stylesheet" href="./css/layui.css">
+</head>
+<body>
+<script src="./jquery.js"></script>
+<script src="./layui.js"></script>
+<form class="layui-form" id="formDemo" action="">
+   <div class="layui-form-item">
+       <input type="hidden" name="id">
+   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">学校名称: <span style="color: red;">* </span></label>
+    <div class="layui-input-inline">
+      <input type="text" name="school_name" required  lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input" style="width:400px">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">学校代码: <span style="color: red;">* </span></label>
+    <div class="layui-input-inline">
+      <input type="text" name="school_code" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input" style="width:400px">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">建校时间:</label>
+    <div class="layui-input-inline">
+      <input type="text" name="build_year"  maxlength="4" autocomplete="off" class="layui-input" style="width:300px">
+    </div>
+	<label class="layui-form-label">年</label>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">类别: </label>
+	<div class="layui-input-inline" style="width:400px">
+      <select name="type" >
+        <option value="">--选择所属类别--</option>
+		<option value="1">公立大学</option>
+        <option value="2">私立大学</option>
+      </select>
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">属性:</label>
+    <div class="layui-input-inline">
+      <input type="text" name="properties" autocomplete="off" class="layui-input" style="width:300px">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">说  明:</label>
+    <div class="layui-input-inline" style="width:400px">
+     <textarea name="memo" placeholder="" class="layui-textarea"></textarea>
+    </div>
+  </div>
+  <div class="layui-form-item" align="right">
+	 <button type="button" class="layui-btn layui-btn-primary" id="resetBtn">重置</button>
+	 <button type="button" class="layui-btn layui-btn-checked" lay-submit="" lay-filter="formDemo">保存</button>
+  </div>
+</form>
+</body>
+<script src="./jquery.js"></script>
+<script src="./layui.js"></script>
+<script src="./util/constants.js"></script>
+<script>
+//Demo
+layui.use(['form','layer'], function(){
+  var form = layui.form, layer=layui.layer, $ = layui.jquery; 
+  var url = Class.getURL();
+  
+  form.render();
+ 
+  //监听提交
+  /*
+  form.on('submit(formDemo)', function(data){
+	
+    layer.msg(JSON.stringify(data.field));
+    return false;
+  });*/
+  form.on('submit(formDemo)', function(data){
+	console.log("data.field:" + data.field);
+	
+	    $.ajax({
+	    			type:'POST',
+	    			url:url + '/updateSchool',
+	    			data:data.field,
+	    			dataType:'json',
+	    			success:function(res){
+	    				if(res.code='0'){       
+	                            alert('成功修改学校!');
+	                    } else            
+	                            alert('修改学校失败!');   
+	                    },              
+	             	error:function (data) {
+	                   	alert('修改学校的过程中出现错误!');
+	             	}        
+	    		});
+				
+	var index = parent.layer.getFrameIndex(window.name);//获取子窗口索引
+	parent.layer.close(index);
+	
+	parent.layui.table.reload('demo',{page:{curr:1}});
+		
+	return false;
+});
+});
+
+</script>
+</html>
