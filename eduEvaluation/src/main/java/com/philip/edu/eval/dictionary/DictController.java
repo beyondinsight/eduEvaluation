@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,8 @@ import com.philip.edu.test.service.HelloService;
 @EnableWebMvc
 public class DictController {
 	
+	private static final Logger logger = Logger.getLogger(DictController.class);
+	
 	@Autowired
 	private DictService service;
 	
@@ -36,8 +39,10 @@ public class DictController {
 		//ApplicationContext context = ApplicationContextRegister.getApplicationContext();
 		//HelloService service = (HelloService)context.getBean("service_test");
 		//String password = service.getPwByUserNm(name);
+		logger.info("Entering [school] method.");
 		
 		ArrayList schoolList = (ArrayList) service.getSchoolList();
+		logger.info("successfully get the school list");
 		
 		//process the data:
 		for(int i=0; i<schoolList.size(); i++){
