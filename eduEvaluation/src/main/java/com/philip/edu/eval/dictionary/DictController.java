@@ -44,20 +44,6 @@ public class DictController {
 		ArrayList schoolList = (ArrayList) service.getSchoolList();
 		logger.info("successfully get the school list");
 		
-		//process the data:
-		for(int i=0; i<schoolList.size(); i++){
-			School school = (School) schoolList.get(i);
-			school.setBuild_year_s(school.getBuild_year() + "Äê");
-			switch(school.getType()){
-			case '1':
-				school.setType_s(EvalConstants.SCHOOL_TYPE_1);
-				break;
-			case '2':
-				school.setType_s(EvalConstants.SCHOOL_TYPE_2);
-				break;
-			}
-		}
-		
 		BackendData data = new BackendData();
 		data.setMsg("");
 		data.setCode(0); 
@@ -74,15 +60,12 @@ public class DictController {
 		School school = new School();
 		String school_name = request.getParameter("school_name");
 		String school_code = request.getParameter("school_code");
-		String build_year = request.getParameter("build_year");
+		String city = request.getParameter("city");
 		String type = request.getParameter("type");
-		String properties = request.getParameter("properties");
 		String memo = request.getParameter("memo");
 		school.setSchool_name(school_name);
 		school.setSchool_code(school_code);
-		school.setBuild_year(build_year);
-		if(type!=null&&!"".equals(type))school.setType(type.charAt(0));
-		school.setProperties(properties);
+		school.setType(type);
 		school.setMemo(memo);
 		school.setCreate_time(new Date());
 		school.setUpdate_time(new Date());
@@ -107,17 +90,15 @@ public class DictController {
 		String id = request.getParameter("id");
 		String school_name = request.getParameter("school_name");
 		String school_code = request.getParameter("school_code");
-		String build_year = request.getParameter("build_year");
+		String city = request.getParameter("city");
 		String type = request.getParameter("type");
-		String properties = request.getParameter("properties");
 		String memo = request.getParameter("memo");
 		
 		school.setId(Integer.parseInt(id));
 		school.setSchool_name(school_name);
 		school.setSchool_code(school_code);
-		school.setBuild_year(build_year);
-		if(type!=null&&!"".equals(type))school.setType(type.charAt(0));
-		school.setProperties(properties);
+		school.setCity(city);
+		school.setType(type);
 		school.setMemo(memo);
 		school.setUpdate_time(new Date());
 		
@@ -138,7 +119,6 @@ public class DictController {
 	public ResponseEntity deleteSchool(HttpServletRequest request) {
 		
 		String id = request.getParameter("id");
-		
 		
 		int result = service.deleteSchool(Integer.parseInt(id));
 		JSONObject object = new JSONObject();

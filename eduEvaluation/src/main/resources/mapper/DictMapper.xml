@@ -6,10 +6,8 @@
 		<id property="id" column="id"/>
 		<result property="school_name" column="school_name"/>
 		<result property="school_code" column="school_code"/>
-		<result property="build_year"  column="build_year"/>
+		<result property="city" column="city"/>
 		<result property="type" column="type"/>
-		<result property="properties" column="properties"/>
-		<result property="level"  column="level"/>
 		<result property="memo" column="memo"/>
 	</resultMap>
 
@@ -18,13 +16,13 @@
     </select>
     
     <insert id="createSchool" parameterType="com.philip.edu.eval.bean.School" useGeneratedKeys="true" keyProperty="id">
-    	insert into tbl_school(school_name, school_code, build_year,type, properties, memo, create_time, update_time)
-    	values(#{school_name}, #{school_code}, #{build_year}, #{type}, #{properties}, #{memo}, #{create_time}, #{update_time})
+    	insert into tbl_school(school_name, school_code, type, memo, create_time, update_time)
+    	values(#{school_name}, #{school_code}, #{type}, #{memo}, #{create_time}, #{update_time})
     </insert>
     
     <update id="updateSchool" parameterType="com.philip.edu.eval.bean.School">
-    	update tbl_school set school_name=#{school_name}, school_code=#{school_code}, build_year=#{build_year}, type=#{type}, 
-    	properties=#{properties}, memo=#{memo}, update_time=#{update_time} where id=#{id}
+    	update tbl_school set school_name=#{school_name}, school_code=#{school_code}, type=#{type}, city=#{city},
+    	memo=#{memo}, update_time=#{update_time} where id=#{id}
     </update>
     
     <delete id="deleteSchool" parameterType="int">

@@ -8,7 +8,8 @@ public class School {
 	private String school_code;
 	private String build_year;
 	private String build_year_s;
-	private char type;
+	private String city;
+	private String type;
 	private String type_s;
 	private String properties;
 	public String getBuild_year_s() {
@@ -59,10 +60,16 @@ public class School {
 	public void setProperties(String properties) {
 		this.properties = properties;
 	}
-	public char getType() {
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getType() {
 		return type;
 	}
-	public void setType(char type) {
+	public void setType(String type) {
 		this.type = type;
 	}
 	public int getLevel() {

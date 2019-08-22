@@ -130,6 +130,7 @@
   <build>
     <finalName>eduEvaluation</finalName>
   </build>
+  
   <properties>
   	<spring.version>4.2.5.RELEASE</spring.version>
   	<mybatis.version>3.4.4</mybatis.version>
