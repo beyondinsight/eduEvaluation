@@ -31,9 +31,9 @@ public class DictServiceImpl implements DictService {
 		return dao.updateSchool(school);
 	}
 
-	public boolean deleteSchool(int school_id) {
+	public int deleteSchool(int school_id) {
 		// TODO Auto-generated method stub
-		return false;
+		return dao.deleteSchool(school_id);
 	}
 
 	public List<School> getSchoolList() {
@@ -64,6 +64,10 @@ public class DictServiceImpl implements DictService {
 	public List<Major> getMajorList() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public int batchDeleteSchool(int ids[]){
+		return dao.batchDeleteSchool(ids);
 	}
 
 }

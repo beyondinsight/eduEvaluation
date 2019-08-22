@@ -26,4 +26,15 @@
     	update tbl_school set school_name=#{school_name}, school_code=#{school_code}, build_year=#{build_year}, type=#{type}, 
     	properties=#{properties}, memo=#{memo}, update_time=#{update_time} where id=#{id}
     </update>
+    
+    <delete id="deleteSchool" parameterType="int">
+    	delete from tbl_school where id=#{id}
+    </delete>
+    
+    <delete id="batchDeleteSchool" parameterType="int[]">
+    	delete from tbl_school where id in 
+    	<foreach collection="array" item="ids" index="no" open="(" separator="," close=")">
+    		#{ids}
+    	</foreach>
+    </delete>
 </mapper>

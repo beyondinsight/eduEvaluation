@@ -128,4 +128,45 @@ public class DictController {
 		
 		return new ResponseEntity(object, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value="/deleteSchool", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity deleteSchool(HttpServletRequest request) {
+		
+		String id = request.getParameter("id");
+		
+		
+		int result = service.deleteSchool(Integer.parseInt(id));
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			object.put("code", 0);
+			object.put("msg", "删除学校成功！");
+		}else{
+			object.put("code", -1);
+			object.put("msg", "删除学校失败！");
+		}
+		
+		return new ResponseEntity(object, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/deleteSchools", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity deleteSchools(HttpServletRequest request) {
+		
+		String[] sIds = request.getParameterValues("id");
+		int[] ids = new int[sIds.length];
+		for(int i=0; i<sIds.length; i++){
+			ids[i] = Integer.parseInt(sIds[i]);
+		}
+		
+		int result = service.batchDeleteSchool(ids);
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			object.put("code", 0);
+			object.put("msg", "删除学校成功！");
+		}else{
+			object.put("code", -1);
+			object.put("msg", "删除学校失败！");
+		}
+		
+		return new ResponseEntity(object, HttpStatus.OK);
+	}
 }

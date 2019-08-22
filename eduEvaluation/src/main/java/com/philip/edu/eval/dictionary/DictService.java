@@ -10,8 +10,9 @@ public interface DictService {
 	public School getSchoolById(int school_id);
 	public int createSchool(School school);
 	public int updateSchool(School school);
-	public boolean deleteSchool(int school_id);
+	public int deleteSchool(int school_id);
 	public List<School> getSchoolList();
+	public int batchDeleteSchool(int ids[]);
 	
 	//Major:
 	public Major getMajorById(int major_id);

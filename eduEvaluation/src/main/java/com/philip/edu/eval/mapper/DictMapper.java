@@ -11,4 +11,6 @@ public interface DictMapper {
 	public List<School> getSchoolList();
 	public int createSchool(School school);
 	public int updateSchool(School school);
+	public int deleteSchool(int school_id);
+	public int batchDeleteSchool(int ids[]);
 }
