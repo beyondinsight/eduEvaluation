@@ -49,7 +49,7 @@
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: 'http://127.0.0.1:8080/eduEvaluation/school' //数据接口
+	  ,url: 'school'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
@@ -69,12 +69,13 @@
 	  var data = obj.data;
 	  if(obj.event === 'del'){
 	    layer.confirm('确定删除这所学校吗？', function(index){
-	    		admin.req({
+	    		$.ajax({
 	    					type:'POST',
-	    					url: 'http://127.0.0.1:8080/eduEvaluation/deleteSchool',
+	    					url: '/deleteSchool',
 	    					data:data,
 	    					dataType:'json',
-	    					success:function(res){
+							async: false,
+	    					done:function(res){
 	    									if(res.code='0'){       
 	    					                        layer.msg('删除学校成功!');
 	    					                } else {          
@@ -91,6 +92,7 @@
 	    				});
 	      obj.del();
 	      layer.close(index);
+		  layer.msg('已成功删除!');
 		  });
 	  } else if(obj.event === 'edit'){
 	    layer.open({
@@ -155,12 +157,13 @@
 		}
       
         layer.confirm('确定删除这些学校吗？', function(index) {
-          admin.req({
+          $.ajax({
           			type:'POST',
-          			url:'http://127.0.0.1:8080/eduEvaluation/deleteSchools',
+          			url:'/deleteSchools',
           			traditional: true,
           			data:{id:id},
           			dataType:'json',
+					async: false,
           			success:function(res){
           							if(res.code='0'){       
           			                        layer.msg('删除学校成功!');
@@ -174,7 +177,7 @@
           										layer.msg('删除学校的过程中出现错误!', function(){
           											layer.msg('删除学校的过程中出现错误!');
           										});  
-          			  }          
+          			  },       
           		});
           //执行 Ajax 后重载
           /*
@@ -184,7 +187,7 @@
           });
           */
           table.reload('demo');
-          layer.msg('已删除');
+          layer.msg('已成功删除!');
         });
       },
       add: function(){

@@ -71,7 +71,7 @@
       //$.ajax({});
 	  admin.req({
 		  type: 'POST',
-		  url: 'http://127.0.0.1:8080/eduEvaluation/updateSchool',
+		  url: '../../../updateSchool',
 	      data: field,
 		  dataType:'json',
 		  success:function(res){
@@ -91,6 +91,7 @@
 	  
       parent.layui.table.reload('demo'); //重载表格
       parent.layer.close(index); //再执行关闭 
+	  layer.msg('已成功修改!');
     });
   })
   </script>

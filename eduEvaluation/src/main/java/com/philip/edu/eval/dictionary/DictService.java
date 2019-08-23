@@ -13,6 +13,7 @@ public interface DictService {
 	public int deleteSchool(int school_id);
 	public List<School> getSchoolList();
 	public int batchDeleteSchool(int ids[]);
+	public List<String> searchCity(String search);
 	
 	//Major:
 	public Major getMajorById(int major_id);

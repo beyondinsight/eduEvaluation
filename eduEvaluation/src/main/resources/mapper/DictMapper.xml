@@ -10,6 +10,10 @@
 		<result property="type" column="type"/>
 		<result property="memo" column="memo"/>
 	</resultMap>
+	
+	<resultMap id="cityResultMap" type="java.lang.String">
+		<result property="city" column="city"/>
+	</resultMap>
 
     <select id="getSchoolList" resultMap="schoolResultMap">
         SELECT * FROM tbl_school
@@ -35,4 +39,8 @@
     		#{ids}
     	</foreach>
     </delete>
+    
+    <select id="searchCity" parameterType="java.lang.String" resultMap="cityResultMap">
+    	select distinct city from tbl_school where city like "%${search}%"
+    </select>
 </mapper>

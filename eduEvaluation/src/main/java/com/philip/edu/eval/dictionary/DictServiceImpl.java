@@ -40,6 +40,14 @@ public class DictServiceImpl implements DictService {
 		// TODO Auto-generated method stub
 		return this.dao.getSchoolList();
 	}
+	
+	public int batchDeleteSchool(int ids[]){
+		return dao.batchDeleteSchool(ids);
+	}
+	
+	public List<String> searchCity(String search){
+		return dao.searchCity(search);
+	}
 
 	public Major getMajorById(int major_id) {
 		// TODO Auto-generated method stub
@@ -64,10 +72,6 @@ public class DictServiceImpl implements DictService {
 	public List<Major> getMajorList() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-	
-	public int batchDeleteSchool(int ids[]){
-		return dao.batchDeleteSchool(ids);
 	}
 
 }

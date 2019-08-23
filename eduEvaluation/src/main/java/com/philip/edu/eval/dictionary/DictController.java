@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.philip.edu.eval.bean.BackendData;
+import com.philip.edu.eval.bean.BackendData1;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.util.EvalConstants;
 import com.philip.edu.test.bean.HelloBean;
@@ -73,10 +74,10 @@ public class DictController {
 		int result = service.createSchool(school);
 		JSONObject object = new JSONObject();
 		if(result!=0){
-			object.put("code", 0);
+			object.put("code", 1);
 			object.put("msg", "添加学校成功！");
 		}else{
-			object.put("code", -1);
+			object.put("code", 99);
 			object.put("msg", "添加学校失败！");
 		}
 		
@@ -108,7 +109,7 @@ public class DictController {
 			object.put("code", 0);
 			object.put("msg", "修改学校成功！");
 		}else{
-			object.put("code", -1);
+			object.put("code", 99);
 			object.put("msg", "修改学校失败！");
 		}
 		
@@ -126,7 +127,7 @@ public class DictController {
 			object.put("code", 0);
 			object.put("msg", "删除学校成功！");
 		}else{
-			object.put("code", -1);
+			object.put("code", 99);
 			object.put("msg", "删除学校失败！");
 		}
 		
@@ -145,13 +146,28 @@ public class DictController {
 		int result = service.batchDeleteSchool(ids);
 		JSONObject object = new JSONObject();
 		if(result!=0){
-			object.put("code", 0);
+			object.put("code", 1);
 			object.put("msg", "删除学校成功！");
 		}else{
-			object.put("code", -1);
+			object.put("code", 99);
 			object.put("msg", "删除学校失败！");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/searchCity", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity searchCity(HttpServletRequest request) {
+		
+		String search = request.getParameter("keywords");
+		
+		List<String> cityList = service.searchCity(search);
+		
+		BackendData1 data = new BackendData1();
+		data.setMsg("成功获取城市信息");
+		data.setCode(0); 
+		data.setData((ArrayList)cityList);
+		
+		return new ResponseEntity<BackendData1>(data, HttpStatus.OK);
 	}
 }
