@@ -31,8 +31,8 @@
     </select>
     
     <insert id="createSchool" parameterType="com.philip.edu.eval.bean.School" useGeneratedKeys="true" keyProperty="id">
-    	insert into tbl_school(school_name, school_code, type, memo, create_time, update_time)
-    	values(#{school_name}, #{school_code}, #{type}, #{memo}, #{create_time}, #{update_time})
+    	insert into tbl_school(school_name, school_code, city, type, memo, create_time, update_time)
+    	values(#{school_name}, #{school_code}, #{city}, #{type}, #{memo}, #{create_time}, #{update_time})
     </insert>
     
     <update id="updateSchool" parameterType="com.philip.edu.eval.bean.School">

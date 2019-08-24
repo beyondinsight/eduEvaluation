@@ -69,6 +69,7 @@ public class DictController {
 		String memo = request.getParameter("memo");
 		school.setSchool_name(school_name);
 		school.setSchool_code(school_code);
+		school.setCity(city);
 		school.setType(type);
 		school.setMemo(memo);
 		school.setCreate_time(new Date());

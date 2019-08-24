@@ -36,20 +36,22 @@
   </div>
 
   <script src="../../layuiadmin/layui/layui.js"></script>  
+  <script src="../util/Constants.js"></script>
   <script>
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
-    index: 'lib/index' //主入口模块
+    index: 'lib/index' //主入口模块 
   }).use(['index', 'contlist', 'table', 'layer','admin'], function(){
     var table = layui.table
     ,form = layui.form
 	,admin = layui.admin;
+	var projectBase = Class.getURL();
     
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: '/eduEvaluation/dictionary/school'//数据接口
+	  ,url: projectBase + '/dictionary/school'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
@@ -71,7 +73,7 @@
 	    layer.confirm('确定删除这所学校吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: '/deleteSchool',
+	    					url: projectBase + '/dictionary/deleteSchool',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
@@ -159,7 +161,7 @@
         layer.confirm('确定删除这些学校吗？', function(index) {
           $.ajax({
           			type:'POST',
-          			url:'/deleteSchools',
+          			url: projectBase + '/dictionary/deleteSchools',
           			traditional: true,
           			data:{id:id},
           			dataType:'json',
@@ -186,7 +188,7 @@
             //,……
           });
           */
-          table.reload('demo');
+          table.reload('demo'); 
           layer.msg('已成功删除!');
         });
       },
@@ -194,7 +196,7 @@
         layer.open({
           type: 2
           ,title: '新建学校'
-          ,content: 'new_school.html'
+          ,content: './new_school.html'
           ,maxmin: true
           ,area: ['550px', '500px']
           ,btn: ['确认添加', '取消']

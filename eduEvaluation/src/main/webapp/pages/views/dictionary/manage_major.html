@@ -36,6 +36,7 @@
   </div>
 
   <script src="../../layuiadmin/layui/layui.js"></script>  
+  <script src="../util/Constants.js"></script>
   <script>
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
@@ -45,11 +46,12 @@
     var table = layui.table
     ,form = layui.form
 	,admin = layui.admin;
+	var projectBase = Class.getURL();
     
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: '/eduEvaluation/dictionary/major'//数据接口
+	  ,url: projectBase + '/dictionary/major'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
@@ -71,7 +73,7 @@
 	    layer.confirm('确定删除这个专业吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: '/eduEvaluation/dictionary/deleteMajor',
+	    					url: projectBase + '/dictionary/deleteMajor',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
@@ -159,7 +161,7 @@
         layer.confirm('确定删除这些专业吗？', function(index) {
           $.ajax({
           			type:'POST',
-          			url:'/eduEvaluation/dictionary/deleteMajors',
+          			url: projectBase + '/dictionary/deleteMajors',
           			traditional: true,
           			data:{id:id},
           			dataType:'json',
