@@ -49,11 +49,7 @@
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-<<<<<<< HEAD
 	  ,url: '/eduEvaluation/dictionary/school'//数据接口
-=======
-	  ,url: '../../../school'//数据接口
->>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
@@ -75,7 +71,7 @@
 	    layer.confirm('确定删除这所学校吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: '/eduEvaluation/deleteSchool',
+	    					url: '/deleteSchool',
 	    					data:data,
 	    					dataType:'json',
 							async: false,

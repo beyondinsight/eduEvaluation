@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class HelloBean {
 	private String hello;
 	private List<String> list;
-	
+	 
 	public List<String> getList() {
 		return list;
 	}

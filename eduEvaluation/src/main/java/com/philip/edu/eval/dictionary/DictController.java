@@ -27,7 +27,8 @@ import com.philip.edu.eval.util.EvalConstants;
 import com.philip.edu.test.bean.HelloBean;
 import com.philip.edu.test.service.HelloService;
 
-@Controller
+@RestController
+@EnableWebMvc
 @RequestMapping(value = "/dictionary")
 public class DictController {
 	
@@ -52,6 +53,7 @@ public class DictController {
 		data.setCode(0); 
 		data.setData(schoolList);
 		data.setCount(schoolList.size());
+		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
@@ -76,10 +78,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "学校添加成功");
+			object.put("msg", "成功添加学校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "学校添加失败");
+			object.put("msg", "添加学校失败");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -108,10 +110,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "学校修改成功");
+			object.put("msg", "成功修改学校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "学校修改失败");
+			object.put("msg", "修改学校失败");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -126,10 +128,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "学校删除成功");
+			object.put("msg", "成功删除学校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "学校删除失败");
+			object.put("msg", "删除学校失败");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -148,10 +150,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "学校删除成功");
+			object.put("msg", "成功删除学校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "学校删除失败");
+			object.put("msg", "删除学校失败");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -165,14 +167,14 @@ public class DictController {
 		List<String> cityList = service.searchCity(search);
 		
 		BackendData1 data = new BackendData1();
-		data.setMsg("");
+		data.setMsg("搜索到信息");
 		data.setCode(0); 
 		data.setData((ArrayList)cityList);
 		
 		return new ResponseEntity<BackendData1>(data, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/major", method = RequestMethod.GET, produces = "application/json")
+		@RequestMapping(value = "/major", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> major(){
 		
 		ArrayList majorList = (ArrayList) service.getMajorList();
@@ -295,6 +297,4 @@ public class DictController {
 		
 		return new ResponseEntity(object, HttpStatus.OK);
 	}
-	
-	
 }
