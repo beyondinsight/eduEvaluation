@@ -27,6 +27,7 @@ import com.philip.edu.test.service.HelloService;
 
 @RestController
 @EnableWebMvc
+@RequestMapping(value = "/dictionary")
 public class DictController {
 	
 	private static final Logger logger = Logger.getLogger(DictController.class);
@@ -75,10 +76,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "Ìí¼ÓÑ§Ğ£³É¹¦£¡");
+			object.put("msg", "æˆåŠŸæ·»åŠ å­¦æ ¡");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "Ìí¼ÓÑ§Ğ£Ê§°Ü£¡");
+			object.put("msg", "æ·»åŠ å­¦æ ¡å¤±è´¥");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -107,10 +108,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "ĞŞ¸ÄÑ§Ğ£³É¹¦£¡");
+			object.put("msg", "æˆåŠŸä¿®æ”¹å­¦æ ¡");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "ĞŞ¸ÄÑ§Ğ£Ê§°Ü£¡");
+			object.put("msg", "ä¿®æ”¹å­¦æ ¡å¤±è´¥");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -125,10 +126,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "É¾³ıÑ§Ğ£³É¹¦£¡");
+			object.put("msg", "æˆåŠŸåˆ é™¤å­¦æ ¡");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "É¾³ıÑ§Ğ£Ê§°Ü£¡");
+			object.put("msg", "åˆ é™¤å­¦æ ¡å¤±è´¥");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -147,10 +148,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "É¾³ıÑ§Ğ£³É¹¦£¡");
+			object.put("msg", "æˆåŠŸåˆ é™¤å­¦æ ¡");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "É¾³ıÑ§Ğ£Ê§°Ü£¡");
+			object.put("msg", "åˆ é™¤å­¦æ ¡å¤±è´¥");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -164,7 +165,7 @@ public class DictController {
 		List<String> cityList = service.searchCity(search);
 		
 		BackendData1 data = new BackendData1();
-		data.setMsg("³É¹¦»ñÈ¡³ÇÊĞĞÅÏ¢");
+		data.setMsg("æœç´¢åˆ°ä¿¡æ¯");
 		data.setCode(0); 
 		data.setData((ArrayList)cityList);
 		
