@@ -173,4 +173,124 @@ public class DictController {
 		
 		return new ResponseEntity<BackendData1>(data, HttpStatus.OK);
 	}
+	
+		@RequestMapping(value = "/major", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> major(){
+		
+		ArrayList majorList = (ArrayList) service.getMajorList();
+		logger.info("successfully get the major list");
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(majorList);
+		data.setCount(majorList.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/addMajor", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity addMajor(HttpServletRequest request) {
+		
+		TblMajor major = new TblMajor();
+		String majorName = request.getParameter("majorName");
+		String majorCode = request.getParameter("majorCode");
+		String majorClass = request.getParameter("majorClass");
+		String mainLecture = request.getParameter("mainLecture");
+		String memo = request.getParameter("memo");
+		major.setMajorName(majorName);
+		major.setMajorCode(majorCode);
+		major.setMajorClass("");
+		major.setMainLecture(mainLecture);
+		major.setMemo(memo);
+		major.setCreateTime(new Date());
+		major.setUpdateTime(new Date());
+		
+		int result = service.createMajor(major);
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			object.put("code", 1);
+			object.put("msg", "专业添加成功");
+		}else{
+			object.put("code", 99);
+			object.put("msg", "专业添加失败");
+		}
+		
+		return new ResponseEntity(object, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/updateMajor", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity updateMajor(HttpServletRequest request) {
+		
+		TblMajor major = new TblMajor();
+		String id = request.getParameter("id");
+		String majorName = request.getParameter("majorName");
+		String majorCode = request.getParameter("majorCode");
+		String majorClass = request.getParameter("majorClass");
+		String mainLecture = request.getParameter("mainLecture");
+		String memo = request.getParameter("memo");
+		
+		major.setId(Integer.parseInt(id));
+		major.setMajorName(majorName);
+		major.setMajorCode(majorCode);
+		major.setMajorClass("");
+		major.setMainLecture(mainLecture);
+		major.setMemo(memo);
+
+		major.setUpdateTime(new Date());
+		
+		int result = service.updateMajor(major);
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			object.put("code", 0);
+			object.put("msg", "专业修改成功");
+		}else{
+			object.put("code", 99);
+			object.put("msg", "专业修改失败");
+		}
+		
+		return new ResponseEntity(object, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/deleteMajor", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity deleteMajor(HttpServletRequest request) {
+		
+		String id = request.getParameter("id");
+		
+		int result = service.deleteMajor(Integer.parseInt(id));
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			object.put("code", 0);
+			object.put("msg", "专业删除成功");
+		}else{
+			object.put("code", 99);
+			object.put("msg", "专业删除失败");
+		}
+		
+		return new ResponseEntity(object, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/deleteMajors", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity deleteMajors(HttpServletRequest request) {
+		
+		String[] sIds = request.getParameterValues("id");
+		int[] ids = new int[sIds.length];
+		for(int i=0; i<sIds.length; i++){
+			ids[i] = Integer.parseInt(sIds[i]);
+		}
+		
+		int result = service.batchDeleteSchool(ids);
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			object.put("code", 1);
+			object.put("msg", "专业删除成功");
+		}else{
+			object.put("code", 99);
+			object.put("msg", "专业删除失败");
+		}
+		
+		return new ResponseEntity(object, HttpStatus.OK);
+	}
 }
