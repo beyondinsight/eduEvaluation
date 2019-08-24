@@ -198,11 +198,13 @@ public class DictController {
 		String majorCode = request.getParameter("majorCode");
 		String majorClass = request.getParameter("majorClass");
 		String mainLecture = request.getParameter("mainLecture");
+		String isFirstClass = request.getParameter("isFirstClass");
 		String memo = request.getParameter("memo");
 		major.setMajorName(majorName);
 		major.setMajorCode(majorCode);
-		major.setMajorClass("");
+		major.setMajorClass(majorClass);
 		major.setMainLecture(mainLecture);
+		major.setIsFirstClass(isFirstClass);
 		major.setMemo(memo);
 		major.setCreateTime(new Date());
 		major.setUpdateTime(new Date());
@@ -228,6 +230,7 @@ public class DictController {
 		String id = request.getParameter("id");
 		String majorName = request.getParameter("majorName");
 		String majorCode = request.getParameter("majorCode");
+		String isFirstClass = request.getParameter("isFirstClass");
 		String majorClass = request.getParameter("majorClass");
 		String mainLecture = request.getParameter("mainLecture");
 		String memo = request.getParameter("memo");
@@ -235,7 +238,8 @@ public class DictController {
 		major.setId(Integer.parseInt(id));
 		major.setMajorName(majorName);
 		major.setMajorCode(majorCode);
-		major.setMajorClass("");
+		major.setMajorClass(majorClass);
+		major.setIsFirstClass(isFirstClass);
 		major.setMainLecture(mainLecture);
 		major.setMemo(memo);
 
@@ -282,7 +286,7 @@ public class DictController {
 			ids[i] = Integer.parseInt(sIds[i]);
 		}
 		
-		int result = service.batchDeleteSchool(ids);
+		int result = service.batchDeleteMajor(ids);
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);

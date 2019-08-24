@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.philip.edu.eval.mapper.UsersMapper" >
+
+  <resultMap id="UsersResultMap" type="com.bi.po.TblUsers" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="chinese_name" property="chineseName" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="institution" property="institution" jdbcType="VARCHAR" />
+    <result column="majot" property="majot" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="creator" property="creator" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="last_operation" property="lastOperation" jdbcType="TIMESTAMP" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="fix_phone" property="fixPhone" jdbcType="VARCHAR" />
+    <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+ 
+  <select id="getUsersList" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select  *   from tbl_users 
+  </select>
+  
+  <delete id="deleteUsers" parameterType="java.lang.Long" >
+    delete from tbl_users
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+  <insert id="addUsers" parameterType="com.bi.po.TblUsers" >
+    insert into tbl_users (id, user_name, chinese_name, 
+      password, salt, institution, 
+      majot, status, creator, 
+      create_time, update_time, last_operation, 
+      position, QQ, fix_phone, 
+      mobile_phone, email, memo
+      )
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{chineseName,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{institution,jdbcType=VARCHAR}, 
+      #{majot,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{creator,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{lastOperation,jdbcType=TIMESTAMP}, 
+      #{position,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{fixPhone,jdbcType=VARCHAR}, 
+      #{mobilePhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}
+      )
+  </insert>
+ 
+
+  <update id="updateUsers" parameterType="com.bi.po.TblUsers" >
+    update tbl_users
+    set user_name = #{userName,jdbcType=VARCHAR},
+      chinese_name = #{chineseName,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      institution = #{institution,jdbcType=VARCHAR},
+      majot = #{majot,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      creator = #{creator,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      last_operation = #{lastOperation,jdbcType=TIMESTAMP},
+      position = #{position,jdbcType=VARCHAR},
+      QQ = #{qq,jdbcType=VARCHAR},
+      fix_phone = #{fixPhone,jdbcType=VARCHAR},
+      mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

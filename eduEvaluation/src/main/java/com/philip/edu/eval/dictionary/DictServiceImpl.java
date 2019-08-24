@@ -75,9 +75,9 @@ public class DictServiceImpl implements DictService {
 		return dao.getMajorList();
 	}
 
-	public int batchDeleteMajor(int[] id) {
+	public int batchDeleteMajor(int[] ids) {
 		// TODO Auto-generated method stub
-		return dao.batchDeleteSchool(id);
+		return dao.batchDeleteMajor(ids);
 	}
  
 
