@@ -11,6 +11,17 @@
 		<result property="memo" column="memo"/>
 	</resultMap>
 	
+	<resultMap id="majorResultMap" type="com.philip.edu.eval.bean.TblMajor" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="major_name" property="majorName" jdbcType="VARCHAR" />
+    <result column="major_code" property="majorCode" jdbcType="VARCHAR" />
+    <result column="major_class" property="majorClass" jdbcType="INTEGER" />
+    <result column="main_lecture" property="mainLecture" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+	
 	<resultMap id="cityResultMap" type="java.lang.String">
 		<result property="city" column="city"/>
 	</resultMap>
@@ -37,6 +48,49 @@
     	delete from tbl_school where id in 
     	<foreach collection="array" item="ids" index="no" open="(" separator="," close=")">
     		#{ids}
+    	</foreach>
+    </delete>
+    
+    
+   <select id="getMajorList" resultMap="majorResultMap">
+  	select * from tbl_major
+  </select>
+  
+  <select id="getMajorById" resultMap="majorResultMap">
+  	select * from tbl_major    where id = #{id,jdbcType=BIGINT}
+  </select>
+ 
+  <insert id="createMajor" parameterType="com.philip.edu.eval.bean.TblMajor" >
+    insert into tbl_major (major_name, major_code, 
+      major_class, main_lecture, memo, 
+      create_time, update_time)
+    values ( #{majorName,jdbcType=VARCHAR}, #{majorCode,jdbcType=VARCHAR}, 
+      #{majorClass,jdbcType=INTEGER}, #{mainLecture,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+ 
+
+  <update id="updateMajor" parameterType="com.philip.edu.eval.bean.TblMajor" >
+    update tbl_major
+    set major_name = #{majorName,jdbcType=VARCHAR},
+      major_code = #{majorCode,jdbcType=VARCHAR},
+      major_class = #{majorClass,jdbcType=INTEGER},
+      main_lecture = #{mainLecture,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <delete id="deleteMajor" parameterType="int">
+    	delete from tbl_major where id = #{id,jdbcType=BIGINT}    
+    </delete>
+  
+  
+   <delete id="batchDeleteMajor" parameterType="int[]">
+    	delete from tbl_major where id in 
+    	<foreach collection="array" item="id" index="no" open="(" separator="," close=")">
+    		#{id,jdbcType=BIGINT}
     	</foreach>
     </delete>
     

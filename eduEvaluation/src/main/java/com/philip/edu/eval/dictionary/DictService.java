@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.School;
+import com.philip.edu.eval.bean.TblMajor;
 
 public interface DictService {
 	//School:
@@ -15,11 +16,13 @@ public interface DictService {
 	public int batchDeleteSchool(int ids[]);
 	public List<String> searchCity(String search);
 	
+
 	//Major:
 	public Major getMajorById(int major_id);
-	public boolean createMajor(Major major);
-	public boolean updateMajor(Major major);
-	public boolean deleteMajor(Major major);
-	public List<Major> getMajorList();
+	public int createMajor(TblMajor major);
+	public int updateMajor(TblMajor major);
+	public int deleteMajor(int school_id);
+	public int batchDeleteMajor(int id[]);
+	public List<TblMajor> getMajorList();
 	
 }

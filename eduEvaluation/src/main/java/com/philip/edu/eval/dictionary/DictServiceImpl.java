@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.School;
+import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.mapper.DictMapper;
 
 @org.springframework.stereotype.Service("dict_service")
@@ -54,24 +55,30 @@ public class DictServiceImpl implements DictService {
 		return null;
 	}
 
-	public boolean createMajor(Major major) {
+	public int createMajor(TblMajor major) {
 		// TODO Auto-generated method stub
-		return false;
+		return dao.createMajor(major);
 	}
 
-	public boolean updateMajor(Major major) {
+	public int updateMajor(TblMajor major) {
 		// TODO Auto-generated method stub
-		return false;
+		return dao.updateMajor(major);
 	}
 
-	public boolean deleteMajor(Major major) {
+	public int deleteMajor(int id) {
 		// TODO Auto-generated method stub
-		return false;
+		return dao.deleteMajor(id);
 	}
 
-	public List<Major> getMajorList() {
+	public List<TblMajor> getMajorList() {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.getMajorList();
 	}
+
+	public int batchDeleteMajor(int[] id) {
+		// TODO Auto-generated method stub
+		return dao.batchDeleteSchool(id);
+	}
+ 
 
 }
