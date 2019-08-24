@@ -9,9 +9,11 @@ public class TblMajor {
 
     private String majorCode;
 
-    private Integer majorClass;
+    private String majorClass;
 
     private String mainLecture;
+
+    private String isFirstClass;
 
     private String memo;
 
@@ -43,12 +45,12 @@ public class TblMajor {
         this.majorCode = majorCode == null ? null : majorCode.trim();
     }
 
-    public Integer getMajorClass() {
+    public String getMajorClass() {
         return majorClass;
     }
 
-    public void setMajorClass(Integer majorClass) {
-        this.majorClass = majorClass;
+    public void setMajorClass(String majorClass) {
+        this.majorClass = majorClass == null ? null : majorClass.trim();
     }
 
     public String getMainLecture() {
@@ -57,6 +59,14 @@ public class TblMajor {
 
     public void setMainLecture(String mainLecture) {
         this.mainLecture = mainLecture == null ? null : mainLecture.trim();
+    }
+
+    public String getIsFirstClass() {
+        return isFirstClass;
+    }
+
+    public void setIsFirstClass(String isFirstClass) {
+        this.isFirstClass = isFirstClass == null ? null : isFirstClass.trim();
     }
 
     public String getMemo() {
@@ -82,14 +92,4 @@ public class TblMajor {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
-
-	@Override
-	public String toString() {
-		return "TblMajor [id=" + id + ", majorName=" + majorName + ", majorCode=" + majorCode + ", majorClass="
-				+ majorClass + ", mainLecture=" + mainLecture + ", memo=" + memo + ", createTime=" + createTime
-				+ ", updateTime=" + updateTime + "]";
-	}
-    
-    
-    
 }

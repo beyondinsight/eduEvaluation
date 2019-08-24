@@ -76,10 +76,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "添加学校成功！");
+			object.put("msg", "瀛︽牎娣诲姞鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "添加学校失败！");
+			object.put("msg", "瀛︽牎娣诲姞澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -108,10 +108,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "修改学校成功！");
+			object.put("msg", "瀛︽牎淇敼鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "修改学校失败！");
+			object.put("msg", "瀛︽牎淇敼澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -126,10 +126,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "删除学校成功！");
+			object.put("msg", "瀛︽牎鍒犻櫎鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "删除学校失败！");
+			object.put("msg", "瀛︽牎鍒犻櫎澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -148,10 +148,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "删除学校成功！");
+			object.put("msg", "瀛︽牎鍒犻櫎鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "删除学校失败！");
+			object.put("msg", "瀛︽牎鍒犻櫎澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -165,7 +165,7 @@ public class DictController {
 		List<String> cityList = service.searchCity(search);
 		
 		BackendData1 data = new BackendData1();
-		data.setMsg("成功获取城市信息");
+		data.setMsg("");
 		data.setCode(0); 
 		data.setData((ArrayList)cityList);
 		
@@ -198,7 +198,7 @@ public class DictController {
 		String memo = request.getParameter("memo");
 		major.setMajorName(majorName);
 		major.setMajorCode(majorCode);
-		major.setMajorClass(1);
+		major.setMajorClass("");
 		major.setMainLecture(mainLecture);
 		major.setMemo(memo);
 		major.setCreateTime(new Date());
@@ -208,10 +208,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "添加专业成功！");
+			object.put("msg", "涓撲笟娣诲姞鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "添加专业失败！");
+			object.put("msg", "涓撲笟娣诲姞澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -232,7 +232,7 @@ public class DictController {
 		major.setId(Integer.parseInt(id));
 		major.setMajorName(majorName);
 		major.setMajorCode(majorCode);
-		major.setMajorClass(1);
+		major.setMajorClass("");
 		major.setMainLecture(mainLecture);
 		major.setMemo(memo);
 
@@ -242,10 +242,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "修改专业成功！");
+			object.put("msg", "涓撲笟淇敼鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "修改专业失败！");
+			object.put("msg", "涓撲笟淇敼澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -261,10 +261,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "删除专业成功！");
+			object.put("msg", "涓撲笟鍒犻櫎鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "删除专业失败！");
+			object.put("msg", "涓撲笟鍒犻櫎澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -283,10 +283,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "删除专业成功！");
+			object.put("msg", "涓撲笟鍒犻櫎鎴愬姛");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "删除专业失败！");
+			object.put("msg", "涓撲笟鍒犻櫎澶辫触");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
