@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>学校维护</title>
+  <title>专业维护</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -49,16 +49,16 @@
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: '/eduEvaluation/dictionary/school'//数据接口
+	  ,url: '/eduEvaluation/dictionary/major'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
 		    {type: 'checkbox'}
 			,{type: 'numbers', title: '序号'}
-	    ,{field: 'school_code', title: '学校代码', width:120}
-	    ,{field: 'school_name', title: '学校名称', width:200, }
-	    ,{field: 'city', title: '城市', width:90} 
-	    ,{field: 'type', title: '学校类型', width: 150}
+	    ,{field: 'majorCode', title: '专业代码', width:120}
+	    ,{field: 'majorName', title: '专业名称', width:200, }
+	    ,{field: 'mainLecture', title: '所属一级学科', width:200} 
+	    ,{field: 'majorClass', title: '是否一流学科相关', width: 200}
 	    ,{field: 'memo', title: '备注'}
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150}
 	  ]]
@@ -68,25 +68,25 @@
 	table.on('tool(demo)', function(obj){
 	  var data = obj.data;
 	  if(obj.event === 'del'){
-	    layer.confirm('确定删除这所学校吗？', function(index){
+	    layer.confirm('确定删除这个专业吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: '/eduEvaluation/deleteSchool',
+	    					url: '/eduEvaluation/dictionary/deleteMajor',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
 	    					done:function(res){
 	    									if(res.code='0'){       
-	    					                        layer.msg('删除学校成功!');
+	    					                        layer.msg('删除专业成功!');
 	    					                } else {          
-	    					                        layer.msg('删除学校失败!', function(){
-	    															layer.msg('删除学校失败!');
+	    					                        layer.msg('删除专业失败!', function(){
+	    															layer.msg('删除专业失败!');
 	    													  });   
 	    					                }
 							},             
 	    					 error:function(data){
-	    												layer.msg('删除学校的过程中出现错误!', function(){
-	    													layer.msg('删除学校的过程中出现错误!');
+	    												layer.msg('删除专业的过程中出现错误!', function(){
+	    													layer.msg('删除专业的过程中出现错误!');
 	    												});  
 	    					  }     
 	    				});
@@ -97,7 +97,7 @@
 	  } else if(obj.event === 'edit'){
 	    layer.open({
 	        type: 2 //此处以iframe举例
-	        ,title: '修改学校'
+	        ,title: '修改专业'
 	        ,area: ['550px', '500px']
 	        ,shade: 0
 	        ,maxmin: true
@@ -111,16 +111,16 @@
 			  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
 			  submit.click();
 			}
-	        ,content: 'edit_school.html'
+	        ,content: 'edit_major.html'
 	    	,zIndex: layer.zIndex //重点1
 	        ,success: function(layero, index){
 	    	  var body = layer.getChildFrame('body',index);
 	    	  var inputList = body.find('input');
 	    	  $(inputList[0]).val(data.id);
-	    	  $(inputList[1]).val(data.school_name);//school_name
-	    	  $(inputList[2]).val(data.school_code);
-	    	  $(inputList[3]).val(data.city);
-	    	  $(inputList[4]).val(data.type);
+	    	  $(inputList[1]).val(data.majorName);//major_name
+	    	  $(inputList[2]).val(data.majorCode);
+	    	  $(inputList[3]).val(data.mainLecture);
+	    	  $(inputList[4]).val(data.majorClass);
 	    	  var areaList = body.find('textarea');
 	    	  $(areaList[0]).val(data.memo);
 	    	  
@@ -147,7 +147,7 @@
 		,id=[]; //得到选中的数据
 
         if(checkData.length === 0){
-          return layer.msg('请选择学校');
+          return layer.msg('请选择专业');
         }
 		
 		if(checkData.length > 0){
@@ -156,26 +156,26 @@
 			}
 		}
       
-        layer.confirm('确定删除这些学校吗？', function(index) {
+        layer.confirm('确定删除这些专业吗？', function(index) {
           $.ajax({
           			type:'POST',
-          			url:'/deleteSchools',
+          			url:'/eduEvaluation/dictionary/deleteMajors',
           			traditional: true,
           			data:{id:id},
           			dataType:'json',
 					async: false,
           			success:function(res){
           							if(res.code='0'){       
-          			                        layer.msg('删除学校成功!');
+          			                        layer.msg('删除专业成功!');
           			                } else {          
-          			                        layer.msg('删除学校失败!', function(){
-          													layer.msg('删除学校失败!');
+          			                        layer.msg('删除专业失败!', function(){
+          													layer.msg('删除专业失败!');
           											  });   
           			                }
           			},             
           			 error:function(data){
-          										layer.msg('删除学校的过程中出现错误!', function(){
-          											layer.msg('删除学校的过程中出现错误!');
+          										layer.msg('删除专业的过程中出现错误!', function(){
+          											layer.msg('删除专业的过程中出现错误!');
           										});  
           			  },       
           		});
@@ -193,8 +193,8 @@
       add: function(){
         layer.open({
           type: 2
-          ,title: '新建学校'
-          ,content: 'new_school.html'
+          ,title: '新建专业'
+          ,content: 'new_major.html'
           ,maxmin: true
           ,area: ['550px', '500px']
           ,btn: ['确认添加', '取消']
