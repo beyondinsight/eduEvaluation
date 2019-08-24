@@ -22,7 +22,7 @@ public interface DictService {
 	public int createMajor(TblMajor major);
 	public int updateMajor(TblMajor major);
 	public int deleteMajor(int school_id);
-	public int batchDeleteMajor(int id[]);
+	public int batchDeleteMajor(int ids[]);
 	public List<TblMajor> getMajorList();
 	
 }

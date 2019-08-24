@@ -13,13 +13,14 @@
 	
 	<resultMap id="majorResultMap" type="com.philip.edu.eval.bean.TblMajor" >
     <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="major_name" property="majorName" jdbcType="VARCHAR" />
-    <result column="major_code" property="majorCode" jdbcType="VARCHAR" />
-    <result column="major_class" property="majorClass" jdbcType="INTEGER" />
-    <result column="main_lecture" property="mainLecture" jdbcType="VARCHAR" />
-    <result column="memo" property="memo" jdbcType="VARCHAR" />
-    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+     <result column="major_name" jdbcType="VARCHAR" property="majorName" />
+    <result column="major_code" jdbcType="VARCHAR" property="majorCode" />
+    <result column="major_class" jdbcType="VARCHAR" property="majorClass" />
+    <result column="main_lecture" jdbcType="VARCHAR" property="mainLecture" />
+    <result column="is_first_class" jdbcType="VARCHAR" property="isFirstClass" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
 	
 	<resultMap id="cityResultMap" type="java.lang.String">
@@ -61,23 +62,25 @@
   </select>
  
   <insert id="createMajor" parameterType="com.philip.edu.eval.bean.TblMajor" >
-    insert into tbl_major (major_name, major_code, 
-      major_class, main_lecture, memo, 
-      create_time, update_time)
+   insert into tbl_major (major_name, major_code, 
+      major_class, main_lecture, is_first_class, 
+      memo, create_time, update_time
+      )
     values ( #{majorName,jdbcType=VARCHAR}, #{majorCode,jdbcType=VARCHAR}, 
-      #{majorClass,jdbcType=INTEGER}, #{mainLecture,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{majorClass,jdbcType=VARCHAR}, #{mainLecture,jdbcType=VARCHAR}, #{isFirstClass,jdbcType=VARCHAR}, 
+      #{memo,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
  
 
   <update id="updateMajor" parameterType="com.philip.edu.eval.bean.TblMajor" >
-    update tbl_major
+   update tbl_major
     set major_name = #{majorName,jdbcType=VARCHAR},
       major_code = #{majorCode,jdbcType=VARCHAR},
       major_class = #{majorClass,jdbcType=INTEGER},
       main_lecture = #{mainLecture,jdbcType=VARCHAR},
       memo = #{memo,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_first_class = #{record.isFirstClass,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -89,8 +92,8 @@
   
    <delete id="batchDeleteMajor" parameterType="int[]">
     	delete from tbl_major where id in 
-    	<foreach collection="array" item="id" index="no" open="(" separator="," close=")">
-    		#{id,jdbcType=BIGINT}
+    	<foreach collection="array" item="ids" index="no" open="(" separator="," close=")">
+    		#{ids,jdbcType=BIGINT}
     	</foreach>
     </delete>
     

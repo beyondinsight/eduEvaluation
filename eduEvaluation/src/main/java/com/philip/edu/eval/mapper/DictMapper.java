@@ -26,6 +26,6 @@ public interface DictMapper {
 	public int createMajor(TblMajor major);
 	public int updateMajor(TblMajor major);
 	public int deleteMajor(int id);
-	public int batchDeleteMajor(int id[]);
+	public int batchDeleteMajor(int ids[]);
 	public List<TblMajor> getMajorList();
 }
