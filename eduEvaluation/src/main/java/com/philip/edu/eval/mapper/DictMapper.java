@@ -14,11 +14,13 @@ public interface DictMapper {
 	
 	//School:
 	public List<School> getSchoolList();
+	public List<School> getSchoolById(int id);
 	public int createSchool(School school);
 	public int updateSchool(School school);
 	public int deleteSchool(int school_id);
 	public int batchDeleteSchool(int ids[]);
-	public List<String> searchCity(@Param(value="search")String search);
+	public List<String> getCity();
+	public List<String> getType();
 	
 	
 	//Major:

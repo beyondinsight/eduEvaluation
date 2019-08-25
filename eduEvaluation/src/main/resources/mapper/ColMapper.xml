@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.philip.edu.eval.mapper.ColMapper">
+	<resultMap id="colTaskSchoolResultMap" type="com.philip.edu.eval.bean.ColTaskSchool">
+		<id property="id" column="id"/>
+		<result property="school_id" column="school_id"/>
+		<result property="school_name" column="school_name"/>
+		<result property="school_code" column="school_code"/>
+	</resultMap>
+    
+</mapper>

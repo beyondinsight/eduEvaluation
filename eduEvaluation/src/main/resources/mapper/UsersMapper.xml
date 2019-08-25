@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.philip.edu.eval.mapper.UsersMapper" >
 
-  <resultMap id="UsersResultMap" type="com.bi.po.TblUsers" >
+  <resultMap id="UsersResultMap" type="com.philip.edu.eval.bean.TblUsers" >
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_name" property="userName" jdbcType="VARCHAR" />
     <result column="chinese_name" property="chineseName" jdbcType="VARCHAR" />
@@ -23,7 +23,7 @@
     <result column="memo" property="memo" jdbcType="VARCHAR" />
   </resultMap>
  
-  <select id="getUsersList" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="getUsersList" resultMap="UsersResultMap" parameterType="java.lang.Long" >
     select  *   from tbl_users 
   </select>
   
@@ -32,7 +32,7 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   
-  <insert id="addUsers" parameterType="com.bi.po.TblUsers" >
+  <insert id="addUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
     insert into tbl_users (id, user_name, chinese_name, 
       password, salt, institution, 
       majot, status, creator, 
@@ -50,7 +50,7 @@
   </insert>
  
 
-  <update id="updateUsers" parameterType="com.bi.po.TblUsers" >
+  <update id="updateUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
     update tbl_users
     set user_name = #{userName,jdbcType=VARCHAR},
       chinese_name = #{chineseName,jdbcType=VARCHAR},

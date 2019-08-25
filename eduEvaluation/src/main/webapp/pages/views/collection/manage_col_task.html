@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>学校维护</title>
+  <title>填报任务管理</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -16,8 +16,11 @@
  
       <div class="layui-card-body">
         <div style="padding-bottom: 10px;">
-		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 添加</button>
-          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel">批量删除 <i class="layui-icon layui-icon-delete"></i></button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-normal" lay-href="collection/new_col_task.html"> <i class="layui-icon layui-icon-add-1"></i> 添加</button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm"> <i class="layui-icon layui-icon-edit"></i> 编辑</button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-checked"> <i class="layui-icon layui-icon-ok-circle"></i> 启用</button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm"> <i class="layui-icon layui-icon-pause"></i> 禁用</button>
+          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 删除</button>
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="buttonTpl">

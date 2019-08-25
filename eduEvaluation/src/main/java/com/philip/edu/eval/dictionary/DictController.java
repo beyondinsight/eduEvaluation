@@ -58,9 +58,25 @@ public class DictController {
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/schoolById", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData1> schoolById(HttpServletRequest request){		
+		String sId = request.getParameter("id");
+		
+		ArrayList schoolList = (ArrayList) service.getSchoolById(Integer.parseInt(sId));
+		
+		BackendData1 data = new BackendData1();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(schoolList);
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData1>(data, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/addSchool", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity addSchool(HttpServletRequest request) {
 		
+		logger.info("entering addSchool method.");
 		School school = new School();
 		String school_name = request.getParameter("school_name");
 		String school_code = request.getParameter("school_code");
@@ -74,8 +90,11 @@ public class DictController {
 		school.setMemo(memo);
 		school.setCreate_time(new Date());
 		school.setUpdate_time(new Date());
+		logger.info("get all the information from page.");
 		
 		int result = service.createSchool(school);
+		logger.info("the create method successfully executed.");
+		
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
@@ -84,6 +103,8 @@ public class DictController {
 			object.put("code", 99);
 			object.put("msg", "添加学校失败");
 		}
+		
+		logger.info("return the message.");
 		
 		return new ResponseEntity(object, HttpStatus.OK);
 	}
@@ -160,13 +181,14 @@ public class DictController {
 		return new ResponseEntity(object, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value="/searchCity", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity searchCity(HttpServletRequest request) {
+	@RequestMapping(value="/getCity", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity getCity(HttpServletRequest request) {
 		
-		String search = request.getParameter("keywords");
+		//String search = request.getParameter("keywords");
 		
-		List<String> cityList = service.searchCity(search);
+		List<String> cityList = service.getCity();
 		
+		//logger.info("get city list");
 		BackendData1 data = new BackendData1();
 		data.setMsg("搜索到信息");
 		data.setCode(0); 
@@ -175,7 +197,22 @@ public class DictController {
 		return new ResponseEntity<BackendData1>(data, HttpStatus.OK);
 	}
 	
-		@RequestMapping(value = "/major", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping(value="/getType", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity getType(HttpServletRequest request) {
+		
+		//String search = request.getParameter("keywords");
+		
+		List<String> typeList = service.getType();
+		
+		BackendData1 data = new BackendData1();
+		data.setMsg("搜索到信息");
+		data.setCode(0); 
+		data.setData((ArrayList)typeList);
+		
+		return new ResponseEntity<BackendData1>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/major", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> major(){
 		
 		ArrayList majorList = (ArrayList) service.getMajorList();

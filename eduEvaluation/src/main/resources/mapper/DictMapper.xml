@@ -26,9 +26,17 @@
 	<resultMap id="cityResultMap" type="java.lang.String">
 		<result property="city" column="city"/>
 	</resultMap>
+	
+	<resultMap id="typeResultMap" type="java.lang.String">
+		<result property="type" column="type"/>
+	</resultMap>
 
     <select id="getSchoolList" resultMap="schoolResultMap">
         SELECT * FROM tbl_school
+    </select>
+    
+    <select id="getSchoolById" resultMap="schoolResultMap">
+    	select * FROM tbl_school where id=#{id}
     </select>
     
     <insert id="createSchool" parameterType="com.philip.edu.eval.bean.School" useGeneratedKeys="true" keyProperty="id">
@@ -80,7 +88,7 @@
       major_class = #{majorClass,jdbcType=INTEGER},
       main_lecture = #{mainLecture,jdbcType=VARCHAR},
       memo = #{memo,jdbcType=VARCHAR},
-      is_first_class = #{record.isFirstClass,jdbcType=VARCHAR},
+      is_first_class = #{isFirstClass,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -97,7 +105,11 @@
     	</foreach>
     </delete>
     
-    <select id="searchCity" parameterType="java.lang.String" resultMap="cityResultMap">
-    	select distinct city from tbl_school where city like "%${search}%"
+    <select id="getCity" resultMap="cityResultMap">
+    	select distinct city from tbl_school
+    </select>
+    
+    <select id="getType" resultMap="typeResultMap">
+    	select distinct type from tbl_school
     </select>
 </mapper>

@@ -17,9 +17,9 @@ public class DictServiceImpl implements DictService {
 	@Autowired
 	private DictMapper dao; 
 
-	public School getSchoolById(int school_id) {
+	public List<School> getSchoolById(int school_id) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.getSchoolById(school_id);
 	}
 
 	public int createSchool(School school) {
@@ -46,8 +46,12 @@ public class DictServiceImpl implements DictService {
 		return dao.batchDeleteSchool(ids);
 	}
 	
-	public List<String> searchCity(String search){
-		return dao.searchCity(search);
+	public List<String> getCity(){
+		return dao.getCity();
+	}
+	
+	public List<String> getType(){
+		return dao.getType();
 	}
 
 	public Major getMajorById(int major_id) {
