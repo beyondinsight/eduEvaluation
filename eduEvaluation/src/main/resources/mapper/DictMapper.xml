@@ -22,6 +22,18 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+  
+   <resultMap id="chosenMajorAllResultMap" type="com.philip.edu.eval.bean.ChosenMajor" >
+   	<id column="id" property="id" jdbcType="BIGINT" />
+   	<result column="school_id" property="school_id" jdbcType="BIGINT"/>
+   	<result column="major_id" property="major_id" jdbcType="BIGINT"/>
+   	<result column="major_code" property="major_code" jdbcType="VARCHAR"/>
+   	<result column="major_name" property="major_name" jdbcType="VARCHAR"/>
+   </resultMap>
+   
+   <resultMap id="chosenMajorResultMap" type="java.lang.Integer">
+   	  <result column="major_id" property="major_id" jdbcType="BIGINT"/>
+   </resultMap>
 	
 	<resultMap id="cityResultMap" type="java.lang.String">
 		<result property="city" column="city"/>
@@ -112,4 +124,28 @@
     <select id="getType" resultMap="typeResultMap">
     	select distinct type from tbl_school
     </select>
+    
+    <select id="testGetChosenMajor" parameterType="int" resultMap="chosenMajorResultMap">
+    	select sm.id, sm.school_id, sm.major_id, m.major_code, m.major_name 
+    	from tbl_school_major sm 
+    	left join tbl_major m 
+    	on sm.major_id = m.id 
+    	where sm.school_id=#{school_id};
+    </select>
+    
+    <select id="getChosenMajor" parameterType="int" resultMap="chosenMajorResultMap">
+    	select major_id from tbl_school_major where school_id=#{school_id}
+    </select>
+    
+    <delete id="deleteChosenMajor" parameterType="int">
+    	delete from tbl_school_major where school_id=#{school_id}
+    </delete>
+    
+    <insert id="saveChosenMajor">
+    	insert into tbl_school_major(school_id, major_id)
+    	values
+    	<foreach collection="majors" item="major" separator=",">
+    		(#{school_id}, #{major})
+    	</foreach>
+    </insert>
 </mapper>

@@ -28,6 +28,7 @@
           {{#  } }}
         </script>
         <script type="text/html" id="test-table-toolbar-barDemo">
+		  <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><i class="layui-icon layui-icon-set"></i>设置</a>
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
@@ -53,7 +54,7 @@
 	  ,height: 400
 	  ,url: projectBase + '/dictionary/school'//数据接口
 	  //toolbar:'#toolbarDemo'
-	  ,page: true //开启分页
+	  ,page: true //开启分页 
 	  ,cols: [[ //表头
 		    {type: 'checkbox'}
 			,{type: 'numbers', title: '序号'}
@@ -62,7 +63,7 @@
 	    ,{field: 'city', title: '城市', width:90} 
 	    ,{field: 'type', title: '学校类型', width: 150}
 	    ,{field: 'memo', title: '备注'}
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150}
+		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:200}
 	  ]]
 	});
 	
@@ -129,7 +130,35 @@
 	          layer.setTop(layero); //重点2
 	        }
 	      });
-	  }
+	  } else if(obj.event === 'set') {
+		layer.open({
+		    type: 2 //此处以iframe举例
+		    ,title: '选择专业'
+		    ,area: ['800px', '500px']
+		    ,shade: 0
+		    ,maxmin: true
+		    ,offset: [ //为了演示，随机坐标
+		      $(window).height()-520
+		      ,$(window).width()-1000
+		    ]
+			,btn: ['确认', '取消']
+			,yes: function(index, layero){
+			  //点击确认触发 iframe 内容中的按钮提交
+			  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+			  submit.click();
+			}
+		    ,content: 'choose_major.html'
+			,zIndex: layer.zIndex //重点1
+		    ,success: function(layero, index){
+			  var school_name = layero.find('iframe').contents().find("#school_name");
+			  var school_id = layero.find('iframe').contents().find("#school_id");
+			  $(school_name).val(data.school_name);
+			  $(school_id).val(data.id);
+			  
+		      layer.setTop(layero); //重点2
+		    }
+		  });   
+      }
 	});
 	
     //监听搜索

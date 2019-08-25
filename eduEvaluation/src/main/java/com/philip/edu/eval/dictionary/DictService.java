@@ -3,6 +3,7 @@ package com.philip.edu.eval.dictionary;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.philip.edu.eval.bean.ChosenMajor;
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
@@ -26,5 +27,7 @@ public interface DictService {
 	public int deleteMajor(int school_id);
 	public int batchDeleteMajor(int ids[]);
 	public List<TblMajor> getMajorList();
+	public List<Integer> getChosenMajor(int school_id);
+	public int saveChosenMajor(int school_id, int[] majors);
 	
 }

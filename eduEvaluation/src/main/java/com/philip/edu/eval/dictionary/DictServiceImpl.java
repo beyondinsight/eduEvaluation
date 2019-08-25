@@ -5,7 +5,9 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.philip.edu.eval.bean.ChosenMajor;
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
@@ -82,6 +84,19 @@ public class DictServiceImpl implements DictService {
 	public int batchDeleteMajor(int[] ids) {
 		// TODO Auto-generated method stub
 		return dao.batchDeleteMajor(ids);
+	}
+
+	public List<Integer> getChosenMajor(int school_id) {
+		// TODO Auto-generated method stub
+		return dao.getChosenMajor(school_id);
+	}
+
+	@Transactional("txManager")
+	public int saveChosenMajor(int school_id, int[] majors) {
+		// TODO Auto-generated method stub
+		dao.deleteChosenMajor(school_id);
+		int n = dao.saveChosenMajor(school_id, majors);
+		return n;
 	}
  
 

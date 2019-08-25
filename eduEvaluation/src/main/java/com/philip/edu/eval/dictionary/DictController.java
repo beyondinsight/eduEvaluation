@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.BackendData1;
+import com.philip.edu.eval.bean.BackendDataJSON;
 import com.philip.edu.eval.bean.School;
+import com.philip.edu.eval.bean.ShuttleBoxInfo;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.util.EvalConstants;
 import com.philip.edu.test.bean.HelloBean;
@@ -227,6 +230,44 @@ public class DictController {
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/choseMajor", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> choseMajor(){
+		
+		ArrayList majorList = (ArrayList) service.getMajorList();
+		logger.info("successfully get the prepare to chose major list");
+		
+		/*StringBuffer sb = new StringBuffer();
+		sb.append("[");
+		for(int i=0; i<majorList.size(); i++){
+			TblMajor major = (TblMajor)majorList.get(i);
+			//obj.put("value", major.getId());
+			//obj.put("title", major.getMajorCode() + "--" + major.getMajorName());
+			sb.append("{");
+			sb.append("\"value\":\"" + major.getId() + "\",");
+			sb.append("\"title\":\"" + major.getMajorCode() + "--" + major.getMajorName() + "\"");
+			sb.append("}");
+			if(i != majorList.size()-1)sb.append(",");
+		}
+		sb.append("]");*/
+		ArrayList choseMajor = new ArrayList();
+		for(int i=0; i<majorList.size(); i++){
+			TblMajor major = (TblMajor)majorList.get(i);
+			ShuttleBoxInfo info = new ShuttleBoxInfo();
+			info.setValue(major.getId().toString());
+			info.setTitle(major.getMajorCode() + "--" + major.getMajorName());
+			choseMajor.add(info);
+		}
+		
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(choseMajor);
+		data.setCount(choseMajor.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value="/addMajor", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity addMajor(HttpServletRequest request) {
 		
@@ -334,5 +375,49 @@ public class DictController {
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/chosenMajor", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> chosenMajor(HttpServletRequest request){
+		
+		String sSchool = request.getParameter("school_id");
+		
+		ArrayList majorList = (ArrayList) service.getChosenMajor(Integer.parseInt(sSchool));
+		
+		logger.info("successfully get chosen majors list");
+		
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(majorList);
+		data.setCount(majorList.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/saveChosenMajor", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> saveChosenMajor(HttpServletRequest request){
+		
+		String sSchool = request.getParameter("school_id");
+		String[] sMajor = request.getParameterValues("majors");
+		
+		int school_id = Integer.parseInt(sSchool);
+		int[] majors = new int[sMajor.length];
+		for(int i=0; i<majors.length; i++){
+			majors[i] = Integer.parseInt(sMajor[i]);
+		}
+		
+		int n = service.saveChosenMajor(school_id, majors);
+		logger.info("successfully save chosen majors list");
+		
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		//data.setData(majorList);
+		//data.setCount(majorList.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 }
