@@ -17,6 +17,30 @@ public class CollectionTask {
 	private int form_basic_weight;
 	private int form_performance_weight;
 	private int form_capitalprogress_weight;
+	private String forms;
+	private String school_major;
+	private String status_info;
+	
+	
+	
+	public String getStatus_info() {
+		return status_info;
+	}
+	public void setStatus_info(String status_info) {
+		this.status_info = status_info;
+	}
+	public String getSchool_major() {
+		return school_major;
+	}
+	public void setSchool_major(String school_major) {
+		this.school_major = school_major;
+	}
+	public String getForms() {
+		return forms;
+	}
+	public void setForms(String forms) {
+		this.forms = forms;
+	}
 	public int getId() {
 		return id;
 	}

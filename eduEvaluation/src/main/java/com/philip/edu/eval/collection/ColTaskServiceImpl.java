@@ -27,7 +27,7 @@ import com.philip.edu.eval.util.EvalConstants;
 
 @org.springframework.stereotype.Service("colTask_service")
 public class ColTaskServiceImpl implements ColTaskService {
-	
+
 	@Autowired
 	private ColMapper dao;
 	@Autowired
@@ -42,25 +42,26 @@ public class ColTaskServiceImpl implements ColTaskService {
 	public int createColTask(CollectionTask task, List<ColTaskSchool> schools, List<ColTaskMajor> majors) {
 		// TODO Auto-generated method stub
 		int result = 0;
-		int school_ids[]= new int[schools.size()];
-		//1.insert task:
+		int school_ids[] = new int[schools.size()];
+		// 1.insert task:
 		int n = dao.insertColTask(task);
-		
-		//2.insert task-school:
-		for(int i=0; i<schools.size(); i++){
-			ColTaskSchool school = (ColTaskSchool)schools.get(i);
-			school.setTask_id(task.getId());
-			school_ids[i] = school.getSchool_id();
-		}
-		dao.insertColSchool(schools);
-		
-		//3.insert task-major:
-			//3.1 default school majors:
+
+		if (schools != null && schools.size()!=0) {
+			// 2.insert task-school:
+			for (int i = 0; i < schools.size(); i++) {
+				ColTaskSchool school = (ColTaskSchool) schools.get(i);
+				school.setTask_id(task.getId());
+				school_ids[i] = school.getSchool_id();
+			}
+			dao.insertColSchool(schools);
+
+			// 3.insert task-major:
+			// 3.1 default school majors:
 			List<ColTaskMajor> defaultMajorTasks = new ArrayList();
-			List<ChosenMajor> defaultMajors = (ArrayList)dictDao.getChosenMajorSchools(school_ids);
-			for(int i=0; i<defaultMajors.size(); i++){
+			List<ChosenMajor> defaultMajors = (ArrayList) dictDao.getChosenMajorSchools(school_ids);
+			for (int i = 0; i < defaultMajors.size(); i++) {
 				ColTaskMajor taskMajor = new ColTaskMajor();
-				ChosenMajor major = (ChosenMajor)defaultMajors.get(i);
+				ChosenMajor major = (ChosenMajor) defaultMajors.get(i);
 				taskMajor.setMajor_id(major.getMajor_id());
 				int[] colTaskSchoolId = dao.getColTaskSchoolId(task.getId(), major.getSchool_id());
 				taskMajor.setCollection_school_id(colTaskSchoolId[0]);
@@ -68,19 +69,19 @@ public class ColTaskServiceImpl implements ColTaskService {
 				taskMajor.setCreate_time(new Date());
 				taskMajor.setUpdate_time(new Date());
 				int m = dao.insertTaskMajor(taskMajor);
-				//defaultMajorTasks.add(taskMajor);
-				
-				//4.insert form 1:
+				// defaultMajorTasks.add(taskMajor);
+
+				// 4.insert form 1:
 				BasicForm bf = new BasicForm();
 				bf.setCollection_major_id(taskMajor.getId());
 				bf.setCreate_time(new Date());
 				bf.setUpdate_time(new Date());
 				bf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 				dao.insertBasicForm(bf);
-				
-				//5.insert form 2:
-				
-				//6.insert form 3:
+
+				// 5.insert form 2:
+
+				// 6.insert form 3:
 				CapitalProgressForm cpf = new CapitalProgressForm();
 				cpf.setCollection_major_id(taskMajor.getId());
 				cpf.setCreate_time(new Date());
@@ -88,56 +89,74 @@ public class ColTaskServiceImpl implements ColTaskService {
 				cpf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 				dao.insertCapitalProgressForm(cpf);
 			}
-			//dao.insertTaskMajors(defaultMajorTasks);
-			
-		 	//3.2 update school majors:
-			HashMap choseSchool = new HashMap();
-			for(int i=0; i<majors.size(); i++){
-				ColTaskMajor inputMajor = (ColTaskMajor)majors.get(i);
-				choseSchool.put(inputMajor.getSchool_id(), null);
-				int[] colTaskNewSchoolId = dao.getColTaskSchoolId(task.getId(), inputMajor.getSchool_id());
-				inputMajor.setCollection_school_id(colTaskNewSchoolId[0]);
-				inputMajor.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
-				inputMajor.setCreate_time(new Date());
-				inputMajor.setUpdate_time(new Date());
+			// dao.insertTaskMajors(defaultMajorTasks);
+
+			// 3.2 update school majors:
+			if (majors != null && majors.size()!=0) {
+				HashMap choseSchool = new HashMap();
+				for (int i = 0; i < majors.size(); i++) {
+					ColTaskMajor inputMajor = (ColTaskMajor) majors.get(i);
+					choseSchool.put(inputMajor.getSchool_id(), null);
+					int[] colTaskNewSchoolId = dao.getColTaskSchoolId(task.getId(), inputMajor.getSchool_id());
+					inputMajor.setCollection_school_id(colTaskNewSchoolId[0]);
+					inputMajor.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					inputMajor.setCreate_time(new Date());
+					inputMajor.setUpdate_time(new Date());
+				}
+				int[] school_id2 = new int[choseSchool.size()];
+				Iterator iterator = choseSchool.entrySet().iterator();
+				int index = 0;
+				while (iterator.hasNext()) {
+					Entry entrySchool = (Entry) iterator.next();
+					int tempId = ((Integer) entrySchool.getKey()).intValue();
+					int[] tempId2 = dao.getColTaskSchoolId(task.getId(), tempId);
+					school_id2[index++] = tempId2[0];
+				}
+				dao.deleteTaskOldSchools(school_id2);
+
+				for (int i = 0; i < majors.size(); i++) {
+					ColTaskMajor inputMajor = (ColTaskMajor) majors.get(i);
+					int m = dao.insertTaskMajor(inputMajor);
+
+					// 4.insert form 1:
+					BasicForm bf = new BasicForm();
+					bf.setCollection_major_id(inputMajor.getId());
+					bf.setCreate_time(new Date());
+					bf.setUpdate_time(new Date());
+					bf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					dao.insertBasicForm(bf);
+
+					// 5.insert form 2:
+
+					// 6.insert form 3:
+					CapitalProgressForm cpf = new CapitalProgressForm();
+					cpf.setCollection_major_id(inputMajor.getId());
+					cpf.setCreate_time(new Date());
+					cpf.setUpdate_time(new Date());
+					cpf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					dao.insertCapitalProgressForm(cpf);
+				}
 			}
-			int[] school_id2 = new int[choseSchool.size()];
-			Iterator iterator = choseSchool.entrySet().iterator();
-			int index = 0;
-			while(iterator.hasNext()){
-				Entry entrySchool = (Entry)iterator.next();
-				int tempId = ((Integer)entrySchool.getKey()).intValue();
-				int[] tempId2 = dao.getColTaskSchoolId(task.getId(), tempId);
-				school_id2[index++] = tempId2[0];
-			}
-			dao.deleteTaskOldSchools(school_id2);
-			
-			for(int i=0; i<majors.size(); i++){
-				ColTaskMajor inputMajor = (ColTaskMajor)majors.get(i);
-				int m = dao.insertTaskMajor(inputMajor);
-				
-				//4.insert form 1:
-				BasicForm bf = new BasicForm();
-				bf.setCollection_major_id(inputMajor.getId());
-				bf.setCreate_time(new Date());
-				bf.setUpdate_time(new Date());
-				bf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
-				dao.insertBasicForm(bf);
-				
-				//5.insert form 2:
-				
-				//6.insert form 3:
-				CapitalProgressForm cpf = new CapitalProgressForm();
-				cpf.setCollection_major_id(inputMajor.getId());
-				cpf.setCreate_time(new Date());
-				cpf.setUpdate_time(new Date());
-				cpf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
-				dao.insertCapitalProgressForm(cpf);
-			}
-			
-			result = 1;
+		}
+
+		result = 1;
 
 		return result;
-	} 
+	}
+
+	public List<CollectionTask> getColTaskList() {
+		// TODO Auto-generated method stub
+		return dao.getColTaskList();
+	}
+
+	public int countTaskSchool(int task_id) {
+		// TODO Auto-generated method stub
+		return dao.countTaskSchool(task_id);
+	}
+
+	public int countTaskMajor(int task_id) {
+		// TODO Auto-generated method stub
+		return dao.countTaskMajor(task_id);
+	}
 
 }

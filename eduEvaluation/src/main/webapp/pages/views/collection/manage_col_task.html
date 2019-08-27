@@ -54,18 +54,17 @@
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: projectBase + '/dictionary/school'//数据接口
+	  ,url: projectBase + '/collection/colTask'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
 		    {type: 'checkbox'}
-			,{type: 'numbers', title: '序号'}
-	    ,{field: 'school_code', title: '院校代码', width:120}
-	    ,{field: 'school_name', title: '院校名称', width:200, }
-	    ,{field: 'city', title: '城市', width:90} 
-	    ,{field: 'type', title: '院校类型', width: 150}
-	    ,{field: 'memo', title: '备注'}
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150}
+	    ,{field: 'task_name', title: '专业填报任务', width:200}
+	    ,{field: 'task_year', title: '所属年度', width:100, }
+	    ,{field: 'school_major', title: '填报学校及专业', width:200} 
+	    ,{field: 'start_time', title: '开始日期', width: 120}
+	    ,{field: 'end_time', title: '结束日期', width:120}
+		,{field: 'status_info', title:'状态', width:100}
 	  ]]
 	});
 	

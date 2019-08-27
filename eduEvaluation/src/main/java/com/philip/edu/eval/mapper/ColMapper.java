@@ -27,4 +27,7 @@ public interface ColMapper {
 	public int deleteTaskOldSchools(@Param("collection_school_ids")int[] collection_school_ids);
 	public int insertBasicForm(BasicForm bf);
 	public int insertCapitalProgressForm(CapitalProgressForm cpf);
+	public List<CollectionTask> getColTaskList();
+	public int countTaskSchool(int task_id);
+	public int countTaskMajor(int task_id);
 }

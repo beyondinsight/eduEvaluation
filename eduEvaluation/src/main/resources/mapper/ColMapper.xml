@@ -9,6 +9,15 @@
 		<result property="school_code" column="school_code"/>
 	</resultMap>
 	
+	<resultMap id="colTaskListResultMap" type="com.philip.edu.eval.bean.CollectionTask">
+		<id property="id" column="id"/>
+		<result property="task_name" column="task_name"/>
+		<result property="task_year" column="task_year"/>
+		<result property="status" column="status"/>
+		<result property="start_time" column="start_time"/>
+		<result property="end_time" column="end_time"/>
+	</resultMap> 
+	
 	<resultMap id="colTaskSchoolId" type="int">
 		<id property="id" column="id"/>
 	</resultMap>
@@ -17,8 +26,8 @@
     	<selectKey resultType="int" keyProperty="id" order="AFTER">
     		select LAST_INSERT_ID() As id
   		</selectKey>
-    	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system) 
-    	values(#{task_name},#{task_year},#{start_time},#{end_time},#{status},#{use_metrics_system})
+    	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system, form_basic_weight, form_performance_weight, form_capitalprogress_weight) 
+    	values(#{task_name}, #{task_year}, #{start_time}, #{end_time}, #{status}, #{use_metrics_system}, #{form_basic_weight}, #{form_performance_weight}, #{form_capitalprogress_weight})
     </insert>
     
     <insert id="insertColSchool" parameterType="java.util.List">
@@ -74,4 +83,17 @@
     	insert into tbl_form_capitalprogress(collection_major_id, create_time, update_time, process_status)
     	values(#{collection_major_id}, #{create_time}, #{update_time}, #{process_status})
     </insert>
+    
+    <select id="getColTaskList" resultMap="colTaskListResultMap">
+    	select id, task_name, task_year, start_time, end_time, status from tbl_collection_tasks
+    </select>
+    
+    <select id="countTaskSchool" resultType="int" parameterType="int">
+    	select count(*) from tbl_collection_school where collection_task_id=#{task_id}
+    </select>
+    
+    <select id="countTaskMajor" resultType="int" parameterType="int">
+    	select count(*) from tbl_collection_major 
+    	where collection_school_id in (select id from tbl_collection_school where collection_task_id=#{task_id})
+    </select>
 </mapper>

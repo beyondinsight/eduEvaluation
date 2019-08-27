@@ -13,4 +13,7 @@ public interface ColTaskService {
 	//Task:
 	public List<ColTaskSchool> getTaskSchoolList(int task_id);
 	public int createColTask(CollectionTask task, List<ColTaskSchool> schools, List<ColTaskMajor> majors);
+	public List<CollectionTask> getColTaskList();
+	public int countTaskSchool(int task_id);
+	public int countTaskMajor(int task_id);
 }

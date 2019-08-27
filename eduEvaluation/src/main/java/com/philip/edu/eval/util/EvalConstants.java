@@ -10,4 +10,11 @@ public class EvalConstants {
 	public static final char PROCESS_STATUS_GORVERNMENT_APPROVE = 'A';
 	
 	public static final int DEFAULT_METRICS_SYSTEM_ID = 1;
+	
+	public static final char COLLECTION_STATUS_INACTIVE = 'I';
+	public static final char COLLECTION_STATUS_ACTIVE = 'A';
+	public static final char COLLECTION_STATUS_STOP = 'S';
+	public static final String COLLECTION_STATUS_INACTIVE_DISPLAY = "未启用";
+	public static final String COLLECTION_STATUS_ACTIVE_DISPLAY = "启用";
+	public static final String COLLECTION_STATUS_STOP_DISPLAY = "禁用";
 }
