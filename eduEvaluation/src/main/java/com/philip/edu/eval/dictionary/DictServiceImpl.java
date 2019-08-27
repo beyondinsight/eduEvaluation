@@ -98,6 +98,11 @@ public class DictServiceImpl implements DictService {
 		int n = dao.saveChosenMajor(school_id, majors);
 		return n;
 	}
+
+	public List<ChosenMajor> getChosenMajorInfo(int school_id) {
+		// TODO Auto-generated method stub
+		return dao.getChosenMajorInfo(school_id);
+	}
  
 
 }

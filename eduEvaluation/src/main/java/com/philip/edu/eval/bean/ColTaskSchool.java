@@ -5,7 +5,15 @@ public class ColTaskSchool {
 	private int task_id;
 	private int school_id;
 	private String school_code;
-	private String school_name;
+	private String school_name; 
+	private char process_status;
+	
+	public char getProcess_status() {
+		return process_status;
+	}
+	public void setProcess_status(char process_status) {
+		this.process_status = process_status;
+	}
 	public int getId() {
 		return id;
 	}

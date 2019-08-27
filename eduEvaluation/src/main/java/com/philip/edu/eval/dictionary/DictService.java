@@ -28,6 +28,7 @@ public interface DictService {
 	public int batchDeleteMajor(int ids[]);
 	public List<TblMajor> getMajorList();
 	public List<Integer> getChosenMajor(int school_id);
+	public List<ChosenMajor> getChosenMajorInfo(int school_id);
 	public int saveChosenMajor(int school_id, int[] majors);
 	
 }

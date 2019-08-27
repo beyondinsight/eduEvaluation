@@ -22,17 +22,17 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
-  
-   <resultMap id="chosenMajorAllResultMap" type="com.philip.edu.eval.bean.ChosenMajor" >
-   	<id column="id" property="id" jdbcType="BIGINT" />
-   	<result column="school_id" property="school_id" jdbcType="BIGINT"/>
-   	<result column="major_id" property="major_id" jdbcType="BIGINT"/>
-   	<result column="major_code" property="major_code" jdbcType="VARCHAR"/>
-   	<result column="major_name" property="major_name" jdbcType="VARCHAR"/>
-   </resultMap>
    
    <resultMap id="chosenMajorResultMap" type="java.lang.Integer">
    	  <result column="major_id" property="major_id" jdbcType="BIGINT"/>
+   </resultMap>
+   
+   <resultMap id="chosenMajorInfoResultMap" type="com.philip.edu.eval.bean.ChosenMajor">
+      <id column="id" property="id" jdbcType="BIGINT" />
+   	  <result column="major_id" property="major_id" jdbcType="BIGINT"/>
+   	  <result column="school_id" property="school_id" jdbcType="BIGINT"/>
+   	  <result column="major_name" property="major_name" jdbcType="VARCHAR"/>
+   	  <result column="major_code" property="major_code" jdbcType="VARCHAR"/>
    </resultMap>
 	
 	<resultMap id="cityResultMap" type="java.lang.String">
@@ -137,6 +137,21 @@
     	select major_id from tbl_school_major where school_id=#{school_id}
     </select>
     
+    <select id="getChosenMajorSchools" parameterType="int[]" resultMap="chosenMajorInfoResultMap">
+    	select sm.id as id, major_id, school_id, major_code, major_name 
+    	from tbl_school_major sm left join tbl_major m 
+    	on sm.major_id = m.id 
+    	where school_id  
+    	in
+    	<foreach collection="school_ids" item="school" index="index" open="(" separator="," close=")">
+    		#{school}
+    	</foreach> 
+    </select>
+    
+    <select id="getChosenMajorInfo" parameterType="int" resultMap="chosenMajorInfoResultMap">
+    	select sm.id, major_id, school_id, major_code, major_name from tbl_school_major sm left join tbl_major m on sm.major_id = m.id where school_id=#{school_id};
+    </select>
+        
     <delete id="deleteChosenMajor" parameterType="int">
     	delete from tbl_school_major where school_id=#{school_id}
     </delete>

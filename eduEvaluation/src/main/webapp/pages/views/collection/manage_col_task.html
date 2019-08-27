@@ -60,10 +60,10 @@
 	  ,cols: [[ //表头
 		    {type: 'checkbox'}
 			,{type: 'numbers', title: '序号'}
-	    ,{field: 'school_code', title: '学校代码', width:120}
-	    ,{field: 'school_name', title: '学校名称', width:200, }
+	    ,{field: 'school_code', title: '院校代码', width:120}
+	    ,{field: 'school_name', title: '院校名称', width:200, }
 	    ,{field: 'city', title: '城市', width:90} 
-	    ,{field: 'type', title: '学校类型', width: 150}
+	    ,{field: 'type', title: '院校类型', width: 150}
 	    ,{field: 'memo', title: '备注'}
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150}
 	  ]]
@@ -73,7 +73,7 @@
 	table.on('tool(demo)', function(obj){
 	  var data = obj.data;
 	  if(obj.event === 'del'){
-	    layer.confirm('确定删除这所学校吗？', function(index){
+	    layer.confirm('确定删除这所院校吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
 	    					url: projectBase + '/dictionary/deleteSchool',
@@ -82,16 +82,16 @@
 							async: false,
 	    					done:function(res){
 	    									if(res.code='0'){       
-	    					                        layer.msg('删除学校成功!');
+	    					                        layer.msg('删除院校成功!');
 	    					                } else {          
-	    					                        layer.msg('删除学校失败!', function(){
-	    															layer.msg('删除学校失败!');
+	    					                        layer.msg('删除院校失败!', function(){
+	    															layer.msg('删除院校失败!');
 	    													  });   
 	    					                }
 							},             
 	    					 error:function(data){
-	    												layer.msg('删除学校的过程中出现错误!', function(){
-	    													layer.msg('删除学校的过程中出现错误!');
+	    												layer.msg('删除院校的过程中出现错误!', function(){
+	    													layer.msg('删除院校的过程中出现错误!');
 	    												});  
 	    					  }     
 	    				});
@@ -102,7 +102,7 @@
 	  } else if(obj.event === 'edit'){
 	    layer.open({
 	        type: 2 //此处以iframe举例
-	        ,title: '修改学校'
+	        ,title: '修改院校'
 	        ,area: ['550px', '500px']
 	        ,shade: 0
 	        ,maxmin: true
@@ -152,7 +152,7 @@
 		,id=[]; //得到选中的数据
 
         if(checkData.length === 0){
-          return layer.msg('请选择学校');
+          return layer.msg('请选择院校');
         }
 		
 		if(checkData.length > 0){
@@ -161,7 +161,7 @@
 			}
 		}
       
-        layer.confirm('确定删除这些学校吗？', function(index) {
+        layer.confirm('确定删除这些院校吗？', function(index) {
           $.ajax({
           			type:'POST',
           			url: projectBase + '/dictionary/deleteSchools',
@@ -171,16 +171,16 @@
 					async: false,
           			success:function(res){
           							if(res.code='0'){       
-          			                        layer.msg('删除学校成功!');
+          			                        layer.msg('删除院校成功!');
           			                } else {          
-          			                        layer.msg('删除学校失败!', function(){
-          													layer.msg('删除学校失败!');
+          			                        layer.msg('删除院校失败!', function(){
+          													layer.msg('删除院校失败!');
           											  });   
           			                }
           			},             
           			 error:function(data){
-          										layer.msg('删除学校的过程中出现错误!', function(){
-          											layer.msg('删除学校的过程中出现错误!');
+          										layer.msg('删除院校的过程中出现错误!', function(){
+          											layer.msg('删除院校的过程中出现错误!');
           										});  
           			  },       
           		});
@@ -198,7 +198,7 @@
       add: function(){
         layer.open({
           type: 2
-          ,title: '新建学校'
+          ,title: '新建院校'
           ,content: 'new_school.html'
           ,maxmin: true
           ,area: ['550px', '500px']

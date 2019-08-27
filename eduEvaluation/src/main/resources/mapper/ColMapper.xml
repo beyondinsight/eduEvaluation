@@ -8,5 +8,70 @@
 		<result property="school_name" column="school_name"/>
 		<result property="school_code" column="school_code"/>
 	</resultMap>
+	
+	<resultMap id="colTaskSchoolId" type="int">
+		<id property="id" column="id"/>
+	</resultMap>
     
+    <insert id="insertColTask" parameterType="com.philip.edu.eval.bean.CollectionTask" useGeneratedKeys="true" keyProperty="id" >
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+    		select LAST_INSERT_ID() As id
+  		</selectKey>
+    	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system) 
+    	values(#{task_name},#{task_year},#{start_time},#{end_time},#{status},#{use_metrics_system})
+    </insert>
+    
+    <insert id="insertColSchool" parameterType="java.util.List">
+    	insert into tbl_collection_school(collection_task_id, school_id, process_status)
+    	values
+    	<foreach collection="taskSchools" item="school" index="index" separator=",">
+    		(
+    			#{school.task_id},#{school.school_id},#{school.process_status}
+    		)
+    	</foreach>
+    </insert>
+    
+    <insert id="insertTaskMajors" parameterType="java.util.List">
+    	insert into tbl_collection_major(collection_school_id, major_id, create_time, update_time, process_status)
+    	values
+    	<foreach collection="taskMajors" item="major" index="index" separator=",">
+    		(
+    			#{major.collection_school_id},#{major.major_id},#{major.create_time},#{major.update_time},#{major.process_status}
+    		)
+    	</foreach>
+    </insert>
+    
+    <insert id="insertTaskMajor" parameterType="com.philip.edu.eval.bean.ColTaskMajor" useGeneratedKeys="true" keyProperty="id">
+    	<selectKey resultType="int" keyProperty="id" order="AFTER">
+    		select LAST_INSERT_ID()
+  		</selectKey>
+    	insert into tbl_collection_major(collection_school_id, major_id, create_time, update_time, process_status)
+    	values(#{collection_school_id},#{major_id},#{create_time},#{update_time},#{process_status})
+    </insert>
+    
+    <select id="getColTaskSchoolId" parameterType="int" resultMap="colTaskSchoolId">
+    	select id from tbl_collection_school where collection_task_id=#{task_id} and school_id=#{school_id}
+    </select>
+    
+    <delete id="deleteTaskOldSchools" parameterType="int[]">
+    	delete from tbl_collection_major where 
+    	collection_school_id in
+    	<foreach collection="collection_school_ids" item="school" index="no" open="(" separator="," close=")">
+    		#{school}
+    	</foreach> 
+    </delete> 
+    
+    <insert id="insertBasicForm" parameterType="com.philip.edu.eval.bean.BasicForm">
+    	insert into tbl_form_basic(collection_major_id, process_status, create_time, update_time)
+    	values(#{collection_major_id}, #{process_status}, #{create_time}, #{update_time})
+    </insert>
+    
+    <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm">
+    	
+    </insert>
+    
+    <insert id="insertCapitalProgressForm" parameterType="com.philip.edu.eval.bean.CapitalProgressForm">
+    	insert into tbl_form_capitalprogress(collection_major_id, create_time, update_time, process_status)
+    	values(#{collection_major_id}, #{create_time}, #{update_time}, #{process_status})
+    </insert>
 </mapper>

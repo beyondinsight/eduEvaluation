@@ -32,6 +32,8 @@ public interface DictMapper {
 	public int batchDeleteMajor(int ids[]);
 	public List<TblMajor> getMajorList();
 	public List<Integer> getChosenMajor(@Param("school_id")int school_id);
+	public List<ChosenMajor> getChosenMajorInfo(@Param("school_id")int school_id);
 	public int saveChosenMajor(@Param("school_id")int school_id, @Param("majors")int[] majors);
 	public int deleteChosenMajor(@Param("school_id")int school_id);
+	public List<ChosenMajor> getChosenMajorSchools(@Param("school_ids")int[] school_ids);
 }

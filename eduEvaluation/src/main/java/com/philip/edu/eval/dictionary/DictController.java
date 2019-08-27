@@ -61,6 +61,32 @@ public class DictController {
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
+	@RequestMapping(value = "/choseSchool", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> choseSchool(){
+		logger.info("Entering [choseSchool] method.");
+		
+		ArrayList schoolList = (ArrayList) service.getSchoolList();
+		logger.info("successfully get the school list");
+		
+		ArrayList choseSchool = new ArrayList();
+		for(int i=0; i<schoolList.size(); i++){
+			School school = (School)schoolList.get(i);
+			ShuttleBoxInfo info = new ShuttleBoxInfo();
+			info.setValue(""+school.getId());
+			info.setTitle(school.getSchool_code() + "--" + school.getSchool_name());
+			choseSchool.add(info);
+		}
+		
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(choseSchool);
+		data.setCount(choseSchool.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
 	@RequestMapping(value = "/schoolById", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData1> schoolById(HttpServletRequest request){		
 		String sId = request.getParameter("id");
@@ -101,10 +127,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "成功添加学校");
+			object.put("msg", "成功添加院校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "添加学校失败");
+			object.put("msg", "添加院校失败");
 		}
 		
 		logger.info("return the message.");
@@ -135,10 +161,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "成功修改学校");
+			object.put("msg", "成功修改院校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "修改学校失败");
+			object.put("msg", "修改院校失败");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -153,10 +179,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 0);
-			object.put("msg", "成功删除学校");
+			object.put("msg", "成功删除院校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "删除学校失败");
+			object.put("msg", "删除院校失败");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -175,10 +201,10 @@ public class DictController {
 		JSONObject object = new JSONObject();
 		if(result!=0){
 			object.put("code", 1);
-			object.put("msg", "成功删除学校");
+			object.put("msg", "成功删除院校");
 		}else{
 			object.put("code", 99);
-			object.put("msg", "删除学校失败");
+			object.put("msg", "删除院校失败");
 		}
 		
 		return new ResponseEntity(object, HttpStatus.OK);
@@ -236,19 +262,6 @@ public class DictController {
 		ArrayList majorList = (ArrayList) service.getMajorList();
 		logger.info("successfully get the prepare to chose major list");
 		
-		/*StringBuffer sb = new StringBuffer();
-		sb.append("[");
-		for(int i=0; i<majorList.size(); i++){
-			TblMajor major = (TblMajor)majorList.get(i);
-			//obj.put("value", major.getId());
-			//obj.put("title", major.getMajorCode() + "--" + major.getMajorName());
-			sb.append("{");
-			sb.append("\"value\":\"" + major.getId() + "\",");
-			sb.append("\"title\":\"" + major.getMajorCode() + "--" + major.getMajorName() + "\"");
-			sb.append("}");
-			if(i != majorList.size()-1)sb.append(",");
-		}
-		sb.append("]");*/
 		ArrayList choseMajor = new ArrayList();
 		for(int i=0; i<majorList.size(); i++){
 			TblMajor major = (TblMajor)majorList.get(i);
@@ -385,6 +398,25 @@ public class DictController {
 		ArrayList majorList = (ArrayList) service.getChosenMajor(Integer.parseInt(sSchool));
 		
 		logger.info("successfully get chosen majors list");
+		
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(majorList);
+		data.setCount(majorList.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/chosenMajorInfo", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> chosenMajorInfo(HttpServletRequest request){
+		
+		String sSchool = request.getParameter("school_id");
+		
+		ArrayList majorList = (ArrayList) service.getChosenMajorInfo(Integer.parseInt(sSchool));
+		
+		logger.info("successfully get chosen majors with info list");
 		
 		BackendData data = new BackendData();
 		data.setMsg("");
