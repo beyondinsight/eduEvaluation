@@ -12,6 +12,7 @@ public interface UsersMapper {
 		public int updateUsers(TblUsers users);
 		public int deleteUsers(int id);
 		public int batchDeleteUsers(int ids[]);
-		
+		public int exsitsUser(String username);
+		public List<TblUsers> selectUser(String username);
     
 }

@@ -16,4 +16,6 @@ public interface ColTaskService {
 	public List<CollectionTask> getColTaskList();
 	public int countTaskSchool(int task_id);
 	public int countTaskMajor(int task_id);
+	public int updateStatus(int task_id, char status);
+	public int batchDeleteTasks(int[] ids);
 }

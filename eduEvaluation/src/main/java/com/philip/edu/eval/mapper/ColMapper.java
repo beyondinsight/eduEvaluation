@@ -30,4 +30,6 @@ public interface ColMapper {
 	public List<CollectionTask> getColTaskList();
 	public int countTaskSchool(int task_id);
 	public int countTaskMajor(int task_id);
+	public int updateStatus(@Param("task_id")int task_id, @Param("status")char status);
+	public int batchDeleteTasks(int[] ids);
 }

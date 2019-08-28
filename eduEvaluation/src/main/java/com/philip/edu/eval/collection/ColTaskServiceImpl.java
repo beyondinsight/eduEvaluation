@@ -159,4 +159,14 @@ public class ColTaskServiceImpl implements ColTaskService {
 		return dao.countTaskMajor(task_id);
 	}
 
+	public int updateStatus(int task_id, char status) {
+		// TODO Auto-generated method stub
+		return dao.updateStatus(task_id, status);
+	}
+
+	public int batchDeleteTasks(int[] ids) {
+		// TODO Auto-generated method stub
+		return dao.batchDeleteTasks(ids);
+	}
+
 }

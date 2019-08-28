@@ -71,4 +71,12 @@
       memo = #{memo,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+  
+  <select id="exsitsUser" resultType="int" parameterType="java.lang.String">
+  	  select count(*) from tbl_users where user_name=#{user_name}
+  </select>
+  
+  <select id="selectUser" resultType="com.philip.edu.eval.bean.TblUsers" parameterType="java.lang.String">
+  	  select * from tbl_users where user_name=#{user_name}
+  </select>
 </mapper>

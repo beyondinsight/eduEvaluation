@@ -25,8 +25,6 @@ import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.util.EvalConstants;
-import com.philip.edu.test.bean.HelloBean;
-import com.philip.edu.test.service.HelloService;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -39,16 +37,37 @@ public class UsersController {
 
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> users(){
+	public ResponseEntity<BackendData> users(HttpServletRequest request){
 		
-		ArrayList usersList = (ArrayList) service.getUsersList();
-		logger.info("successfully get the major list");
 		BackendData data = new BackendData();
-		data.setMsg("");
-		data.setCode(0); 
-		data.setData(usersList);
-		data.setCount(usersList.size());
-		//BackendData data = new BackendData();
+		
+		/*String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		//user exsits:
+		boolean exsits = service.exsitsUser(username);
+		if(!exsits){
+			data.setMsg("用户不存在！");
+			data.setCode(EvalConstants.LOGIN_STATUS_USER_NO_EXSITS);
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		//password correct:
+		boolean passwordRight = service.checkPassword(username, password);
+		if(!passwordRight){
+			data.setMsg("您的密码不正确！");
+			data.setCode(EvalConstants.LOGIN_STATUS_PASSWORD_NOT_RIGHT);
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		logger.info("successfully login");
+
+		data.setMsg("登录成功!");
+		data.setCode(EvalConstants.LOGIN_STATUS_SUCCESS); 
+		//data.setData(usersList);
+		//data.setCount(usersList.size());
+		//BackendData data = new BackendData();*/
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
@@ -102,44 +121,7 @@ public class UsersController {
 		
 		return new ResponseEntity(object, HttpStatus.OK);
 	}
-	
-	
-	/*@RequestMapping(value="/updateUsers", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity updateUsers(HttpServletRequest request) {
-		
-		TblMajor major = new TblMajor();
-		String id = request.getParameter("id");
-		String majorName = request.getParameter("majorName");
-		String majorCode = request.getParameter("majorCode");
-		String isFirstClass = request.getParameter("isFirstClass");
-		String majorClass = request.getParameter("majorClass");
-		String mainLecture = request.getParameter("mainLecture");
-		String memo = request.getParameter("memo");
-		
-		major.setId(Integer.parseInt(id));
-		major.setMajorName(majorName);
-		major.setMajorCode(majorCode);
-		major.setMajorClass(majorClass);
-		major.setIsFirstClass(isFirstClass);
-		major.setMainLecture(mainLecture);
-		major.setMemo(memo);
 
-		major.setUpdateTime(new Date());
-		
-		int result = service.updateUsers(major);
-		JSONObject object = new JSONObject();
-		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "用户修改成功");
-		}else{
-			object.put("code", 99);
-			object.put("msg", "用户修改失败");
-		}
-		
-		return new ResponseEntity(object, HttpStatus.OK);
-	}*/
-	
-	
 	@RequestMapping(value="/deleteUsers", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity deleteUsers(HttpServletRequest request) {
 		
@@ -180,5 +162,39 @@ public class UsersController {
 		return new ResponseEntity(object, HttpStatus.OK);
 	}
 	
-	
+	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> login(HttpServletRequest request){
+		
+		BackendData data = new BackendData();
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		//user exsits:
+		boolean exsits = service.exsitsUser(username);
+		if(!exsits){
+			data.setMsg("用户不存在！");
+			data.setCode(EvalConstants.LOGIN_STATUS_USER_NO_EXSITS);
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		//password correct:
+		boolean passwordRight = service.checkPassword(username, password);
+		if(!passwordRight){
+			data.setMsg("您的密码不正确！");
+			data.setCode(EvalConstants.LOGIN_STATUS_PASSWORD_NOT_RIGHT);
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		logger.info("successfully login");
+
+		data.setMsg("登录成功!");
+		data.setCode(EvalConstants.LOGIN_STATUS_SUCCESS); 
+		//data.setData(usersList);
+		//data.setCount(usersList.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
 }

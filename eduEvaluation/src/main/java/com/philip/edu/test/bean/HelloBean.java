@@ -2,9 +2,7 @@ package com.philip.edu.test.bean;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class HelloBean {
 	private String hello;
 	private List<String> list;

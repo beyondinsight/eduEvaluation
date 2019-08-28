@@ -126,7 +126,7 @@ public class ColTaskController {
 	}
 	
 	@RequestMapping(value="/colTask", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getColTask(){
+	public ResponseEntity<BackendData> getColTask(){ 
 		
 		ArrayList taskList = (ArrayList)service.getColTaskList();
 		for(int i=0; i<taskList.size(); i++){
@@ -146,6 +146,8 @@ public class ColTaskController {
 				task.setStatus_info(EvalConstants.COLLECTION_STATUS_STOP_DISPLAY);
 				break;
 			}
+			task.setStart_time(task.getStart_time().substring(0, 10));
+			task.setEnd_time(task.getEnd_time().substring(0,10));
 		}
 		logger.info("successfully get collection task list");
 		
@@ -159,4 +161,69 @@ public class ColTaskController {
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 
+	@RequestMapping(value="/startTask", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> startTask(HttpServletRequest request){
+		
+		String status = (String)request.getParameter("status");
+		String sTask_id = (String)request.getParameter("id");
+		
+		int result = service.updateStatus(Integer.parseInt(sTask_id), EvalConstants.COLLECTION_STATUS_ACTIVE);
+		logger.info("successfully start task");
+		
+		BackendData data = new BackendData();
+		if(result!=0){
+			data.setMsg("启用成功!");
+			data.setCode(1); 
+		} else {
+			data.setMsg("启用失败!");
+			data.setCode(99);
+		}
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/stopTask", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> stopTask(HttpServletRequest request){
+		
+		String status = (String)request.getParameter("status");
+		String sTask_id = (String)request.getParameter("id");
+		
+		int result = service.updateStatus(Integer.parseInt(sTask_id), EvalConstants.COLLECTION_STATUS_STOP);
+		logger.info("successfully stop task list");
+		
+		BackendData data = new BackendData();
+		logger.info("result:" + result);
+		if(result!=0){
+			data.setMsg("启用成功!");
+			data.setCode(1); 
+		} else {
+			data.setMsg("启用失败!");
+			data.setCode(99);
+		}
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/deleteTasks", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity deleteTasks(HttpServletRequest request) {
+		
+		String[] sIds = request.getParameterValues("id");
+		int[] ids = new int[sIds.length];
+		for(int i=0; i<sIds.length; i++){
+			ids[i] = Integer.parseInt(sIds[i]);
+		}
+		
+		int result = service.batchDeleteTasks(ids);
+		BackendData data = new BackendData();
+		//logger.info("result:" + result);
+		if(result!=0){
+			data.setMsg("删除任务成功!");
+			data.setCode(1); 
+		} else {
+			data.setMsg("删除任务失败!");
+			data.setCode(99);
+		}
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
 }

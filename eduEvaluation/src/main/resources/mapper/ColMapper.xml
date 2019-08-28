@@ -85,7 +85,7 @@
     </insert>
     
     <select id="getColTaskList" resultMap="colTaskListResultMap">
-    	select id, task_name, task_year, start_time, end_time, status from tbl_collection_tasks
+    	select id, task_name, task_year, start_time, end_time, status from tbl_collection_tasks order by id desc
     </select>
     
     <select id="countTaskSchool" resultType="int" parameterType="int">
@@ -96,4 +96,17 @@
     	select count(*) from tbl_collection_major 
     	where collection_school_id in (select id from tbl_collection_school where collection_task_id=#{task_id})
     </select>
+    
+    <update id="updateStatus">
+    	update tbl_collection_tasks
+    	set status = #{status}
+    	where id=#{task_id}
+    </update>
+    
+    <delete id="batchDeleteTasks" parameterType="int[]">
+    	delete from tbl_collection_tasks where id in 
+    	<foreach collection="array" item="id" index="no" open="(" separator="," close=")">
+    		#{id}
+    	</foreach>
+    </delete>
 </mapper>
