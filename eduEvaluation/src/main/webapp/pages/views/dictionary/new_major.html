@@ -55,6 +55,7 @@
   </div>
 
   <script src="../../layuiadmin/layui/layui.js"></script>
+  <script src="../util/Constants.js"></script>
   <script>
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
@@ -65,6 +66,7 @@
     var $ = layui.$
     ,form = layui.form
 	,admin = layui.admin;
+	var projectBase = Class.getURL();
     
     //监听提交
     form.on('submit(layuiadmin-app-form-submit)', function(data){
@@ -75,7 +77,7 @@
       //$.ajax({});
 	  $.ajax({
 		  type: 'POST',
-		  url: '/eduEvaluation/dictionary/addMajor',
+		  url: projectBase + '/dictionary/addMajor',
 	      data: field,
 		  dataType:'json',
 		  async: false,

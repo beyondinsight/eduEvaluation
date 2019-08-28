@@ -22,18 +22,38 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+   
+   <resultMap id="chosenMajorResultMap" type="java.lang.Integer">
+   	  <result column="major_id" property="major_id" jdbcType="BIGINT"/>
+   </resultMap>
+   
+   <resultMap id="chosenMajorInfoResultMap" type="com.philip.edu.eval.bean.ChosenMajor">
+      <id column="id" property="id" jdbcType="BIGINT" />
+   	  <result column="major_id" property="major_id" jdbcType="BIGINT"/>
+   	  <result column="school_id" property="school_id" jdbcType="BIGINT"/>
+   	  <result column="major_name" property="major_name" jdbcType="VARCHAR"/>
+   	  <result column="major_code" property="major_code" jdbcType="VARCHAR"/>
+   </resultMap>
 	
 	<resultMap id="cityResultMap" type="java.lang.String">
 		<result property="city" column="city"/>
+	</resultMap>
+	
+	<resultMap id="typeResultMap" type="java.lang.String">
+		<result property="type" column="type"/>
 	</resultMap>
 
     <select id="getSchoolList" resultMap="schoolResultMap">
         SELECT * FROM tbl_school
     </select>
     
+    <select id="getSchoolById" resultMap="schoolResultMap">
+    	select * FROM tbl_school where id=#{id}
+    </select>
+    
     <insert id="createSchool" parameterType="com.philip.edu.eval.bean.School" useGeneratedKeys="true" keyProperty="id">
-    	insert into tbl_school(school_name, school_code, type, memo, create_time, update_time)
-    	values(#{school_name}, #{school_code}, #{type}, #{memo}, #{create_time}, #{update_time})
+    	insert into tbl_school(school_name, school_code, city, type, memo, create_time, update_time)
+    	values(#{school_name}, #{school_code}, #{city}, #{type}, #{memo}, #{create_time}, #{update_time})
     </insert>
     
     <update id="updateSchool" parameterType="com.philip.edu.eval.bean.School">
@@ -80,7 +100,7 @@
       major_class = #{majorClass,jdbcType=INTEGER},
       main_lecture = #{mainLecture,jdbcType=VARCHAR},
       memo = #{memo,jdbcType=VARCHAR},
-      is_first_class = #{record.isFirstClass,jdbcType=VARCHAR},
+      is_first_class = #{isFirstClass,jdbcType=VARCHAR},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -97,7 +117,50 @@
     	</foreach>
     </delete>
     
-    <select id="searchCity" parameterType="java.lang.String" resultMap="cityResultMap">
-    	select distinct city from tbl_school where city like "%${search}%"
+    <select id="getCity" resultMap="cityResultMap">
+    	select distinct city from tbl_school
     </select>
+    
+    <select id="getType" resultMap="typeResultMap">
+    	select distinct type from tbl_school
+    </select>
+    
+    <select id="testGetChosenMajor" parameterType="int" resultMap="chosenMajorResultMap">
+    	select sm.id, sm.school_id, sm.major_id, m.major_code, m.major_name 
+    	from tbl_school_major sm 
+    	left join tbl_major m 
+    	on sm.major_id = m.id 
+    	where sm.school_id=#{school_id};
+    </select>
+    
+    <select id="getChosenMajor" parameterType="int" resultMap="chosenMajorResultMap">
+    	select major_id from tbl_school_major where school_id=#{school_id}
+    </select>
+    
+    <select id="getChosenMajorSchools" parameterType="int[]" resultMap="chosenMajorInfoResultMap">
+    	select sm.id as id, major_id, school_id, major_code, major_name 
+    	from tbl_school_major sm left join tbl_major m 
+    	on sm.major_id = m.id 
+    	where school_id  
+    	in
+    	<foreach collection="school_ids" item="school" index="index" open="(" separator="," close=")">
+    		#{school}
+    	</foreach> 
+    </select>
+    
+    <select id="getChosenMajorInfo" parameterType="int" resultMap="chosenMajorInfoResultMap">
+    	select sm.id, major_id, school_id, major_code, major_name from tbl_school_major sm left join tbl_major m on sm.major_id = m.id where school_id=#{school_id};
+    </select>
+        
+    <delete id="deleteChosenMajor" parameterType="int">
+    	delete from tbl_school_major where school_id=#{school_id}
+    </delete>
+    
+    <insert id="saveChosenMajor">
+    	insert into tbl_school_major(school_id, major_id)
+    	values
+    	<foreach collection="majors" item="major" separator=",">
+    		(#{school_id}, #{major})
+    	</foreach>
+    </insert>
 </mapper>

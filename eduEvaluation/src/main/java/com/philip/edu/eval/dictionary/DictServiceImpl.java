@@ -5,7 +5,9 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.philip.edu.eval.bean.ChosenMajor;
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
@@ -17,9 +19,9 @@ public class DictServiceImpl implements DictService {
 	@Autowired
 	private DictMapper dao; 
 
-	public School getSchoolById(int school_id) {
+	public List<School> getSchoolById(int school_id) {
 		// TODO Auto-generated method stub
-		return null;
+		return dao.getSchoolById(school_id);
 	}
 
 	public int createSchool(School school) {
@@ -46,8 +48,12 @@ public class DictServiceImpl implements DictService {
 		return dao.batchDeleteSchool(ids);
 	}
 	
-	public List<String> searchCity(String search){
-		return dao.searchCity(search);
+	public List<String> getCity(){
+		return dao.getCity();
+	}
+	
+	public List<String> getType(){
+		return dao.getType();
 	}
 
 	public Major getMajorById(int major_id) {
@@ -78,6 +84,24 @@ public class DictServiceImpl implements DictService {
 	public int batchDeleteMajor(int[] ids) {
 		// TODO Auto-generated method stub
 		return dao.batchDeleteMajor(ids);
+	}
+
+	public List<Integer> getChosenMajor(int school_id) {
+		// TODO Auto-generated method stub
+		return dao.getChosenMajor(school_id);
+	}
+
+	@Transactional("txManager")
+	public int saveChosenMajor(int school_id, int[] majors) {
+		// TODO Auto-generated method stub
+		dao.deleteChosenMajor(school_id);
+		int n = dao.saveChosenMajor(school_id, majors);
+		return n;
+	}
+
+	public List<ChosenMajor> getChosenMajorInfo(int school_id) {
+		// TODO Auto-generated method stub
+		return dao.getChosenMajorInfo(school_id);
 	}
  
 
