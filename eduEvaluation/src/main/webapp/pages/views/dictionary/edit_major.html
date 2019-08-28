@@ -81,23 +81,22 @@
 	      data: field,
 		  dataType:'json',
 		  success:function(res){
-		  				if(res.code='0'){       
-		                          layer.msg('修改专业成功!');
+		  				if(res.code==0){       
+		                          parent.layer.msg('修改专业成功!', {time:3000});
 		                  } else            
-		                          layer.msg('修改专业失败!', function(){
-										layer.msg('修改专业失败!');
+		                          parent.layer.msg('修改专业失败!', function(){
+			 						parent.layer.msg('修改专业失败!', {time:3000});
 								  });   
 		                  },              
 		   error:function (data) {
-							layer.msg('修改专业的过程中出现错误!', function(){
-								layer.msg('修改专业的过程中出现错误!');
+			  			parent.layer.msg('修改专业的过程中出现错误!', function(){
+								parent.layer.msg('修改专业的过程中出现错误!', {time:3000});
 							});  
 		    } 
 	  });
 	  
       parent.layui.table.reload('demo'); //重载表格
       parent.layer.close(index); //再执行关闭 
-	  layer.msg('已成功修改!');
     });
   })
   </script>

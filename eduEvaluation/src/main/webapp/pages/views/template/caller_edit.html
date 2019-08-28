@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>专业维护</title>
+  <title>填报详情</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -15,25 +15,39 @@
     <div class="layui-card">
 
       <div class="layui-card-body">
-        <div style="padding-bottom: 10px;">
-		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 添加</button>
-          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel">批量删除 <i class="layui-icon layui-icon-delete"></i></button>
+       <!-- <div style="padding-bottom: 10px;"> -->
+		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>
+          
         </div>
         <table id="demo" lay-filter="demo"></table> 
-        <script type="text/html" id="buttonTpl">
+        <!-- <script type="text/html" id="buttonTpl">
           {{#  if(d.status){ }}
             <button class="layui-btn layui-btn-xs">已发布</button>
           {{#  } else { }}
             <button class="layui-btn layui-btn-primary layui-btn-xs">待修改</button>
           {{#  } }}
-        </script>
+        </script> -->
         <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>1</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>2</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
     </div>
   </div>
+  
+  
+<!--   <div class="layui-col-md12">
+        <div class="layui-card">
+          <div class="layui-card-header">指定允许上传的文件类型</div>
+          <div class="layui-card-body">
+            <button type="button" class="layui-btn" id="test-upload-type1"><i class="layui-icon"></i>上传文件</button>
+            <button type="button" class="layui-btn layui-btn-primary" id="test-upload-type2"><i class="layui-icon"></i>只允许压缩文件</button>
+            <button type="button" class="layui-btn" id="test-upload-type3"><i class="layui-icon"></i>上传视频</button>
+            <button type="button" class="layui-btn" id="test-upload-type4"><i class="layui-icon"></i>上传音频</button> 
+          </div>
+        </div>
+      </div> -->
 
   <script src="../../layuiadmin/layui/layui.js"></script>  
   <script>
@@ -49,19 +63,17 @@
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: '/eduEvaluation/dictionary/major'//数据接口
+	  ,url: '/eduEvaluation/collectionmaterial/selectcollectionMaterial'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
 		    {type: 'checkbox'}
-			,{type: 'numbers', title: '序号'}
-	    ,{field: 'majorCode', title: '专业代码', width:120}
-	    ,{field: 'majorName', title: '专业名称', width:200, }
-	    ,{field: 'mainLecture', title: '所属一级学科', width:200}
-	    ,{field: 'majorClass', title: '学科门类', width: 200}
-	    ,{field: 'isFirstClass', title: '是否一流学科相关', width: 200}
-	    ,{field: 'memo', title: '备注'}
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150}
+		
+	    ,{field: 'description', title: '支撑材料'}
+	     ,{field: 'school_name', title: '文件名' }
+	    ,{field: 'city', title: '文件大小'} 
+	    ,{field: 'type', title: '上传时间'}	    
+		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
 	});
 	
@@ -69,25 +81,25 @@
 	table.on('tool(demo)', function(obj){
 	  var data = obj.data;
 	  if(obj.event === 'del'){
-	    layer.confirm('确定删除这个专业吗？', function(index){
+	    layer.confirm('确定删除这文件吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: '/eduEvaluation/dictionary/deleteMajor',
+	    					url: '/eduEvaluation/collectionmaterial/deletecollectionmaterial',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
 	    					done:function(res){
-	    									if(res.code==0){       
-	    					                        layer.msg('删除专业成功!');
+	    									if(res.code='0'){       
+	    					                        layer.msg('删除文件成功!');
 	    					                } else {          
-	    					                        layer.msg('删除专业失败!', function(){
-	    															layer.msg('删除专业失败!');
+	    					                        layer.msg('删除文件失败!', function(){
+	    															layer.msg('删除文件失败!');
 	    													  });   
 	    					                }
 							},             
 	    					 error:function(data){
-	    												layer.msg('删除专业的过程中出现错误!', function(){
-	    													layer.msg('删除专业的过程中出现错误!');
+	    												layer.msg('删除文件的过程中出现错误!', function(){
+	    													layer.msg('删除文件的过程中出现错误!');
 	    												});  
 	    					  }     
 	    				});
@@ -98,7 +110,7 @@
 	  } else if(obj.event === 'edit'){
 	    layer.open({
 	        type: 2 //此处以iframe举例
-	        ,title: '修改专业'
+	        ,title: '修改文件'
 	        ,area: ['550px', '500px']
 	        ,shade: 0
 	        ,maxmin: true
@@ -112,16 +124,13 @@
 			  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
 			  submit.click();
 			}
-	        ,content: 'edit_major.html'
+	        ,content: 'collectionmaterial_new.html'
 	    	,zIndex: layer.zIndex //重点1
 	        ,success: function(layero, index){
 	    	  var body = layer.getChildFrame('body',index);
 	    	  var inputList = body.find('input');
-	    	  $(inputList[0]).val(data.id);
-	    	  $(inputList[1]).val(data.majorName);//major_name
-	    	  $(inputList[2]).val(data.majorCode);
-	    	  $(inputList[3]).val(data.mainLecture);
-	    	  $(inputList[4]).val(data.majorClass);
+	    	  $(inputList[0]).val(data.description);
+	    	  
 	    	  var areaList = body.find('textarea');
 	    	  $(areaList[0]).val(data.memo);
 	    	  
@@ -148,7 +157,7 @@
 		,id=[]; //得到选中的数据
 
         if(checkData.length === 0){
-          return layer.msg('请选择专业');
+          return layer.msg('请选择文件');
         }
 		
 		if(checkData.length > 0){
@@ -157,26 +166,26 @@
 			}
 		}
       
-        layer.confirm('确定删除这些专业吗？', function(index) {
+        layer.confirm('确定删除这些文件吗？', function(index) {
           $.ajax({
           			type:'POST',
-          			url:'/eduEvaluation/dictionary/deleteMajors',
+          			url:'/deletecollectionmaterial',
           			traditional: true,
           			data:{id:id},
           			dataType:'json',
 					async: false,
           			success:function(res){
-          							if(res.code==0){       
-          			                        layer.msg('删除专业成功!');
+          							if(res.code='0'){       
+          			                        layer.msg('删除文件成功!');
           			                } else {          
-          			                        layer.msg('删除专业失败!', function(){
-          													layer.msg('删除专业失败!');
+          			                        layer.msg('删除文件失败!', function(){
+          													layer.msg('删除文件失败!');
           											  });   
           			                }
           			},             
           			 error:function(data){
-          										layer.msg('删除专业的过程中出现错误!', function(){
-          											layer.msg('删除专业的过程中出现错误!');
+          										layer.msg('删除文件的过程中出现错误!', function(){
+          											layer.msg('删除文件的过程中出现错误!');
           										});  
           			  },       
           		});
@@ -194,8 +203,8 @@
       add: function(){
         layer.open({
           type: 2
-          ,title: '新建专业'
-          ,content: 'new_major.html'
+          ,title: '支撑材料'
+          ,content: 'caller_new.html'
           ,maxmin: true
           ,area: ['550px', '500px']
           ,btn: ['确认添加', '取消']
@@ -207,6 +216,7 @@
         }); 
       }
     }; 
+    
 
     $('.layui-btn.layuiadmin-btn-list').on('click', function(){
       var type = $(this).data('type');

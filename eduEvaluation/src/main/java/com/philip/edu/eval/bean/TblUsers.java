@@ -15,9 +15,29 @@ public class TblUsers {
 
     private String institution;
 
-    private String majot;
+    private String major;
+    
+    private Integer roleId;
+    
+	private String roleName;
+    
+    public Integer getRoleId() {
+		return roleId;
+	}
 
-    private String status;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+    public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	private String status;
 
     private Integer creator;
 
@@ -87,12 +107,12 @@ public class TblUsers {
         this.institution = institution == null ? null : institution.trim();
     }
 
-    public String getMajot() {
-        return majot;
+    public String getMajor() {
+        return major;
     }
 
-    public void setMajot(String majot) {
-        this.majot = majot == null ? null : majot.trim();
+    public void setMajor(String major) {
+        this.major = major == null ? null : major.trim();
     }
 
     public String getStatus() {
@@ -182,4 +202,14 @@ public class TblUsers {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+
+	@Override
+	public String toString() {
+		return "TblUsers [id=" + id + ", userName=" + userName + ", chineseName=" + chineseName + ", password="
+				+ password + ", salt=" + salt + ", institution=" + institution + ", majot=" + major + ", status="
+				+ status + ", creator=" + creator + ", createTime=" + createTime + ", updateTime=" + updateTime
+				+ ", lastOperation=" + lastOperation + ", position=" + position + ", qq=" + qq + ", fixPhone="
+				+ fixPhone + ", mobilePhone=" + mobilePhone + ", email=" + email + ", memo=" + memo + "]";
+	}
+    
 }
