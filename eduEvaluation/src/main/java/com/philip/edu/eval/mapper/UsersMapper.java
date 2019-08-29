@@ -18,5 +18,5 @@ public interface UsersMapper {
 		//User Role
 		public int createUserRole(TblUsers users);
 		public int updateUserRole(TblUsers users);
-  
+		public List<TblUsers> getRolesUsers(int id);
 }

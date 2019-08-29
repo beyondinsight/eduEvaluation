@@ -12,6 +12,7 @@
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="counts" property="counts" jdbcType="BIGINT" />
   </resultMap>
   
   <resultMap id="UserRoleResultMap" type="com.philip.edu.eval.bean.TblUserRole" >
@@ -22,14 +23,35 @@
     <result column="status" property="status" jdbcType="CHAR" />  
   </resultMap>
   
-<!--    <resultMap id="UserRolecountResultMap" type="com.philip.edu.eval.bean.TblUserRolecount" >
-    
-    <result column="user_id" property="userId" jdbcType="BIGINT" />
-    <result column="rolecount" property="rolecount" jdbcType="BIGINT" />
-     
-  </resultMap> -->
+  <select id="getRolesUsersCount"  resultMap="RolesResultMap">
+     select a.id,a.role_name,(CASE  WHEN b.counts IS NULL THEN  0 ELSE b.counts   END) counts from tbl_roles a
+		LEFT JOIN
+	 (select role_id,count(1) as counts from tbl_user_role  where role_id IS NOT NULL GROUP BY role_id) b ON a.id=b.role_id 
+   </select>
+   
+   
+    <update id="updateChosenUser"  parameterType="com.philip.edu.eval.bean.TblUserRole" >
+      update tbl_user_role
+        set   role_id = #{roleId,jdbcType=BIGINT}
+        where user_id = #{userId,jdbcType=BIGINT}
+   </update>
+   
+   <insert id="saveChosenUser"  parameterType="com.philip.edu.eval.bean.TblUserRole" >
+      insert into tbl_user_role  (user_id, role_id)
+  	  values ( #{userId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}) 
+   </insert>
+   
+   <delete id="deleteChosenUser" parameterType="int[]">
+    	 <!--  update   tbl_user_role  set role_id = 0 -->
+    	 delete from tbl_user_role
+    		where user_id in 
+    	<foreach collection="array" item="userId" index="no" open="(" separator="," close=")">
+    		#{userId}
+    	</foreach>
+    </delete>
+   
  
-  <delete id="deleteRolesById" parameterType="java.lang.Long" >
+  <delete id="deleteRolesById" parameterType="int" >
     delete from tbl_roles
     where id = #{id,jdbcType=BIGINT}
   </delete>
@@ -44,6 +66,7 @@
       #{pid,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP})
   </insert>
+  
   <insert id="insertSelectiveRoles" parameterType="com.philip.edu.eval.bean.TblRoles" >
     insert into tbl_roles
     <trim prefix="(" suffix=")" suffixOverrides="," >

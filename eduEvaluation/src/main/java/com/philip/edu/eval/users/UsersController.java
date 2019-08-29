@@ -449,12 +449,10 @@ public class UsersController {
 		}
 		
 		List usersList = new ArrayList<TblUsers>();
-			for(String [] users : list) {
-				System.out.println(users.length);		 
+			for(String [] users : list) {	 
 				TblUsers u = new TblUsers();
 				u.setUserName(users[0]);
 			    u.setChineseName(users[1]);
-			    System.out.println(users[2]);
 			    if(users[2]!= null && !users[2].equals("") && role_name.contains(users[2])) {
 			    	u.setRoleId(role_id.get(role_name.indexOf(users[2])));
 			    }

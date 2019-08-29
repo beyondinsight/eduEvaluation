@@ -22,36 +22,31 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
     <result column="role_id" property="roleId" jdbcType="BIGINT" />
-    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
-    
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />   
   </resultMap>
  
-<<<<<<< HEAD
   <select id="getUsersList" resultMap="UsersResultMap"   >
-  select  * from tbl_users d left join(
+    select  * from tbl_users d left join(
 			select user_id,c.role_id,c.role_name
 				from (
 							select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
 							) c 
 		) e on d.id = e.user_id
-
-=======
-  <select id="getUsersList" resultMap="UsersResultMap" parameterType="java.lang.Long" >
-    select  *   from tbl_users 
->>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
-  </select>
+	</select>
   
-   <select id="getUsers" resultMap="UsersResultMap" parameterType="com.philip.edu.eval.bean.TblUsers"  >
+  <select id="getUsers" resultMap="UsersResultMap" parameterType="com.philip.edu.eval.bean.TblUsers"  >
   	  select  *   from tbl_users where user_name=#{userName,jdbcType=VARCHAR} 
   </select>
   
-<<<<<<< HEAD
+   <select id="getRolesUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   resultMap="UsersResultMap">
+      SELECT  b.* from (select user_id from tbl_user_role where role_id= #{id,jdbcType=BIGINT}) a LEFT JOIN tbl_users b on a.user_id=b.id  
+  </select>
+  
+  
+
   <insert id="createUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   useGeneratedKeys="true" keyProperty="id">
-    insert into tbl_users (user_name, chinese_name, 
-=======
-  <insert id="addUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
-    insert into tbl_users (id, user_name, chinese_name, 
->>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
+    
+   insert into tbl_users (user_name, chinese_name, 
       password, salt, institution, 
       major, status, creator, 
       create_time, update_time, last_operation, 
@@ -92,7 +87,7 @@
         update tbl_user_role set role_id = #{roleId,jdbcType=BIGINT} where user_id= #{id,jdbcType=BIGINT};
   </update>  
 
-<<<<<<< HEAD
+
   <insert id="createUserRole" parameterType="com.philip.edu.eval.bean.TblUsers">       
          insert into tbl_user_role (user_id, role_id)
           			  values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT})
@@ -154,29 +149,7 @@
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT} 
-=======
-  <update id="updateUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
-    update tbl_users
-    set user_name = #{userName,jdbcType=VARCHAR},
-      chinese_name = #{chineseName,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      salt = #{salt,jdbcType=VARCHAR},
-      institution = #{institution,jdbcType=VARCHAR},
-      majot = #{majot,jdbcType=VARCHAR},
-      status = #{status,jdbcType=CHAR},
-      creator = #{creator,jdbcType=BIGINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      last_operation = #{lastOperation,jdbcType=TIMESTAMP},
-      position = #{position,jdbcType=VARCHAR},
-      QQ = #{qq,jdbcType=VARCHAR},
-      fix_phone = #{fixPhone,jdbcType=VARCHAR},
-      mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      memo = #{memo,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
->>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
-  </update>
+ </update>
   
   <delete id="deleteUsers"   >
     delete from tbl_users

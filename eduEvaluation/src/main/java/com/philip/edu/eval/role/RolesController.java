@@ -31,8 +31,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.philip.edu.eval.bean.BackendData;
+import com.philip.edu.eval.bean.ShuttleBoxInfo;
+import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.bean.TblRoles;
+import com.philip.edu.eval.bean.TblUserRole;
 import com.philip.edu.eval.bean.TblUsers;
+import com.philip.edu.eval.users.UsersService;
 
 
 @Controller
@@ -43,23 +47,142 @@ public class RolesController {
 	
 	@Autowired
 	private RolesService service;
+	@Autowired
+	private UsersService user_service;
 
 	
 	@RequestMapping(value = "/roles", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> users(){
+	public ResponseEntity<BackendData> roles(){
 		
-		ArrayList usersList = (ArrayList) service.getRolenameRoles();
+		ArrayList rolesList = (ArrayList) service.getRolenameRoles();
 		logger.info("successfully get the roles list");
 		BackendData data = new BackendData();
 		data.setMsg("");
 		data.setCode(0); 
-		data.setData(usersList);
-		data.setCount(usersList.size());
+		data.setData(rolesList);
+		data.setCount(rolesList.size());
 		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
+	/**
+	 * 权限拥有人数
+	 * @return
+	 */
+	@RequestMapping(value = "/roles_usersCount", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> roles_usersCount(){
+		
+		ArrayList roles_usersListCount = (ArrayList) service.getRolesUsersCount();
+		logger.info("successfully get the roles list");
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(roles_usersListCount);
+		data.setCount(roles_usersListCount.size());
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+		 
+	
+	/**
+	 * 权限拥有人
+	 * @return
+	 */
+	@RequestMapping(value = "/choseUser", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> choseUser(){
+	
+		ArrayList usersList = (ArrayList) user_service.getUsersList();				 
+	 		
+		ArrayList choseUser = new ArrayList();
+		for(int i=0; i<usersList.size(); i++){
+			TblUsers user = (TblUsers)usersList.get(i);
+			ShuttleBoxInfo info = new ShuttleBoxInfo();
+			info.setValue(user.getId().toString());
+			info.setTitle(user.getChineseName());
+			choseUser.add(info);
+		}
+		
+		logger.info("successfully get the choseuser list");
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(choseUser);
+		data.setCount(choseUser.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/chosenUser", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> chosenUser(HttpServletRequest request){
+		
+		String id = request.getParameter("roleId");		 
+		if(id==null || id.equals("")) {		
+			id="0";		 
+		} 
+		List<TblUsers> usersList = user_service.getRolesUsers(Integer.parseInt(id));
+		ArrayList<Integer> chosenUser = new ArrayList<Integer>();
+		for(TblUsers u: usersList) {		
+			chosenUser.add(u.getId());
+		}
+		
+		logger.info("successfully get the choseuser list");
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(chosenUser);
+		data.setCount(chosenUser.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/saveChosenUser", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> saveChosenUser(HttpServletRequest request){
+		
+
+		String sroleId = request.getParameter("roleId");
+		String[] suserId = request.getParameterValues("userId");
+		
+		int roleId = Integer.parseInt(sroleId);
+		List<TblUsers> usersList = user_service.getRolesUsers(roleId);
+		List<Integer> userid_all = new ArrayList<Integer>();
+		for(TblUsers turs : usersList){
+			userid_all.add(turs.getId());
+		}
+
+		if(suserId!=null &&  !suserId.equals("") ) {
+			for(String su: suserId) {
+				int userId = Integer.parseInt(su);
+				TblUserRole  tur = new TblUserRole();  
+				tur.setRoleId(roleId);
+				tur.setUserId(userId);
+				int n = service.updateChosenUser(tur);
+				if(n==0){
+					service.saveChosenUser(tur);
+				}
+				userid_all.remove((Object)userId);//必须是object 类型
+
+			}
+		}
+		int[] usid = new int[userid_all.size()];
+		for(int i=0; i<userid_all.size(); i++){
+			usid[i] =  userid_all.get(i);
+		}
+		if(userid_all.size()>0) {
+			service.deleteChosenUser(usid);
+		 }
+		
+		
+		logger.info("successfully save chosen User list");
+		
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
 	
 	@RequestMapping(value="/addroles", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity addUsers(HttpServletRequest request) {
@@ -120,8 +243,6 @@ public class RolesController {
 		
 		TblRoles roles = new TblRoles();
 		String id = request.getParameter("id");
-
-		System.out.println(id);
 		
 		String roleName = request.getParameter("roleName");
 		String roleCode = request.getParameter("roleCode");

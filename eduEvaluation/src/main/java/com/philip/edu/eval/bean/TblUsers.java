@@ -203,13 +203,14 @@ public class TblUsers {
         this.memo = memo == null ? null : memo.trim();
     }
 
-	@Override
+
 	public String toString() {
 		return "TblUsers [id=" + id + ", userName=" + userName + ", chineseName=" + chineseName + ", password="
-				+ password + ", salt=" + salt + ", institution=" + institution + ", majot=" + major + ", status="
-				+ status + ", creator=" + creator + ", createTime=" + createTime + ", updateTime=" + updateTime
-				+ ", lastOperation=" + lastOperation + ", position=" + position + ", qq=" + qq + ", fixPhone="
-				+ fixPhone + ", mobilePhone=" + mobilePhone + ", email=" + email + ", memo=" + memo + "]";
+				+ password + ", salt=" + salt + ", institution=" + institution + ", major=" + major + ", roleId="
+				+ roleId + ", roleName=" + roleName + ", status=" + status + ", creator=" + creator + ", createTime="
+				+ createTime + ", updateTime=" + updateTime + ", lastOperation=" + lastOperation + ", position="
+				+ position + ", qq=" + qq + ", fixPhone=" + fixPhone + ", mobilePhone=" + mobilePhone + ", email="
+				+ email + ", memo=" + memo + "]";
 	}
     
 }

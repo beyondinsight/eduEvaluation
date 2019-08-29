@@ -41,28 +41,29 @@ public class UsersImpl implements UsersService {
 		return dao.batchDeleteUsers(ids);
 	}
 
-	@Override
 	public int createUsersList(List<TblUsers> usersList) {
 		// TODO Auto-generated method stub
 		return dao.createUsersList(usersList);
 	}
 
-	@Override
 	public List<TblUsers> getUsers(String userName) {
 		// TODO Auto-generated method stub
 		return dao.getUsers(userName);
 	}
 
-	@Override
 	public int updateUserRole(TblUsers users) {
 		// TODO Auto-generated method stub
 		return dao.updateUserRole(users);
 	}
 
-	@Override
 	public int createUserRole(TblUsers users) {
 		// TODO Auto-generated method stub
 		return dao.createUserRole(users);
+	}
+	
+	public List<TblUsers> getRolesUsers(int id) {
+		// TODO Auto-generated method stub
+		return dao.getRolesUsers(id);
 	}
 	
 }
