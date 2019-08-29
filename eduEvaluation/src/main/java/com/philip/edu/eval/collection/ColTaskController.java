@@ -99,7 +99,7 @@ public class ColTaskController {
 				JSONArray value = objMajors.getJSONArray(key);
 				for (int i = 0; i < value.length(); i++) {
 					JSONObject obj = value.getJSONObject(i);
-					int major_id = obj.getInt("id");
+					int major_id = obj.getInt("major_id");
 					ColTaskMajor major = new ColTaskMajor();
 					major.setSchool_id(school_id);
 					major.setMajor_id(major_id);
@@ -305,7 +305,7 @@ public class ColTaskController {
 		metrics.setMetrics_code(metrics_code);  
 		//decode:
 		if(Integer.parseInt(level) == 2 && metrics_code.contains(".")){
-			String[] temp = metrics_code.split(".");
+			String[] temp = metrics_code.split("\\.");
 			metrics.setPid(Integer.parseInt(temp[0]));
 			metrics.setOrder(Integer.parseInt(temp[1]));
 		} else if(Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
@@ -379,6 +379,67 @@ public class ColTaskController {
 		data.setMsg("成功删除指标");
 		data.setCode(1); 
 		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/addMaterial", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> addMaterial(HttpServletRequest request){
+		
+		String metrics_id = request.getParameter("metrics_id");
+		String material_name = request.getParameter("material_name");
+		String memo = request.getParameter("memo");
+		Material material = new Material();
+		material.setMetrics_id(Integer.parseInt(metrics_id));
+		material.setMaterial_name(material_name);
+		material.setMemo(memo);
+		
+		int result = service.insertMaterial(material);
+		
+		BackendData data = new BackendData();
+		if(result!=0){
+			data.setMsg("成功添加材料");
+			data.setCode(1); 
+		} else {
+			data.setMsg("添加材料失败");
+			data.setCode(99);
+		}
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/getMaterials", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getMaterials(HttpServletRequest request){
+		
+		String metrics_id = request.getParameter("id");
+		
+		ArrayList materialList = (ArrayList) service.getMaterials(Integer.parseInt(metrics_id));
+		logger.info("successfully get material list");
+		
+		BackendData data = new BackendData();
+		data.setMsg("成功获取全部材料"); 
+		data.setCode(0); 
+		data.setData(materialList);
+		data.setCount(materialList.size());
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/deleteMaterial", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> deleteMaterial(HttpServletRequest request){
+		
+		String material_id = request.getParameter("id");
+		
+		//ArrayList materialList = (ArrayList) service.getMaterials(Integer.parseInt(metrics_id));
+		int result = service.deleteMaterial(Integer.parseInt(material_id));
+		logger.info("successfully delete material");
+		
+		BackendData data = new BackendData();
+		data.setMsg("成功删除材料"); 
+		data.setCode(1); 
+		//data.setData(materialList);
+		//data.setCount(materialList.size());
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}

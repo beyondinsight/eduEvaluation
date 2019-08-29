@@ -101,10 +101,10 @@
                 <cite>数据字典</cite>
               </a>
               <dl class="layui-nav-child">
-				  <dd data-name="console" class="layui-this">
+				  <dd data-name="majorM" class="layui-this">
 				    <a lay-href="dictionary/manage_major.html">专业维护</a>
 				  </dd>
-                <dd data-name="console">
+                <dd data-name="schoolM">
                   <a lay-href="dictionary/manage_school.html">学校维护</a>
                 </dd>
               </dl>
@@ -112,7 +112,7 @@
             <li data-name="component" class="layui-nav-item">
               <a href="javascript:;" lay-tips="用户及角色管理" lay-direction="2">
                 <i class="layui-icon layui-icon-user"></i>
-                <cite>用户及角色管理</cite>
+                <cite>用户及角色管理</cite> 
               </a>
               <dl class="layui-nav-child">
                 <dd data-name="user">
@@ -135,14 +135,15 @@
               <dl class="layui-nav-child">
                 <dd><a lay-href="collection/performance_template.html">填报模板维护</a></dd>
                 <dd><a lay-href="collection/manage_col_task.html">填报任务管理</a></dd>
-                <dd><a lay-href="template/caller.html">专业数据填报</a>
+                <dd data-name="major">
+					<a href="javascript:;">专业数据填报</a>
 					<dl class="layui-nav-child">
-						<dd data-name="report_basic"><a lay-href="component/grid/list.html">专业基本情况</a></dd>
+						<dd data-name="report_basic"><a lay-href="template/caller.html">专业基本情况</a></dd>
 						<dd data-name="report_performance"><a lay-href="component/grid/mobile.html">绩效目标完成</a></dd>
 						<dd data-name="report_capital"><a lay-href="component/grid/mobile-pc.html">资金支出进度</a></dd>
                   </dl>
-				</dd>
-              </dl>
+				</dd> 
+              </dl> 
             </li>
             <li data-name="report_audit" class="layui-nav-item">
               <a href="javascript:;" lay-tips="填报数据审核" lay-direction="2">
@@ -177,7 +178,7 @@
                 </dd>
                 <dd>
                   <a lay-href="user/administrators/list.html">绩效目标完成情况--专业汇总表</a>
-                </dd>
+                </dd>  
                 <dd>
                   <a lay-href="user/administrators/role.html">资金支出进度表</a>
                 </dd>
@@ -214,7 +215,7 @@
       <!-- 主体内容 -->
       <div class="layui-body" id="LAY_app_body">
         <div class="layadmin-tabsbody-item layui-show">
-          <iframe src="user/manage_user.html" frameborder="0" class="layadmin-iframe"></iframe>
+          <iframe src="dictionary/manage_major.html" frameborder="0" class="layadmin-iframe"></iframe>
         </div>
       </div>
       

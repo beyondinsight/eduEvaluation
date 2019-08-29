@@ -21,6 +21,7 @@ import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
+import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.mapper.ColMapper;
@@ -59,7 +60,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 			// 3.insert task-major:
 			// 3.1 default school majors:
-			List<ColTaskMajor> defaultMajorTasks = new ArrayList();
+			/*List<ColTaskMajor> defaultMajorTasks = new ArrayList();
 			List<ChosenMajor> defaultMajors = (ArrayList) dictDao.getChosenMajorSchools(school_ids);
 			for (int i = 0; i < defaultMajors.size(); i++) {
 				ColTaskMajor taskMajor = new ColTaskMajor();
@@ -82,7 +83,14 @@ public class ColTaskServiceImpl implements ColTaskService {
 				dao.insertBasicForm(bf);
 
 				// 5.insert form 2:
-
+				PerformanceForm pf = new PerformanceForm();
+				pf.setCollection_major_id(taskMajor.getId());
+				pf.setCreate_time(new Date());
+				pf.setUpdate_time(new Date());
+				//pf.setOp_user(op_user);
+				pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+				dao.insertPerformanceForm(pf);
+				
 				// 6.insert form 3:
 				CapitalProgressForm cpf = new CapitalProgressForm();
 				cpf.setCollection_major_id(taskMajor.getId());
@@ -91,11 +99,11 @@ public class ColTaskServiceImpl implements ColTaskService {
 				cpf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 				dao.insertCapitalProgressForm(cpf);
 			}
-			// dao.insertTaskMajors(defaultMajorTasks);
+			// dao.insertTaskMajors(defaultMajorTasks);*/
 
 			// 3.2 update school majors:
 			if (majors != null && majors.size()!=0) {
-				HashMap choseSchool = new HashMap();
+				/*HashMap choseSchool = new HashMap();
 				for (int i = 0; i < majors.size(); i++) {
 					ColTaskMajor inputMajor = (ColTaskMajor) majors.get(i);
 					choseSchool.put(inputMajor.getSchool_id(), null);
@@ -114,10 +122,15 @@ public class ColTaskServiceImpl implements ColTaskService {
 					int[] tempId2 = dao.getColTaskSchoolId(task.getId(), tempId);
 					school_id2[index++] = tempId2[0];
 				}
-				dao.deleteTaskOldSchools(school_id2);
+				dao.deleteTaskOldSchools(school_id2);*/
 
 				for (int i = 0; i < majors.size(); i++) {
 					ColTaskMajor inputMajor = (ColTaskMajor) majors.get(i);
+					inputMajor.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					inputMajor.setCreate_time(new Date());
+					inputMajor.setUpdate_time(new Date());
+					int[] colTaskNewSchoolId = dao.getColTaskSchoolId(task.getId(), inputMajor.getSchool_id());
+					inputMajor.setCollection_school_id(colTaskNewSchoolId[0]);
 					int m = dao.insertTaskMajor(inputMajor);
 
 					// 4.insert form 1:
@@ -128,8 +141,16 @@ public class ColTaskServiceImpl implements ColTaskService {
 					bf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 					dao.insertBasicForm(bf);
 
-					// 5.insert form 2:
-
+					// 5.insert form 2:  
+					PerformanceForm pf = new PerformanceForm();
+					pf.setCollection_major_id(inputMajor.getId());
+					pf.setCreate_time(new Date());
+					pf.setUpdate_time(new Date());
+					//pf.setOp_user(op_user);
+					pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					pf.setM_system_id(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+					dao.insertPerformanceForm(pf);
+					
 					// 6.insert form 3:
 					CapitalProgressForm cpf = new CapitalProgressForm();
 					cpf.setCollection_major_id(inputMajor.getId());
@@ -200,6 +221,21 @@ public class ColTaskServiceImpl implements ColTaskService {
 	public int deleteMetrics(int metrics_id) {
 		// TODO Auto-generated method stub
 		return dao.deleteMetrics(metrics_id);
+	}
+
+	public int insertMaterial(Material material) {
+		// TODO Auto-generated method stub
+		return dao.insertMaterial(material);
+	}
+
+	public List<Material> getMaterials(int metrics_id) {
+		// TODO Auto-generated method stub
+		return dao.selectMaterials(metrics_id);
+	}
+
+	public int deleteMaterial(int id) {
+		// TODO Auto-generated method stub
+		return dao.deleteMaterial(id);
 	}
 
 }

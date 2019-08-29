@@ -25,4 +25,7 @@ public interface ColTaskService {
 	public int countMaterials(int metrics_id);
 	public int updateMetrics(MetricsDetail metrics); 
 	public int deleteMetrics(int metrics_id);
+	public int insertMaterial(Material material);
+	public List<Material> getMaterials(int metrics_id);
+	public int deleteMaterial(int id); 
 }

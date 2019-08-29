@@ -87,7 +87,7 @@
 	  for(i=0; i<chosen.length; i++){
 		  var str = chosen[i].title.split("--");
 		  major={
-			  'id':chosen[i].value,
+			  'major_id':chosen[i].value,
 			  'major_code': str[0],
 			  'major_name': str[1]
 		  };
@@ -107,7 +107,7 @@
 		  if(i != chosen.length-1) strChosen = strChosen + ",";
 	  }
 	  strChosen = strChosen + "]";
-	  
+	   
 	  $('#choseId').val(strChosen);
 	  
 	  parent.layer.close(index);

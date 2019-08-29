@@ -16,6 +16,7 @@
 				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="metrics_form">
 					<div class="layui-form-item">
 						<input type="hidden" name="id" id="id">
+						<input type="hidden" name="tempLevel" id="tempLevel">
 						<div class="layui-inline">
 							<label class="layui-form-label" style="width: 70px;">指标级别<span style="color: red;">* </span></label>
 							<div class="layui-input-inline" style="width: 120px">
@@ -81,26 +82,27 @@
 			}).extend({
 				index: 'lib/index' //主入口模块
 			}).use(['index', 'contlist', 'table', 'laydate', 'form', 'transfer', 'admin'], function() {
-				var table = layui.table,
+				var $ = layui.$,
+					table = layui.table,
 					form = layui.form,
 					laydate = layui.laydate,
 					transfer = layui.transfer,
 					admin = layui.admin,
 					projectBase = Class.getURL();
 				var data0, schoolTable;
-
-				form.render();
-
-				layui.data('materials', null);
 				
-				var data0 = layui.data('materials');
+				form.render();
+				form.render('select');
+				
+				console.log($('#tempLevel').val());
+				var select = 'dd[lay-value=' + $('#tempLevel').val() + ']';
+				$('#level').siblings("div.layui-form-select").find('dl').find(select).click();  
 
-				schoolTable = table.render({
+				table.render({
 					elem: '#LAY-app-content-list',
 					width: 680,
 					height: 320,
-					data: []
-						//toolbar:'#toolbarDemo'
+					url: projectBase + "/collection/getMaterials?id="+id.value
 						,
 					page: true //开启分页
 						,
@@ -172,13 +174,25 @@
 					var data = obj.data;
 					if (obj.event === 'del') {
 						
-						console.log(data.material_name);
-						layui.data("materials",{
-							key: data.material_name,
-							remove: true
+						$.ajax({
+							url: projectBase + '/collection/deleteMaterial',
+							dataType: 'json',
+							data: {
+								'id':data.id,
+								},
+							type: 'POST',
+							success: function(res){
+								if(res.code==1){
+									//layer.msg("删除材料成功!");
+									obj.del();
+								} else {
+									layer.msg("指删除材料失败!", function(){
+										});
+								} 
+							} 
 						});
 						
-						obj.del();
+						obj.del();  
 
 						/*table.render({
 							elem: '#LAY-app-content-list',
@@ -247,60 +261,23 @@
 								maxmin: true,
 								offset: [ //为了演示，随机坐标
 									$(window).height() - 520, $(window).width() - 1000
-								],
+								], 
 								btn: ['确认', '取消'],
 								yes: function(index, layero) {
 									//点击确认触发 iframe 内容中的按钮提交
 									var submit = layero.find('iframe').contents().find("#material_form");
-									console.log(submit);
+									//console.log(submit);
+									console.log("start to submit");
 									submit.click();
-									
-									var materials = layui.data('materials');
-									console.log(materials);
-									var data0 = [];
-									for(var val in materials){
-										var material = {
-											'material_name':val,
-											'memo':materials[val]
-										}
-										data0.push(material);
-									}
-
-									table.render({
-										elem: '#LAY-app-content-list',
-										width: 680,
-										height: 320,
-										data: data0
-											//toolbar:'#toolbarDemo'
-											,
-										page: true //开启分页
-											,
-										cols: [
-											[ //表头
-												{
-													field: 'material_name',
-													title: '支撑材料',
-													align: 'center',
-													width: 190
-												}, {
-													field: 'memo',
-													title: '备注',
-													align: 'center',
-													width: 350
-												}, {
-													title: '操作',
-													toolbar: '#test-table-toolbar-barDemo',
-													align: 'center',
-													width: 140
-												}
-											]
-										]
-									});
+									    
+									table.reload();
 								},
-								content: 'new_material.html',
+								content: 'edit_material.html', 
 								zIndex: layer.zIndex //重点1
 									,
 								success: function(layero, index) {
+									var metrics_id = layero.find('iframe').contents().find("#metrics_id");
+									$(metrics_id).val(id.value);
 									layer.setTop(layero); //重点2
 								} 
 							});
