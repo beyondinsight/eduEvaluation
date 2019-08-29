@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.philip.edu.eval.mapper.RolesMapper" >
+  <resultMap id="RolesResultMap" type="com.philip.edu.eval.bean.TblRoles" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="role_code" property="roleCode" jdbcType="VARCHAR" />
+    <result column="define_year" property="defineYear" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="role_def" property="roleDef" jdbcType="VARCHAR" />
+    <result column="pid" property="pid" jdbcType="BIGINT" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <resultMap id="UserRoleResultMap" type="com.philip.edu.eval.bean.TblUserRole" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />  
+  </resultMap>
+  
+<!--    <resultMap id="UserRolecountResultMap" type="com.philip.edu.eval.bean.TblUserRolecount" >
+    
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="rolecount" property="rolecount" jdbcType="BIGINT" />
+     
+  </resultMap> -->
+ 
+  <delete id="deleteRolesById" parameterType="java.lang.Long" >
+    delete from tbl_roles
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+
+  <insert id="insertRoles" parameterType="com.philip.edu.eval.bean.TblRoles" >
+    insert into tbl_roles (id, role_name, role_code, 
+      define_year, description, role_def, 
+      pid, status, create_time, 
+      update_time)
+    values (#{id,jdbcType=BIGINT}, #{roleName,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR}, 
+      #{defineYear,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{roleDef,jdbcType=VARCHAR}, 
+      #{pid,jdbcType=BIGINT}, #{status,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelectiveRoles" parameterType="com.philip.edu.eval.bean.TblRoles" >
+    insert into tbl_roles
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleName != null" >
+        role_name,
+      </if>
+      <if test="roleCode != null" >
+        role_code,
+      </if>
+      <if test="defineYear != null" >
+        define_year,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="roleDef != null" >
+        role_def,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="roleName != null" >
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null" >
+        #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="defineYear != null" >
+        #{defineYear,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDef != null" >
+        #{roleDef,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+ 
+ 
+  <update id="updateByPrimaryKeySelectiveRoles" parameterType="com.philip.edu.eval.bean.TblRoles" >
+    update tbl_roles
+    <set >
+      <if test="roleName != null" >
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleCode != null" >
+        role_code = #{roleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="defineYear != null" >
+        define_year = #{defineYear,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDef != null" >
+        role_def = #{roleDef,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=BIGINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <update id="updateByPrimaryKeyRoles" parameterType="com.philip.edu.eval.bean.TblRoles" >
+    update tbl_roles
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_code = #{roleCode,jdbcType=VARCHAR},
+      define_year = #{defineYear,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      role_def = #{roleDef,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=BIGINT},
+      status = #{status,jdbcType=CHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="getRolenameRoles" resultMap="RolesResultMap" >
+  select * from tbl_roles
+  </select>
+  
+  
+ 
+ 
+  
+  <delete id="deleteByPrimaryKeyUserrole"  >
+    delete from tbl_user_role
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  
+ 
+  <insert id="insertUserrole" parameterType="com.philip.edu.eval.bean.TblUserRole" >
+    insert into tbl_user_role (id, user_id, role_id, 
+      memo, status)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT}, 
+      #{memo,jdbcType=VARCHAR}, #{status,jdbcType=CHAR})
+  </insert>
+  
+  <insert id="insertSelectiveUserrole" parameterType="com.philip.edu.eval.bean.TblUserRole" >
+    insert into tbl_user_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=BIGINT},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeyUserrole" parameterType="com.philip.edu.eval.bean.TblUserRole" >
+    update tbl_user_role
+    set user_id = #{userId,jdbcType=BIGINT},
+      role_id = #{roleId,jdbcType=BIGINT},
+      memo = #{memo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  
+  <select id="selectByPrimaryKeyUserrole" parameterType="com.philip.edu.eval.bean.TblUserRole" >
+    update tbl_user_role
+    set user_id = #{userId,jdbcType=BIGINT},
+      role_id = #{roleId,jdbcType=BIGINT},
+      memo = #{memo,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  
+  <select id="getRolenameUserrole" resultMap="UserRoleResultMap" >
+  select * from tbl_user_role
+  </select>
+  
+<!--   
+   <select id="getRolenameUserrolecount" resultMap="UserRolecountResultMap" >
+ 		 select user_id,count(1) rolecount from tbl_user_role GROUP by user_id
+  </select>
+   -->
+  
+  
+</mapper>

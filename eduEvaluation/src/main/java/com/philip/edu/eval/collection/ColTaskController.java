@@ -31,7 +31,6 @@ import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.dictionary.DictService;
 import com.philip.edu.eval.util.EvalConstants;
 import com.philip.edu.test.bean.HelloBean;
-import com.philip.edu.test.service.HelloService;
 
 @RestController
 @EnableWebMvc

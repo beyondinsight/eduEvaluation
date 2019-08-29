@@ -9,7 +9,7 @@
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="salt" property="salt" jdbcType="VARCHAR" />
     <result column="institution" property="institution" jdbcType="VARCHAR" />
-    <result column="majot" property="majot" jdbcType="VARCHAR" />
+    <result column="major" property="major" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="creator" property="creator" jdbcType="BIGINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
@@ -21,21 +21,50 @@
     <result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="BIGINT" />
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    
   </resultMap>
  
-  <select id="getUsersList" resultMap="UsersResultMap" parameterType="java.lang.Long" >
-    select  *   from tbl_users 
-  </select>
+
+ 
+  <select id="getUsersList" resultMap="UsersResultMap"   >
+    select  * from tbl_users d left join(
+			select user_id,c.role_id,c.role_name
+				from (
+							select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
+							) c 
+		) e on d.id = e.user_id
+	</select>
   
   <delete id="deleteUsers" parameterType="java.lang.Long" >
     delete from tbl_users
     where id = #{id,jdbcType=BIGINT}
   </delete>
   
+  
+  <insert id="createUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   useGeneratedKeys="true" keyProperty="id">
+    
+   insert into tbl_users (user_name, chinese_name, 
+      password, salt, institution, 
+      major, status, creator, 
+      create_time, update_time, last_operation, 
+      position, QQ, fix_phone, 
+      mobile_phone, email, memo
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{chineseName,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{institution,jdbcType=VARCHAR}, 
+      #{major,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{creator,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{lastOperation,jdbcType=TIMESTAMP}, 
+      #{position,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{fixPhone,jdbcType=VARCHAR}, 
+      #{mobilePhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}
+      )
+  </insert>
+
   <insert id="addUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
     insert into tbl_users (id, user_name, chinese_name, 
       password, salt, institution, 
-      majot, status, creator, 
+      major, status, creator, 
       create_time, update_time, last_operation, 
       position, QQ, fix_phone, 
       mobile_phone, email, memo
@@ -79,4 +108,5 @@
   <select id="selectUser" resultType="com.philip.edu.eval.bean.TblUsers" parameterType="java.lang.String">
   	  select * from tbl_users where user_name=#{user_name}
   </select>
+
 </mapper>

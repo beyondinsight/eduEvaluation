@@ -8,7 +8,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.shiro.codec.Hex;
 
-import io.jsonwebtoken.SignatureAlgorithm;
+//import io.jsonwebtoken.SignatureAlgorithm;
 
 public class PasswordUtil {
 	public static byte[] createSalt(){
@@ -26,13 +26,14 @@ public class PasswordUtil {
 		try {
 			MessageDigest md5 = MessageDigest.getInstance("MD5");
 			byte[] bs = md5.digest(src.getBytes());
-			return new String(new Hex().encode(bs));
+			new Hex();
+			return new String(Hex.encode(bs));
 		} catch (Exception e) {
 			return null;
 		}
 	}
 	
-	public static String createJWT(String id, String issuer, String subject, long ttlMillis){
+	/*public static String createJWT(String id, String issuer, String subject, long ttlMillis){
 		SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 		
 		long nowMillis = System.currentTimeMillis();
@@ -49,5 +50,5 @@ public class PasswordUtil {
 		
 		String s = PasswordUtil.md5Hex(name + password + salt);
 		System.out.println(s);
-	}
+	}*/
 }
