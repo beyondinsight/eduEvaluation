@@ -133,9 +133,15 @@
                 <cite>专业填报</cite>
               </a>
               <dl class="layui-nav-child">
-                <dd><a lay-href="template/personalpage.html">填报模板维护</a></dd>
+                <dd><a lay-href="collection/performance_template.html">填报模板维护</a></dd>
                 <dd><a lay-href="collection/manage_col_task.html">填报任务管理</a></dd>
-                <dd><a lay-href="template/caller.html">专业数据填报</a></dd>
+                <dd><a lay-href="template/caller.html">专业数据填报</a>
+					<dl class="layui-nav-child">
+						<dd data-name="report_basic"><a lay-href="component/grid/list.html">专业基本情况</a></dd>
+						<dd data-name="report_performance"><a lay-href="component/grid/mobile.html">绩效目标完成</a></dd>
+						<dd data-name="report_capital"><a lay-href="component/grid/mobile-pc.html">资金支出进度</a></dd>
+                  </dl>
+				</dd>
               </dl>
             </li>
             <li data-name="report_audit" class="layui-nav-item">

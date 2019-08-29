@@ -21,4 +21,6 @@ public class EvalConstants {
 	public static final int LOGIN_STATUS_SUCCESS = 1;
 	public static final int LOGIN_STATUS_USER_NO_EXSITS = 2;
 	public static final int LOGIN_STATUS_PASSWORD_NOT_RIGHT = 3;
+	
+	public static final int METRICS_SYSTEM_ROOT_CODE = 0;
 }

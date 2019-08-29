@@ -18,6 +18,18 @@
 		<result property="end_time" column="end_time"/>
 	</resultMap> 
 	
+	<resultMap id="metricsListResultMap" type="com.philip.edu.eval.bean.MetricsDetail">
+		<id property="id" column="id"/>
+		<result property="m_system_id" column="m_system_id"/>
+		<result property="metrics_name" column="metric_name"/>
+		<result property="level" column="level"/>
+		<result property="metrics_code" column="metric_code"/>
+		<result property="order" column="morder"/>
+		<result property="description" column="description"/>
+		<result property="pid" column="pid"/>
+		<result property="unit" column="unit"/>
+	</resultMap> 
+	
 	<resultMap id="colTaskSchoolId" type="int">
 		<id property="id" column="id"/>
 	</resultMap>
@@ -108,5 +120,37 @@
     	<foreach collection="array" item="id" index="no" open="(" separator="," close=")">
     		#{id}
     	</foreach>
+    </delete>
+    
+    <insert id="insertMetrics" parameterType="com.philip.edu.eval.bean.MetricsDetail" useGeneratedKeys="true" keyProperty="id">
+    	insert into tbl_metrics_detail(m_system_id, metric_name, metric_code, unit, pid, morder, level, description)
+    	values(#{m_system_id}, #{metrics_name}, #{metrics_code}, #{unit}, #{pid}, #{order}, #{level}, #{description})
+    </insert>
+    
+    <insert id="insertMaterials" parameterType="java.util.List">
+    	insert into tbl_support_material(metrics_id, material_name, description)
+    	values
+    	<foreach collection="list" item="material" index="index" separator=",">
+    	(#{material.metrics_id}, #{material.material_name}, #{material.memo})
+    	</foreach>
+    </insert>
+    
+    <select id="selectMetricsList" resultMap="metricsListResultMap">
+    	select * from tbl_metrics_detail where m_system_id=#{metrics_system}
+    </select>
+    
+    <select id="countMaterials" resultType="int">
+    	select count(*) from tbl_support_material where metrics_id=#{metrics_id}
+    </select>
+    
+    <update id="updateMetrics" parameterType="com.philip.edu.eval.bean.MetricsDetail">
+    	update tbl_metrics_detail
+    	set metric_name = #{metrics_name}, metric_code=#{metrics_code}, morder=#{order}, pid=#{pid}, unit=#{unit}, level=#{level}, description=#{description}
+    	where id=#{id}
+    </update>
+    
+    <delete id="deleteMetrics" parameterType="int">
+    	delete from tbl_metrics_detail
+    	where id=#{metrics_id}
     </delete>
 </mapper>
