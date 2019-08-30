@@ -25,4 +25,9 @@ public class EvalConstants {
 	public static final String COLLECTION_STATUS_INACTIVE_DISPLAY = "未启用";
 	public static final String COLLECTION_STATUS_ACTIVE_DISPLAY = "启用";
 	public static final String COLLECTION_STATUS_STOP_DISPLAY = "禁用";
+	
+	public static final int LOGIN_STATUS_USER_NO_EXSITS = 2;
+	public static final int LOGIN_STATUS_PASSWORD_NOT_RIGHT = 3;
+	public static final int LOGIN_STATUS_SUCCESS = 1;
+	
 }

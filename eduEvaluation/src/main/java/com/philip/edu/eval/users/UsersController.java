@@ -47,6 +47,7 @@ import com.philip.edu.eval.bean.TblUsers;
 
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.EvalConstants;
+import com.philip.edu.eval.util.PasswordUtil;
 //import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.role.RolesService;
 import com.philip.edu.eval.util.Code;
@@ -109,12 +110,12 @@ public class UsersController {
 		String roleId = request.getParameter("roleId");
 
 		JSONObject object = new JSONObject();
-		/*int sieq = service.getUsers(userName).size();
+		int sieq = service.getUsers(userName).size();
 		if(sieq>0) {
 			 code=2;
 			 msg="用户名已存在";
 			return   new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
-		}*/
+		}
 		
 		if(!checkName(userName)) {
 			code =3;			 
@@ -135,20 +136,21 @@ public class UsersController {
 			users.setCreator(Integer.parseInt(creator));
 		}
 		 
-		password = Code.encrypt(password, propConfig.getProperty("code_key"), propConfig.getProperty("code_ivs"));
+
 		users.setEmail(email);
 		users.setFixPhone(fixPhone);
 		users.setInstitution(institution);
 		//users.setMajor(major);
 		users.setMemo(memo);
 		users.setMobilePhone(mobilePhone);
-		users.setPassword(password);
 		users.setPosition(position);
 		users.setQq(qq);
-		//users.setSalt(PasswordUtil.createSalt().toString());
+		users.setSalt(PasswordUtil.createSalt().toString());
 		users.setStatus(status);
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
+		password = PasswordUtil.md5Hex(userName + password + users.getSalt());
+		users.setPassword(password);
 		
 		if( roleId !=null && !roleId.equals("") ) {
 			users.setRoleId(Integer.parseInt(roleId));
@@ -192,7 +194,7 @@ public class UsersController {
 		String password = request.getParameter("password");
 		String position = request.getParameter("position");
 		String qq = request.getParameter("qq");
-		String salt = request.getParameter("salt");
+		//String salt = request.getParameter("salt");
 		String status = request.getParameter("status");
 		String userName = request.getParameter("userName");
 		
@@ -225,7 +227,7 @@ public class UsersController {
 		
 		users.setPosition(position);
 		users.setQq(qq);
-		users.setSalt(salt);
+		//users.setSalt(salt);
 		users.setStatus(status);
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
@@ -441,7 +443,7 @@ public class UsersController {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		//user exsits:
-		/*boolean exsits = service.exsitsUser(username);
+		boolean exsits = service.exsitsUser(username);
 		if(!exsits){
 			data.setMsg("用户不存在！");
 			data.setCode(EvalConstants.LOGIN_STATUS_USER_NO_EXSITS);
@@ -462,11 +464,11 @@ public class UsersController {
 		List<TblUsers> users = service.getUsers(username);
 		//TblUsers user = users.get(0);
 
-		data.setMsg("登录成功!");
+		data.setMsg("登录成功!"); 
 		data.setCode(EvalConstants.LOGIN_STATUS_SUCCESS); 
 		data.setData((ArrayList)users);
 		//data.setCount(usersList.size());
-		//BackendData data = new BackendData();*/
+		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}

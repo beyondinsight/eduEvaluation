@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>数据填报模板定义 - 绩效目标完成情况</title>
+		<title>绩效目标完成情况</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -26,13 +26,12 @@
 
 				<div class="layui-card-body">
 					<div style="padding-bottom: 10px;">
-						<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 新建指标</button>
+						<button class="layui-btn layuiadmin-btn-list layui-btn-checked" data-type="edit" ><i class="layui-icon layui-icon-senior"></i> 校验并完成填报</button>
 						<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
 					</div>
 					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 					<script type="text/html" id="test-table-toolbar-barDemo">
 					  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-					  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
 					</script>
 				</div>
 				<div class="layui-card-body">
@@ -72,77 +71,56 @@
 
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getMetrics',
+					url: projectBase + '/collection/getPerformanceForm?collection_major_id=' + 30,
 					page: true, //开启分页
 					height: 500	,
 					cols: [
 						[ //表头
-							{
-								field: 'order',
-								title: '一级指标编号',
-								align: 'center',
-								width: 140
-							}, {
+							 {
 								field: 'level1_name',
 								title: '一级指标',
 								align: 'center',
-								width: 160
 							},{
-								field: 'metrics_code',
-								title: '二级指标编号',
-								align: 'center',
-								width: 140
-							}, {
 								field: 'metrics_name',
 								title: '二级指标',
 								align: 'center',
-								width: 300
 							}, ,{
 								field: 'unit',
 								title: '单位',
 								align: 'center',
-								width: 80
 							}, {
 								field: '',
 								title: '当前值',
 								align: 'center',
-								width: 80
 							},  {
 								field: '',
 								title: '目标值',
 								align: 'center',
-								width: 80
 							},  {
 								field: '',
 								title: '实际完成值',
 								align: 'center',
-								width: 120
 							},  {
 								field: '',
 								title: '分值',
 								align: 'center',
-								width: 80
 							},  {
 								field: '',
 								title: '自评分',
 								align: 'center',
-								width: 80
 							},  {
 								field: '',
 								title: '自评说明',
 								align: 'center',
-								width: 100
 							},  {
 								field: 'material_num',
 								title: '支撑材料',
 								align: 'center',
-								width: 140
 							}, {
 								title: '操作',
 								fixed: 'right',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
-								width: 140
 							}
 						]
 					]
@@ -151,18 +129,18 @@
 				
 				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
-					if (obj.event === 'edit') {
+					if (obj.event === 'edit') { 
+						console("entering my method.");
+						console.log("metrics_id: " + data.metrics_id);
+						console.log("metrics_name:" + data.metrics_name);
 						layer.open({
 							type: 2 //此处以iframe举例
 								,
-							title: '选择专业',
-							area: ['800px', '500px'],
+							title: '填报详细',
+							area: ['50%', '70%'],
 							shade: 0,
 							maxmin: true,
-							/*offset: [ //为了演示，随机坐标
-								$(window).height() - 520, $(window).width() - 1000
-							],*/
-							btn: ['确认', '取消'],
+							btn: ['保存', '取消'],
 							yes: function(index, layero) {
 								//点击确认触发 iframe 内容中的按钮提交
 								var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
@@ -193,7 +171,7 @@
 									cols: [
 										[ //表头
 											{
-												field: 'major_code',
+												field: 'major_code',  
 												title: '专业代码',
 												align: 'center',
 												width: 230
@@ -207,12 +185,12 @@
 									]
 								});
 							},
-							content: 'choose_major.html',
+							content: 'edit_performance_item.html',
 							zIndex: layer.zIndex //重点1
 								,
 							success: function(layero, index) {
-								var school_id = layero.find('iframe').contents().find("#school_id");
-								$(school_id).val(data.id);
+								var school_id = layero.find('iframe').contents().find("#metrics_id");
+								$(metrics_id).val(data.id);
 								layer.setTop(layero); //重点2
 							}
 						});
@@ -246,11 +224,14 @@
 						});
 							
 					} else if (obj.event == 'edit') {
+						//console.log("entering my method.");
+						//console.log("metrics_id: " + data.metrics_id);
+						//console.log("metrics_name:" + data.metrics_name);
 						layer.open({
 							type: 2 //此处以iframe举例
 								,
-							title: '修改指标定义',
-							area: ['850px', '750px'],
+							title: '填报详细',
+							area: ['70%', '80%'],
 							shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
@@ -261,25 +242,13 @@
 								
 								table.reload('LAY-app-content-list');
 							},
-							content: 'edit_metrics.html',
+							content: 'edit_performance_item.html',
 							zIndex: layer.zIndex //重点1
 								,
 							success: function(layero, index) {
-								console.log(data.id);
-								var contents = layero.find('iframe').contents();
-								var level = contents.find('#level');
-								var metrics_code = contents.find('#metrics_code');
-								$(metrics_code).val(data.metrics_code);
-								var unit = contents.find('#unit');
-								$(unit).val(data.unit);
-								var name = contents.find('#name');
-								$(name).val(data.metrics_name); 
-								var memo = contents.find('#memo');
-								$(memo).val(data.description);
-								var id = contents.find('#id'); 
-								$(id).val(data.id);
-								var tempLevel = contents.find('#tempLevel');
-								$(tempLevel).val(data.level);
+								//console.log(data.id);
+								var metrics_id = layero.find('iframe').contents().find("#metrics_id");
+								$(metrics_id).val(data.metrics_id);
 								
 								layer.setTop(layero); //重点2    
 							}   

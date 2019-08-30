@@ -30,6 +30,29 @@
 		<result property="unit" column="unit"/>
 	</resultMap> 
 	
+	<resultMap id="performanceResultMap" type="com.philip.edu.eval.bean.PerformanceForm">
+		<id property="id" column="id"/>
+		<result property="collection_major_id" column="collection_major_id" />
+		<result property="metrics_id" column="metrics_id" />
+		<result property="metrics_name" column="metric_name" />
+		<result property="unit" column="unit" />
+		<result property="current_value" column="current_value" />
+		<result property="target_value" column="target_value" />
+		<result property="actual_value" column="actual_value" />
+		<result property="score" column="score" />
+		<result property="self_evaluate" column="self_evaluate" />
+		<result property="self_introduction" column="self_introduction" />
+		<result property="process_status" column="process_status" />
+	</resultMap>
+	
+	<resultMap id="materialResultMap" type="com.philip.edu.eval.bean.Material">
+		<id property="id" column="id"/>
+		<result property="material_id" column="material_id" />
+		<result property="material_name" column="material_name" />
+		<result property="update_time" column="update_time" />
+		<result property="doc_size" column="doc_size" />
+ 	</resultMap>
+	
 	<resultMap id="colTaskSchoolId" type="int">
 		<id property="id" column="id"/>
 	</resultMap>
@@ -153,4 +176,15 @@
     	delete from tbl_metrics_detail
     	where id=#{metrics_id}
     </delete>
+    
+    <select id="getPerformanceForm" resultMap="performanceResultMap" >
+    	select collection_major_id, metrics_id, metric_name, m.unit, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
+    	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id}
+    </select>
+    
+    <select id="getRelateMaterials" resultMap="materialResultMap">
+    	 select cm.id, material_id, material_name, cm.update_time, doc_size 
+    	 from tbl_collection_material cm left join tbl_support_material sm  
+    	 on cm.material_id = sm.id  and cm.metrics_id = #{metrics_id}
+    </select>
 </mapper>

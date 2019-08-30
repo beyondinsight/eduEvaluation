@@ -8,6 +8,7 @@ import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
+import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 
@@ -25,4 +26,6 @@ public interface ColTaskService {
 	public int countMaterials(int metrics_id);
 	public int updateMetrics(MetricsDetail metrics); 
 	public int deleteMetrics(int metrics_id);
+	public List<PerformanceForm> getPerformanceForm(int collection_major_id);
+	public List<Material> getRelateMaterials(int metrics_id);
 }

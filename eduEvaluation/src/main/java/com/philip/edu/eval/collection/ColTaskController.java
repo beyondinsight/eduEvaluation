@@ -382,4 +382,40 @@ public class ColTaskController {
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
+	 
+	@RequestMapping(value="/getPerformanceForm", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getPerformanceForm(HttpServletRequest request){
+		
+		String collection_major_id = request.getParameter("collection_major_id");
+		
+		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id));
+		logger.info("successfully get performance form list");
+		 
+		BackendData data = new BackendData();
+		data.setMsg("成功获取业绩表格"); 
+		data.setCode(0); 
+		data.setData(performanceForm);
+		data.setCount(performanceForm.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/getRelateMaterials", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request){
+		
+		String metrics_id = request.getParameter("metrics_id");
+		
+		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(metrics_id));
+		logger.info("successfully get materials list");
+		 
+		BackendData data = new BackendData();
+		data.setMsg("成功获取材料列表");  
+		data.setCode(0); 
+		data.setData(materials);
+		data.setCount(materials.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
 }
