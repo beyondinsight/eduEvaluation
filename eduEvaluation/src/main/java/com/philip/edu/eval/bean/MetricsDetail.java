@@ -10,7 +10,22 @@ public class MetricsDetail {
 	private int level;
 	private String description;
 	private int order;
+	private String unit;
+	private String metrics_code;
 	
+	
+	public String getMetrics_code() {
+		return metrics_code;
+	}
+	public void setMetrics_code(String metrics_code) {
+		this.metrics_code = metrics_code;
+	}
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
 	private List<SupportMaterial> materials;
 	
 	

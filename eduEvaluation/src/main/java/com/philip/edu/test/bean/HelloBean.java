@@ -4,6 +4,16 @@ import java.util.List;
 
 
 public class HelloBean {
+	
+	public static void main(String[] args){
+		String a = "1.2.3";
+		String[] temp = a.split("\\.");
+		System.out.println(temp.length);
+		for(int i=0; i<temp.length; i++){
+			System.out.println(temp[i]);
+		}
+	}
+	
 	private String hello;
 	private List<String> list;
 	 
