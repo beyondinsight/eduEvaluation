@@ -9,12 +9,13 @@ import com.philip.edu.eval.bean.TblSchoolUser;
 
 public interface SchoolUserMapper {
 
-	public int createschoolmajor(TblSchoolMajor users);
-	public int updateschoolmajor(TblSchoolMajor users);
-	public int deleteschoolmajor(int id);   
-    List<TblSchoolMajor> getRolenameSchoolMajor();
+	//school major user
+	public int createMajorUser(TblSchoolMajor tsu);
+	public int updateMajorUser(TblSchoolMajor tsu);
+	public int deleteMajorUser(int id);  
+	public List<TblSchoolMajor> getRolenameSchoolMajor();
     
-	
+	//school user
     public List<TblSchoolUser> getNameSchoolUser();
     public int createSchoolUser(TblSchoolUser tsu);
 	public int updateSchoolUser(TblSchoolUser tsu);

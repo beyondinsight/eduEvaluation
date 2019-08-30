@@ -12,7 +12,8 @@ public interface RolesMapper {
    
 	//tbl_roles
 	List<TblRoles> getRolenameRoles();
-	List<TblRoles> getRolesUsersCount();	
+	List<TblRoles> getRolesUsersCount();
+	List<TblRoles> getUploadRolesUsersCount(int id);
     int deleteByPrimaryKey(int id);  
     int createRoles(TblRoles roles);
    	int updateRoles(TblRoles roles);

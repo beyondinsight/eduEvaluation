@@ -44,6 +44,30 @@ public  class SchoolUserImpl implements SchoolUserService {
 	}
 
 
+	public List<TblSchoolMajor> getRolenameSchoolMajor() {
+		// TODO Auto-generated method stub
+		return dao.getRolenameSchoolMajor();
+	}
+
+
+	public int createMajorUser(TblSchoolMajor tsu) {
+		// TODO Auto-generated method stub
+		return dao.createMajorUser(tsu);
+	}
+
+
+	public int updateMajorUser(TblSchoolMajor tsu) {
+		// TODO Auto-generated method stub
+		return dao.updateMajorUser(tsu);
+	}
+
+
+	public int deleteMajorUser(int id) {
+		// TODO Auto-generated method stub
+		return dao.deleteMajorUser(id);
+	}
+
+
 
 	
 }

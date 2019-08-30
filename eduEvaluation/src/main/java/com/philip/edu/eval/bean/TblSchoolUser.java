@@ -63,6 +63,12 @@ public class TblSchoolUser {
 	public void setSchoolName(String schoolName) {
 		this.schoolName = schoolName;
 	}
+
+	@Override
+	public String toString() {
+		return "TblSchoolUser [id=" + id + ", roleId=" + roleId + ", roleName=" + roleName + ", userId=" + userId
+				+ ", userName=" + userName + ", schoolId=" + schoolId + ", schoolName=" + schoolName + "]";
+	}
     
     
     

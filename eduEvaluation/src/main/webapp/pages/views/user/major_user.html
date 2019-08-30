@@ -15,21 +15,20 @@
   <div class="layui-fluid">
     <div class="layui-card">
 
-      <div class="layui-card-body">
-        
-        <table id="demo" lay-filter="demo"></table> 
-        <script type="text/html" id="buttonTpl">
-          {{#  if(d.status){ }}
-            <button class="layui-btn layui-btn-xs">已发布</button>
-          {{#  } else { }}
-            <button class="layui-btn layui-btn-primary layui-btn-xs">待修改</button>
-          {{#  } }}
-        </script>
-        <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-        </script>
-      </div>
+			<div class="layui-card-body">
+				<table id="demo" lay-filter="demo"></table>
+				<script type="text/html" id="test-table-toolbar-barDemo">
+       			  <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><i class="layui-icon layui-icon-set"></i>设置</a>
+        		</script>
+			</div>
+
+			<div class="layui-card-body">
+				<table id="demo2" lay-filter="demo2"></table>
+				<script type="text/html" id="test-table-toolbar-barDemo">
+       			   <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><i class="layui-icon layui-icon-set"></i>设置</a>
+       			</script>
+			</div>
+       
     </div>
   </div>
 
@@ -47,22 +46,116 @@
     var $ = layui.jquery
     ,layer = layui.layer;
     
+    table.render({
+  	  elem: '#demo'
+  	  ,height: 400
+  	  ,url: '/eduEvaluation/role/upload_roles_usersCount'//数据接口
+  	  //toolbar:'#toolbarDemo'
+  	  ,page: true //开启分页
+  	  ,cols: [[ //表头
+  		 {type: 'numbers', title: '序号'}
+  	    ,{field: 'roleName', title: '角色名称'}
+  	    ,{field: 'counts', title: '关联用户'}    
+  		,{fixed: 'right', title:'操作',  toolbar: '#test-table-toolbar-barDemo'}
+  	  ]]
+  	});
+    
 	table.render({
-	  elem: '#demo'
+	  elem: '#demo2'
 	  ,height: 400
-	  ,url: '/eduEvaluation/schooluser/getschooluser'//数据接口
+	  ,url: '/eduEvaluation/schooluser/schoolMajorUser'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
 	    {type: 'checkbox'}
 	    ,{type: 'numbers', title: '序号'}
-	    ,{field: 'majorname', title: '角色'}
-	    ,{field: 'schoolname', title: '待分配学校'}
-	    ,{field: 'username', title: '分配用户'}
+	    ,{field: 'roleName', title: '角色'}
+	    ,{field: 'schoolName', title: '待分配学校'}
+	    ,{field: 'majorName', title: '待分配专业'}
+	    ,{field: 'userName', title: '分配用户'}
 	    ,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'}
 	  ]]
 	});
 	
+	
+	//监听行工具事件
+	table.on('tool(demo)', function(obj){
+	  var data = obj.data;
+	  if(obj.event === 'del'){
+	  } else if(obj.event === 'edit'){
+	  } else if(obj.event === 'set') {
+		
+		   layer.open({
+			    type: 2 //此处以iframe举例
+			    ,title: '选择用户'
+			    ,area: ['800px', '500px']
+			    ,shade: 0
+			    ,maxmin: true
+			    ,offset: [ //为了演示，随机坐标
+			    	 $(window).height()-700
+			          ,$(window).width()-1200
+			    ]
+				,btn: ['确认', '取消']
+				,yes: function(index, layero){
+				  //点击确认触发 iframe 内容中的按钮提交
+				  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+				  submit.click();
+				  table.reload('demo');
+				}
+			    ,content: 'choose_user.html'
+				,zIndex: layer.zIndex //重点1
+			    ,success: function(layero, index){
+				  var roleName = layero.find('iframe').contents().find("#roleName");
+				  var roleId = layero.find('iframe').contents().find("#roleId");
+				  $(roleName).val(data.roleName);
+				  $(roleId).val(data.id);
+ 
+			      layer.setTop(layero); //重点2  
+			    }
+			  });   
+
+      }
+	});
+	
+	
+	//监听行工具事件
+	table.on('tool(demo2)', function(obj){
+	  var data = obj.data;
+	  if(obj.event === 'del'){
+	  } else if(obj.event === 'edit'){
+	  } else if(obj.event === 'set') {
+		
+		   layer.open({
+			    type: 2 //此处以iframe举例
+			    ,title: '选择用户'
+			    ,area: ['800px', '500px']
+			    //,shade: 0
+			    ,maxmin: true
+			    ,offset: [ //为了演示，随机坐标
+			    	 $(window).height()-700
+			          ,$(window).width()-1200
+			    ]
+				,btn: ['确认', '取消']
+				,yes: function(index, layero){
+				  //点击确认触发 iframe 内容中的按钮提交
+				  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+				  submit.click();
+				  table.reload('demo2');
+				}
+			    ,content: 'edit_major_user.html'
+				,zIndex: layer.zIndex //重点1
+			    ,success: function(layero, index){
+			    	var body = layer.getChildFrame('body',index);
+			    	var inputList = body.find('input');
+			    	$(inputList[0]).val(data.majorId);
+			    	$(inputList[1]).val(data.userId);
+ 
+			      layer.setTop(layero); //重点2  
+			    }
+			  });   
+
+      }
+	});
 	 
     
   });

@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +38,7 @@ import com.philip.edu.eval.bean.TblRoles;
 import com.philip.edu.eval.bean.TblUserRole;
 import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.users.UsersService;
+import com.philip.edu.eval.util.PropertiesUtil;
 
 
 @Controller
@@ -44,7 +46,7 @@ import com.philip.edu.eval.users.UsersService;
 public class RolesController {
 	
 	private static final Logger logger = Logger.getLogger(RolesController.class);
-	
+	private Properties propConfig = PropertiesUtil.getProperty("config");
 	@Autowired
 	private RolesService service;
 	@Autowired
@@ -74,6 +76,21 @@ public class RolesController {
 	public ResponseEntity<BackendData> roles_usersCount(){
 		
 		ArrayList roles_usersListCount = (ArrayList) service.getRolesUsersCount();
+		logger.info("successfully get the roles list");
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(roles_usersListCount);
+		data.setCount(roles_usersListCount.size());
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/upload_roles_usersCount", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> upload_roles_usersCount(){
+		
+		int id = Integer.parseInt(propConfig.getProperty("upload_roleid"));
+		ArrayList roles_usersListCount = (ArrayList) service.getUploadRolesUsersCount(id);
 		logger.info("successfully get the roles list");
 		BackendData data = new BackendData();
 		data.setMsg("");

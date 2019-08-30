@@ -13,7 +13,7 @@
   <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="text-align: center;">
 	 
 	 <div class="layui-form-item">
-	      <input  hidden="hidden"  name="schoolId">
+	      <input  hidden="hidden"  name="majorId">
 	 </div>
 	  
 	<div class="layui-form-item" style="text-align: center;margin-left: 200px;">
@@ -70,7 +70,7 @@
       //$.ajax({});
 	  admin.req({
 		  type: 'POST',
-		  url: '/eduEvaluation/schooluser/addSchoolUser',
+		  url: '/eduEvaluation/schooluser/addMajorUser',
 	      data: field,
 		  dataType:'json',
 		  success:function(res){

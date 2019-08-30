@@ -88,8 +88,10 @@ public  class RolesImpl implements RolesService {
 
 
 
-	
-
+	public List<TblRoles> getUploadRolesUsersCount(int id) {
+		// TODO Auto-generated method stub
+		return dao.getUploadRolesUsersCount(id);
+	}
 
 
 	

@@ -56,19 +56,18 @@ public class SchoolUserController {
 		data.setData(usersList);
 		data.setCount(usersList.size());
 
-		System.out.println(usersList);
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 
 	@RequestMapping(value="/addSchoolUser", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity addSchoolUser(HttpServletRequest request) {
+	public ResponseEntity<BackendData> addSchoolUser(HttpServletRequest request) {
 		
 		TblSchoolUser schooluser = new TblSchoolUser();
 		
 		String schoolId = request.getParameter("schoolId");
 		String userId = request.getParameter("userId");
-		
+
 		if(schoolId != null  && !schoolId.equals("")) {
 		    
 			if(userId != null && !userId.equals("") ) {
@@ -83,28 +82,21 @@ public class SchoolUserController {
 			}
 		} 
 		
-		
-		 
-		JSONObject object = new JSONObject();
-		 
-		object.put("code", 1);
-		object.put("msg", "用户添加成功");
-		 
-		
-		return new ResponseEntity(object, HttpStatus.OK);
+
+ 
+		BackendData data = new BackendData();
+		data.setMsg("用户添加成功");
+		data.setCode(0); 
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	
 	@RequestMapping(value="/updateschooluser", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity updateUsers(HttpServletRequest request) {
-	 
-		
+	public ResponseEntity<BackendData> updateUsers(HttpServletRequest request) {
+			
 		TblSchoolUser schooluser = new TblSchoolUser();
 		String id = request.getParameter("id");
-
-		System.out.println(id);
-		
-		
+	
 		String schoolId = request.getParameter("schoolId");
 		String userId = request.getParameter("userId");
 		String username = request.getParameter("username");
@@ -126,36 +118,81 @@ public class SchoolUserController {
 		}
 		int result = service.updateSchoolUser(schooluser);
 		
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
+		
 		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "用户修改成功");
+			data.setMsg("用户修改成功");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "用户修改失败");
+			data.setMsg("用户修改失败");
+			data.setCode(99); 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	
 	@RequestMapping(value="/deleteschooluser", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteUsers(HttpServletRequest request) {
+	public ResponseEntity<BackendData> deleteUsers(HttpServletRequest request) {
 		
 		String id = request.getParameter("id");
 		
 		int result = service.deleteSchoolUser(Integer.parseInt(id));
-		JSONObject object = new JSONObject();
+		
+		BackendData data = new BackendData();
+		
 		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "用户删除成功");
+			data.setMsg("用户删除成功");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "用户删除失败");
+			data.setMsg("用户删除失败");
+			data.setCode(99); 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 		
 	
+	@RequestMapping(value = "/schoolMajorUser", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> schoolMajorUser(){
+		
+		ArrayList usersList = (ArrayList) service.getRolenameSchoolMajor();
+		logger.info("successfully get the roles list");
+		BackendData data = new BackendData();
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(usersList);
+		data.setCount(usersList.size());
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/addMajorUser", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> addMajorUser(HttpServletRequest request) {
+		
+		TblSchoolMajor majoruser = new TblSchoolMajor();
+		
+		String majorId = request.getParameter("majorId");
+		String userId = request.getParameter("userId");
+
+		if(majorId != null  && !majorId.equals("")) {
+		    
+			if(userId != null && !userId.equals("") ) {
+				majoruser.setMajorId(Integer.parseInt(majorId));
+				majoruser.setUserId(Integer.parseInt(userId));
+				int num = service.updateMajorUser(majoruser);
+				if(num==0) {
+					service.createMajorUser(majoruser);
+				}
+			}else {
+				service.deleteMajorUser(Integer.parseInt(majorId));
+			}
+		} 
+		 
+		BackendData data = new BackendData();
+		data.setMsg("用户添加成功");
+		data.setCode(0); 
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
 }

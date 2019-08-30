@@ -15,6 +15,7 @@ public interface RolesService {
 	
     public List<TblRoles> getRolenameRoles();
     public List<TblRoles> getRolesUsersCount();
+    public List<TblRoles> getUploadRolesUsersCount(int id);
     public int createRoles(TblRoles roles);
 	public int updateRoles(TblRoles roles);
 	public int deleteRoles(int id);

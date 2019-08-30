@@ -13,16 +13,17 @@ import com.philip.edu.eval.bean.TblSchoolUser;
 
 public interface SchoolUserService {
 	
+	//school major user
+	public List<TblSchoolMajor> getRolenameSchoolMajor();
+	public int createMajorUser(TblSchoolMajor tsu);
+	public int updateMajorUser(TblSchoolMajor tsu);
+	public int deleteMajorUser(int id);
+    
+	//school user
     public List<TblSchoolUser> getNameSchoolUser();
-
     public int createSchoolUser(TblSchoolUser tsu);
 	public int updateSchoolUser(TblSchoolUser tsu);
 	public int deleteSchoolUser(int id);
-
-
-
-
-
 
 	
 }

@@ -96,6 +96,7 @@
 				  //点击确认触发 iframe 内容中的按钮提交
 				  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
 				  submit.click();
+				  table.reload('demo');
 				}
 			    ,content: 'choose_user.html'
 				,zIndex: layer.zIndex //重点1
@@ -135,6 +136,7 @@
 				  //点击确认触发 iframe 内容中的按钮提交
 				  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
 				  submit.click();
+				  table.reload('demo2');
 				}
 			    ,content: 'edit_school_user.html'
 				,zIndex: layer.zIndex //重点1

@@ -29,6 +29,12 @@
 	 (select role_id,count(1) as counts from tbl_user_role  where role_id IS NOT NULL GROUP BY role_id) b ON a.id=b.role_id 
    </select>
    
+   <select id="getUploadRolesUsersCount" parameterType="int"  resultMap="RolesResultMap">
+      select a.id,a.role_name,(CASE  WHEN b.counts IS NULL THEN  0 ELSE b.counts   END) counts from (select * from tbl_roles  WHERE id= #{id,jdbcType=BIGINT} ) a 
+		LEFT JOIN
+	 (select role_id,count(1) as counts from tbl_user_role  where role_id IS NOT NULL GROUP BY role_id) b ON   a.id=b.role_id  
+	 
+   </select>
    
     <update id="updateChosenUser"  parameterType="com.philip.edu.eval.bean.TblUserRole" >
       update tbl_user_role
