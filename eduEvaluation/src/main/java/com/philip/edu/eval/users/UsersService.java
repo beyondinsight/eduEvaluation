@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import com.philip.edu.eval.bean.TblUsers;
 
 public interface UsersService {
-	//Users:
+	//Users:  
 	public List<TblUsers> getUsersList();
 	public List<TblUsers> getUsers(String userName);
 	public int createUsers(TblUsers users);

@@ -1,17 +1,21 @@
 package com.philip.edu.eval.users;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.mapper.UsersMapper;
+import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.PasswordUtil;
+import com.philip.edu.eval.util.PropertiesUtil;
 
 @org.springframework.stereotype.Service("users_service")
 public class UsersImpl implements UsersService {
 	
 	@Autowired 
 	private UsersMapper dao; 
+	private Properties propConfig = PropertiesUtil.getProperty("config");
 
 	public TblUsers getUsersById(int school_id) {
 		// TODO Auto-generated method stub
@@ -58,7 +62,8 @@ public class UsersImpl implements UsersService {
 		List<TblUsers> users = dao.selectUser(username);
 		TblUsers user = users.get(0);
 		
-		String temp = PasswordUtil.md5Hex(username + password + user.getSalt());
+		//String temp = PasswordUtil.md5Hex(username + password + user.getSalt());
+		String temp = Code.encrypt(password, propConfig.getProperty("code_key"), propConfig.getProperty("code_ivs"));
 		if(temp.equals(user.getPassword()))right = true;
 		
 		return right;

@@ -42,6 +42,10 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   
+  <select id="getUsers" resultMap="UsersResultMap">
+  	select * from tbl_users where user_name=#{userName}
+  </select>
+  
   
   <insert id="createUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   useGeneratedKeys="true" keyProperty="id">
     

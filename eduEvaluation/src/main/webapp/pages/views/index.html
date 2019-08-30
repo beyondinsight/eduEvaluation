@@ -68,7 +68,7 @@
           </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
-              <cite>谢维</cite>
+              <cite><script type="text/html" template>{{c_name}}</script></cite>
             </a>
             <dl class="layui-nav-child">
               <dd><a lay-href="set/user/info.html">基本资料</a></dd>
@@ -220,7 +220,7 @@
       </div>
       
       <!-- 辅助元素，一般用于移动设备下遮罩 -->
-      <div class="layadmin-body-shade" layadmin-event="shade"></div>
+      <div class="layadmin-body-shade" layadmin-event="shade"><input type="hidden" id="username"></div>
 	  
 	  <div class="layui-footer">
 	    <!-- 底部固定区域 -->
@@ -235,7 +235,17 @@
     base: '../layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use('index');
+  }).use(['index','form','laytpl'],function(){
+	  var $ = layui.$,
+	  form = layui.form,
+	  router = layui.router();
+	  
+	  var userinfo = layui.data('userinfo');
+	  c_name=userinfo['user']['chineseName'];
+	  console.log(userinfo['user']['chineseName']);
+	  $('#cName').val(userinfo['user']['chineseName']);
+	  form.render();
+  });
   </script>
   
   <!-- 百度统计 -->
