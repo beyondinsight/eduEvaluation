@@ -9,6 +9,14 @@ public class EvalConstants {
 	public static final char PROCESS_STATUS_GOVERNMENT_REJECT = 'E';
 	public static final char PROCESS_STATUS_GORVERNMENT_APPROVE = 'A';
 	
+	public static final String PROCESS_STATUS_DISPLAY_NOT_INPUT = "未填报";
+	public static final String PROCESS_STATUS_DISPLAY_INPUTING_INFORMATION = "填报中";
+	public static final String PROCESS_STATUS_DISPLAY_SCHOOL_VERIFY = "已提交，待学校审核";
+	public static final String PROCESS_STATUS_DISPLAY_SCHOOL_REJECT = "学校退回，待重新填报";
+	public static final String PROCESS_STATUS_DISPLAY_GOVERNMENT_VERIFY = "学校已审核,待教育厅审核";
+	public static final String PROCESS_STATUS_DISPLAY_GOVERNMENT_REJECT = "教育厅退回，待重新填报";
+	public static final String PROCESS_STATUS_DISPLAY_GOVERNMENT_APPROVE = "教育厅已审核入库";
+	
 	public static final int DEFAULT_METRICS_SYSTEM_ID = 1;
 	
 	public static final char COLLECTION_STATUS_INACTIVE = 'I';

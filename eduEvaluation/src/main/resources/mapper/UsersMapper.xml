@@ -22,8 +22,11 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="memo" property="memo" jdbcType="VARCHAR" />
     <result column="role_id" property="roleId" jdbcType="BIGINT" />
-    <result column="role_name" property="roleName" jdbcType="VARCHAR" />   
+    <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    
   </resultMap>
+ 
+
  
   <select id="getUsersList" resultMap="UsersResultMap"   >
     select  * from tbl_users d left join(
@@ -43,7 +46,6 @@
   </select>
   
   
-
   <insert id="createUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   useGeneratedKeys="true" keyProperty="id">
     
    insert into tbl_users (user_name, chinese_name, 
@@ -81,6 +83,23 @@
 	      #{item.mobilePhone,jdbcType=VARCHAR}, #{item.email,jdbcType=VARCHAR}, #{item.memo,jdbcType=VARCHAR}
 	      )
       </foreach >
+  </insert>
+  
+    <insert id="addUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
+    insert into tbl_users (id, user_name, chinese_name, 
+      password, salt, institution, 
+      major, status, creator, 
+      create_time, update_time, last_operation, 
+      position, QQ, fix_phone, 
+      mobile_phone, email, memo
+      )
+    values (#{id,jdbcType=BIGINT}, #{userName,jdbcType=VARCHAR}, #{chineseName,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{institution,jdbcType=VARCHAR}, 
+      #{majot,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{creator,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{lastOperation,jdbcType=TIMESTAMP}, 
+      #{position,jdbcType=VARCHAR}, #{qq,jdbcType=VARCHAR}, #{fixPhone,jdbcType=VARCHAR}, 
+      #{mobilePhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}
+      )
   </insert>
  
   <update id="updateUserRole" parameterType="com.philip.edu.eval.bean.TblUsers">

@@ -68,7 +68,7 @@
           </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
-              <cite>谢维</cite>
+              <cite><script type="text/html" template>{{c_name}}</script></cite>
             </a>
             <dl class="layui-nav-child">
               <dd><a lay-href="set/user/info.html">基本资料</a></dd>
@@ -135,10 +135,8 @@
               <dl class="layui-nav-child">
                 <dd><a lay-href="template/personalpage.html">填报模板维护</a></dd>
                 <dd><a lay-href="collection/manage_col_task.html">填报任务管理</a></dd>
-<<<<<<< HEAD
                 <dd><a lay-href="template/caller.html">专业数据填报</a></dd>
               </dl>
-=======
                 <dd data-name="major">
 					<a href="javascript:;">专业数据填报</a>
 					<dl class="layui-nav-child">
@@ -148,7 +146,6 @@
                   </dl>
 				</dd> 
               </dl> 
->>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
             </li>
             <li data-name="report_audit" class="layui-nav-item">
               <a href="javascript:;" lay-tips="填报数据审核" lay-direction="2">
@@ -225,7 +222,7 @@
       </div>
       
       <!-- 辅助元素，一般用于移动设备下遮罩 -->
-      <div class="layadmin-body-shade" layadmin-event="shade"></div>
+      <div class="layadmin-body-shade" layadmin-event="shade"><input type="hidden" id="username"></div>
 	  
 	  <div class="layui-footer">
 	    <!-- 底部固定区域 -->
@@ -240,7 +237,17 @@
     base: '../layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use('index');
+  }).use(['index','form','laytpl'],function(){
+	  var $ = layui.$,
+	  form = layui.form,
+	  router = layui.router();
+	  
+	  var userinfo = layui.data('userinfo');
+	  c_name=userinfo['user']['chineseName'];
+	  console.log(userinfo['user']['chineseName']);
+	  $('#cName').val(userinfo['user']['chineseName']);
+	  form.render();
+  });
   </script>
   
   <!-- 百度统计 -->

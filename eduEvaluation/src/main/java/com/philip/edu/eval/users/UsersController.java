@@ -44,6 +44,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.TblRoles;
 import com.philip.edu.eval.bean.TblUsers;
+
+import com.philip.edu.eval.util.Code;
+import com.philip.edu.eval.util.EvalConstants;
+//import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.role.RolesService;
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.PropertiesUtil;
@@ -105,12 +109,12 @@ public class UsersController {
 		String roleId = request.getParameter("roleId");
 
 		JSONObject object = new JSONObject();
-		int sieq = service.getUsers(userName).size();
+		/*int sieq = service.getUsers(userName).size();
 		if(sieq>0) {
 			 code=2;
 			 msg="用户名已存在";
 			return   new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
-		}
+		}*/
 		
 		if(!checkName(userName)) {
 			code =3;			 
@@ -141,7 +145,7 @@ public class UsersController {
 		users.setPassword(password);
 		users.setPosition(position);
 		users.setQq(qq);
-		users.setSalt(salt);
+		//users.setSalt(PasswordUtil.createSalt().toString());
 		users.setStatus(status);
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
@@ -280,7 +284,7 @@ public class UsersController {
 	}
 	
 	@RequestMapping(value="/deleteUserss", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteUserss(HttpServletRequest request) {
+	public ResponseEntity<BackendData> deleteUserss(HttpServletRequest request) {
 		
 		int code=0;
 		String msg="";
@@ -426,9 +430,48 @@ public class UsersController {
 		}
 		return false;
 	}
- 
+
+		
 	
-	//上传用户
+	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> login(HttpServletRequest request){
+		
+		BackendData data = new BackendData();
+		
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+		//user exsits:
+		/*boolean exsits = service.exsitsUser(username);
+		if(!exsits){
+			data.setMsg("用户不存在！");
+			data.setCode(EvalConstants.LOGIN_STATUS_USER_NO_EXSITS);
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		//password correct:
+		boolean passwordRight = service.checkPassword(username, password);
+		if(!passwordRight){
+			data.setMsg("您的密码不正确！");
+			data.setCode(EvalConstants.LOGIN_STATUS_PASSWORD_NOT_RIGHT);
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		logger.info("successfully login");
+		List<TblUsers> users = service.getUsers(username);
+		//TblUsers user = users.get(0);
+
+		data.setMsg("登录成功!");
+		data.setCode(EvalConstants.LOGIN_STATUS_SUCCESS); 
+		data.setData((ArrayList)users);
+		//data.setCount(usersList.size());
+		//BackendData data = new BackendData();*/
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+
 	private int addUsersList( List<String[]> list,List<String> name_list) {
 			
 		

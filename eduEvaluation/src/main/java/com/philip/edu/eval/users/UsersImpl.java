@@ -1,16 +1,21 @@
 package com.philip.edu.eval.users;
 
 import java.util.List;
+import java.util.Properties;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.mapper.UsersMapper;
+import com.philip.edu.eval.util.Code;
+import com.philip.edu.eval.util.PasswordUtil;
+import com.philip.edu.eval.util.PropertiesUtil;
 
 @org.springframework.stereotype.Service("users_service")
 public class UsersImpl implements UsersService {
 	
 	@Autowired
 	private UsersMapper dao; 
+	private Properties propConfig = PropertiesUtil.getProperty("config");
 
 	public TblUsers getUsersById(int school_id) {
 		// TODO Auto-generated method stub
