@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.mapper.UsersMapper;
 import com.philip.edu.eval.util.Code;
-import com.philip.edu.eval.util.PasswordUtil;
+//import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.util.PropertiesUtil;
 
 @org.springframework.stereotype.Service("users_service")
