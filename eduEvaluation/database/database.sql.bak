@@ -84,7 +84,6 @@ create table tbl_collection_material
    form_performance_id  bigint,
    metrics_id           int,
    material_id          int,
-   material_name        varchar,
    required             char(1),
    doc                  varchar(300),
    description          char(10),
@@ -507,116 +506,151 @@ create table tbl_users
    primary key (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+alter table tbl_collection_major drop foreign key FK_Reference_22;
 alter table tbl_collection_major add constraint FK_Reference_22 foreign key (collection_school_id)
       references tbl_collection_school (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_collection_major drop foreign key FK_Reference_23;
 alter table tbl_collection_major add constraint FK_Reference_23 foreign key (major_id)
       references tbl_major (id) on delete CASCADE on update CASCADE ;
 
+alter table tbl_collection_material drop foreign key FK_Reference_26;
 alter table tbl_collection_material add constraint FK_Reference_26 foreign key (form_performance_id)
       references tbl_form_performance (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_collection_material drop foreign key FK_Reference_27;
 alter table tbl_collection_material add constraint FK_Reference_27 foreign key (material_id)
       references tbl_support_material (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_collection_school drop foreign key FK_Reference_17;
 alter table tbl_collection_school add constraint FK_Reference_17 foreign key (collection_task_id)
       references tbl_collection_tasks (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_collection_school drop foreign key FK_Reference_18;
 alter table tbl_collection_school add constraint FK_Reference_18 foreign key (school_id)
       references tbl_school (id) on delete CASCADE  on update CASCADE ;
 
-
+alter table tbl_collection_tasks drop foreign key FK_Reference_16;
 alter table tbl_collection_tasks add constraint FK_Reference_16 foreign key (use_metrics_system)
       references tbl_metrics_system (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_evaluation drop foreign key FK_Reference_29;
 alter table tbl_evaluation add constraint FK_Reference_29 foreign key (metrics_id)
       references tbl_metrics_detail (id) on delete CASCADE  on update CASCADE ;
 
-
+alter table tbl_evaluation drop foreign key FK_Reference_31;
 alter table tbl_evaluation add constraint FK_Reference_31 foreign key (expert_id)
       references tbl_users (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_evaluation drop foreign key FK_Reference_32;
 alter table tbl_evaluation add constraint FK_Reference_32 foreign key (school_id)
       references tbl_school (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_evaluation drop foreign key FK_Reference_33;
 alter table tbl_evaluation add constraint FK_Reference_33 foreign key (major_id)
       references tbl_major (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_evaluation drop foreign key FK_Reference_35;
 alter table tbl_evaluation add constraint FK_Reference_35 foreign key (eval_task_id)
       references tbl_evaluation_tasks (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_evaluation_sub_task drop foreign key FK_Reference_15;
 alter table tbl_evaluation_sub_task add constraint FK_Reference_15 foreign key (eval_task_id)
       references tbl_evaluation_tasks (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_evaluation_tasks drop foreign key FK_Reference_7;
 alter table tbl_evaluation_tasks add constraint FK_Reference_7 foreign key (use_metrics_system)
       references tbl_metrics_system (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_expert_group drop foreign key FK_Reference_11;
 alter table tbl_expert_group add constraint FK_Reference_11 foreign key (eval_task_id)
       references tbl_evaluation_tasks (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_expert_group_person drop foreign key FK_Reference_12;
 alter table tbl_expert_group_person add constraint FK_Reference_12 foreign key (group_id)
       references tbl_expert_group (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_expert_group_person drop foreign key FK_Reference_14;
 alter table tbl_expert_group_person add constraint FK_Reference_14 foreign key (expert_id)
       references tbl_users (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_form_basic drop foreign key FK_Reference_19;
 alter table tbl_form_basic add constraint FK_Reference_19 foreign key (collection_major_id)
       references tbl_collection_major (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_form_capitalprogress drop foreign key FK_Reference_28;
 alter table tbl_form_capitalprogress add constraint FK_Reference_28 foreign key (collection_major_id)
       references tbl_collection_major (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_form_performance drop foreign key FK_Reference_24;
 alter table tbl_form_performance add constraint FK_Reference_24 foreign key (collection_major_id)
       references tbl_collection_major (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_form_performance drop foreign key FK_Reference_25;
 alter table tbl_form_performance add constraint FK_Reference_25 foreign key (metrics_id)
       references tbl_metrics_detail (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_intro_doc drop foreign key FK_Reference_41;
 alter table tbl_intro_doc add constraint FK_Reference_41 foreign key (eval_task_id)
       references tbl_evaluation_tasks (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_major_group drop foreign key FK_Reference_8;
 alter table tbl_major_group add constraint FK_Reference_8 foreign key (eval_task_id)
       references tbl_evaluation_tasks (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_major_group_item drop foreign key FK_Reference_10;
 alter table tbl_major_group_item add constraint FK_Reference_10 foreign key (major_id)
       references tbl_major (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_major_group_item drop foreign key FK_Reference_9;
 alter table tbl_major_group_item add constraint FK_Reference_9 foreign key (group_id)
       references tbl_major_group (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_major_user drop foreign key FK_Reference_39;
 alter table tbl_major_user add constraint FK_Reference_39 foreign key (user_id)
       references tbl_users (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_major_user drop foreign key FK_Reference_40;
 alter table tbl_major_user add constraint FK_Reference_40 foreign key (major_id)
       references tbl_major (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_metrics_detail drop foreign key FK_Reference_5;
 alter table tbl_metrics_detail add constraint FK_Reference_5 foreign key (m_system_id)
       references tbl_metrics_system (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_role_permission drop foreign key FK_Reference_3;
 alter table tbl_role_permission add constraint FK_Reference_3 foreign key (role_id)
       references tbl_roles (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_role_permission drop foreign key FK_Reference_4;
 alter table tbl_role_permission add constraint FK_Reference_4 foreign key (permission_id)
       references tbl_permissions (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_school_major drop foreign key FK_Reference_34;
 alter table tbl_school_major add constraint FK_Reference_34 foreign key (school_id)
       references tbl_school (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_school_major drop foreign key FK_Reference_36;
 alter table tbl_school_major add constraint FK_Reference_36 foreign key (major_id)
       references tbl_major (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_school_user drop foreign key FK_Reference_37;
 alter table tbl_school_user add constraint FK_Reference_37 foreign key (user_id)
       references tbl_users (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_school_user drop foreign key FK_Reference_38;
 alter table tbl_school_user add constraint FK_Reference_38 foreign key (school_id)
       references tbl_school (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_support_material drop foreign key FK_Reference_6;
 alter table tbl_support_material add constraint FK_Reference_6 foreign key (metrics_id)
       references tbl_metrics_detail (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_user_role drop foreign key FK_Reference_1;
 alter table tbl_user_role add constraint FK_Reference_1 foreign key (user_id)
       references tbl_users (id) on delete CASCADE  on update CASCADE ;
 
+alter table tbl_user_role drop foreign key FK_Reference_2;
 alter table tbl_user_role add constraint FK_Reference_2 foreign key (role_id)
       references tbl_roles (id) on delete CASCADE  on update CASCADE ;
 

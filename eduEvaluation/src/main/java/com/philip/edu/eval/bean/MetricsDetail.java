@@ -12,22 +12,8 @@ public class MetricsDetail {
 	private int order;
 	private String unit;
 	private String metrics_code;
-	private String level1_name;
-	private String material_num;
 	
 	
-	public String getMaterial_num() {
-		return material_num;
-	}
-	public void setMaterial_num(String material_num) {
-		this.material_num = material_num;
-	}
-	public String getLevel1_name() {
-		return level1_name;
-	}
-	public void setLevel1_name(String level1_name) {
-		this.level1_name = level1_name;
-	}
 	public String getMetrics_code() {
 		return metrics_code;
 	}

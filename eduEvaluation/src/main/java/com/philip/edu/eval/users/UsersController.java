@@ -39,20 +39,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
 import com.philip.edu.eval.bean.BackendData;
-import com.philip.edu.eval.bean.BackendData1;
-import com.philip.edu.eval.bean.School;
-import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.bean.TblRoles;
 import com.philip.edu.eval.bean.TblUsers;
+
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.EvalConstants;
-import com.philip.edu.eval.util.PasswordUtil;
+//import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.role.RolesService;
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.PropertiesUtil;
@@ -62,7 +57,6 @@ import net.sf.json.JSONArray;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
-import com.philip.edu.eval.util.EvalConstants;
 
 @Controller
 @RequestMapping(value = "/user")
@@ -80,7 +74,6 @@ public class UsersController {
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> users(){
 		
-
 		ArrayList usersList = (ArrayList) service.getUsersList();
 		logger.info("successfully get the users list");
 		BackendData data = new BackendData();
@@ -96,16 +89,15 @@ public class UsersController {
 	@RequestMapping(value="/addUsers", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity addUsers(HttpServletRequest request) {
 		
-		int code = 0;
-		String msg = "";
-		
+		int code=0;
+		String msg="";
 		TblUsers users = new TblUsers();
 		String chineseName = request.getParameter("chineseName");
 		String creator = request.getParameter("creator");
 		String email = request.getParameter("email");
 		String fixPhone = request.getParameter("fixPhone");
 		String institution = request.getParameter("institution");
-		String major = request.getParameter("majot");
+		//String major = request.getParameter("major");
 		String memo = request.getParameter("memo");
 		String mobilePhone = request.getParameter("mobilePhone");
 		String password = request.getParameter("password");
@@ -153,7 +145,7 @@ public class UsersController {
 		users.setPassword(password);
 		users.setPosition(position);
 		users.setQq(qq);
-		users.setSalt(PasswordUtil.createSalt().toString());
+		//users.setSalt(PasswordUtil.createSalt().toString());
 		users.setStatus(status);
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
@@ -176,6 +168,240 @@ public class UsersController {
 		}
 		
 		return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/updateUsers", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity updateUsers(HttpServletRequest request) {
+		
+		int code=0;
+		String msg="";
+		
+		TblUsers users = new TblUsers();
+		
+		String id = request.getParameter("id");
+		String chineseName = request.getParameter("chineseName");
+		String creator = request.getParameter("creator");
+		String email = request.getParameter("email");
+		String fixPhone = request.getParameter("fixPhone");
+		String institution = request.getParameter("institution");
+		//String major = request.getParameter("major");
+		String roleId = request.getParameter("roleId");
+		String memo = request.getParameter("memo");
+		String mobilePhone = request.getParameter("mobilePhone");
+		String password = request.getParameter("password");
+		String position = request.getParameter("position");
+		String qq = request.getParameter("qq");
+		String salt = request.getParameter("salt");
+		String status = request.getParameter("status");
+		String userName = request.getParameter("userName");
+		
+		
+	
+		if (id != null && !id.equals("")) {
+			users.setId(Integer.parseInt(id));
+		}
+		users.setChineseName(chineseName);
+		users.setCreateTime(new Date());
+		
+
+		if (creator != null && !creator.equals("")) {
+			users.setCreator(Integer.parseInt(creator));
+		}
+		
+		if(!checkPwd(password)) {
+			code =4;
+			msg="非法密码："+password;
+			return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+		}
+		
+		password = Code.encrypt(password, propConfig.getProperty("code_key"), propConfig.getProperty("code_ivs"));
+		users.setEmail(email);
+		users.setFixPhone(fixPhone);
+		users.setInstitution(institution);
+		//users.setMajor(major);
+		users.setMemo(memo);
+		users.setMobilePhone(mobilePhone);
+		
+		users.setPosition(position);
+		users.setQq(qq);
+		users.setSalt(salt);
+		users.setStatus(status);
+		users.setUpdateTime(new Date());
+		users.setUserName(userName);
+		if(!roleId.equals("") && roleId!=null) {
+			users.setRoleId(Integer.parseInt(roleId));
+		}else {
+			users.setRoleId(null);
+		}
+			
+		if(!password.equals("") && password != null) {
+			users.setPassword(password);
+		} 
+		
+	 
+		int result = service.updateUsers(users);
+
+		int result_ur =  service.updateUserRole(users);
+		
+		if(result_ur==0) {
+			service.createUserRole(users);
+		}
+		
+		JSONObject object = new JSONObject();
+		
+		if(result!=0){
+			code= 0;
+			msg="用户修改成功";
+		}else{
+			code= 99;
+			msg="用户修改失败";
+		}
+		
+		return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/deleteUsers", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity deleteUsers(HttpServletRequest request) {
+
+		int code=0;
+		String msg="";
+		
+		String id = request.getParameter("id");
+		
+		int result = service.deleteUsers(Integer.parseInt(id));
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			code= 0;
+			msg="用户删除成功";
+		}else{
+			code= 99;
+			msg= "用户删除失败";
+		}
+		
+		return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/deleteUserss", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> deleteUserss(HttpServletRequest request) {
+		
+		int code=0;
+		String msg="";
+		
+		String[] sIds = request.getParameterValues("id");
+		int[] ids = new int[sIds.length];
+		for(int i=0; i<sIds.length; i++){
+			ids[i] = Integer.parseInt(sIds[i]);
+		}
+		
+		int result = service.batchDeleteUsers(ids);
+		JSONObject object = new JSONObject();
+		if(result!=0){
+			code =1;
+			object.put("msg", "用户删除成功");
+		}else{
+			code= 99;
+			object.put("msg", "用户删除失败");
+		}
+		
+		return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+	}
+	
+	
+	@RequestMapping(value="/uploadUsers", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity uploadUsers(HttpServletRequest request,MultipartFile file)  {
+		 // TODO Auto-generated method stub
+		int code=0;
+		String msg="";
+		
+		JSONObject object = new JSONObject();
+		List<String> name_list = new ArrayList<String>();
+		 //检查文件
+        try {
+			checkFile(file);
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			code= 99;
+			msg= "失败";
+			return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+		}
+        //获得Workbook工作薄对象
+        Workbook workbook = getWorkBook(file);
+        //创建返回对象，把每行中的值作为一个数组，所有行作为一个集合返回
+        List<String[]> list = new ArrayList<String[]>();
+        if(workbook != null){
+            for(int sheetNum = 0;sheetNum < workbook.getNumberOfSheets();sheetNum++){
+                //获得当前sheet工作表
+                Sheet sheet = workbook.getSheetAt(sheetNum);
+                if(sheet == null){
+                    continue;
+                }
+                //获得当前sheet的开始行
+                int firstRowNum  = sheet.getFirstRowNum();
+                //获得当前sheet的结束行
+                int lastRowNum = sheet.getLastRowNum();
+                //循环除了第一行的所有行
+                for(int rowNum = firstRowNum+1;rowNum <= lastRowNum;rowNum++){ //为了过滤到第一行因为我的第一行是数据库的列
+                    //获得当前行
+                    Row row = sheet.getRow(rowNum);
+                    if(row == null){
+                        continue;
+                    }
+                    //获得当前行的开始列
+                    int firstCellNum = row.getFirstCellNum();
+                    //获得当前行的列数
+                    int lastCellNum = UsersFieldConstants.COUNTS;//row.getLastCellNum();//为空列获取
+                    //int lastCellNum = row.getPhysicalNumberOfCells();//为空列不获取
+                    //String[] cells = new String[row.getPhysicalNumberOfCells()];
+                    String[] cells = new String[lastCellNum];//new String[row.getLastCellNum()];
+                    //循环当前行
+                    for(int cellNum = firstCellNum; cellNum < lastCellNum;cellNum++){
+                    	
+                        Cell cell = row.getCell(cellNum);
+                        String  cellValue= getCellValue(cell).toLowerCase();
+                        cells[cellNum] = cellValue;
+                    	if(cellNum == firstCellNum) {
+                    		if(name_list.contains(cellValue)) {
+                    		 
+                    			code= 2;
+                    			msg="文件存在重复用户名："+cellValue;
+                    			return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+                    			
+                    		}else {
+                    			if(!checkName(cellValue)) {
+                    				code= 3;
+                        			msg="文件存在非法用户名："+cellValue;
+
+                        			return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
+                    			}
+                    			name_list.add(cellValue);
+                    		}
+                    	}
+                    }
+                    list.add(cells);
+                }
+            }
+        }
+      
+        int  type = addUsersList(list,name_list);
+       
+        if(type==2) {
+        	code = 2;
+			msg= "文件存在重复用户名";
+			
+        }else if(type==1) {
+        	code =1;
+        	msg= "上传成功";
+      		 
+        }else {
+        	code= 0;
+        	msg= "上传失败";
+      		 
+        }
+
+        return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);		
 	}
 	
 	/**
@@ -205,48 +431,7 @@ public class UsersController {
 		return false;
 	}
 
-	@RequestMapping(value="/deleteUsers", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteUsers(HttpServletRequest request) {
 		
-		String id = request.getParameter("id");
-		
-		int result = service.deleteUsers(Integer.parseInt(id));
-		JSONObject object = new JSONObject();
-		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "用户删除成功");
-		}else{
-			object.put("code", 99);
-			object.put("msg", "用户删除失败");
-		}
-		
-		return new ResponseEntity(object, HttpStatus.OK);
-	}
-	
-	@RequestMapping(value="/deleteUserss", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteUserss(HttpServletRequest request) {
-		
-		int code=0;
-		String msg="";
-		
-		String[] sIds = request.getParameterValues("id");
-		int[] ids = new int[sIds.length];
-		for(int i=0; i<sIds.length; i++){
-			ids[i] = Integer.parseInt(sIds[i]);
-		}
-		
-		int result = service.batchDeleteUsers(ids);
-		JSONObject object = new JSONObject();
-		if(result!=0){
-			code =1;
-			object.put("msg", "用户删除成功");
-		}else{
-			code= 99;
-			object.put("msg", "用户删除失败");
-		}
-		
-return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
-	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> login(HttpServletRequest request){
@@ -256,7 +441,7 @@ return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		//user exsits:
-		boolean exsits = service.exsitsUser(username);
+		/*boolean exsits = service.exsitsUser(username);
 		if(!exsits){
 			data.setMsg("用户不存在！");
 			data.setCode(EvalConstants.LOGIN_STATUS_USER_NO_EXSITS);
@@ -281,12 +466,12 @@ return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
 		data.setCode(EvalConstants.LOGIN_STATUS_SUCCESS); 
 		data.setData((ArrayList)users);
 		//data.setCount(usersList.size());
-		//BackendData data = new BackendData();
+		//BackendData data = new BackendData();*/
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
-		//上传用户
+
 	private int addUsersList( List<String[]> list,List<String> name_list) {
 			
 		
@@ -307,12 +492,10 @@ return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
 		}
 		
 		List usersList = new ArrayList<TblUsers>();
-			for(String [] users : list) {
-				System.out.println(users.length);		 
+			for(String [] users : list) {	 
 				TblUsers u = new TblUsers();
 				u.setUserName(users[0]);
 			    u.setChineseName(users[1]);
-			    System.out.println(users[2]);
 			    if(users[2]!= null && !users[2].equals("") && role_name.contains(users[2])) {
 			    	u.setRoleId(role_id.get(role_name.indexOf(users[2])));
 			    }
@@ -409,6 +592,7 @@ return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
 	    
 	
 		@SuppressWarnings("resource")
+	    @ResponseBody
 	    @RequestMapping(value="downloadUsers",method = RequestMethod.GET,produces="text/html;charset=UTF-8")//json中文乱码解决produces="text/html;charset=UTF-8"
 		public void downloadUsers(HttpServletResponse response) throws Exception  {
 			List<String> list = new ArrayList<String>();

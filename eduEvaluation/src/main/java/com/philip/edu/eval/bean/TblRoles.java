@@ -22,8 +22,19 @@ public class TblRoles {
     private Date createTime;
 
     private Date updateTime;
+    
+    private Integer counts;
+    
+    
+    public Integer getCounts() {
+		return counts;
+	}
 
-    public Integer getId() {
+	public void setCounts(Integer counts) {
+		this.counts = counts;
+	}
+
+	public Integer getId() {
         return id;
     }
 
@@ -102,4 +113,12 @@ public class TblRoles {
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
     }
+
+	@Override
+	public String toString() {
+		return "TblRoles [id=" + id + ", roleName=" + roleName + ", roleCode=" + roleCode + ", defineYear=" + defineYear
+				+ ", description=" + description + ", roleDef=" + roleDef + ", pid=" + pid + ", status=" + status
+				+ ", createTime=" + createTime + ", updateTime=" + updateTime + ", counts=" + counts + "]";
+	}
+    
 }

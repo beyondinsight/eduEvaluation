@@ -37,13 +37,12 @@
 		) e on d.id = e.user_id
 	</select>
   
-  <delete id="deleteUsers" parameterType="java.lang.Long" >
-    delete from tbl_users
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+  <select id="getUsers" resultMap="UsersResultMap" parameterType="com.philip.edu.eval.bean.TblUsers"  >
+  	  select  *   from tbl_users where user_name=#{userName,jdbcType=VARCHAR} 
+  </select>
   
-  <select id="getUsers" resultMap="UsersResultMap">
-  	select * from tbl_users where user_name=#{userName}
+   <select id="getRolesUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   resultMap="UsersResultMap">
+      SELECT  b.* from (select user_id from tbl_user_role where role_id= #{id,jdbcType=BIGINT}) a LEFT JOIN tbl_users b on a.user_id=b.id  
   </select>
   
   
@@ -64,8 +63,29 @@
       #{mobilePhone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}
       )
   </insert>
-
-  <insert id="addUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
+  
+  
+  <insert id="createUsersList" parameterType="java.util.List">
+    insert into tbl_users (user_name, chinese_name, 
+      password, salt, institution, 
+      major, status, creator, 
+      create_time, update_time, last_operation, 
+      position, QQ, fix_phone, 
+      mobile_phone, email, memo
+      )
+        values
+      <foreach collection ="list" item="item" index= "index" separator =",">
+	   (#{item.userName,jdbcType=VARCHAR}, #{item.chineseName,jdbcType=VARCHAR}, 
+	      #{item.password,jdbcType=VARCHAR}, #{item.salt,jdbcType=VARCHAR}, #{item.institution,jdbcType=VARCHAR}, 
+	      #{item.major,jdbcType=VARCHAR}, #{item.status,jdbcType=CHAR}, #{item.creator,jdbcType=BIGINT}, 
+	      #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP}, #{item.lastOperation,jdbcType=TIMESTAMP}, 
+	      #{item.position,jdbcType=VARCHAR}, #{item.qq,jdbcType=VARCHAR}, #{item.fixPhone,jdbcType=VARCHAR}, 
+	      #{item.mobilePhone,jdbcType=VARCHAR}, #{item.email,jdbcType=VARCHAR}, #{item.memo,jdbcType=VARCHAR}
+	      )
+      </foreach >
+  </insert>
+  
+    <insert id="addUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
     insert into tbl_users (id, user_name, chinese_name, 
       password, salt, institution, 
       major, status, creator, 
@@ -82,35 +102,84 @@
       )
   </insert>
  
+  <update id="updateUserRole" parameterType="com.philip.edu.eval.bean.TblUsers">
+        update tbl_user_role set role_id = #{roleId,jdbcType=BIGINT} where user_id= #{id,jdbcType=BIGINT};
+  </update>  
 
-  <update id="updateUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >
-    update tbl_users
-    set user_name = #{userName,jdbcType=VARCHAR},
-      chinese_name = #{chineseName,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      salt = #{salt,jdbcType=VARCHAR},
-      institution = #{institution,jdbcType=VARCHAR},
-      majot = #{majot,jdbcType=VARCHAR},
-      status = #{status,jdbcType=CHAR},
-      creator = #{creator,jdbcType=BIGINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      last_operation = #{lastOperation,jdbcType=TIMESTAMP},
-      position = #{position,jdbcType=VARCHAR},
-      QQ = #{qq,jdbcType=VARCHAR},
-      fix_phone = #{fixPhone,jdbcType=VARCHAR},
-      mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      memo = #{memo,jdbcType=VARCHAR}
+
+  <insert id="createUserRole" parameterType="com.philip.edu.eval.bean.TblUsers">       
+         insert into tbl_user_role (user_id, role_id)
+          			  values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT})
+  </insert>
+   
+  <update id="updateUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >  
+   update tbl_users
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="chineseName != null" >
+        chinese_name = #{chineseName,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="institution != null" >
+        institution = #{institution,jdbcType=VARCHAR},
+      </if>
+      <if test="major != null" >
+        major = #{major,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastOperation != null" >
+        last_operation = #{lastOperation,jdbcType=TIMESTAMP},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="qq != null" >
+        QQ = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="fixPhone != null" >
+        fix_phone = #{fixPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilePhone != null" >
+        mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT} 
+ </update>
+  
+  <delete id="deleteUsers"   >
+    delete from tbl_users
     where id = #{id,jdbcType=BIGINT}
-  </update>
-  
-  <select id="exsitsUser" resultType="int" parameterType="java.lang.String">
-  	  select count(*) from tbl_users where user_name=#{user_name}
-  </select>
-  
-  <select id="selectUser" resultType="com.philip.edu.eval.bean.TblUsers" parameterType="java.lang.String">
-  	  select * from tbl_users where user_name=#{user_name}
-  </select>
-
+  </delete>
+    
+  <delete id="batchDeleteUsers" parameterType="int[]">
+    	delete from tbl_users where id in 
+    	<foreach collection="array" item="ids" index="no" open="(" separator="," close=")">
+    		#{ids,jdbcType=BIGINT}
+    	</foreach>
+   </delete>
+   
 </mapper>

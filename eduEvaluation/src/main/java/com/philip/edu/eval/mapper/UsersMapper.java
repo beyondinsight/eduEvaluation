@@ -18,6 +18,5 @@ public interface UsersMapper {
 		//User Role
 		public int createUserRole(TblUsers users);
 		public int updateUserRole(TblUsers users);
-		public int exsitsUser(String username);
-		public List<TblUsers> selectUser(String username);
+		public List<TblUsers> getRolesUsers(int id);
 }

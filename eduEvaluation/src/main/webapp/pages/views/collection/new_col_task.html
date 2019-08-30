@@ -13,7 +13,7 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form" id="col_task_form">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form">
 					<div class="layui-form-item">
 						<label class="layui-form-label" style="width: 120px;">专业填报任务名称</label>
 						<div class="layui-input-inline" style="width: 500px;">
@@ -74,14 +74,6 @@
 							</div>
 						</div>
 					</div>
-					
-					<div class="layui-form-item">
-					<div style="padding-right: 150px;">
-						<div align="right">
-							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit"><i class="layui-icon layui-icon-file-b"></i> 创建</button>
-						</div>
-					</div>
-					</div>
 				</div>
 
 
@@ -140,7 +132,11 @@
 					<table id="major-list" lay-filter="major-list"></table>
 				</div>
 				<div class="layui-card-body">
-					
+					<div style="padding-bottom: 10px;">
+						<div align="center">
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit"><i class="layui-icon layui-icon-file-b"></i> 创建</button>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -152,12 +148,11 @@
 				base: '../../layuiadmin/' //静态资源所在路径
 			}).extend({
 				index: 'lib/index' //主入口模块
-			}).use(['index', 'contlist', 'table', 'laydate', 'form', 'transfer', 'admin'], function() {
+			}).use(['index', 'contlist', 'table', 'laydate', 'form', 'transfer'], function() {
 				var table = layui.table,
 					form = layui.form,
 					laydate = layui.laydate,
 					transfer = layui.transfer,
-					admin = layui.admin,
 					projectBase = Class.getURL();
 				var data0, schoolTable;
 				
@@ -327,9 +322,7 @@
 								setTimeout(function(){
 									//console.log(parent.layui.admin.events);
 									//parent.index.refreshAndCloseTabs();
-									var refreshButton = parent.layui.$('#layuiadmin-app-form-submit');
-									console.log(refreshButton);
-									refreshButton.click();
+									parent.layui.admin.events.refresh();
 									parent.layui.admin.events.closeThisTabs();
 									},1200);
 							/*} else {

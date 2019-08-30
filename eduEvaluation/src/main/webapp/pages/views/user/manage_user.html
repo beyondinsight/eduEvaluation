@@ -218,6 +218,7 @@
             //点击确认触发 iframe 内容中的按钮提交
             var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
             submit.click();
+            table.reload('demo');
           }
         }); 
       }

@@ -8,8 +8,8 @@
   <name>eduEvaluation Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
-  	<dependency>
-     <groupId>junit</groupId>
+    <dependency>
+      <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <version>3.8.1</version>
       <scope>test</scope>
@@ -34,7 +34,37 @@
     	<artifactId>spring-context</artifactId>
     	<version>${spring.version}</version>
     </dependency>
-           <dependency>
+    <dependency>
+    	<groupId>org.mybatis</groupId>
+    	<artifactId>mybatis</artifactId>
+    	<version>${mybatis.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.mybatis</groupId>
+    	<artifactId>mybatis-spring</artifactId>
+    	<version>2.0.2</version>
+    </dependency>
+    <dependency>
+    	<groupId>mysql</groupId>
+    	<artifactId>mysql-connector-java</artifactId>
+    	<version>6.0.6</version>
+    </dependency>
+    <dependency>
+    	<groupId>javax.annotation</groupId>
+    	<artifactId>jsr250-api</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.springframework</groupId>
+    	<artifactId>spring-tx</artifactId>
+    	<version>${spring.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>commons-dbcp</groupId>
+    	<artifactId>commons-dbcp</artifactId>
+    	<version>1.2.2</version>
+    </dependency>
+    <dependency>
     	<groupId>org.springframework</groupId>
     	<artifactId>spring-jdbc</artifactId>
     	<version>${spring.version}</version>
@@ -49,97 +79,89 @@
     	<artifactId>spring-web</artifactId>
     	<version>${spring.version}</version>
     </dependency>
-    
-     <dependency>
-    	<groupId>org.mybatis</groupId>
-    	<artifactId>mybatis</artifactId>
-    	<version>${mybatis.version}</version>
+    <dependency>
+    	<groupId>com.fasterxml.jackson.core</groupId>
+    	<artifactId>jackson-databind</artifactId>
+    	<version>2.4.1</version>
     </dependency>
     <dependency>
-    	<groupId>org.mybatis</groupId>
-    	<artifactId>mybatis-spring</artifactId>
-    	<version>2.0.2</version>
+    	<groupId>com.fasterxml.jackson.core</groupId>
+    	<artifactId>jackson-core</artifactId>
+    	<version>2.4.1</version>
     </dependency>
-    
-        <dependency>
-    	<groupId>commons-dbcp</groupId>
-    	<artifactId>commons-dbcp</artifactId>
-    	<version>1.2.2</version>
+    <dependency>
+    	<groupId>org.apache.shiro</groupId>
+    	<artifactId>shiro-core</artifactId>
+    	<version>1.4.1</version>
     </dependency>
-    
-    	<dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId> 
-            <version>1.4</version>
-        </dependency>
-        
-                	<dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>3.10-FINAL</version>
-    	</dependency>
-
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>slf4j-simple</artifactId>
+    	<version>1.7.21</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.slf4j</groupId>
+    	<artifactId>jcl-over-slf4j</artifactId>
+    	<version>1.7.21</version>
+    </dependency>
+    <dependency>
+    	<groupId>org.mybatis.caches</groupId>
+    	<artifactId>mybatis-redis</artifactId>
+    	<version>1.0.0-beta2</version>
+    </dependency>
+    <dependency>
+    	<groupId>com.thetransactioncompany</groupId>
+    	<artifactId>cors-filter</artifactId>
+    	<version>1.3.2</version>
+	</dependency>
+	<!-- https://mvnrepository.com/artifact/org.json/json -->
 	<dependency>
-	            <groupId>org.apache.poi</groupId>
-	            <artifactId>poi-ooxml</artifactId>
-	            <version>3.10-FINAL</version>
-	    </dependency>
-	    
-	    	<dependency>
     	<groupId>org.json</groupId>
     	<artifactId>json</artifactId>
     	<version>20180813</version>
 	</dependency>
 	
-		  <dependency>
-        <groupId>net.sf.json-lib</groupId>
-        <artifactId>json-lib</artifactId>
-        <classifier>jdk15</classifier>
-        <version>2.2.3</version>
-      </dependency>
-      
-               <dependency>
-    	<groupId>org.apache.shiro</groupId>
-    	<artifactId>shiro-core</artifactId>
-    	<version>1.4.1</version>
-    </dependency>
-    
-     <dependency>
+	<dependency>
     	<groupId>log4j</groupId>
     	<artifactId>log4j</artifactId>
     	<version>1.2.17</version>
 	</dependency>
+	
+ 	<dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.10-FINAL</version>
+    </dependency>
     
+    <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.10-FINAL</version>
+    </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
-    	<groupId>mysql</groupId>
-    	<artifactId>mysql-connector-java</artifactId>
-    	<version>6.0.6</version>
-    </dependency>
-    
-     <dependency>
-    	<groupId>org.springframework</groupId>
-    	<artifactId>spring-tx</artifactId>
-    	<version>${spring.version}</version>
-    </dependency>
-    
-            <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.1</version>
         </dependency>
+ 
+    
+     <dependency>
+        <groupId>net.sf.json-lib</groupId>
+        <artifactId>json-lib</artifactId>
+        <classifier>jdk15</classifier>
+        <version>2.2.3</version>
+      </dependency>
         
-    <dependency>
-     	<groupId>com.fasterxml.jackson.core</groupId>
-     	<artifactId>jackson-databind</artifactId>
-     	<version>2.4.1</version>
-    </dependency>
-    <dependency>
-	     <groupId>com.fasterxml.jackson.core</groupId>
-	     <artifactId>jackson-core</artifactId>
-	     <version>2.4.1</version>
-    </dependency>
- </dependencies>
+  </dependencies>
   
   
  
@@ -152,7 +174,7 @@
             <artifactId>maven-war-plugin</artifactId>    
             <version>2.6</version>    
             <configuration>    
-                <webResources>     
+                <webResources>    
                     <resource>    
                         <directory>src/main/webapp/WEB-INF</directory>    
                         <filtering>true</filtering>    

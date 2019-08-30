@@ -99,7 +99,7 @@ public class DictController {
 	}
 	
 	@RequestMapping(value="/addSchool", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity addSchool(HttpServletRequest request) {
+	public ResponseEntity<BackendData> addSchool(HttpServletRequest request) {
 		
 		logger.info("entering addSchool method.");
 		School school = new School();
@@ -120,22 +120,22 @@ public class DictController {
 		int result = service.createSchool(school);
 		logger.info("the create method successfully executed.");
 		
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 1);
-			object.put("msg", "成功添加院校");
+			data.setMsg("成功添加院校");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "添加院校失败");
+			data.setMsg("添加院校失败");
+			data.setCode(99); 	 
 		}
 		
 		logger.info("return the message.");
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/updateSchool", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity updateSchool(HttpServletRequest request) {
+	public ResponseEntity<BackendData> updateSchool(HttpServletRequest request) {
 		
 		School school = new School();
 		String id = request.getParameter("id");
@@ -154,38 +154,42 @@ public class DictController {
 		school.setUpdate_time(new Date());
 		
 		int result = service.updateSchool(school);
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "成功修改院校");
+			data.setMsg("成功修改院校");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "修改院校失败");
+			data.setMsg("修改院校失败");
+			data.setCode(99); 	 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		logger.info("return the message.");
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/deleteSchool", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteSchool(HttpServletRequest request) {
+	public ResponseEntity<BackendData> deleteSchool(HttpServletRequest request) {
 		
 		String id = request.getParameter("id");
 		
 		int result = service.deleteSchool(Integer.parseInt(id));
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "成功删除院校");
+			data.setMsg("成功删除院校");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "删除院校失败");
+			data.setMsg("删除院校失败");
+			data.setCode(99); 	 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		logger.info("return the message.");
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/deleteSchools", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteSchools(HttpServletRequest request) {
+	public ResponseEntity<BackendData> deleteSchools(HttpServletRequest request) {
 		
 		String[] sIds = request.getParameterValues("id");
 		int[] ids = new int[sIds.length];
@@ -194,16 +198,18 @@ public class DictController {
 		}
 		
 		int result = service.batchDeleteSchool(ids);
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 1);
-			object.put("msg", "成功删除院校");
+			data.setMsg("成功删除院校");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "删除院校失败");
+			data.setMsg("删除院校失败");
+			data.setCode(99); 	 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		logger.info("return the message.");
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/getCity", method = RequestMethod.GET, produces = "application/json")
@@ -278,7 +284,7 @@ public class DictController {
 	}
 	
 	@RequestMapping(value="/addMajor", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity addMajor(HttpServletRequest request) {
+	public ResponseEntity<BackendData> addMajor(HttpServletRequest request) {
 		
 		TblMajor major = new TblMajor();
 		String majorName = request.getParameter("majorName");
@@ -297,21 +303,22 @@ public class DictController {
 		major.setUpdateTime(new Date());
 		
 		int result = service.createMajor(major);
-		JSONObject object = new JSONObject();
+ 
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 1);
-			object.put("msg", "专业添加成功");
+			data.setMsg("专业添加成功");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "专业添加失败");
+			data.setMsg("专业添加失败");
+			data.setCode(99); 	 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	
 	@RequestMapping(value="/updateMajor", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity updateMajor(HttpServletRequest request) {
+	public ResponseEntity<BackendData> updateMajor(HttpServletRequest request) {
 		
 		TblMajor major = new TblMajor();
 		String id = request.getParameter("id");
@@ -333,39 +340,39 @@ public class DictController {
 		major.setUpdateTime(new Date());
 		
 		int result = service.updateMajor(major);
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "专业修改成功");
+			data.setMsg("专业修改成功");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "专业修改失败");
+			data.setMsg("专业修改失败");
+			data.setCode(99); 	 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	
 	@RequestMapping(value="/deleteMajor", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteMajor(HttpServletRequest request) {
+	public ResponseEntity<BackendData> deleteMajor(HttpServletRequest request) {
 		
 		String id = request.getParameter("id");
 		
 		int result = service.deleteMajor(Integer.parseInt(id));
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 0);
-			object.put("msg", "专业删除成功");
+			data.setMsg("专业删除成功");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "专业删除失败");
+			data.setMsg("专业删除失败");
+			data.setCode(99); 	 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/deleteMajors", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteMajors(HttpServletRequest request) {
+	public ResponseEntity<BackendData> deleteMajors(HttpServletRequest request) {
 		
 		String[] sIds = request.getParameterValues("id");
 		int[] ids = new int[sIds.length];
@@ -374,16 +381,16 @@ public class DictController {
 		}
 		
 		int result = service.batchDeleteMajor(ids);
-		JSONObject object = new JSONObject();
+		BackendData data = new BackendData();
 		if(result!=0){
-			object.put("code", 1);
-			object.put("msg", "专业删除成功");
+			data.setMsg("专业删除成功");
+			data.setCode(0); 
 		}else{
-			object.put("code", 99);
-			object.put("msg", "专业删除失败");
+			data.setMsg("专业删除失败");
+			data.setCode(99); 	 
 		}
 		
-		return new ResponseEntity(object, HttpStatus.OK);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value="/chosenMajor", method = RequestMethod.GET, produces = "application/json")

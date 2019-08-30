@@ -79,7 +79,7 @@
 	    					dataType:'json',
 							async: false,
 	    					done:function(res){
-	    									if(res.code='0'){       
+	    									if(res.code==0){       
 	    					                        layer.msg('删除院校成功!');
 	    					                } else {          
 	    					                        layer.msg('删除院校失败!', function(){
@@ -196,7 +196,7 @@
           			dataType:'json',
 					async: false,
           			success:function(res){
-          							if(res.code='0'){       
+          							if(res.code==0){       
           			                        layer.msg('删除院校成功!');
           			                } else {          
           			                        layer.msg('删除院校失败!', function(){

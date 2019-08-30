@@ -18,27 +18,8 @@
 		<result property="end_time" column="end_time"/>
 	</resultMap> 
 	
-	<resultMap id="metricsListResultMap" type="com.philip.edu.eval.bean.MetricsDetail">
-		<id property="id" column="id"/>
-		<result property="m_system_id" column="m_system_id"/>
-		<result property="metrics_name" column="metric_name"/>
-		<result property="level" column="level"/>
-		<result property="metrics_code" column="metric_code"/>
-		<result property="order" column="morder"/>
-		<result property="description" column="description"/>
-		<result property="pid" column="pid"/>
-		<result property="unit" column="unit"/>
-	</resultMap> 
-	
 	<resultMap id="colTaskSchoolId" type="int">
 		<id property="id" column="id"/>
-	</resultMap>
-	
-	<resultMap id="materialResultMap" type="com.philip.edu.eval.bean.Material">
-		<id property="id" column="id"/>
-		<result property="material_name" column="material_name"/>
-		<result property="metrics_id" column="metrics_id"/>
-		<result property="memo" column="description"/>
 	</resultMap>
     
     <insert id="insertColTask" parameterType="com.philip.edu.eval.bean.CollectionTask" useGeneratedKeys="true" keyProperty="id" >
@@ -94,10 +75,8 @@
     	values(#{collection_major_id}, #{process_status}, #{create_time}, #{update_time})
     </insert>
     
-    <insert id="insertPerformanceForm" parameterType="java.util.List">
-    	insert into tbl_form_performance (collection_major_id, create_time, update_time, op_user, process_status, metrics_id )
-    	select #{collection_major_id}, #{create_time}, #{update_time}, #{op_user}, #{process_status}, id 
-    	from tbl_metrics_detail where m_system_id=#{m_system_id}
+    <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm">
+    	
     </insert>
     
     <insert id="insertCapitalProgressForm" parameterType="com.philip.edu.eval.bean.CapitalProgressForm">
@@ -106,7 +85,7 @@
     </insert>
     
     <select id="getColTaskList" resultMap="colTaskListResultMap">
-    	select id, task_name, task_year, start_time, end_time, status from tbl_collection_tasks order by id desc
+    	select id, task_name, task_year, start_time, end_time, status from tbl_collection_tasks
     </select>
     
     <select id="countTaskSchool" resultType="int" parameterType="int">
@@ -117,62 +96,4 @@
     	select count(*) from tbl_collection_major 
     	where collection_school_id in (select id from tbl_collection_school where collection_task_id=#{task_id})
     </select>
-    
-    <update id="updateStatus">
-    	update tbl_collection_tasks
-    	set status = #{status}
-    	where id=#{task_id}
-    </update>
-    
-    <delete id="batchDeleteTasks" parameterType="int[]">
-    	delete from tbl_collection_tasks where id in 
-    	<foreach collection="array" item="id" index="no" open="(" separator="," close=")">
-    		#{id}
-    	</foreach>
-    </delete>
-    
-    <insert id="insertMetrics" parameterType="com.philip.edu.eval.bean.MetricsDetail" useGeneratedKeys="true" keyProperty="id">
-    	insert into tbl_metrics_detail(m_system_id, metric_name, metric_code, unit, pid, morder, level, description)
-    	values(#{m_system_id}, #{metrics_name}, #{metrics_code}, #{unit}, #{pid}, #{order}, #{level}, #{description})
-    </insert>
-    
-    <insert id="insertMaterials" parameterType="java.util.List">
-    	insert into tbl_support_material(metrics_id, material_name, description)
-    	values
-    	<foreach collection="list" item="material" index="index" separator=",">
-    	(#{material.metrics_id}, #{material.material_name}, #{material.memo})
-    	</foreach>
-    </insert>
-    
-    <select id="selectMetricsList" resultMap="metricsListResultMap">
-    	select * from tbl_metrics_detail where m_system_id=#{metrics_system}
-    </select>
-    
-    <select id="countMaterials" resultType="int">
-    	select count(*) from tbl_support_material where metrics_id=#{metrics_id}
-    </select>
-    
-    <update id="updateMetrics" parameterType="com.philip.edu.eval.bean.MetricsDetail">
-    	update tbl_metrics_detail
-    	set metric_name = #{metrics_name}, metric_code=#{metrics_code}, morder=#{order}, pid=#{pid}, unit=#{unit}, level=#{level}, description=#{description}
-    	where id=#{id}
-    </update>
-    
-    <delete id="deleteMetrics" parameterType="int">
-    	delete from tbl_metrics_detail
-    	where id=#{metrics_id}
-    </delete>
-    
-    <insert id="insertMaterial" parameterType="com.philip.edu.eval.bean.Material">
-    	insert into tbl_support_material(metrics_id, material_name, description)
-    	values(#{metrics_id}, #{material_name}, #{memo})
-    </insert>
-    
-    <select id="selectMaterials" resultMap="materialResultMap">
-    	select * from tbl_support_material where metrics_id=#{metrics_id}
-    </select>
-    
-    <delete id="deleteMaterial" parameterType="int">
-    	delete from tbl_support_material where id=#{id}
-    </delete>
 </mapper>
