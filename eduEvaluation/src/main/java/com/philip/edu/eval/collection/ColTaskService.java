@@ -27,5 +27,5 @@ public interface ColTaskService {
 	public int updateMetrics(MetricsDetail metrics); 
 	public int deleteMetrics(int metrics_id);
 	public List<PerformanceForm> getPerformanceForm(int collection_major_id);
-	public List<Material> getRelateMaterials(int metrics_id);
+	public List<Material> getRelateMaterials(int pf_id, int metrics_id);
 }

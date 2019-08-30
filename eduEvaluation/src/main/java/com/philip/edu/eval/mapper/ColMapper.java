@@ -42,5 +42,8 @@ public interface ColMapper {
 	public int updateMetrics(MetricsDetail metrics);
 	public int deleteMetrics(int metrics_id);
 	public List<PerformanceForm> getPerformanceForm(int collection_major_id);
-	public List<Material> getRelateMaterials(int metrics_id);
+	public List<Material> getRelateMaterials(@Param("pf_id")int pf_id, @Param("metrics_id")int metrics_id);
+	public int insertPerformanceForm(PerformanceForm pf);
+	public int insertRelateMaterial(Material material);
+	public List<Material> getMaterialMetrics(int pf_id);
 } 

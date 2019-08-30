@@ -30,4 +30,6 @@ public class EvalConstants {
 	public static final int LOGIN_STATUS_PASSWORD_NOT_RIGHT = 3;
 	public static final int LOGIN_STATUS_SUCCESS = 1;
 	
+	public static final char MATERIAL_IS_REQUIRED = 'Y';
+	public static final char MATERIAL_IS_REQUIRED_NO = 'N';
 }

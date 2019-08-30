@@ -60,7 +60,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 			// 3.insert task-major:
 			// 3.1 default school majors:
-			List<ColTaskMajor> defaultMajorTasks = new ArrayList();
+			/*List<ColTaskMajor> defaultMajorTasks = new ArrayList();
 			List<ChosenMajor> defaultMajors = (ArrayList) dictDao.getChosenMajorSchools(school_ids);
 			for (int i = 0; i < defaultMajors.size(); i++) {
 				ColTaskMajor taskMajor = new ColTaskMajor();
@@ -91,7 +91,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 				cpf.setUpdate_time(new Date());
 				cpf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 				dao.insertCapitalProgressForm(cpf);
-			}
+			}*/
 			// dao.insertTaskMajors(defaultMajorTasks);
 
 			// 3.2 update school majors:
@@ -130,7 +130,34 @@ public class ColTaskServiceImpl implements ColTaskService {
 					dao.insertBasicForm(bf);
 
 					// 5.insert form 2:
-
+						//5.1 insert forms;
+						PerformanceForm pf = new PerformanceForm();
+						pf.setCollection_major_id(inputMajor.getId());
+						pf.setM_system_id(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+						pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+						
+						ArrayList metrics = (ArrayList)dao.selectMetricsList(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+						for(int j=0; j<metrics.size(); j++){
+							MetricsDetail metric = (MetricsDetail)metrics.get(j);
+							pf.setCreate_time(new Date());
+							pf.setUpdate_time(new Date());
+							pf.setMetrics_id(metric.getId());
+							pf.setUnit(metric.getUnit());
+							dao.insertPerformanceForm(pf);
+							 
+							//5.2 insert materials:
+							List<Material> materials = dao.getMaterialMetrics(metric.getId());
+							for(int k=0; k<materials.size(); k++){
+								Material material = (Material)materials.get(k);	
+								material.setCreate_time(new Date());
+								material.setUpdate_time(new Date());
+								material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+								
+								material.setForm_performance_id(pf.getId());
+								dao.insertRelateMaterial(material);
+							} 
+						}
+						
 					// 6.insert form 3:
 					CapitalProgressForm cpf = new CapitalProgressForm();
 					cpf.setCollection_major_id(inputMajor.getId());
@@ -208,9 +235,9 @@ public class ColTaskServiceImpl implements ColTaskService {
 		return dao.getPerformanceForm(collection_major_id);
 	}
 
-	public List<Material> getRelateMaterials(int metrics_id) {
+	public List<Material> getRelateMaterials(int pf_id, int metrics_id) {
 		// TODO Auto-generated method stub
-		return dao.getRelateMaterials(metrics_id);
+		return dao.getRelateMaterials(pf_id, metrics_id);
 	}
 
 }

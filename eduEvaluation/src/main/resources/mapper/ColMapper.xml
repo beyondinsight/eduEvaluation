@@ -110,8 +110,15 @@
     	values(#{collection_major_id}, #{process_status}, #{create_time}, #{update_time})
     </insert>
     
-    <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm">
-    	
+    <insert id="insertPerformanceForms" parameterType="com.philip.edu.eval.bean.PerformanceForm">
+    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status)
+    	select #{collection_major_id}, id, unit, #{create_time}, #{update_time}, #{process_status}
+    	from tbl_metrics_detail where m_system_id=#{m_system_id}
+    </insert>
+    
+    <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm" useGeneratedKeys="true" keyProperty="id">
+    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status)
+    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status})
     </insert>
     
     <insert id="insertCapitalProgressForm" parameterType="com.philip.edu.eval.bean.CapitalProgressForm">
@@ -158,6 +165,11 @@
     	</foreach>
     </insert>
     
+    <insert id="insertRelateMaterial" parameterType="com.philip.edu.eval.bean.Material">
+    	insert into tbl_collection_material(form_performance_id, metrics_id, material_id, material_name, required, create_time, update_time)
+    	values(#{form_performance_id}, #{metrics_id}, #{id}, #{material_name}, #{is_required}, #{create_time}, #{update_time})
+    </insert>
+    
     <select id="selectMetricsList" resultMap="metricsListResultMap">
     	select * from tbl_metrics_detail where m_system_id=#{m_system_id}
     </select>
@@ -178,13 +190,17 @@
     </delete>
     
     <select id="getPerformanceForm" resultMap="performanceResultMap" >
-    	select collection_major_id, metrics_id, metric_name, m.unit, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
+    	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
     	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id}
     </select>
     
     <select id="getRelateMaterials" resultMap="materialResultMap">
-    	 select cm.id, material_id, material_name, cm.update_time, doc_size 
-    	 from tbl_collection_material cm left join tbl_support_material sm  
-    	 on cm.material_id = sm.id  and cm.metrics_id = #{metrics_id}
+    	 select cm.id, material_id, sm.material_name, cm.update_time, doc_size, sm.metrics_id
+		 from  tbl_support_material sm, tbl_collection_material cm
+		 where cm.material_id=sm.id and cm.form_performance_id=#{pf_id}
+    </select>
+    
+    <select id="getMaterialMetrics" resultMap="materialResultMap">
+    	select * from tbl_support_material where metrics_id=#{metrics_id}
     </select>
 </mapper>

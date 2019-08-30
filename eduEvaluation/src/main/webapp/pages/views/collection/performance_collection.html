@@ -71,7 +71,7 @@
 
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getPerformanceForm?collection_major_id=' + 30,
+					url: projectBase + '/collection/getPerformanceForm?collection_major_id=' + 59,
 					page: true, //开启分页
 					height: 500	,
 					cols: [
@@ -86,7 +86,7 @@
 								align: 'center',
 							}, ,{
 								field: 'unit',
-								title: '单位',
+								title: '单位', 
 								align: 'center',
 							}, {
 								field: '',
@@ -248,7 +248,7 @@
 							success: function(layero, index) {
 								//console.log(data.id);
 								var metrics_id = layero.find('iframe').contents().find("#metrics_id");
-								$(metrics_id).val(data.metrics_id);
+								$(metrics_id).val("?metrics_id=" + data.metrics_id + "&form_performance_id=" + data.id );
 								
 								layer.setTop(layero); //重点2    
 							}   

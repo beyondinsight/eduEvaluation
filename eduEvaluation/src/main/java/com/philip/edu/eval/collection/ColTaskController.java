@@ -99,7 +99,7 @@ public class ColTaskController {
 				JSONArray value = objMajors.getJSONArray(key);
 				for (int i = 0; i < value.length(); i++) {
 					JSONObject obj = value.getJSONObject(i);
-					int major_id = obj.getInt("id");
+					int major_id = obj.getInt("major_id");
 					ColTaskMajor major = new ColTaskMajor();
 					major.setSchool_id(school_id);
 					major.setMajor_id(major_id);
@@ -245,7 +245,7 @@ public class ColTaskController {
 		metrics.setMetrics_code(metrics_code);
 		//decode:
 		if(Integer.parseInt(level) == 2 && metrics_code.contains(".")){
-			String[] temp = metrics_code.split(".");
+			String[] temp = metrics_code.split("\\.");
 			metrics.setPid(Integer.parseInt(temp[0]));
 			metrics.setOrder(Integer.parseInt(temp[1]));
 		} else if(Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
@@ -391,7 +391,7 @@ public class ColTaskController {
 		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id));
 		logger.info("successfully get performance form list");
 		 
-		BackendData data = new BackendData();
+		BackendData data = new BackendData(); 
 		data.setMsg("成功获取业绩表格"); 
 		data.setCode(0); 
 		data.setData(performanceForm);
@@ -404,15 +404,16 @@ public class ColTaskController {
 	@RequestMapping(value="/getRelateMaterials", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request){
 		
+		String pf_id = request.getParameter("form_performance_id");
 		String metrics_id = request.getParameter("metrics_id");
 		
-		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(metrics_id));
+		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(pf_id), Integer.parseInt(metrics_id));
 		logger.info("successfully get materials list");
 		 
 		BackendData data = new BackendData();
-		data.setMsg("成功获取材料列表");  
+		data.setMsg("成功获取材料列表");   
 		data.setCode(0); 
-		data.setData(materials);
+		data.setData(materials); 
 		data.setCount(materials.size());
 		//BackendData data = new BackendData();
 		
