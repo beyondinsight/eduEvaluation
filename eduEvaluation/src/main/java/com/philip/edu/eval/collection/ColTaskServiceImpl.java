@@ -19,6 +19,8 @@ import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Major;
+import com.philip.edu.eval.bean.Material;
+import com.philip.edu.eval.bean.MetricsDetail;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.mapper.ColMapper;
@@ -157,6 +159,47 @@ public class ColTaskServiceImpl implements ColTaskService {
 	public int countTaskMajor(int task_id) {
 		// TODO Auto-generated method stub
 		return dao.countTaskMajor(task_id);
+	}
+
+	public int updateStatus(int task_id, char status) {
+		// TODO Auto-generated method stub
+		return dao.updateStatus(task_id, status);
+	}
+
+	public int batchDeleteTasks(int[] ids) {
+		// TODO Auto-generated method stub
+		return dao.batchDeleteTasks(ids);
+	}
+
+	public int createMetrics(MetricsDetail metrics, List<Material> materials) {
+		// TODO Auto-generated method stub
+		int result = dao.insertMetrics(metrics);
+		for(int i=0; i<materials.size(); i++){
+			Material material = (Material)materials.get(i);
+			material.setMetrics_id(metrics.getId());
+		}
+		if(materials.size()!=0)result = dao.insertMaterials(materials);
+		return result;
+	}
+
+	public List<MetricsDetail> getMetricsList(int metrics_system) {
+		// TODO Auto-generated method stub
+		return dao.selectMetricsList(metrics_system);
+	}
+
+	public int countMaterials(int metrics_id) {
+		// TODO Auto-generated method stub
+		return dao.countMaterials(metrics_id);
+	}
+
+	public int updateMetrics(MetricsDetail metrics) {
+		// TODO Auto-generated method stub
+		return dao.updateMetrics(metrics);
+	}
+
+	public int deleteMetrics(int metrics_id) {
+		// TODO Auto-generated method stub
+		return dao.deleteMetrics(metrics_id);
 	}
 
 }

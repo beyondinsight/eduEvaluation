@@ -139,7 +139,6 @@
 								width: 140
 							}, {
 								title: '操作',
-								fixed: 'right',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
 								width: 140
@@ -268,21 +267,21 @@
 								console.log(data.id);
 								var contents = layero.find('iframe').contents();
 								var level = contents.find('#level');
+								var select = 'dd[lay-value=' + data.level + ']';
+								$(level).siblings("div.layui-form-select").find('dl').find(select).click();  
 								var metrics_code = contents.find('#metrics_code');
 								$(metrics_code).val(data.metrics_code);
 								var unit = contents.find('#unit');
 								$(unit).val(data.unit);
 								var name = contents.find('#name');
-								$(name).val(data.metrics_name); 
+								$(name).val(data.metrics_name);
 								var memo = contents.find('#memo');
 								$(memo).val(data.description);
-								var id = contents.find('#id'); 
+								var id = contents.find('#id');
 								$(id).val(data.id);
-								var tempLevel = contents.find('#tempLevel');
-								$(tempLevel).val(data.level);
 								
-								layer.setTop(layero); //重点2    
-							}   
+								layer.setTop(layero); //重点2
+							} 
 						});
 					}
 				});

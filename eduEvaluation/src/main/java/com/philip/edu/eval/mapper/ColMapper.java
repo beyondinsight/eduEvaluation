@@ -11,6 +11,8 @@ import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Major;
+import com.philip.edu.eval.bean.Material;
+import com.philip.edu.eval.bean.MetricsDetail;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 
@@ -30,4 +32,12 @@ public interface ColMapper {
 	public List<CollectionTask> getColTaskList();
 	public int countTaskSchool(int task_id);
 	public int countTaskMajor(int task_id);
+	public int updateStatus(@Param("task_id")int task_id, @Param("status")char status);
+	public int batchDeleteTasks(int[] ids);
+	public int insertMetrics(MetricsDetail metrics);
+	public int insertMaterials(List<Material> materials);
+	public List<MetricsDetail> selectMetricsList(int metrics_system); 
+	public int countMaterials(int metrics_id);
+	public int updateMetrics(MetricsDetail metrics);
+	public int deleteMetrics(int metrics_id);
 }
