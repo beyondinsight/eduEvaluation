@@ -65,6 +65,7 @@ public class UsersController {
 	private static final Logger logger = Logger.getLogger(UsersController.class);
 	private Properties propConfig = PropertiesUtil.getProperty("config");
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+	
 	@Autowired
 	private UsersService service;
 	@Autowired
@@ -109,12 +110,12 @@ public class UsersController {
 		String roleId = request.getParameter("roleId");
 
 		JSONObject object = new JSONObject();
-		/*int sieq = service.getUsers(userName).size();
+		int sieq = service.getUsers(userName).size();
 		if(sieq>0) {
 			 code=2;
 			 msg="用户名已存在";
 			return   new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
-		}*/
+		}
 		
 		if(!checkName(userName)) {
 			code =3;			 

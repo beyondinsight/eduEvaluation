@@ -101,13 +101,13 @@
 	    layer.open({
 	        type: 2 //此处以iframe举例
 	        ,title: '修改院校'
-	        ,area: ['550px', '500px']
-	        ,shade: 0
+	        ,area: ['50%', '70%']
+	        //,shade: 0
 	        ,maxmin: true
-	        ,offset: [ //为了演示，随机坐标
+	        /* ,offset: [ //为了演示，随机坐标
 	          $(window).height()-550
 	          ,$(window).width()-900
-	        ]
+	        ] */
 			,btn: ['确认修改', '取消']
 			,yes: function(index, layero){
 			  //点击确认触发 iframe 内容中的按钮提交
@@ -135,12 +135,12 @@
 		    type: 2 //此处以iframe举例
 		    ,title: '选择专业'
 		    ,area: ['800px', '500px']
-		    ,shade: 0
+		    //,shade: 0
 		    ,maxmin: true
-		    ,offset: [ //为了演示，随机坐标
+		    /* ,offset: [ //为了演示，随机坐标
 		      $(window).height()-520
 		      ,$(window).width()-1000
-		    ]
+		    ] */
 			,btn: ['确认', '取消']
 			,yes: function(index, layero){
 			  //点击确认触发 iframe 内容中的按钮提交
@@ -227,7 +227,7 @@
           ,title: '新建院校'
           ,content: 'new_school.html'
           ,maxmin: true
-          ,area: ['550px', '500px']
+          ,area: ['50%', '70%']
           ,btn: ['确认添加', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
