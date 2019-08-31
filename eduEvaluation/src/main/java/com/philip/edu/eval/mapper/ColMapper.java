@@ -51,4 +51,5 @@ public interface ColMapper {
 	public int countUploadedMaterial(int form_performance_id);
 	public int countRequiredMaterial(int form_performance_id);  
 	public ArrayList getCapitalProgressItemId(int collection_major_id,int metrics_id);
+	public int updatePerformanceForm(PerformanceForm pf);
 } 

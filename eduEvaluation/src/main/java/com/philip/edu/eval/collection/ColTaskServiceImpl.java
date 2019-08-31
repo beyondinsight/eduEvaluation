@@ -36,6 +36,42 @@ public class ColTaskServiceImpl implements ColTaskService {
 	private ColMapper dao;
 	@Autowired
 	private DictMapper dictDao;
+	
+	private int TEMPLATE_BASIC_FORM_ID;
+	private int TEMPLATE_PERFORMANCE_FORM_ID;
+	private int TEMPLATE_CAPITAL_PROGRESS_ID;
+	
+	private int METRICS_MAJOR_BASIC_ID;
+	private int METRICS_SELF_EVAL_ID;
+	
+	private int metrics_region_disbursement_amount_id;
+	private int metrics_region_paid_hardware_amount_id;
+	private int metrics_region_paid_internal_amount_id;
+	private int metrics_central_disbursement_amount_id;
+	private int metrics_central_paid_hardware_amount_id;
+	private int metrics_central_paid_internal_amount_id;
+	private int metrics_school_funding_total_id;
+	private int metrics_school_funding_hardware_id;
+	private int metrics_school_funding_internal_id;
+	private int template_basic_form_id;
+	private int template_performance_form_id;
+	private int template_capital_progress_form_id;
+	
+	public void use_properties(Properties prop){
+		template_basic_form_id=((Integer)prop.get("template_basic_form_id")).intValue();
+		template_performance_form_id=((Integer)prop.get("template_performance_form_id")).intValue();
+		template_capital_progress_form_id=((Integer)prop.get("template_capital_progress_form_id")).intValue();
+		
+		metrics_region_disbursement_amount_id = (Integer.parseInt((String)prop.get("metrics_region_disbursement_amount_id")));
+		metrics_region_paid_hardware_amount_id = (Integer.parseInt((String)prop.get("metrics_region_paid_hardware_amount_id")));
+		metrics_region_paid_internal_amount_id = (Integer.parseInt((String)prop.get("metrics_region_paid_internal_amount_id")));
+		metrics_central_disbursement_amount_id = (Integer.parseInt((String)prop.get("metrics_region_central_disbursement_amount_id")));
+		metrics_central_paid_hardware_amount_id = (Integer.parseInt((String)prop.get("metrics_central_paid_hardware_amount_id")));
+		metrics_central_paid_internal_amount_id = (Integer.parseInt((String)prop.get("metrics_central_paid_internal_amount_id")));
+		metrics_school_funding_total_id = (Integer.parseInt((String)prop.get("metrics_school_funding_total_id")));
+		metrics_school_funding_hardware_id = (Integer.parseInt((String)prop.get("metrics_school_funding_hardware_id")));
+		metrics_school_funding_internal_id = (Integer.parseInt((String)prop.get("metrics_school_funding_internal_id")));
+	}
 
 	public List<ColTaskSchool> getTaskSchoolList(int task_id) {
 		// TODO Auto-generated method stub
@@ -43,9 +79,12 @@ public class ColTaskServiceImpl implements ColTaskService {
 	}
 
 	@Transactional
-	public int createColTask(CollectionTask task, List<ColTaskSchool> schools, List<ColTaskMajor> majors) {
+	public int createColTask(CollectionTask task, List<ColTaskSchool> schools, List<ColTaskMajor> majors, Properties prop) {
 		// TODO Auto-generated method stub
 		int result = 0;
+		
+		this.use_properties(prop);
+		
 		int school_ids[] = new int[schools.size()];
 		// 1.insert task:
 		int n = dao.insertColTask(task);
@@ -129,15 +168,26 @@ public class ColTaskServiceImpl implements ColTaskService {
 					bf.setUpdate_time(new Date());
 					bf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 					dao.insertBasicForm(bf);
+					
+					PerformanceForm pf1 = new PerformanceForm();
+					pf1.setCollection_major_id(inputMajor.getId());
+					pf1.setM_system_id(this.template_basic_form_id);
+					pf1.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					pf1.setCreate_time(new Date());
+					pf1.setUpdate_time(new Date());
+					pf1.setMetrics_id(this.METRICS_MAJOR_BASIC_ID);
+					dao.insertPerformanceForm(pf1);
+					pf1.setMetrics_id(this.METRICS_SELF_EVAL_ID);
+					dao.insertPerformanceForm(pf1);
 
 					// 5.insert form 2:
 						//5.1 insert forms;
 						PerformanceForm pf = new PerformanceForm();
 						pf.setCollection_major_id(inputMajor.getId());
-						pf.setM_system_id(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+						pf.setM_system_id(this.TEMPLATE_PERFORMANCE_FORM_ID);
 						pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 						
-						ArrayList metrics = (ArrayList)dao.selectMetricsList(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+						ArrayList metrics = (ArrayList)dao.selectMetricsList(this.template_performance_form_id);
 						for(int j=0; j<metrics.size(); j++){
 							MetricsDetail metric = (MetricsDetail)metrics.get(j);
 							pf.setCreate_time(new Date());
@@ -166,6 +216,40 @@ public class ColTaskServiceImpl implements ColTaskService {
 					cpf.setUpdate_time(new Date());
 					cpf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 					dao.insertCapitalProgressForm(cpf);
+					
+					PerformanceForm pf2 = new PerformanceForm();
+					pf2.setCollection_major_id(inputMajor.getId());
+					pf2.setM_system_id(this.TEMPLATE_CAPITAL_PROGRESS_ID);
+					pf2.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					pf2.setCreate_time(new Date());
+					pf2.setUpdate_time(new Date());
+					pf2.setMetrics_id(this.metrics_central_disbursement_amount_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_central_disbursement_amount_id);
+					pf2.setMetrics_id(this.metrics_central_paid_hardware_amount_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_central_paid_hardware_amount_id);
+					pf2.setMetrics_id(this.metrics_central_paid_internal_amount_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_central_paid_internal_amount_id);
+					pf2.setMetrics_id(this.metrics_region_disbursement_amount_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_region_disbursement_amount_id);
+					pf2.setMetrics_id(this.metrics_region_paid_hardware_amount_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_region_paid_hardware_amount_id);
+					pf2.setMetrics_id(this.metrics_region_paid_internal_amount_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_region_paid_internal_amount_id);
+					pf2.setMetrics_id(this.metrics_school_funding_total_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_school_funding_total_id);
+					pf2.setMetrics_id(this.metrics_school_funding_hardware_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_school_funding_hardware_id);
+					pf2.setMetrics_id(this.metrics_school_funding_internal_id);
+					dao.insertPerformanceForm(pf2);
+					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id, this.metrics_school_funding_internal_id);
 				}
 			}
 		}
@@ -315,5 +399,26 @@ public class ColTaskServiceImpl implements ColTaskService {
 		result = 1;
 		
 		return result;
+	}
+	
+	private int insertMaterials(int performance_id, int template_id, int metrics_id){	 
+			//5.2 insert materials:
+			List<Material> materials = dao.getMaterialMetrics(metrics_id);
+			for(int k=0; k<materials.size(); k++){
+				Material material = (Material)materials.get(k);	
+				material.setCreate_time(new Date());
+				material.setUpdate_time(new Date());
+				material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+				
+				material.setForm_performance_id(performance_id);
+				dao.insertRelateMaterial(material);
+			} 
+
+		return materials.size();	
+	}
+
+	public int updatePerformanceForm(PerformanceForm pf) {
+		// TODO Auto-generated method stub
+		return dao.updatePerformanceForm(pf);
 	}
 }

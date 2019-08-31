@@ -89,29 +89,46 @@
 								title: '单位', 
 								align: 'center',
 							}, {
-								field: '',
+								field: 'current_value',
 								title: '当前值',
+								templet: function(d){ if(d.current_value==0)return "";
+													  else return d.current_value;},
 								align: 'center',
 							},  {
-								field: '',
+								field: 'target_value',
 								title: '目标值',
+								templet: function(d){ if(d.target_value==0)return "";
+													  else return d.target_value;},
 								align: 'center',
 							},  {
-								field: '',
+								field: 'actual_value',
 								title: '实际完成值',
 								align: 'center',
+								templet: function(d){ if(d.actual_value==0)return "";
+													  else return d.actual_value;}
 							},  {
-								field: '',
+								field: 'score',
 								title: '分值',
 								align: 'center',
+								templet: function(d){ if(d.score==0)return "";
+													  else return d.score;}
 							},  {
-								field: '',
+								field: 'self_evaluate',
 								title: '自评分',
 								align: 'center',
+								templet: function(d){ if(d.self_evaluate==0)return "";
+													  else return d.self_evaluate;}
 							},  {
-								field: '',
+								field: 'self_introduction',
 								title: '自评说明',
 								align: 'center',
+								templet: function(d){ 
+									var data = d.self_introduction;
+									console.log("data:" + data);
+									if(data == null) return "共0字";
+									console.log(data.length);
+									var str = "共"+ data.length +"字";
+									return str},
 							},  {
 								field: 'material_num',
 								title: '支撑材料',
@@ -189,8 +206,27 @@
 							zIndex: layer.zIndex //重点1
 								,
 							success: function(layero, index) {
-								var school_id = layero.find('iframe').contents().find("#metrics_id");
+								var metric_id = layero.find('iframe').contents().find("#metrics_id");
 								$(metrics_id).val(data.id);
+								var current_value = layero.find('iframe').contents().find("#current_value");
+								console.log("set data");
+								if(data.current_value!=0)
+								$(current_value).val(data.current_value);
+								var target_value = layero.find('iframe').contents().find("#target_value");
+								if(data.target_value!=0)
+								$(target_value).val(data.target_value);
+								var actual_value = layero.find('iframe').contents().find("#actual_value");
+								if(data.actual_value!=0)
+								$(actual_value).val(data.actual_value);
+								var score = layero.find('iframe').contents().find("#score");
+								if(data.score!=0)
+								$(score).val(data.score);
+								var self_evaluate = layero.find('iframe').contents().find("#self_evaluate");
+								if(data.self_evaluate!=0)
+								$(self_evaluate).val(data.self_evluate);
+								var self_introduction = layero.find('iframe').contents().find("#self_introduction");
+								$(self_introduction).val(data.self_introduction);
+								
 								layer.setTop(layero); //重点2
 							}
 						});
@@ -237,8 +273,9 @@
 							btn: ['保存', '取消'],
 							yes: function(index, layero) {
 								//点击确认触发 iframe 内容中的按钮提交
-								var submit = layero.find('iframe').contents().find("#metrics_form");
+								var submit = layero.find('iframe').contents().find("#edit_performance_form");
 								submit.click();
+								
 								
 								table.reload('LAY-app-content-list');
 							},
@@ -249,6 +286,27 @@
 								//console.log(data.id);
 								var metrics_id = layero.find('iframe').contents().find("#metrics_id");
 								$(metrics_id).val("?metrics_id=" + data.metrics_id + "&form_performance_id=" + data.id );
+								var performance_id = layero.find('iframe').contents().find("#performance_id");
+								$(performance_id).val(data.id);
+								
+								var current_value = layero.find('iframe').contents().find("#current_value");
+								console.log("set data");
+								if(data.current_value!=0)
+								$(current_value).val(data.current_value);
+								var target_value = layero.find('iframe').contents().find("#target_value");
+								if(data.target_value!=0)
+								$(target_value).val(data.target_value);
+								var actual_value = layero.find('iframe').contents().find("#actual_value");
+								if(data.actual_value!=0)
+								$(actual_value).val(data.actual_value);
+								var score = layero.find('iframe').contents().find("#score");
+								if(data.score!=0)
+								$(score).val(data.score);
+								var self_evaluate = layero.find('iframe').contents().find("#self_evaluate");
+								if(data.self_evaluate!=0)
+								$(self_evaluate).val(data.self_evluate);
+								var self_introduction = layero.find('iframe').contents().find("#self_introduction");
+								$(self_introduction).val(data.self_introduction);
 								
 								layer.setTop(layero); //重点2    
 							}   

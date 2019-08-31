@@ -30,6 +30,7 @@ import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
+import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.dictionary.DictService;
@@ -113,7 +114,7 @@ public class ColTaskController {
 		}
 		logger.info("get collection task major information from page.");
 
-		int result = service.createColTask(taskCol, schools, majors);
+		int result = service.createColTask(taskCol, schools, majors, propConfig);
 		logger.info("the create method successfully executed.");
 
 		JSONObject object = new JSONObject();
@@ -242,7 +243,8 @@ public class ColTaskController {
 		String memo = request.getParameter("memo");
 		MetricsDetail metrics = new MetricsDetail();
 		metrics.setMetrics_name(name);
-		metrics.setM_system_id(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+		int metrics_system_id = ((Integer.parseInt((String)propConfig.get("template_performance_form_id"))));
+		metrics.setM_system_id(metrics_system_id);
 		metrics.setLevel(Integer.parseInt(level));
 		metrics.setUnit(unit);
 		metrics.setDescription(memo);
@@ -302,7 +304,8 @@ public class ColTaskController {
 		MetricsDetail metrics = new MetricsDetail();
 		metrics.setId(Integer.parseInt(id));
 		metrics.setMetrics_name(name);
-		metrics.setM_system_id(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+		int metrics_system_id = (Integer.parseInt((String)propConfig.get("template_performance_form_id")));
+		metrics.setM_system_id(metrics_system_id);
 		metrics.setLevel(Integer.parseInt(level));
 		metrics.setUnit(unit);
 		metrics.setDescription(memo);
@@ -353,7 +356,8 @@ public class ColTaskController {
 	@RequestMapping(value="/getMetrics", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> chosenMajor(HttpServletRequest request){
 		
-		ArrayList metricsList = (ArrayList) service.getMetricsList(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+		int metrics_system_id = (Integer.parseInt((String)propConfig.get("template_performance_form_id")));
+		ArrayList metricsList = (ArrayList) service.getMetricsList(metrics_system_id);
 		for(int i=0; i<metricsList.size(); i++){
 			MetricsDetail detail = (MetricsDetail)metricsList.get(i);
 			detail.setLevel1_name(detail.getMetrics_name());
@@ -395,7 +399,7 @@ public class ColTaskController {
 		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id));
 		logger.info("successfully get performance form list");
 		 
-		BackendData data = new BackendData(); 
+		BackendData data = new BackendData();  
 		data.setMsg("成功获取业绩表格"); 
 		data.setCode(0); 
 		data.setData(performanceForm);
@@ -443,5 +447,48 @@ public class ColTaskController {
 		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value = "/editPerformanceItem", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity editPerformanceItem(HttpServletRequest request) {
+
+		String performance_id = request.getParameter("performance_id");
+		logger.info("performance_id:" + performance_id);
+		String current_value = request.getParameter("current_value");
+		String target_value = request.getParameter("target_value");
+		String actual_value = request.getParameter("actual_value");
+		String score = request.getParameter("score");
+		String self_evaluation = request.getParameter("self_evaluation");
+		String memo = request.getParameter("memo");
+		
+		PerformanceForm pf = new PerformanceForm();
+		pf.setId(Integer.parseInt(performance_id));
+		if(current_value!=null&&!"".equals(current_value))
+		pf.setCurrent_value(Double.parseDouble(current_value));
+		if(target_value!=null&&!"".equals(target_value))
+		pf.setTarget_value(Double.parseDouble(target_value));
+		if(actual_value!=null&&!"".equals(actual_value))
+		pf.setActual_value(Double.parseDouble(actual_value));
+		if(score!=null&&!"".equals(score))
+		pf.setScore(Double.parseDouble(score)); 
+		if(self_evaluation!=null&&!"".equals(self_evaluation))
+		pf.setSelf_evaluate(Double.parseDouble(self_evaluation));
+		pf.setMemo(memo);
+		pf.setUpdate_time(new Date());
+		int result = service.updatePerformanceForm(pf);
+		
+		logger.info("update performance form success");
+		
+		BackendData data = new BackendData();
+		// logger.info("result:" + result);
+		if (result != 0) {
+			data.setMsg("修改表格成功!");
+			data.setCode(1);
+		} else {
+			data.setMsg("修改表格失败!");
+			data.setCode(99);
+		}
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 }

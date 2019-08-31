@@ -238,4 +238,9 @@
     <select id="getCapitalProgressItemId">
     	select id from tbl_form_performance where collection_major_id=#{collection_major_id} and metrics_id=#{metrics_id}
     </select>
+    
+    <insert id="updatePerformanceForm">
+    	update tbl_form_performance set current_value=#{current_value}, target_value=#{target_value}, actual_value=#{actual_value}, score=#{score}, self_evaluate=#{self_evaluate}, update_time=#{update_time}, self_introduction=#{self_introduction}
+    	where id=#{id}
+    </insert>
 </mapper>

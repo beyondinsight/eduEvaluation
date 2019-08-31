@@ -17,7 +17,7 @@ import com.philip.edu.eval.bean.TblMajor;
 public interface ColTaskService {
 	//Task:
 	public List<ColTaskSchool> getTaskSchoolList(int task_id);
-	public int createColTask(CollectionTask task, List<ColTaskSchool> schools, List<ColTaskMajor> majors);
+	public int createColTask(CollectionTask task, List<ColTaskSchool> schools, List<ColTaskMajor> majors, Properties prop);
 	public List<CollectionTask> getColTaskList();
 	public int countTaskSchool(int task_id);
 	public int countTaskMajor(int task_id);
@@ -27,9 +27,10 @@ public interface ColTaskService {
 	public List<MetricsDetail> getMetricsList(int metrics_system);
 	public int countMaterials(int metrics_id);
 	public int updateMetrics(MetricsDetail metrics); 
-	public int deleteMetrics(int metrics_id);
+	public int deleteMetrics(int metrics_id); 
 	public List<PerformanceForm> getPerformanceForm(int collection_major_id);
 	public List<Material> getRelateMaterials(int pf_id, int metrics_id);
 	public List<CapitalProgressForm> selectCapitalProgress(int collection_major_id);
 	public int selectCapitalProgressMaterialsNum(CapitalProgressForm cpf, Properties prop);
+	public int updatePerformanceForm(PerformanceForm pf);
 }

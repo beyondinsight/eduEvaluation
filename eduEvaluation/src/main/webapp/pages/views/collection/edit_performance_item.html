@@ -13,9 +13,10 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="metrics_form">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_performance_form">
 					<div class="layui-form-item">
 						<input type="hidden" name="metrics_id" id="metrics_id">
+						<input type="hidden" name="performance_id" id="performance_id">
 						<div class="layui-inline">
 							<label class="layui-form-label" style="width: 70px;">当前值</label>
 								<div class="layui-inline" style="width: 120px">
@@ -65,7 +66,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label" style="width: 70px;">备注</label>
 						<div class="layui-input-inline" style="width: 300px;">
-							<textarea name="memo" id="memo" style="width: 300px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
+							<textarea name="self_introduction" id="self_introduction" style="width: 300px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
 					</div>
 					
@@ -81,7 +82,7 @@
 					</div>
 					
 					<div class="layui-form-item layui-hide">
-					  <input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认添加">
+					  <input type="button" lay-submit lay-filter="edit_performance_form" id="edit_performance_form" value="确认添加">
 					</div>
 				</div>
 
@@ -152,36 +153,25 @@
 				});
 
 				//监听搜索
-				form.on('submit(metrics_form)', function(data) {
-										
-					var data0 = layui.data('materials');
-										
-					var metrics={
-						'level':$('#level').val(),
-						'metrics_code':$('#metrics_code').val(),
-						'unit':$('#unit').val(),
-						'name':$('#name').val(),
-						'memo': $('#memo').val(),
-						'materials': JSON.stringify(data0)
-						}; 
-
-					console.log("start to ajax");
+				form.on('submit(edit_performance_form)', function(data) {
+					var field = data.field; //获取提交的字段					
 					
+					console.log("edit performance");
 					$.ajax({
-						url: projectBase + '/collection/createMetrics',
+						url: projectBase + '/collection/editPerformanceItem',
 						dataType: 'json',
-						data: metrics,
+						data: field,
 						type: 'POST',
 						success: function(res){
 							if(res.code==1){
-								layer.msg("指标创建成功!");
+								layer.msg("修改业绩完成情况成功!");
 								setTimeout(function(){
-									parent.layui.table.reload('materials_table'); //重载表格
+									parent.layui.table.reload('LAY-app-content-list'); //重载表格
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index); //再执行关闭   
 									},1200);
 							} else {
-								layer.msg("指标创建失败!", function(){
+								layer.msg("修改业绩完成情况失败", function(){
 									});
 							}
 						} 
