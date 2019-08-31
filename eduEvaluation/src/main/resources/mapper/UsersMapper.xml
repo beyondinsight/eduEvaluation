@@ -182,4 +182,8 @@
     	</foreach>
    </delete>
    
+   <select id="exsitsUser" resultType="int">
+   		select count(*) from tbl_users where user_name=#{username}
+   </select>
+   
 </mapper>

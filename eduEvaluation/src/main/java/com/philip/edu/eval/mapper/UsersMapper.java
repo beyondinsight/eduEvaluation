@@ -2,6 +2,7 @@ package com.philip.edu.eval.mapper;
 
 import java.util.List;
 
+import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.TblUsers;
 
 public interface UsersMapper {
@@ -19,4 +20,5 @@ public interface UsersMapper {
 		public int createUserRole(TblUsers users);
 		public int updateUserRole(TblUsers users);
 		public List<TblUsers> getRolesUsers(int id);
+		public int exsitsUser(String username);
 }

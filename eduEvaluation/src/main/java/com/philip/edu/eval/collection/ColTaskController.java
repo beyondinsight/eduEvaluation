@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.BackendData1;
+import com.philip.edu.eval.bean.CapitalProgressForm;
 import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
@@ -32,6 +34,7 @@ import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.dictionary.DictService;
 import com.philip.edu.eval.util.EvalConstants;
+import com.philip.edu.eval.util.PropertiesUtil;
 import com.philip.edu.test.bean.HelloBean;
 
 @RestController
@@ -40,6 +43,7 @@ import com.philip.edu.test.bean.HelloBean;
 public class ColTaskController {
 
 	private static final Logger logger = Logger.getLogger(ColTaskController.class);
+	private Properties propConfig = PropertiesUtil.getProperty("config");
 
 	@Autowired
 	private ColTaskService service;
@@ -99,7 +103,7 @@ public class ColTaskController {
 				JSONArray value = objMajors.getJSONArray(key);
 				for (int i = 0; i < value.length(); i++) {
 					JSONObject obj = value.getJSONObject(i);
-					int major_id = obj.getInt("id");
+					int major_id = obj.getInt("major_id");
 					ColTaskMajor major = new ColTaskMajor();
 					major.setSchool_id(school_id);
 					major.setMajor_id(major_id);
@@ -245,7 +249,7 @@ public class ColTaskController {
 		metrics.setMetrics_code(metrics_code);
 		//decode:
 		if(Integer.parseInt(level) == 2 && metrics_code.contains(".")){
-			String[] temp = metrics_code.split(".");
+			String[] temp = metrics_code.split("\\.");
 			metrics.setPid(Integer.parseInt(temp[0]));
 			metrics.setOrder(Integer.parseInt(temp[1]));
 		} else if(Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
@@ -381,5 +385,63 @@ public class ColTaskController {
 		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	 
+	@RequestMapping(value="/getPerformanceForm", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getPerformanceForm(HttpServletRequest request){
+		
+		String collection_major_id = request.getParameter("collection_major_id");
+		
+		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id));
+		logger.info("successfully get performance form list");
+		 
+		BackendData data = new BackendData(); 
+		data.setMsg("成功获取业绩表格"); 
+		data.setCode(0); 
+		data.setData(performanceForm);
+		data.setCount(performanceForm.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/getRelateMaterials", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request){
+		 
+		String pf_id = request.getParameter("form_performance_id");
+		String metrics_id = request.getParameter("metrics_id");
+		
+		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(pf_id), Integer.parseInt(metrics_id));
+		logger.info("successfully get materials list");
+		 
+		BackendData data = new BackendData();
+		data.setMsg("成功获取材料列表");   
+		data.setCode(0); 
+		data.setData(materials); 
+		data.setCount(materials.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/getCapitalProgress", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getCapitalProgress(HttpServletRequest request){
+		 
+		String collection_major_id = request.getParameter("collection_major_id");
+		
+		ArrayList cpf = (ArrayList)service.selectCapitalProgress(Integer.parseInt(collection_major_id));
+		CapitalProgressForm cpform = (CapitalProgressForm) cpf.get(0);
+		
+		int setNum = service.selectCapitalProgressMaterialsNum(cpform, propConfig);
+		logger.info("successfully get capitalProgress form");
+		 
+		BackendData data = new BackendData();
+		data.setMsg("成功获取资金支出表格");   
+		data.setCode(0); 
+		data.setData(cpf); 
+		data.setCount(cpf.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
 	}
 }

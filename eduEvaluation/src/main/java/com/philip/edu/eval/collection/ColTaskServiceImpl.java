@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 import javax.annotation.Resource;
 
@@ -21,6 +22,7 @@ import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
+import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.mapper.ColMapper;
@@ -59,7 +61,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 			// 3.insert task-major:
 			// 3.1 default school majors:
-			List<ColTaskMajor> defaultMajorTasks = new ArrayList();
+			/*List<ColTaskMajor> defaultMajorTasks = new ArrayList();
 			List<ChosenMajor> defaultMajors = (ArrayList) dictDao.getChosenMajorSchools(school_ids);
 			for (int i = 0; i < defaultMajors.size(); i++) {
 				ColTaskMajor taskMajor = new ColTaskMajor();
@@ -90,7 +92,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 				cpf.setUpdate_time(new Date());
 				cpf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 				dao.insertCapitalProgressForm(cpf);
-			}
+			}*/
 			// dao.insertTaskMajors(defaultMajorTasks);
 
 			// 3.2 update school majors:
@@ -129,7 +131,34 @@ public class ColTaskServiceImpl implements ColTaskService {
 					dao.insertBasicForm(bf);
 
 					// 5.insert form 2:
-
+						//5.1 insert forms;
+						PerformanceForm pf = new PerformanceForm();
+						pf.setCollection_major_id(inputMajor.getId());
+						pf.setM_system_id(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+						pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+						
+						ArrayList metrics = (ArrayList)dao.selectMetricsList(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+						for(int j=0; j<metrics.size(); j++){
+							MetricsDetail metric = (MetricsDetail)metrics.get(j);
+							pf.setCreate_time(new Date());
+							pf.setUpdate_time(new Date());
+							pf.setMetrics_id(metric.getId());
+							pf.setUnit(metric.getUnit());
+							dao.insertPerformanceForm(pf);
+							 
+							//5.2 insert materials:
+							List<Material> materials = dao.getMaterialMetrics(metric.getId());
+							for(int k=0; k<materials.size(); k++){
+								Material material = (Material)materials.get(k);	
+								material.setCreate_time(new Date());
+								material.setUpdate_time(new Date());
+								material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+								
+								material.setForm_performance_id(pf.getId());
+								dao.insertRelateMaterial(material);
+							} 
+						}
+						
 					// 6.insert form 3:
 					CapitalProgressForm cpf = new CapitalProgressForm();
 					cpf.setCollection_major_id(inputMajor.getId());
@@ -202,4 +231,89 @@ public class ColTaskServiceImpl implements ColTaskService {
 		return dao.deleteMetrics(metrics_id);
 	}
 
+	public List<PerformanceForm> getPerformanceForm(int collection_major_id) {
+		// TODO Auto-generated method stub
+		return dao.getPerformanceForm(collection_major_id);
+	}
+
+	public List<Material> getRelateMaterials(int pf_id, int metrics_id) {
+		// TODO Auto-generated method stub
+		return dao.getRelateMaterials(pf_id, metrics_id);
+	}
+
+	public List<CapitalProgressForm> selectCapitalProgress(int collection_major_id) {
+		// TODO Auto-generated method stub
+		return dao.selectCapitalProgress(collection_major_id);
+	}
+
+	public int selectCapitalProgressMaterialsNum(CapitalProgressForm cpf, Properties prop){
+		int result = 0;
+		
+		Integer rda_id = (Integer)prop.get("metrics_region_disbursement_amount");
+		Integer rpha_id = (Integer)prop.get("metrics_region_paid_hardware_amount");
+		Integer rpia_id = (Integer)prop.get("metrics_region_paid_internal_amount");
+		Integer cda_id = (Integer)prop.get("metrics_central_disbursement_amount");
+		Integer cpha_id = (Integer)prop.get("metrics_central_paid_hardware_amount");
+		Integer cpia_id = (Integer)prop.get("metrics_central_paid_internal_amount");
+		Integer sft_id = (Integer)prop.get("metrics_school_funding_total");
+		Integer sfh_id = (Integer)prop.get("metrics_school_funding_hardware");
+		Integer sfi_id = (Integer)prop.get("metrics_school_funding_internal");
+		//region_disbursement_amount:
+		ArrayList al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), rda_id);
+		int pf_id = ((Integer)al.get(0)).intValue();
+		String num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setRda_material_num(num);
+		
+		//region_paid_hardware_amount:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), rpha_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setRpha_material_num(num);
+		
+		//region_paid_internal_amount:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), rpia_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setRpia_material_num(num);
+		
+		//central_disbursement_amount:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), cda_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setCda_material_num(num);
+		
+		//central_paid_hardware_amount:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), cpha_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setCpha_material_num(num);
+		
+		//central_paid_internal_amount:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), cpia_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setCpia_material_num(num);
+		
+		//school_funding_total:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), sft_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setSft_material_num(num);
+		
+		//school_funding_hardware:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), sfh_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setSfh_material_num(num);
+		
+		//school_funding_internal:
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), sfi_id);
+		pf_id = ((Integer)al.get(0)).intValue();
+		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		cpf.setSfi_material_num(num);
+		
+		result = 1;
+		
+		return result;
+	}
 }

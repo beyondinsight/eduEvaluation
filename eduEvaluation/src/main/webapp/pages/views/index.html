@@ -22,6 +22,9 @@
       <div class="layui-header">
         <!-- 头部区域 -->
         <ul class="layui-nav layui-layout-left">
+	      <script id="demo" type="text/html">
+	      	{{=d.c_name}}
+	      </script> 
           <li class="layui-nav-item layadmin-flexible" lay-unselect>
             <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
               <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
@@ -68,7 +71,7 @@
           </li>
           <li class="layui-nav-item" lay-unselect>
             <a href="javascript:;">
-              <cite><script type="text/html" template>{{c_name}}</script></cite>
+              <cite><div id="view"></div></cite>
             </a>
             <dl class="layui-nav-child">
               <dd><a lay-href="set/user/info.html">基本资料</a></dd>
@@ -243,10 +246,20 @@
 	  router = layui.router();
 	  
 	  var userinfo = layui.data('userinfo');
-	  c_name=userinfo['user']['chineseName'];
+	  //console.log(userinfo);
+	  chine_name = userinfo['user']['chineseName'];
 	  console.log(userinfo['user']['chineseName']);
 	  $('#cName').val(userinfo['user']['chineseName']);
 	  form.render();
+	  
+	  var data = {
+		  "c_name":chine_name
+	  };
+	  
+	  var getTpl = demo.innerHTML, view = document.getElementById('view');
+	  laytpl(getTpl).render(data, function(html){
+		  view.innerHTML = html;
+	  });
   });
   </script>
   

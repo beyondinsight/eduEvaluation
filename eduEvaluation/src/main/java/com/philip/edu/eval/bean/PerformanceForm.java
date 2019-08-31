@@ -6,13 +6,69 @@ public class PerformanceForm {
 	private int id;
 	private int collection_major_id;
 	private int metrics_id;
+	private String metrics_name;
 	private Date create_time;
 	private Date update_time;
 	private int op_user;
 	private char process_status;
 	private int m_system_id;
+	private double current_value;
+	private double target_value;
+	private double actual_value;
+	private double score;
+	private double self_evaluate;
+	private double self_introduction;
+	private String unit;
 	
 	
+	public String getUnit() {
+		return unit;
+	}
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+	public String getMetrics_name() {
+		return metrics_name;
+	}
+	public void setMetrics_name(String metrics_name) {
+		this.metrics_name = metrics_name;
+	}
+	public double getCurrent_value() {
+		return current_value;
+	}
+	public void setCurrent_value(double current_value) {
+		this.current_value = current_value;
+	}
+	public double getTarget_value() {
+		return target_value;
+	}
+	public void setTarget_value(double target_value) {
+		this.target_value = target_value;
+	}
+	public double getActual_value() {
+		return actual_value;
+	}
+	public void setActual_value(double actual_value) {
+		this.actual_value = actual_value;
+	}
+	public double getScore() {
+		return score;
+	}
+	public void setScore(double score) {
+		this.score = score;
+	}
+	public double getSelf_evaluate() {
+		return self_evaluate;
+	}
+	public void setSelf_evaluate(double self_evaluate) {
+		this.self_evaluate = self_evaluate;
+	}
+	public double getSelf_introduction() {
+		return self_introduction;
+	}
+	public void setSelf_introduction(double self_introduction) {
+		this.self_introduction = self_introduction;
+	}
 	public int getM_system_id() {
 		return m_system_id;
 	}
