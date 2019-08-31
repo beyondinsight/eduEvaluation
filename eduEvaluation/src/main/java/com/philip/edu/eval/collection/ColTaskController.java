@@ -459,7 +459,7 @@ public class ColTaskController {
 		String actual_value = request.getParameter("actual_value");
 		String score = request.getParameter("score");
 		String self_evaluation = request.getParameter("self_evaluation");
-		String memo = request.getParameter("memo");
+		String self_introduction = request.getParameter("self_introduction");
 		
 		PerformanceForm pf = new PerformanceForm();
 		pf.setId(Integer.parseInt(performance_id));
@@ -473,7 +473,7 @@ public class ColTaskController {
 		pf.setScore(Double.parseDouble(score)); 
 		if(self_evaluation!=null&&!"".equals(self_evaluation))
 		pf.setSelf_evaluate(Double.parseDouble(self_evaluation));
-		pf.setMemo(memo);
+		pf.setSelf_introduction(self_introduction);
 		pf.setUpdate_time(new Date());
 		int result = service.updatePerformanceForm(pf);
 		
