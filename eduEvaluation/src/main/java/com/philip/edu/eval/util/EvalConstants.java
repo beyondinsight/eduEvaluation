@@ -19,6 +19,13 @@ public class EvalConstants {
 	
 	public static final int DEFAULT_METRICS_SYSTEM_ID = 1;
 	
+	public static final int TEMPLATE_PERFORMANCE_FORM_ID = 1;
+	public static final int TEMPLATE_BASIC_FORM = 2;
+	public static final int TEMPALTE_CAPITAL_PROGRESS_FORM_ID = 3;
+	
+	public static final int METRIC_BASIC_MAJOR_BASIC_ID = 10;
+	public static final int METRIC_BASIC_SELF_EVAL_ID = 11;
+	
 	public static final char COLLECTION_STATUS_INACTIVE = 'I';
 	public static final char COLLECTION_STATUS_ACTIVE = 'A';
 	public static final char COLLECTION_STATUS_STOP = 'S';

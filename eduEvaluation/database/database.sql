@@ -264,6 +264,7 @@ create table tbl_form_performance
    self_introduction    varchar(1000),
    process_status       char(1),
    weight               int,
+   for_template         int
    primary key (id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.BackendData1;
+import com.philip.edu.eval.bean.CapitalProgressForm;
 import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
@@ -32,6 +34,7 @@ import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.dictionary.DictService;
 import com.philip.edu.eval.util.EvalConstants;
+import com.philip.edu.eval.util.PropertiesUtil;
 import com.philip.edu.test.bean.HelloBean;
 
 @RestController
@@ -40,6 +43,7 @@ import com.philip.edu.test.bean.HelloBean;
 public class ColTaskController {
 
 	private static final Logger logger = Logger.getLogger(ColTaskController.class);
+	private Properties propConfig = PropertiesUtil.getProperty("config");
 
 	@Autowired
 	private ColTaskService service;
@@ -415,6 +419,27 @@ public class ColTaskController {
 		data.setCode(0); 
 		data.setData(materials); 
 		data.setCount(materials.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/getCapitalProgress", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getCapitalProgress(HttpServletRequest request){
+		 
+		String collection_major_id = request.getParameter("collection_major_id");
+		
+		ArrayList cpf = (ArrayList)service.selectCapitalProgress(Integer.parseInt(collection_major_id));
+		CapitalProgressForm cpform = (CapitalProgressForm) cpf.get(0);
+		
+		int setNum = service.selectCapitalProgressMaterialsNum(cpform, propConfig);
+		logger.info("successfully get capitalProgress form");
+		 
+		BackendData data = new BackendData();
+		data.setMsg("成功获取资金支出表格");   
+		data.setCode(0); 
+		data.setData(cpf); 
+		data.setCount(cpf.size());
 		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 

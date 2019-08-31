@@ -52,6 +52,25 @@
 		<result property="update_time" column="update_time" />
 		<result property="doc_size" column="doc_size" />
  	</resultMap>
+ 	
+ 	<resultMap id="capitalResultMap" type="com.philip.edu.eval.bean.CapitalProgressForm">
+ 		<id property="id" column="id" />
+ 		<result property="collection_major_id" column="collection_major_id"/>
+ 		<result property="central_disburserment_total" column="central_disburserment_total"/>
+ 		<result property="central_paid_total" column="central_paid_total"/>
+ 		<result property="region_disbursement_amount" column="region_disbursement_amount"/>
+ 		<result property="region_paid_amount" column="region_paid_amount"/>
+ 		<result property="region_paid_hardware_amount" column="region_paid_hardware_amount"/>
+ 		<result property="region_paid_internal_amount" column="region_paid_internal_amount"/>
+ 		<result property="central_disbursement_amount" column="central_disbursement_amount"/>
+ 		<result property="central_paid_amount" column="central_paid_amount"/>
+ 		<result property="central_paid_hardware_amout" column="central_paid_hardware_amount"/>
+ 		<result property="central_paid_internal_amount" column="central_paid_internal_amount"/>
+ 		<result property="school_funding_total" column="school_funding_total"/>
+ 		<result property="school_funding_hardware" column="school_funding_hardware"/>
+ 		<result property="school_funnding_internal" column="school_funding_internal"/>
+ 		<result property="process_status" column="process_status"/>
+ 	</resultMap>
 	
 	<resultMap id="colTaskSchoolId" type="int">
 		<id property="id" column="id"/>
@@ -202,5 +221,21 @@
     
     <select id="getMaterialMetrics" resultMap="materialResultMap">
     	select * from tbl_support_material where metrics_id=#{metrics_id}
+    </select>
+    
+    <select id="selectCapitalProgress" resultMap="capitalResultMap">
+    	select * from tbl_form_capitalprogress where collection_major_id=#{collection_major_id}
+    </select>
+    
+    <select id="countRequiredMaterial" resultType="int">
+    	select count(*) from tbl_collection_material where form_performance_id=#{form_performance_id} and required='Y'
+    </select>
+    
+    <select id="countUploadedMaterial" resultType="int">
+    	select count(*) from tbl_collection_material where form_performance_id=#{form_performance_id} and doc is not null
+    </select>
+    
+    <select id="getCapitalProgressItemId">
+    	select id from tbl_form_performance where collection_major_id=#{collection_major_id} and metrics_id=#{metrics_id}
     </select>
 </mapper>

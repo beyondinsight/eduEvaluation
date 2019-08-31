@@ -1,5 +1,6 @@
 package com.philip.edu.eval.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -46,4 +47,8 @@ public interface ColMapper {
 	public int insertPerformanceForm(PerformanceForm pf);
 	public int insertRelateMaterial(Material material);
 	public List<Material> getMaterialMetrics(int pf_id);
+	public List<CapitalProgressForm> selectCapitalProgress(int collection_major_id);
+	public int countUploadedMaterial(int form_performance_id);
+	public int countRequiredMaterial(int form_performance_id);  
+	public ArrayList getCapitalProgressItemId(int collection_major_id,int metrics_id);
 } 
