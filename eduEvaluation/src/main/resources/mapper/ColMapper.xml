@@ -7,6 +7,15 @@
 		<result property="school_id" column="school_id"/>
 		<result property="school_name" column="school_name"/>
 		<result property="school_code" column="school_code"/>
+		<result property="collection_school_id" column="cid"/>
+		<result property="process_status" column="process_status"/>
+	</resultMap>
+	
+	<resultMap id="colTaskMajorResultMap" type="com.philip.edu.eval.bean.ColTaskMajor">
+		<id property="id" column="id"/>
+		<result property="major_id" column="major_id"/>
+		<result property="major_name" column="major_name"/>
+		<result property="major_code" column="major_code"/>
 	</resultMap>
 	
 	<resultMap id="colTaskListResultMap" type="com.philip.edu.eval.bean.CollectionTask">
@@ -16,7 +25,11 @@
 		<result property="status" column="status"/>
 		<result property="start_time" column="start_time"/>
 		<result property="end_time" column="end_time"/>
+		<result property="form_basic_weight" column="form_basic_weight"/>
+		<result property="form_performance_weight" column="form_performance_weight"/>
+		<result property="form_capitalprogress_weight" column="form_capitalprogress_weight"/>
 	</resultMap> 
+	
 	
 	<resultMap id="metricsListResultMap" type="com.philip.edu.eval.bean.MetricsDetail">
 		<id property="id" column="id"/>
@@ -80,8 +93,13 @@
     	<selectKey resultType="int" keyProperty="id" order="AFTER">
     		select LAST_INSERT_ID() As id
   		</selectKey>
-    	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system, form_basic_weight, form_performance_weight, form_capitalprogress_weight) 
-    	values(#{task_name}, #{task_year}, #{start_time}, #{end_time}, #{status}, #{use_metrics_system}, #{form_basic_weight}, #{form_performance_weight}, #{form_capitalprogress_weight})
+    	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system, form_basic_weight, form_performance_weight, form_capitalprogress_weight, create_time, update_time) 
+    	values(#{task_name}, #{task_year}, #{start_time}, #{end_time}, #{status}, #{use_metrics_system}, #{form_basic_weight}, #{form_performance_weight}, #{form_capitalprogress_weight}, #{create_time}, #{update_time})
+    </insert>
+    
+    <insert id="insertTaskSchool" parameterType="com.philip.edu.eval.bean.ColTaskSchool" useGeneratedKeys="true" keyProperty="id" >
+    	insert into tbl_collection_school(collection_task_id, school_id, process_status)
+    	values(#{task_id},#{school_id},#{process_status})
     </insert>
     
     <insert id="insertColSchool" parameterType="java.util.List">
@@ -116,6 +134,19 @@
     	select id from tbl_collection_school where collection_task_id=#{task_id} and school_id=#{school_id}
     </select>
     
+    <delete id="deleteTaskSchools" parameterType="int[]">
+    	delete from tbl_collection_school where
+    	school_id in 
+    	<foreach collection="array" item="school" index="no" open="(" separator="," close=")">
+    		#{school}
+    	</foreach> 
+    </delete>
+    
+    <delete id="deleteTaskMajors" parameterType="int">
+    	delete from tbl_collection_major where
+    	collection_school_id = #{collectoin_schools_id}
+    </delete>
+    
     <delete id="deleteTaskOldSchools" parameterType="int[]">
     	delete from tbl_collection_major where 
     	collection_school_id in
@@ -123,6 +154,11 @@
     		#{school}
     	</foreach> 
     </delete> 
+    
+    <delete id="deleteTaskSchool" parameterType="int">
+    	delete from tbl_collection_school where
+    	collection_task_id=#{task_id}
+    </delete>
     
     <insert id="insertBasicForm" parameterType="com.philip.edu.eval.bean.BasicForm">
     	insert into tbl_form_basic(collection_major_id, process_status, create_time, update_time)
@@ -146,7 +182,7 @@
     </insert>
     
     <select id="getColTaskList" resultMap="colTaskListResultMap">
-    	select id, task_name, task_year, start_time, end_time, status from tbl_collection_tasks order by id desc
+    	select id, task_name, task_year, start_time, end_time, status, form_basic_weight, form_performance_weight, form_capitalprogress_weight from tbl_collection_tasks order by id desc
     </select>
     
     <select id="countTaskSchool" resultType="int" parameterType="int">
@@ -243,4 +279,19 @@
     	update tbl_form_performance set current_value=#{current_value}, target_value=#{target_value}, actual_value=#{actual_value}, score=#{score}, self_evaluate=#{self_evaluate}, update_time=#{update_time}, self_introduction=#{self_introduction}
     	where id=#{id}
     </insert>
+    
+    <select id="getChosenSchools" resultMap="colTaskSchoolResultMap">
+    	select cs.school_id,s.school_name,s.school_code, cs.id as cid from tbl_collection_school cs, tbl_school s
+    	where cs.school_id = s.id and collection_task_id=#{task_id}
+    </select>
+    
+    <select id="getChosenMajors" resultMap="colTaskMajorResultMap">
+    	select cm.major_id, m.major_code, m.major_name from tbl_collection_major cm, tbl_major m
+    	where cm.major_id = m.id and collection_school_id=#{collection_school_id}
+    </select>
+    
+    <select id="getChosenMajorId" resultMap="colTaskMajorResultMap">
+    	select cm.major_id, m.major_code, m.major_name from tbl_collection_major cm, tbl_major m
+    	where cm.major_id = m.id and collection_school_id=#{collection_school_id}
+    </select>
 </mapper>

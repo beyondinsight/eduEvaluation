@@ -6,8 +6,16 @@ public class ColTaskSchool {
 	private int school_id;
 	private String school_code;
 	private String school_name; 
+	private int collection_school_id;
 	private char process_status;
 	
+	
+	public int getCollection_school_id() {
+		return collection_school_id;
+	}
+	public void setCollection_school_id(int collection_school_id) {
+		this.collection_school_id = collection_school_id;
+	}
 	public char getProcess_status() {
 		return process_status;
 	}

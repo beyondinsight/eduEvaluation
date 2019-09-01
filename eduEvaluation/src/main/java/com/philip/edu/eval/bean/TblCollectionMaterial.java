@@ -1,5 +1,6 @@
 package com.philip.edu.eval.bean;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TblCollectionMaterial {
@@ -22,8 +23,28 @@ public class TblCollectionMaterial {
     private Date updateTime;
     
     private Integer materialcount;
+    
+    private String docsize;
+    
+    private String materialname;
 
-    public Integer getMaterialcount() {
+    public String getDocsize() {
+		return docsize;
+	}
+
+	public void setDocsize(String docsize) {
+		this.docsize = docsize;
+	}
+
+	public String getMaterialname() {
+		return materialname;
+	}
+
+	public void setMaterialname(String materialname) {
+		this.materialname = materialname;
+	}
+
+	public Integer getMaterialcount() {
 		return materialcount;
 	}
 
@@ -105,10 +126,24 @@ public class TblCollectionMaterial {
 
 	@Override
 	public String toString() {
-		return "TblCollectionMaterial [id=" + id + ", formPerformanceId=" + formPerformanceId + ", metricsId="
-				+ metricsId + ", materialId=" + materialId + ", required=" + required + ", doc=" + doc
-				+ ", description=" + description + ", createTime=" + createTime + ", updateTime=" + updateTime
-				+ ", materialcount=" + materialcount + "]";
-	}
+		
+	
     
+	SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");//日期格式化
+	 String createtime_s="";
+	 String updatetime_s="";
+	 if(createTime != null){
+		
+		 createtime_s = formatter.format(createTime);
+	 } 
+	 
+	 if(updateTime != null){
+			
+		 updatetime_s = formatter.format(updateTime);
+	 }
+	 return "TblCollectionMaterial [id=" + id + ", formPerformanceId=" + formPerformanceId + ", metricsId="
+		+ metricsId + ", materialId=" + materialId + ", required=" + required + ", doc=" + doc
+		+ ", description=" + description + ", createTime=" + createtime_s + ", updateTime=" + updatetime_s
+		+ ", materialcount=" + materialcount + "]";
+	}
 }

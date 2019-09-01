@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.philip.edu.eval.mapper.CollectionMaterialMapper">
+	<resultMap id="CollectionMaterialMap"
+		type="com.philip.edu.eval.bean.TblCollectionMaterial">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="form_performance_id" property="formPerformanceId"
+			jdbcType="BIGINT" />
+		<result column="metrics_id" property="metricsId" jdbcType="INTEGER" />
+		<result column="material_id" property="materialId" jdbcType="INTEGER" />
+		<result column="required" property="required" jdbcType="CHAR" />
+		<result column="doc" property="doc" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="CHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="materialcount" property="materialcount"
+			jdbcType="INTEGER" />
+		<result column="material_name" property="materialname"
+			jdbcType="VARCHAR" />
+		<result column="doc_size" property="docsize" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="createMaterial" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
+		insert into tbl_collection_material ( form_performance_id,
+		metrics_id,material_name,
+		material_id, required, doc,doc_size,
+		description, create_time, update_time
+		)
+		values ( #{formPerformanceId,jdbcType=BIGINT},
+		#{metricsId,jdbcType=INTEGER},#{materialname,jdbcType=VARCHAR},
+		#{materialId,jdbcType=INTEGER}, #{required,jdbcType=CHAR},
+		#{doc,jdbcType=VARCHAR},#{docsize,jdbcType=VARCHAR},
+		#{description,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
+		insert into tbl_collection_material
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="formPerformanceId != null">
+				form_performance_id,
+			</if>
+			<if test="metricsId != null">
+				metrics_id,
+			</if>
+			<if test="materialId != null">
+				material_id,
+			</if>
+			<if test="required != null">
+				required,
+			</if>
+			<if test="doc != null">
+				doc,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="formPerformanceId != null">
+				#{formPerformanceId,jdbcType=BIGINT},
+			</if>
+			<if test="metricsId != null">
+				#{metricsId,jdbcType=INTEGER},
+			</if>
+			<if test="materialId != null">
+				#{materialId,jdbcType=INTEGER},
+			</if>
+			<if test="required != null">
+				#{required,jdbcType=CHAR},
+			</if>
+			<if test="doc != null">
+				#{doc,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=CHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+
+	<update id="updateMaterial" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
+		update tbl_collection_material
+		<set>
+			<if test="formPerformanceId != null">
+				form_performance_id = #{formPerformanceId,jdbcType=BIGINT},
+			</if>
+			<if test="metricsId != null">
+				metrics_id = #{metricsId,jdbcType=INTEGER},
+			</if>
+			<if test="materialId != null">
+				material_id = #{materialId,jdbcType=INTEGER},
+			</if>
+			<if test="materialname != null">
+				material_name = #{materialname,jdbcType=VARCHAR},
+			</if>
+			<if test="docsize != null">
+				doc_size = #{docsize,jdbcType=VARCHAR},
+			</if>
+			<if test="required != null">
+				required = #{required,jdbcType=CHAR},
+			</if>
+			<if test="doc != null">
+				doc = #{doc,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=CHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
+		update tbl_collection_material
+
+		metrics_id = #{metricsId,jdbcType=INTEGER},
+		material_id = #{materialId,jdbcType=INTEGER},
+		material_name = #{materialname,jdbcType=VARCHAR},
+		required = #{required,jdbcType=CHAR},
+		doc = #{doc,jdbcType=VARCHAR},
+		doc_size = #{docsize,jdbcType=VARCHAR},
+		description = #{description,jdbcType=CHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time = #{updateTime,jdbcType=TIMESTAMP}
+		where material_name = #{materialname,jdbcType=VARCHAR}
+	</update>
+
+	<delete id="deleteMaterial">
+		delete from tbl_collection_material
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<select id="getCollectionMaterial" resultMap="CollectionMaterialMap">
+		select metrics_id,count(1) materialcount from tbl_collection_material
+		GROUP by metrics_id
+	</select>
+
+	<select id="CollectionMaterial" resultMap="CollectionMaterialMap">
+		select * from tbl_collection_material
+	</select>
+
+</mapper>

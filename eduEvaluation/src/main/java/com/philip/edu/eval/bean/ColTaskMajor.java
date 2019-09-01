@@ -7,6 +7,8 @@ public class ColTaskMajor {
 	private int collection_school_id;
 	private int school_id;
 	private int major_id;
+	private String major_name;
+	private String major_code;
 	private Date create_time;
 	private Date update_time;
 	private char process_status;
@@ -51,6 +53,18 @@ public class ColTaskMajor {
 	}
 	public void setSchool_id(int school_id) {
 		this.school_id = school_id;
+	}
+	public String getMajor_name() {
+		return major_name;
+	}
+	public void setMajor_name(String major_name) {
+		this.major_name = major_name;
+	}
+	public String getMajor_code() {
+		return major_code;
+	}
+	public void setMajor_code(String major_code) {
+		this.major_code = major_code;
 	}
 	
 }

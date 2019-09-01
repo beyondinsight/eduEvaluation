@@ -25,6 +25,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.BackendData1;
 import com.philip.edu.eval.bean.CapitalProgressForm;
+import com.philip.edu.eval.bean.ChosenMajor;
 import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
@@ -41,12 +42,12 @@ import com.philip.edu.test.bean.HelloBean;
 @RestController
 @EnableWebMvc
 @RequestMapping(value = "/collection")
-public class ColTaskController {
+public class ColTaskController { 
 
 	private static final Logger logger = Logger.getLogger(ColTaskController.class);
 	private Properties propConfig = PropertiesUtil.getProperty("config");
 
-	@Autowired
+	@Autowired 
 	private ColTaskService service;
 
 	@RequestMapping(value = "/createTask", method = RequestMethod.POST, produces = "application/json")
@@ -67,7 +68,7 @@ public class ColTaskController {
 		taskCol.setStart_time(start_date);
 		taskCol.setEnd_time(end_date);
 		taskCol.setCreate_time(new Date());
-		taskCol.setUpdate_time(new Date());
+		taskCol.setUpdate_time(new Date()); 
 		taskCol.setForm_basic_weight(Integer.parseInt(weight1));
 		taskCol.setForm_performance_weight(Integer.parseInt(weight2));
 		taskCol.setForm_capitalprogress_weight(Integer.parseInt(weight3));
@@ -134,7 +135,7 @@ public class ColTaskController {
 	@RequestMapping(value = "/colTask", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getColTask() {
 
-		ArrayList taskList = (ArrayList) service.getColTaskList();
+		ArrayList taskList = (ArrayList) service.getColTaskList();  
 		for (int i = 0; i < taskList.size(); i++) {
 			CollectionTask task = (CollectionTask) taskList.get(i);
 			task.setForms("共3个");
@@ -354,7 +355,7 @@ public class ColTaskController {
 	}
 	
 	@RequestMapping(value="/getMetrics", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> chosenMajor(HttpServletRequest request){
+	public ResponseEntity<BackendData> getMetrics(HttpServletRequest request){
 		
 		int metrics_system_id = (Integer.parseInt((String)propConfig.get("template_performance_form_id")));
 		ArrayList metricsList = (ArrayList) service.getMetricsList(metrics_system_id);
@@ -397,6 +398,7 @@ public class ColTaskController {
 		String collection_major_id = request.getParameter("collection_major_id");
 		
 		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id));
+		service.selectPerformanceMaterialsNum(performanceForm);
 		logger.info("successfully get performance form list");
 		 
 		BackendData data = new BackendData();  
@@ -413,7 +415,8 @@ public class ColTaskController {
 	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request){
 		 
 		String pf_id = request.getParameter("form_performance_id");
-		String metrics_id = request.getParameter("metrics_id");
+		//String metrics_id = request.getParameter("metrics_id");
+		String metrics_id = null;
 		
 		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(pf_id), Integer.parseInt(metrics_id));
 		logger.info("successfully get materials list");
@@ -490,5 +493,135 @@ public class ColTaskController {
 		}
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/chosenSchool", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getChosenSchool(HttpServletRequest request){
+		 
+		String task_id = request.getParameter("task_id");
+		logger.info("task_id:" + task_id);
+		
+		ArrayList chosenSchools = (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
+		
+		logger.info("successfully get chosen school list");  
+		 
+		BackendData data = new BackendData(); 
+		data.setMsg("成功获取选中学校");   
+		data.setCode(0); 
+		data.setData(chosenSchools); 
+		data.setCount(chosenSchools.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/changeSchool", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> changeSchool(HttpServletRequest request){
+		 
+		String task_id = request.getParameter("task_id");
+		String[] school_ids = request.getParameterValues("chose_id");
+		
+		logger.info("task_id:" + task_id);
+		int[] chose_id = new int[school_ids.length];
+		for(int i=0; i<school_ids.length; i++){
+			chose_id[i] = Integer.parseInt(school_ids[i]);
+		}
+		
+		//ArrayList chosenSchools = (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
+		int result = service.changeSchool(Integer.parseInt(task_id), chose_id, propConfig); 
+		
+		logger.info("successfully change school list");  
+		  
+		BackendData data = new BackendData();
+		if(result!=0){
+			data.setMsg("成功改变选中学校");   
+			data.setCode(0);  
+			//data.setData(chosenSchools); 
+			//data.setCount(chosenSchools.size());
+		//BackendData data = new BackendData();
+		} else {
+			data.setMsg("修改学校失败");
+			data.setCode(99);
+		}
+		 
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/chosenMajor", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getChosenMajor(HttpServletRequest request){
+		 
+		String collection_school_id = request.getParameter("collection_school_id");
+		
+		ArrayList chosenMajors =  (ArrayList)service.getChosenMajor(Integer.parseInt(collection_school_id));
+		
+		logger.info("collection school id:" + collection_school_id);
+		logger.info("successfully get chosen major list");
+		  
+		BackendData data = new BackendData(); 
+		data.setMsg("成功获取选中专业");   
+		data.setCode(0); 
+		data.setData(chosenMajors); 
+		data.setCount(chosenMajors.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/chosenMajorTran", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getChosenMajorTran(HttpServletRequest request){
+		 
+		String collection_school_id = request.getParameter("collection_school_id");
+		
+		ArrayList chosenMajors =  (ArrayList)service.getChosenMajor(Integer.parseInt(collection_school_id));
+		
+		logger.info("collection school id:" + collection_school_id);
+		logger.info("successfully get chosen major list");
+		
+		ArrayList temp = new ArrayList();
+		for(int i=0; i<chosenMajors.size(); i++){
+			ColTaskMajor major = (ColTaskMajor)chosenMajors.get(i);
+			temp.add(new Integer(major.getMajor_id()));
+		}
+		  
+		BackendData data = new BackendData(); 
+		data.setMsg("成功获取选中专业");   
+		data.setCode(0); 
+		data.setData(temp); 
+		data.setCount(temp.size());
+		//BackendData data = new BackendData();
+		
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+	}
+	
+	@RequestMapping(value="/changeMajor", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> changeMajor(HttpServletRequest request){
+		 
+		String task_id = request.getParameter("collection_school_id");
+		String[] major_ids = request.getParameterValues("ids");
+		
+		logger.info("collectio_school_id:" + task_id);
+		int[] chose_id = new int[major_ids.length];
+		for(int i=0; i<major_ids.length; i++){
+			chose_id[i] = Integer.parseInt(major_ids[i]);
+		}
+		
+		//ArrayList chosenSchools = (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
+		int result = service.changeMajor(Integer.parseInt(task_id), chose_id, propConfig); 
+		
+		logger.info("successfully change school list");  
+		  
+		BackendData data = new BackendData();
+		if(result!=0){
+			data.setMsg("成功改变选中学校");   
+			data.setCode(0);  
+			//data.setData(chosenSchools); 
+			//data.setCount(chosenSchools.size());
+		//BackendData data = new BackendData();
+		} else {
+			data.setMsg("修改学校失败");
+			data.setCode(99);
+		}
+		 
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
 	}
 }

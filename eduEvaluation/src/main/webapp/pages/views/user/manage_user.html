@@ -18,9 +18,9 @@
       <div class="layui-card-body">
         <div style="padding-bottom: 10px;">
 		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 添加</button>
-          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel">批量删除 <i class="layui-icon layui-icon-delete"></i></button>
+          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"> <i class="layui-icon layui-icon-delete">批量删除</i></button>
        	  <button type="button" class="layui-btn" id="uploadUsers"><i class="layui-icon"></i>上传文件</button>
-       	  <button type="button" class="layui-btn" id="downloadUsers" onclick="downloadUsers()"><i class="layui-icon"></i>下载模板</button>
+       	  <button type="button" class="layui-btn" id="downloadUsers" onclick="downloadUsers()"><i class="layui-icon layui-icon-download-circle" style="font-size: 14px; color: #FFFFFF;"></i>下载模板</button>
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="buttonTpl">
@@ -40,7 +40,10 @@
 
   <script src="../../layuiadmin/layui/layui.js"></script>
   <script src="../../layuiadmin/jquery-1.10.2.js"></script>
+  <script src="../util/Constants.js"></script>
   <script>
+  var projectBase = Class.getURL();
+  
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
@@ -52,10 +55,11 @@
     ,upload = layui.upload;
     var $ = layui.jquery
     ,layer = layui.layer;
+ 
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: '/eduEvaluation/user/users'//数据接口
+	  ,url: projectBase + '/user/users'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
@@ -65,7 +69,7 @@
 	    ,{field: 'chineseName', title: '用户名', width:120, }
 	    ,{field: 'roleName', title: '用户角色', width:120}
 	    ,{field: 'position', title: '职称', width:120}
-	    ,{field: 'institution', title: '所在学校', width:120}  
+	    ,{field: 'institution', title: '所在院校', width:120}  
 	    ,{field: 'mobilePhone', title: '手机号码', width: 200}
 	    ,{field: 'email', title: '电子邮箱邮箱'}
 	    ,{field: 'creator', title: '创建人', width: 200}
@@ -81,12 +85,12 @@
 	    layer.confirm('确定删除这个用户吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: '/eduEvaluation/user/deleteUsers',
+	    					url: projectBase + '/user/deleteUsers',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
 	    					done:function(res){
-	    									if(res.code='0'){       
+	    									if(res.code==0){       
 	    					                        layer.msg('删除用户成功!');
 	    					                } else {          
 	    					                        layer.msg('删除用户失败!', function(){
@@ -108,13 +112,13 @@
 	    layer.open({
 	        type: 2 //此处以iframe举例
 	        ,title: '修改用户'
-	        ,area: ['550px', '500px']
+	        ,area: ['50%', '70%']
 	        //,shade: 0
 	        ,maxmin: true
-	        ,offset: [ //为了演示，随机坐标
+	       /*  ,offset: [ //为了演示，随机坐标
 	          $(window).height()-700
 	          ,$(window).width()-1200
-	        ]
+	        ] */
 			,btn: ['确认修改', '取消']
 			,yes: function(index, layero){
 			  //点击确认触发 iframe 内容中的按钮提交
@@ -175,7 +179,7 @@
         layer.confirm('确定删除这些用户吗？', function(index) {
           $.ajax({
           			type:'POST',
-          			url:'/eduEvaluation/user/deleteUserss',
+          			url: projectBase + '/user/deleteUserss',
           			traditional: true,
           			data:{id:id},
           			dataType:'json',
@@ -232,7 +236,7 @@
      
     upload.render({
 	      elem: '#uploadUsers'
-	      ,url: '/eduEvaluation/user/uploadUsers'
+	      ,url: projectBase + '/user/uploadUsers'
 	      ,accept: 'file' //普通文件
   	  ,exts: 'xlsx' //只允许上传压缩文件
 	      ,done:function(res){
@@ -262,7 +266,7 @@
   
   //下载模板
   function downloadUsers(){
-	window.location.href="/eduEvaluation/user/downloadUsers";	     
+	window.location.href= projectBase + "/user/downloadUsers";	     
   }
   
   </script>

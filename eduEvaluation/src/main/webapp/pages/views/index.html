@@ -108,7 +108,7 @@
 				    <a lay-href="dictionary/manage_major.html">专业维护</a>
 				  </dd>
                 <dd data-name="schoolM">
-                  <a lay-href="dictionary/manage_school.html">学校维护</a>
+                  <a lay-href="dictionary/manage_school.html">院校维护</a>
                 </dd>
               </dl>
             </li>
@@ -122,7 +122,7 @@
                   <a  lay-href="user/manage_user.html" >用户管理</a>
                 </dd>
                 <dd data-name="school_asign">
-                  <a lay-href="user/school_user.html">学校分配</a>
+                  <a lay-href="user/school_user.html">院校分配</a>
                 </dd>
                 <dd data-name="major_asign">
                   <a lay-href="user/major_user.html">专业分配</a>
@@ -133,18 +133,19 @@
             <li data-name="major_report" class="layui-nav-item">
               <a href="javascript:;" lay-tips="专业填报" lay-direction="2">
                 <i class="layui-icon layui-icon-survey"></i>
-                <cite>专业填报</cite>
+                <cite>填报管理</cite>
               </a>
               <dl class="layui-nav-child">
                 <dd><a lay-href="collection/performance_template.html">填报模板维护</a></dd>
                 <dd><a lay-href="collection/manage_col_task.html">填报任务管理</a></dd>
-                <dd><a lay-href="template/caller.html">专业数据填报</a>
-					<dl class="layui-nav-child">
-											<dd data-name="report_basic"><a lay-href="template/caller.html">专业基本情况</a></dd>
-											<dd data-name="report_performance"><a lay-href="collection/performance_collection.html">绩效目标完成</a></dd>
-											<dd data-name="report_capital"><a lay-href="component/grid/mobile-pc.html">资金支出进度</a></dd>
-					</dl>
-				</dd>
+                <dd><a lay-href="javascript:;">专业数据填报</a>
+					<dl class="layui-nav-child"> 
+						<dd data-name="report_basic"><a lay-href="template/caller.html">专业基本情况</a></dd>
+						<dd data-name="report_performance"><a lay-href="collection/performance_collection.html">绩效目标完成</a></dd>
+						<dd data-name="report_capital"><a lay-href="component/grid/mobile-context.html">资金支出进度</a></dd>
+                  </dl>
+				</dd> 
+              </dl> 
             </li>
             <li data-name="report_audit" class="layui-nav-item">
               <a href="javascript:;" lay-tips="填报数据审核" lay-direction="2">
@@ -239,9 +240,7 @@
   }).use(['index','form','laytpl'],function(){
 	  var $ = layui.$,
 	  form = layui.form,
-	  router = layui.router(),
-	  laytpl = layui.laytpl
-	  ;
+	  router = layui.router();
 	  
 	  var userinfo = layui.data('userinfo');
 	  //console.log(userinfo);

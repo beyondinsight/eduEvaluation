@@ -32,8 +32,11 @@
     </div>
   </div>
 
-  <script src="../../layuiadmin/layui/layui.js"></script>  
+  <script src="../../layuiadmin/layui/layui.js"></script> 
+  <script src="../util/Constants.js"></script> 
   <script>
+  var projectBase = Class.getURL();
+  
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
@@ -44,7 +47,7 @@
 	,admin = layui.admin;
     
     $.ajax({
-    	url: '/eduEvaluation/user/users',
+    	url: projectBase + '/user/users',
     	dataType: 'json',
     	type: 'get',
     	success: function (data) {
@@ -70,7 +73,7 @@
       //$.ajax({});
 	  admin.req({
 		  type: 'POST',
-		  url: '/eduEvaluation/schooluser/addMajorUser',
+		  url: projectBase + '/schooluser/addMajorUser',
 	      data: field,
 		  dataType:'json',
 		  success:function(res){

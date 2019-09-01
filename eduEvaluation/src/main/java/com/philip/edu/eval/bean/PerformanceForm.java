@@ -20,8 +20,15 @@ public class PerformanceForm {
 	private String self_introduction;
 	private String unit;
 	private String memo;
+	private String material_num;
 	
 	
+	public String getMaterial_num() {
+		return material_num;
+	}
+	public void setMaterial_num(String material_num) {
+		this.material_num = material_num;
+	}
 	public String getMemo() {
 		return memo;
 	}

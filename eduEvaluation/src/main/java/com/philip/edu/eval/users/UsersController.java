@@ -66,6 +66,7 @@ public class UsersController {
 	private static final Logger logger = Logger.getLogger(UsersController.class);
 	private Properties propConfig = PropertiesUtil.getProperty("config");
 	private SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+	
 	@Autowired
 	private UsersService service;
 	@Autowired

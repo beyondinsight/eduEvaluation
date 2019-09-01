@@ -1,5 +1,6 @@
 package com.philip.edu.eval.collection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -32,5 +33,12 @@ public interface ColTaskService {
 	public List<Material> getRelateMaterials(int pf_id, int metrics_id);
 	public List<CapitalProgressForm> selectCapitalProgress(int collection_major_id);
 	public int selectCapitalProgressMaterialsNum(CapitalProgressForm cpf, Properties prop);
+	public int selectPerformanceMaterialsNum(ArrayList performanceForm);
 	public int updatePerformanceForm(PerformanceForm pf);
+	public List<ColTaskSchool> getChosenSchool(int task_id);
+	public List<ColTaskMajor> getChosenMajor(int collection_school_id);
+	public int deleteTaskSchool(int task_id);
+	public int insertTaskSchool(ColTaskSchool colTaskSchool);
+	public int changeSchool(int task_id, int[] chose_id, Properties prop);
+	public int changeMajor(int parseInt, int[] chose_id, Properties propConfig);
 }

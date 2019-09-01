@@ -67,7 +67,7 @@
 		    {type: 'checkbox'}
 	    ,{field: 'task_name', title: '专业填报任务', width:240}
 	    ,{field: 'task_year', title: '所属年度', width:100, }
-	    ,{field: 'school_major', title: '填报学校及专业'} 
+	    ,{field: 'school_major', title: '填报院校及专业'} 
 	    ,{field: 'start_time', title: '开始日期', width: 150}
 	    ,{field: 'end_time', title: '结束日期', width:150}
 		,{field: 'status_info', title:'状态', width:100}
@@ -218,7 +218,7 @@
           ,title: '新建院校'
           ,content: 'new_school.html'
           ,maxmin: true
-          ,area: ['550px', '500px']
+          ,area: ['50%', '70%']
           ,btn: ['确认添加', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
@@ -236,8 +236,9 @@
 		  		return layer.msg('一次只能修改一项填报任务');
 		  } else {
 			if(checkData[0].status == 'A') return layer.msg('任务已启用，不能修改!');  
+			 
 			  
-			var address = "./#/collection/edit_col_task/task_name=" + checkData[0].task_name;
+			//var address = "./#/collection/edit_col_task/task_name=" + checkData[0].task_name;
 			//address = address + "?id=" + checkData[0].id;
 			//address = address + "&task_name=" + checkData[0].task_name;
 			/*address = address + "/task_year=" + checkData[0].task_year;
@@ -247,9 +248,13 @@
 			address = address + "/weighting2=" + checkData[0].form_performance_weight;
 			address = address + "/weighting3=" + checkData[0].form_capitalprogress_weight;
 			address = address + "/status=" + checkData[0].status;*/
+			layui.data('editTask',{
+			  key: "taskInfo",
+			  value: checkData[0],
+			});
 			
 			//location.hash = address;
-			parent.parent.layui.index.openTabsPage(address, "修改填报任务");
+			parent.layui.index.openTabsPage("collection/edit_col_task.html", "修改填报任务");
 		  }
 	  },
 	  refresh: function(){

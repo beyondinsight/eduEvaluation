@@ -52,4 +52,10 @@ public interface ColMapper {
 	public int countRequiredMaterial(int form_performance_id);  
 	public ArrayList getCapitalProgressItemId(int collection_major_id,int metrics_id);
 	public int updatePerformanceForm(PerformanceForm pf);
+	public List<ColTaskSchool> getChosenSchools(int task_id);
+	public List<ColTaskMajor> getChosenMajors(int collection_school_id);
+	public int deleteTaskSchool(int task_id);
+	public int insertTaskSchool(ColTaskSchool colTaskSchool);
+	public int deleteTaskSchools(int[] school_ids);
+	public int deleteTaskMajors(int collection_school_id);
 } 

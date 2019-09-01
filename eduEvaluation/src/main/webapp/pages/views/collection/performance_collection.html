@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>绩效目标完成情况</title>
 		<meta name="renderer" content="webkit">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
@@ -33,7 +33,7 @@
 					<script type="text/html" id="test-table-toolbar-barDemo">
 					  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
 					</script>
-				</div>
+				</div> 
 				<div class="layui-card-body">
 					
 				</div>
@@ -71,53 +71,61 @@
 
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getPerformanceForm?collection_major_id=' + 59,
+					url: projectBase + '/collection/getPerformanceForm?collection_major_id=59',
 					page: true, //开启分页
 					height: 500	,
 					cols: [
 						[ //表头
-							 {
+							{
 								field: 'level1_name',
 								title: '一级指标',
 								align: 'center',
+								width: 160
 							},{
 								field: 'metrics_name',
 								title: '二级指标',
 								align: 'center',
+								width: 300
 							}, ,{
 								field: 'unit',
-								title: '单位', 
+								title: '单位',
 								align: 'center',
+								width: 80
 							}, {
 								field: 'current_value',
 								title: '当前值',
 								templet: function(d){ if(d.current_value==0)return "";
 													  else return d.current_value;},
 								align: 'center',
+								width: 80
 							},  {
 								field: 'target_value',
 								title: '目标值',
 								templet: function(d){ if(d.target_value==0)return "";
 													  else return d.target_value;},
 								align: 'center',
+								width: 80
 							},  {
 								field: 'actual_value',
 								title: '实际完成值',
 								align: 'center',
 								templet: function(d){ if(d.actual_value==0)return "";
-													  else return d.actual_value;}
+													  else return d.actual_value;},
+								width: 120
 							},  {
 								field: 'score',
 								title: '分值',
 								align: 'center',
 								templet: function(d){ if(d.score==0)return "";
-													  else return d.score;}
+													  else return d.score;},
+								width: 80
 							},  {
 								field: 'self_evaluate',
 								title: '自评分',
 								align: 'center',
 								templet: function(d){ if(d.self_evaluate==0)return "";
-													  else return d.self_evaluate;}
+													  else return d.self_evaluate;},
+								width: 80
 							},  {
 								field: 'self_introduction',
 								title: '自评说明',
@@ -129,15 +137,18 @@
 									console.log(data.length);
 									var str = "共"+ data.length +"字";
 									return str},
+								width: 100
 							},  {
 								field: 'material_num',
 								title: '支撑材料',
-								align: 'center',
+								align: 'center', 
+								width: 140
 							}, {
 								title: '操作',
 								fixed: 'right',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
+								width: 140
 							}
 						]
 					]
@@ -146,16 +157,13 @@
 				
 				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
-					if (obj.event === 'edit') { 
-						console("entering my method.");
-						console.log("metrics_id: " + data.metrics_id);
-						console.log("metrics_name:" + data.metrics_name);
+					if (obj.event === 'edit') {
 						layer.open({
 							type: 2 //此处以iframe举例
 								,
 							title: '填报详细',
 							area: ['50%', '70%'],
-							shade: 0,
+							//shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
 							yes: function(index, layero) {
@@ -260,14 +268,11 @@
 						});
 							
 					} else if (obj.event == 'edit') {
-						//console.log("entering my method.");
-						//console.log("metrics_id: " + data.metrics_id);
-						//console.log("metrics_name:" + data.metrics_name);
 						layer.open({
 							type: 2 //此处以iframe举例
 								,
 							title: '填报详细',
-							area: ['70%', '80%'],
+							area: ['50%', '70%'],
 							shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
@@ -275,7 +280,6 @@
 								//点击确认触发 iframe 内容中的按钮提交
 								var submit = layero.find('iframe').contents().find("#edit_performance_form");
 								submit.click();
-								
 								
 								table.reload('LAY-app-content-list');
 							},
@@ -342,12 +346,12 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '指标定义',
-								area: ['850px', '750px'],
-								shade: 0,
+								area: ['50%', '70%'],
+								//shade: 0,
 								maxmin: true,
-								offset: [ //为了演示，随机坐标
+								/* offset: [ //为了演示，随机坐标
 									$(window).height() - 1000, $(window).width() - 1300
-								],
+								], */
 								btn: ['新建', '取消'],
 								yes: function(index, layero) {
 									//点击确认触发 iframe 内容中的按钮提交

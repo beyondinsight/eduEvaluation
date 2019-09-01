@@ -17,7 +17,7 @@
       <div class="layui-card-body">
        <!-- <div style="padding-bottom: 10px;"> -->
 		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>
-          
+           <!--  <button class="layui-btn layuiadmin-btn-list" id="upload"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button> -->
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <!-- <script type="text/html" id="buttonTpl">
@@ -28,51 +28,39 @@
           {{#  } }}
         </script> -->
         <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>1</a>
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>2</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-edit"></i>上传</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
     </div>
-  </div>
-  
-  
-<!--   <div class="layui-col-md12">
-        <div class="layui-card">
-          <div class="layui-card-header">指定允许上传的文件类型</div>
-          <div class="layui-card-body">
-            <button type="button" class="layui-btn" id="test-upload-type1"><i class="layui-icon"></i>上传文件</button>
-            <button type="button" class="layui-btn layui-btn-primary" id="test-upload-type2"><i class="layui-icon"></i>只允许压缩文件</button>
-            <button type="button" class="layui-btn" id="test-upload-type3"><i class="layui-icon"></i>上传视频</button>
-            <button type="button" class="layui-btn" id="test-upload-type4"><i class="layui-icon"></i>上传音频</button> 
-          </div>
-        </div>
-      </div> -->
 
-  <script src="../../layuiadmin/layui/layui.js"></script>  
+  <script src="../../layuiadmin/layui/layui.js"></script> 
+  <script src="../util/Constants.js"></script> 
   <script>
+  var projectBase = Class.getURL();
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use(['index', 'contlist', 'table', 'layer','admin'], function(){
+  }).use(['index', 'contlist', 'table', 'layer','admin','upload'], function(){
     var table = layui.table
     ,form = layui.form
-	,admin = layui.admin;
-    
+	,admin = layui.admin
+	,upload=layui.upload;        
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,url: '/eduEvaluation/collectionmaterial/selectcollectionMaterial'//数据接口
+	  ,url: projectBase + '/collectionMaterial/collectionMaterial'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
-		    {type: 'checkbox'}
-		
-	    ,{field: 'description', title: '支撑材料'}
-	     ,{field: 'school_name', title: '文件名' }
-	    ,{field: 'city', title: '文件大小'} 
-	    ,{field: 'type', title: '上传时间'}	    
+		{type: 'checkbox'}
+		,{type: 'numbers', title: '序号'}
+	    ,{field: 'materialname', title: '支撑材料'}
+	    ,{field: 'doc', title: '文件名' }
+	    ,{field: 'docsize', title: '文件大小'} 
+	    ,{field: 'updateTime', title: '上传时间'}	    
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
 	});
@@ -84,7 +72,7 @@
 	    layer.confirm('确定删除这文件吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: '/eduEvaluation/collectionmaterial/deletecollectionmaterial',
+	    					url: projectBase + '/collectionMaterial/deleteCollectionMaterial',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
@@ -107,38 +95,40 @@
 	      layer.close(index);
 		  layer.msg('已成功删除!');
 		  });
-	  } else if(obj.event === 'edit'){
+	  } else if(obj.event === 'upload'){
 	    layer.open({
 	        type: 2 //此处以iframe举例
-	        ,title: '修改文件'
-	        ,area: ['550px', '500px']
-	        ,shade: 0
+	        ,title: '上传文件'
+	        ,area: ['50%', '70%']
+	        //,shade: 0
 	        ,maxmin: true
-	        ,offset: [ //为了演示，随机坐标
+	        /* ,offset: [ //为了演示，随机坐标
 	          $(window).height()-550
 	          ,$(window).width()-900
-	        ]
-			,btn: ['确认修改', '取消']
-			,yes: function(index, layero){
-			  //点击确认触发 iframe 内容中的按钮提交
-			  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
-			  submit.click();
-			}
-	        ,content: 'collectionmaterial_new.html'
+	        ] */
+	        
+	        ,content: 'caller_upload.html'
 	    	,zIndex: layer.zIndex //重点1
 	        ,success: function(layero, index){
 	    	  var body = layer.getChildFrame('body',index);
 	    	  var inputList = body.find('input');
-	    	  $(inputList[0]).val(data.description);
-	    	  
+	    	  $(inputList[0]).val(data.materialname);
+	    	  $(inputList[1]).val(data.doc);
+	    	  $(inputList[2]).val(data.docsize);
+	    	  $(inputList[3]).val(data.updateTime);
 	    	  var areaList = body.find('textarea');
 	    	  $(areaList[0]).val(data.memo);
 	    	  
 	          layer.setTop(layero); //重点2
 	        }
 	      });
-	  }
+	  } 
+	  else if (obj.event === 'download'){			
+		  window.location.href= projectBase + "/collectionMaterial/downloadMaterial?doc="+data.doc;	     
+		
+	  }  
 	});
+	
 	
     //监听搜索
     form.on('submit(LAY-app-contlist-search)', function(data){
@@ -206,7 +196,7 @@
           ,title: '支撑材料'
           ,content: 'caller_new.html'
           ,maxmin: true
-          ,area: ['550px', '500px']
+          ,area: ['50%', '70%']
           ,btn: ['确认添加', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
@@ -224,6 +214,25 @@
     });
 
   });
+  
+ /* 
+  layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;	  
+	  //指定允许上传的文件类型
+	  upload.render({
+	      elem: '#upload'
+	      ,url: '/eduEvaluation/user/uploadUsers'
+	      ,accept: 'file' //普通文件
+    	  ,exts: 'xlsx' //只允许上传压缩文件
+	      ,done: function(res){
+	        console.log(res)
+	      }
+	    });  
+  }); */
+  //下载模板
+  
+  
   </script>
 </body>
 </html>
