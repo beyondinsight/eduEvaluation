@@ -46,7 +46,9 @@ public class ColTaskController {
 
 	private static final Logger logger = Logger.getLogger(ColTaskController.class);
 	private Properties propConfig = PropertiesUtil.getProperty("config");
-
+	
+	private int template_form_performance_id = Integer.parseInt(propConfig.getProperty("template_performance_form_id"));
+			
 	@Autowired 
 	private ColTaskService service;
 
@@ -397,7 +399,7 @@ public class ColTaskController {
 		
 		String collection_major_id = request.getParameter("collection_major_id");
 		
-		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id));
+		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id), this.template_form_performance_id);
 		service.selectPerformanceMaterialsNum(performanceForm);
 		logger.info("successfully get performance form list");
 		 
@@ -418,7 +420,7 @@ public class ColTaskController {
 		//String metrics_id = request.getParameter("metrics_id");
 		String metrics_id = null;
 		
-		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(pf_id), Integer.parseInt(metrics_id));
+		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(pf_id), 0);
 		logger.info("successfully get materials list");
 		 
 		BackendData data = new BackendData();

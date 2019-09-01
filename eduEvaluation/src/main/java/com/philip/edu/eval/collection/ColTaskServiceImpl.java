@@ -104,6 +104,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 				ColTaskSchool school = (ColTaskSchool) schools.get(i);
 				school.setTask_id(task.getId());
 				school_ids[i] = school.getSchool_id();
+				school.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 			}
 			dao.insertColSchool(schools);
 
@@ -131,7 +132,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 			 * bf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 			 * dao.insertBasicForm(bf);
 			 * 
-			 * // 5.insert form 2:
+			 * // 5.insert form 2:  
 			 * 
 			 * // 6.insert form 3: CapitalProgressForm cpf = new
 			 * CapitalProgressForm();
@@ -183,6 +184,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 					pf1.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 					pf1.setCreate_time(new Date());
 					pf1.setUpdate_time(new Date());
+					pf1.setFor_template(this.template_basic_form_id);
 					pf1.setMetrics_id(this.METRICS_MAJOR_BASIC_ID);
 					dao.insertPerformanceForm(pf1);
 					pf1.setMetrics_id(this.METRICS_SELF_EVAL_ID);
@@ -194,6 +196,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 					pf.setCollection_major_id(inputMajor.getId());
 					pf.setM_system_id(this.template_performance_form_id);
 					pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					pf.setFor_template(this.template_performance_form_id);
 
 					ArrayList metrics = (ArrayList) dao.selectMetricsList(this.template_performance_form_id);
 					for (int j = 0; j < metrics.size(); j++) {
@@ -229,6 +232,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 					pf2.setCollection_major_id(inputMajor.getId());
 					pf2.setM_system_id(this.template_capital_progress_form_id);
 					pf2.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+					pf2.setFor_template(this.template_capital_progress_form_id);
 					pf2.setCreate_time(new Date());
 					pf2.setUpdate_time(new Date());
 					pf2.setMetrics_id(this.metrics_central_disbursement_amount_id);
@@ -333,9 +337,9 @@ public class ColTaskServiceImpl implements ColTaskService {
 		return dao.deleteMetrics(metrics_id);
 	}
 
-	public List<PerformanceForm> getPerformanceForm(int collection_major_id) {
+	public List<PerformanceForm> getPerformanceForm(int collection_major_id, int for_template) {
 		// TODO Auto-generated method stub
-		return dao.getPerformanceForm(collection_major_id);
+		return dao.getPerformanceForm(collection_major_id, for_template);
 	}
 
 	public List<Material> getRelateMaterials(int pf_id, int metrics_id) {

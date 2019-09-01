@@ -21,8 +21,15 @@ public class PerformanceForm {
 	private String unit;
 	private String memo;
 	private String material_num;
+	private int for_template;
 	
 	
+	public int getFor_template() {
+		return for_template;
+	}
+	public void setFor_template(int for_template) {
+		this.for_template = for_template;
+	}
 	public String getMaterial_num() {
 		return material_num;
 	}

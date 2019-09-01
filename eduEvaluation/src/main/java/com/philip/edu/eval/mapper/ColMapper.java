@@ -12,11 +12,14 @@ import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Major;
+import com.philip.edu.eval.bean.MajorCollectionStatus;
+import com.philip.edu.eval.bean.MajorStatus;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
 import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
+import com.philip.edu.eval.bean.UserTask;
 
 @Repository
 public interface ColMapper {
@@ -42,7 +45,7 @@ public interface ColMapper {
 	public int countMaterials(int metrics_id);
 	public int updateMetrics(MetricsDetail metrics);
 	public int deleteMetrics(int metrics_id);
-	public List<PerformanceForm> getPerformanceForm(int collection_major_id);
+	public List<PerformanceForm> getPerformanceForm(@Param("collection_major_id")int collection_major_id, @Param("for_template")int for_template);
 	public List<Material> getRelateMaterials(@Param("pf_id")int pf_id, @Param("metrics_id")int metrics_id);
 	public int insertPerformanceForm(PerformanceForm pf);
 	public int insertRelateMaterial(Material material);
@@ -58,4 +61,13 @@ public interface ColMapper {
 	public int insertTaskSchool(ColTaskSchool colTaskSchool);
 	public int deleteTaskSchools(int[] school_ids);
 	public int deleteTaskMajors(int collection_school_id);
+	
+	//add by xiewei
+	public List<UserTask> getUserTaskList(@Param("user_id") int user_id);
+	
+	public List<UserTask> getUserTaskByTaskID(@Param("user_id") int user_id, @Param("task_id") int task_id);
+	
+	public List<MajorStatus> getMajorStatusByTask(@Param("user_id") int user_id, @Param("task_id") int task_id);
+	
+	public List<MajorCollectionStatus> getMajorCollectionStatus(@Param("task_id") int task_id, @Param("school_id") int school_id, @Param("major_id") int major_id);
 } 

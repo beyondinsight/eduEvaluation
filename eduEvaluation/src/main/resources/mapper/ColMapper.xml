@@ -166,14 +166,14 @@
     </insert>
     
     <insert id="insertPerformanceForms" parameterType="com.philip.edu.eval.bean.PerformanceForm">
-    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status)
-    	select #{collection_major_id}, id, unit, #{create_time}, #{update_time}, #{process_status}
+    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status, for_template)
+    	select #{collection_major_id}, id, unit, #{create_time}, #{update_time}, #{process_status}, #{for_template}
     	from tbl_metrics_detail where m_system_id=#{m_system_id}
     </insert>
     
     <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm" useGeneratedKeys="true" keyProperty="id">
-    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status)
-    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status})
+    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status, for_template)
+    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status}, for_template)
     </insert>
     
     <insert id="insertCapitalProgressForm" parameterType="com.philip.edu.eval.bean.CapitalProgressForm">
@@ -246,7 +246,7 @@
     
     <select id="getPerformanceForm" resultMap="performanceResultMap" >
     	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
-    	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id}
+    	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id} and for_template=#{for_template}
     </select>
     
     <select id="getRelateMaterials" resultMap="materialResultMap">
@@ -294,4 +294,131 @@
     	select cm.major_id, m.major_code, m.major_name from tbl_collection_major cm, tbl_major m
     	where cm.major_id = m.id and collection_school_id=#{collection_school_id}
     </select>
+    
+    	<select id="getMajorStatusByTask"
+		resultMap="majorStatusResultMap">
+		select
+		v_task_school_major.task_id,
+		v_task_school_major.task_name,
+		tbl_config.config_value as task_status,
+		v_task_school_major.task_year,
+		tbl_major.id as major_id,
+		tbl_major.major_name,
+		tbl_school.id as school_id,
+		tbl_school.school_name,
+		v_task_school_major.major_status,
+		v_task_school_major.update_time
+		from
+		v_user_school_major,
+		v_task_school_major,
+		tbl_major, tbl_school,
+		tbl_config
+		where
+		v_user_school_major.user_id=#{user_id}
+		AND
+		v_task_school_major.task_id=#{task_id}
+		and
+		v_task_school_major.major_id
+		= tbl_major.id
+		and
+		v_task_school_major.school_id = tbl_school.id
+		and
+		v_user_school_major.major_id
+		= v_task_school_major.major_id
+		and
+		v_user_school_major.school_id =v_task_school_major.school_id
+		AND
+		tbl_config.key_string = v_task_school_major.task_status
+		and tbl_config.config_type = 'collection_status'
+	</select>
+
+	<select id="getMajorCollectionStatus"
+		resultMap="majorCollectionStatusResultMap">
+		select * from
+		v_school_major_template_status_2
+		where
+		v_school_major_template_status_2.task_id=#{task_id}
+		AND
+		v_school_major_template_status_2.major_id = #{major_id}
+		and
+		v_school_major_template_status_2.school_id = #{school_id}
+	</select>
+    
+    	<resultMap id="userTaskResultMap"
+		type="com.philip.edu.eval.bean.UserTask">
+		<result property="user_id" column="user_id" />
+		<result property="task_id" column="task_id" />
+		<result property="task_name" column="task_name" />
+		<result property="task_status" column="task_status" />
+		<result property="task_year" column="task_year" />
+	</resultMap>
+
+	<resultMap id="majorStatusResultMap"
+		type="com.philip.edu.eval.bean.MajorStatus">
+		<result property="task_id" column="task_id" />
+		<result property="task_name" column="task_name" />
+		<result property="major_status" column="major_status" />
+		<result property="major_name" column="major_name" />
+		<result property="major_id" column="major_id" />
+		<result property="school_id" column="school_id" />
+		<result property="task_year" column="task_year" />
+		<result property="school_name" column="school_name" />
+		<result property="major_status" column="major_status" />
+		<result property="update_time" column="update_time" />
+	</resultMap>
+
+
+	<resultMap id="majorCollectionStatusResultMap"
+		type="com.philip.edu.eval.bean.MajorCollectionStatus">
+		<result property="task_id" column="task_id" />
+		<result property="school_id;" column="school_id;" />
+		<result property="major_id;" column="major_id;" />
+		<result property="collection_template_name;"
+			column="collection_template_name;" />
+		<result property="template_type_string" column="template_type" />
+		<result property="process_status;" column="process_status;" />
+		<result property="collection_major_id" column="collection_major_id" />
+	</resultMap>
+	
+		<select id="getUserTaskList" resultMap="userTaskResultMap">
+		select distinct
+		v_task_school_major.task_id,
+		v_task_school_major.task_name,
+		v_task_school_major.task_status,
+		v_task_school_major.task_year
+		from
+		v_user_school_major,
+		v_task_school_major
+		where
+		v_user_school_major.user_id=#{user_id}
+		and
+		v_user_school_major.major_id
+		= v_task_school_major.major_id
+		and
+		v_user_school_major.school_id =
+		v_task_school_major.school_id
+	</select>
+
+	<select id="getUserTaskByTaskID" resultMap="userTaskResultMap">
+		select distinct
+		v_task_school_major.task_id,
+		v_task_school_major.task_name,
+		v_task_school_major.task_status,
+		v_task_school_major.task_year
+		from
+		v_user_school_major,
+		v_task_school_major
+		where
+		v_user_school_major.user_id=#{user_id}
+		and
+		v_task_school_major.task_id=#{task_id}
+		and
+		v_user_school_major.major_id
+		=
+		v_task_school_major.major_id
+		and
+		v_user_school_major.school_id =
+		v_task_school_major.school_id
+	</select>
+	
 </mapper>

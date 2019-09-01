@@ -66,14 +66,19 @@
 				});
 
 				form.render();
-
-				layui.data('choseMajor', null);
+				
+				var data = layui.data('collection');
+				layui.data('collection',null);
+				console.log("data:" + data['collection_major_id']);
 
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getPerformanceForm?collection_major_id=59',
+					url: projectBase + '/collection/getPerformanceForm',
+					where: {
+						'collection_major_id':data['collection_major_id']
+					},
 					page: true, //开启分页
-					height: 500	,
+					height: 500	, 
 					cols: [
 						[ //表头
 							{
@@ -162,7 +167,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '填报详细',
-							area: ['50%', '70%'],
+							area: ['70%', '80%'],
 							//shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
@@ -272,7 +277,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '填报详细',
-							area: ['50%', '70%'],
+							area: ['70%', '80%'],
 							shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
