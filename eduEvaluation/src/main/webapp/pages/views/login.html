@@ -114,6 +114,14 @@
 									key: 'user',
 									value: userinfo
 								});
+								
+								var token = data[1];
+								//console.log(token);
+								layui.data('userinfo',{
+									key: 'token',
+									value: token
+								});
+								
 								/*layui.data(setter.tableName, {
 												key: setter.request.tokenName
 												,value: res.data.access_token
