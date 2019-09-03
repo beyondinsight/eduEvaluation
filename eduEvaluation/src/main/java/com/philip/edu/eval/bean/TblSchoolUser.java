@@ -6,14 +6,34 @@ public class TblSchoolUser {
     private Integer roleId;
     
     private String roleName;
-
-	private Integer userId;
-    
-    private String userName;
     
     private Integer schoolId;
     
     private String schoolName;
+
+	private String userId;
+    
+    private String userName;
+    
+    private String userChinese;
+    
+    
+    
+    public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+	public String getUserChinese() {
+		return userChinese;
+	}
+
+	public void setUserChinese(String userChinese) {
+		this.userChinese = userChinese;
+	}
     
     
     public String getRoleName() {
@@ -32,11 +52,11 @@ public class TblSchoolUser {
 		this.id = id;
 	}
 
-	public Integer getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

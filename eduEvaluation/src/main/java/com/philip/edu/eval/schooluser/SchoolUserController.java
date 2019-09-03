@@ -33,6 +33,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.TblSchoolMajor;
 import com.philip.edu.eval.bean.TblSchoolUser;
+import com.philip.edu.eval.bean.TblUserRole;
+import com.philip.edu.eval.bean.TblUsers;
+import com.philip.edu.eval.role.RolesService;
+import com.philip.edu.eval.users.UsersService;
 
 
 @Controller
@@ -43,14 +47,25 @@ public class SchoolUserController {
 	
 	@Autowired
 	private SchoolUserService service;
+	@Autowired
+	private UsersService user_service;
+	@Autowired
+	private RolesService role_service;
 
 	
 	@RequestMapping(value = "/schoolUser", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> schoolUser(){
+	public ResponseEntity<BackendData> schoolUser(HttpServletRequest request){
 		
-		ArrayList usersList = (ArrayList) service.getNameSchoolUser();
-		logger.info("successfully get the roles list");
 		BackendData data = new BackendData();
+		String roleId = request.getParameter("roleId");
+		if(roleId==null || roleId.equals("")) {
+			data.setMsg("未查询到信息");
+			data.setCode(1);
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		ArrayList usersList = (ArrayList) service.getNameSchoolUser(Integer.parseInt(roleId));
+		logger.info("successfully get the roles list");
+		
 		data.setMsg("");
 		data.setCode(0); 
 		data.setData(usersList);
@@ -63,23 +78,43 @@ public class SchoolUserController {
 	@RequestMapping(value="/addSchoolUser", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> addSchoolUser(HttpServletRequest request) {
 		
-		TblSchoolUser schooluser = new TblSchoolUser();
+	
 		
+		String roleId = request.getParameter("roleId");
 		String schoolId = request.getParameter("schoolId");
-		String userId = request.getParameter("userId");
+		
+		String[] sIds = request.getParameterValues("userId");
+		int[] ids = new int[sIds.length];
+		for(int i=0; i<sIds.length; i++){
+			ids[i] = Integer.parseInt(sIds[i]);
+		}
 
-		if(schoolId != null  && !schoolId.equals("")) {
-		    
-			if(userId != null && !userId.equals("") ) {
-				schooluser.setSchoolId(Integer.parseInt(schoolId));
-				schooluser.setUserId(Integer.parseInt(userId));
-				int num = service.updateSchoolUser(schooluser);
-				if(num==0) {
-					service.createSchoolUser(schooluser);
-				}
-			}else {
-				service.deleteSchoolUser(Integer.parseInt(schoolId));
+		if(roleId != null && schoolId != null && !schoolId.equals("") && !roleId.equals("")) {
+			TblSchoolUser user = new TblSchoolUser();
+			user.setSchoolId(Integer.parseInt(schoolId));
+			user.setRoleId(Integer.parseInt(roleId));
+			TblSchoolUser sur = service.getSchoolRolesUsers(user);
+			String[] userids =  sur.getUserId().split(",");
+			int[] uids = new int[userids.length];
+			for(int i=0; i<userids.length; i++){
+				uids[i] = Integer.parseInt(userids[i]);
 			}
+			 
+			role_service.deleteChosenUser(uids);
+			
+			if(ids != null && !ids.equals("") ) {
+				
+				for(int a : ids) {
+					TblUsers users = new TblUsers();
+					users.setId(a);
+					users.setRoleId(Integer.parseInt(roleId));
+					int num = user_service.updateUserRole(users);
+					if(num==0) {
+						user_service.createUserRole(users);		
+					}
+				}				 
+			}
+			
 		} 
 		
 
@@ -91,7 +126,7 @@ public class SchoolUserController {
 	}
 	
 	
-	@RequestMapping(value="/updateschooluser", method = RequestMethod.POST, produces = "application/json")
+	/*@RequestMapping(value="/updateschooluser", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> updateUsers(HttpServletRequest request) {
 			
 		TblSchoolUser schooluser = new TblSchoolUser();
@@ -110,11 +145,11 @@ public class SchoolUserController {
 		
 		Matcher isNum1 = pattern.matcher(userId);
 		if (isNum.matches()) {
-			schooluser.setUserId(Integer.parseInt(userId));
+			schooluser.setUserId(userId);
 		}
 		Matcher isNum2 = pattern.matcher(username);
 		if (isNum.matches()) {
-			schooluser.setUserId(Integer.parseInt(username));
+			schooluser.setUserId(username);
 		}
 		int result = service.updateSchoolUser(schooluser);
 		
@@ -129,7 +164,7 @@ public class SchoolUserController {
 		}
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
-	}
+	}*/
 	
 	
 	@RequestMapping(value="/deleteschooluser", method = RequestMethod.POST, produces = "application/json")
@@ -154,11 +189,19 @@ public class SchoolUserController {
 		
 	
 	@RequestMapping(value = "/schoolMajorUser", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> schoolMajorUser(){
+	public ResponseEntity<BackendData> schoolMajorUser(HttpServletRequest request){
 		
-		ArrayList usersList = (ArrayList) service.getRolenameSchoolMajor();
-		logger.info("successfully get the roles list");
+		
 		BackendData data = new BackendData();
+		String roleId = request.getParameter("roleId");
+		if(roleId==null || roleId.equals("")) {
+			data.setMsg("未查询到信息");
+			data.setCode(1);
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		ArrayList usersList = (ArrayList) service.getRolenameSchoolMajor(Integer.parseInt(roleId));
+		logger.info("successfully get the roles list");
+		
 		data.setMsg("");
 		data.setCode(0); 
 		data.setData(usersList);
@@ -168,7 +211,7 @@ public class SchoolUserController {
 	}
 	
 	
-	@RequestMapping(value="/addMajorUser", method = RequestMethod.POST, produces = "application/json")
+	/*@RequestMapping(value="/addMajorUser", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> addMajorUser(HttpServletRequest request) {
 		
 		TblSchoolMajor majoruser = new TblSchoolMajor();
@@ -193,6 +236,91 @@ public class SchoolUserController {
 		BackendData data = new BackendData();
 		data.setMsg("用户添加成功");
 		data.setCode(0); 
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}*/
+	
+	@RequestMapping(value = "/chosenSchoolUser", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> chosenSchoolUser(HttpServletRequest request){
+		BackendData data = new BackendData();
+		String roleId = request.getParameter("roleId");
+		String schoolId = request.getParameter("schoolId");
+		ArrayList<Integer> chosenUser = new ArrayList<Integer>();
+		if(roleId==null || schoolId==null) {
+			data.setMsg("");
+			data.setCode(0); 
+			data.setData(chosenUser);
+			data.setCount(chosenUser.size());
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		TblSchoolUser user = new TblSchoolUser();
+		user.setSchoolId(Integer.parseInt(schoolId));
+		user.setRoleId(Integer.parseInt(roleId));
+		
+		TblSchoolUser sur = service.getSchoolRolesUsers(user);
+		if(sur == null || sur.getUserId() == null) {
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		String[] userids =  sur.getUserId().split(",");
+		
+		for(int i=0; i<userids.length; i++){
+			chosenUser.add(Integer.parseInt(userids[i]));
+		}
+		
+		logger.info("successfully get the choseuser list");
+
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(chosenUser);
+		data.setCount(chosenUser.size());
+		//BackendData data = new BackendData();
+		System.out.println("///"+chosenUser);
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/chosenMajorUser", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> chosenMajorUser(HttpServletRequest request){
+		BackendData data = new BackendData();
+		String roleId = request.getParameter("roleId");
+		String schoolId = request.getParameter("schoolId");
+		String majorId = request.getParameter("majorId");
+		ArrayList<Integer> chosenUser = new ArrayList<Integer>();
+		if(roleId==null || schoolId==null) {
+			data.setMsg("");
+			data.setCode(0); 
+			data.setData(chosenUser);
+			data.setCount(chosenUser.size());
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		TblSchoolMajor user = new TblSchoolMajor();
+		user.setSchoolId(Integer.parseInt(schoolId));
+		user.setRoleId(Integer.parseInt(roleId));
+		user.setMajorId(Integer.parseInt(majorId));
+		if(roleId==null || schoolId==null) {
+			data.setMsg("");
+			data.setCode(0); 
+			data.setData(chosenUser);
+			data.setCount(chosenUser.size());
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		TblSchoolMajor sur = service.getMajorRolesUsers(user);
+		if(sur == null || sur.getUserId() == null) {
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		String[] userids =  sur.getUserId().split(",");
+		
+		for(int i=0; i<userids.length; i++){
+			chosenUser.add(Integer.parseInt(userids[i]));
+		}
+		
+		logger.info("successfully get the choseuser list");
+
+		data.setMsg("");
+		data.setCode(0); 
+		data.setData(chosenUser);
+		data.setCount(chosenUser.size());
+		//BackendData data = new BackendData();
+		System.out.println("///"+chosenUser);
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.philip.edu.eval.bean.TblRoles;
 import com.philip.edu.eval.bean.TblSchoolMajor;
 import com.philip.edu.eval.bean.TblSchoolUser;
+import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.mapper.RolesMapper;
 import com.philip.edu.eval.mapper.SchoolUserMapper;
 
@@ -20,21 +21,21 @@ public  class SchoolUserImpl implements SchoolUserService {
 
 	
 
-	public List<TblSchoolUser> getNameSchoolUser() {
+	public List<TblSchoolUser> getNameSchoolUser(int roleId) {
 		// TODO Auto-generated method stub
-		return this.dao.getNameSchoolUser();
+		return this.dao.getNameSchoolUser(roleId);
 	}
 
  
-	public int createSchoolUser(TblSchoolUser users) {
+	public int createRoleUser(TblSchoolUser users) {
 		// TODO Auto-generated method stub
-		return dao.createSchoolUser(users);
+		return dao.createRoleUser(users);
 	}
 
  
-	public int updateSchoolUser(TblSchoolUser users) {
+	public int updateRoleUser(TblSchoolUser users) {
 		// TODO Auto-generated method stub
-		return dao.updateSchoolUser(users);
+		return dao.updateRoleUser(users);
 	}
 
 
@@ -44,9 +45,9 @@ public  class SchoolUserImpl implements SchoolUserService {
 	}
 
 
-	public List<TblSchoolMajor> getRolenameSchoolMajor() {
+	public List<TblSchoolMajor> getRolenameSchoolMajor(int roleId) {
 		// TODO Auto-generated method stub
-		return dao.getRolenameSchoolMajor();
+		return dao.getRolenameSchoolMajor(roleId);
 	}
 
 
@@ -66,7 +67,17 @@ public  class SchoolUserImpl implements SchoolUserService {
 		// TODO Auto-generated method stub
 		return dao.deleteMajorUser(id);
 	}
+	
+	public TblSchoolUser getSchoolRolesUsers(TblSchoolUser users) {
+		// TODO Auto-generated method stub
+		return dao.getSchoolRolesUsers(users);
+	}
 
+
+	public TblSchoolMajor getMajorRolesUsers(TblSchoolMajor tsm) {
+		// TODO Auto-generated method stub
+		return dao.getMajorRolesUsers(tsm);
+	}
 
 
 	

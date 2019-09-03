@@ -9,22 +9,23 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<body>
+	<style>
+	.noborder td{
+	border:0;
+	text-align: right;
+	}
+	
+	</style>
+	<body style="background-color:white">
 
-		<div class="layui-fluid">
-			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form">
-					<div class="layui-form-item">
-						<label class="layui-form-label" style="width: 120px;">专业填报任务名称</label>
-						<div class="layui-input-inline" style="width: 500px;">
-							<input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 120px;">填报任务所属年度</label>
-							<div class="layui-input-inline">
-								<select name="year" id="year">
+		<div class="layui-fluid" style="border: 0;">
+			<div class="layui-card" style="border: 0;">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form" style="border: 0;">
+				<table class="layui-table" style="width:800px;border: 1px solid #e6e6e6;">
+				 <tr class="noborder">
+					<td>专业填报任务名称</td><td><input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+					<td>填报任务所属年度</td><td style="text-align: left;">
+						<select name="year" id="year">
 									<option value="2019">2019</option>
 									<option value="2020">2020</option>
 									<option value="2021">2021</option>
@@ -58,40 +59,19 @@
 									<option value="2049">2049</option>
 									<option value="2050">2050</option>
 								</select>
-							</div>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label">开始日期</label>
-							<div class="layui-input-inline" style="width: 180px;">
-								<input type="text" name="date" id="startDate" required lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off"
-								 class="layui-input">
-							</div>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label">结束日期</label>
-							<div class="layui-input-inline">
-								<input type="text" name="date" id="endDate" required lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
-							</div>
-						</div>
-					</div>
-				</div>
-
-
-				<div class="layui-card-body">
-					<div class="layui-form layui-card-header layuiadmin-card-header-auto">
-					<!--<table id="forms" lay-filter="forms" name="forms"></table>-->
-					<div style="text-align: center;">
-					<table class="layui-table" id="weightForm" style="table-layout:fixed; width:615px; text-align: center;">
-					  <colgroup>
-					    <col width="80" align="center">
-					    <col width="350">
-					    <col width="180">
-					    <col>
-					  </colgroup>
+					</td>
+				 </tr>
+				 <tr class="noborder">
+				 	<td>开始日期</td><td>	<input type="text" name="date" id="startDate" required lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off"
+								 class="layui-input"></td>
+				 	<td>结束日期</td><td><input type="text" name="date" id="endDate" required lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input"></td>
+				 </tr>				 
+				</table>
+				<table class="layui-table" id="weightForm" style="table-layout:fixed; width:800px; text-align: center;">			 
 					  <thead>
 					    <tr>
 					      <th align="center">编号</th>
-					      <th align="center">填报内容</th>
+					      <th align="center" style="width:300px;">填报内容</th>
 					      <th>权重</th>
 					    </tr> 
 					  </thead>
@@ -99,20 +79,30 @@
 					    <tr>
 					      <td>1</td>
 					      <td>专业基本情况</td>
-					      <td><input type="number" name="weighting1" required lay-verify="required" id="weighting1" style="width:150px"></td>
+					      <td><input type="number" name="weighting1" required lay-verify="required" id="weighting1"  class="layui-input"></td>
 					    </tr>
 					    <tr>
 					      <td>2</td>
 					      <td>绩效目标完成情况</td>
-					      <td><input type="number" name="weighting2" required lay-verify="required" id="weighting2" style="width:150px"></td>
+					      <td><input type="number" name="weighting2" required lay-verify="required" id="weighting2"  class="layui-input"></td>
 					    </tr>
 					    <tr>
 					      <td>3</td>
 					      <td>资金支出进度</td>
-					      <td><input type="number" name="weighting3" required lay-verify="required" id="weighting3" style="width:150px"></td>
+					      <td><input type="number" name="weighting3" required lay-verify="required" id="weighting3"   class="layui-input"></td>
 					    </tr>
 					   </tbody>
 					  </table>
+ 
+					</div>
+				</div>
+
+
+				<div class="layui-card-body">
+					<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+					<!--<table id="forms" lay-filter="forms" name="forms"></table>-->
+					<div style="text-align: left;">
+					
 					</div> 
 					<script type="text/html" id="weight">
 						<!-- 这里的 checked 的状态只是演示 -->
@@ -131,15 +121,15 @@
 					</script>
 					<table id="major-list" lay-filter="major-list"></table>
 				</div>
-				<div class="layui-card-body">
+				<div class="layui-card-body" style="width:800px;">
 					<div style="padding-bottom: 10px;">
 						<div align="center">
-							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit"><i class="layui-icon layui-icon-file-b"></i> 创建</button>
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit">确认</button>
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		 
 
 		<script src="../../layuiadmin/layui/layui.js"></script>
 		<script src="../util/Constants.js"></script>
@@ -208,7 +198,7 @@
 
 				schoolTable = table.render({
 					elem: '#LAY-app-content-list',
-					width: 680,
+					width: 800,
 					height: 320,
 					data: []
 						//toolbar:'#toolbarDemo'
@@ -244,7 +234,7 @@
 
 				table.render({
 					elem: '#major-list',
-					width: 680,
+					width: 800,
 					height: 320,
 					data: []
 						//toolbar:'#toolbarDemo'
@@ -364,7 +354,7 @@
 					
 					table.render({
 						elem: '#major-list',
-						width: 680,
+						width: 800,
 						height: 320,
 						data: choseM[data.id]
 							//toolbar:'#toolbarDemo'
@@ -381,8 +371,7 @@
 								}, {
 									field: 'major_name',
 									title: '专业名称',
-									align: 'center',
-									width: 450
+									align: 'center' 
 								}
 							]
 						]
@@ -426,7 +415,7 @@
 
 								table.render({ 
 									elem: '#major-list',
-									width: 680,
+									width: 800,
 									height: 320,
 									data: choseM[data.id]
 										//toolbar:'#toolbarDemo'
@@ -507,7 +496,7 @@
 
 									schoolTable = table.render({
 										elem: '#LAY-app-content-list',
-										width: 680,
+										width: 800,
 										height: 320,
 										data: data0
 											//toolbar:'#toolbarDemo'

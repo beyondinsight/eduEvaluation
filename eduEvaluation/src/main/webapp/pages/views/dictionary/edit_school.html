@@ -8,46 +8,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 </head>
+<style>
+.noborder td{
+border:0;
+text-align: right;
+}
+</style>
 <body>
 
   <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
 	  <div class="layui-form-item">
 	      <input type="hidden" name="id">
 	  </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">院校名称: <span style="color: red;">* </span></label>
-      <div class="layui-input-inline">
-        <input type="text" name="school_name" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">院校代码: <span style="color: red;">* </span></label>
-      <div class="layui-input-inline">
-        <input type="text" name="school_code" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">城市:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="city" autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">办学基本类型:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="type" autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">备注</label>
-      <div class="layui-input-inline">
-        <textarea name="memo" style="width: 400px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
-      </div>
-    </div>
+  <table class="layui-table">
+   		<tr class="noborder">
+	   		<td>院校名称:</td><td><input type="text" name="school_name" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+	   		<td>院校代码:</td><td><input type="text" name="school_code" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+   		</tr>
+   		<tr class="noborder">
+	   		<td>城市:</td><td><input type="text" name="city" autocomplete="off" class="layui-input"></td>
+	   		<td>办学基本类型:</td><td><input type="text" name="type" autocomplete="off" class="layui-input"></td>
+   		</tr>
+   		<tr class="noborder">
+	   		<td>备注:</td><td colspan="3"><textarea name="memo"  autocomplete="off" class="layui-textarea" style="height: 200px;resize: none;" ></textarea></td>
+   		</tr>
+   </table>
     
     <div class="layui-form-item layui-hide">
-      <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
-      <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="确认编辑">
+      <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认">
+      <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="取消">
     </div>
   </div>
 
@@ -78,22 +67,22 @@
 		  dataType:'json',
 		  success:function(res){
 		  				if(res.code==0){       
-		                          layer.msg('修改院校成功!');
+		                          parent.layer.msg('修改院校成功!');
 		                  } else            
-		                          layer.msg('修改院校失败!', function(){
-										layer.msg('修改院校失败!');
+		                          parent.layer.msg('修改院校失败!', function(){
+			 						 parent.layer.msg('修改院校失败!');
 								  });   
 		                  },              
 		   error:function (data) {
-							layer.msg('修改院校的过程中出现错误!', function(){
-								layer.msg('修改院校的过程中出现错误!');
+			  		parent.layer.msg('修改院校的过程中出现错误!', function(){
+								parent.layer.msg('修改院校的过程中出现错误!');
 							});  
 		    } 
 	  });
 	  
       parent.layui.table.reload('demo'); //重载表格
       parent.layer.close(index); //再执行关闭 
-	  layer.msg('已成功修改!');
+      parent.layer.msg('已成功修改!');
     });
   })
   </script>

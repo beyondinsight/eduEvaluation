@@ -93,5 +93,17 @@ public class UsersImpl implements UsersService {
 		
 		return right;
 	}
+
+	public int createUserSchool(TblUsers users) {
+		// TODO Auto-generated method stub
+		return dao.createUserSchool(users);
+	}
+
+	public int updateUserSchool(TblUsers users) {
+		// TODO Auto-generated method stub
+		return dao.updateUserSchool(users);
+	}
+
+	
 	
 }

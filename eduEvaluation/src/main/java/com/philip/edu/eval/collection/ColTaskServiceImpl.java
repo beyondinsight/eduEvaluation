@@ -248,7 +248,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 	public int selectCapitalProgressMaterialsNum(CapitalProgressForm cpf, Properties prop){
 		int result = 0;
-		
+		try {
 		Integer rda_id = (Integer)prop.get("metrics_region_disbursement_amount");
 		Integer rpha_id = (Integer)prop.get("metrics_region_paid_hardware_amount");
 		Integer rpia_id = (Integer)prop.get("metrics_region_paid_internal_amount");
@@ -311,8 +311,11 @@ public class ColTaskServiceImpl implements ColTaskService {
 		pf_id = ((Integer)al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setSfi_material_num(num);
+		}catch (Exception e) {
+			// TODO: handle exception
+			result = 1;
+		}
 		
-		result = 1;
 		
 		return result;
 	}

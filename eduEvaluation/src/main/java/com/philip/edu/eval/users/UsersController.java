@@ -71,7 +71,7 @@ public class UsersController {
 	private UsersService service;
 	@Autowired
 	private RolesService role_service;
-
+	
 	
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> users(){
@@ -98,19 +98,20 @@ public class UsersController {
 		String creator = request.getParameter("creator");
 		String email = request.getParameter("email");
 		String fixPhone = request.getParameter("fixPhone");
-		String institution = request.getParameter("institution");
+		//String institution = request.getParameter("institution");
+		
 		//String major = request.getParameter("major");
 		String memo = request.getParameter("memo");
 		String mobilePhone = request.getParameter("mobilePhone");
 		String password = request.getParameter("password");
 		String position = request.getParameter("position");
 		String qq = request.getParameter("qq");
-		String salt = request.getParameter("salt");
+		//String salt = request.getParameter("salt");
 		String status = request.getParameter("status");
 		String userName = request.getParameter("userName").toLowerCase();
 		String roleId = request.getParameter("roleId");
-
-		JSONObject object = new JSONObject();
+		String schoolId = request.getParameter("schoolId");
+	
 		int sieq = service.getUsers(userName).size();
 		if(sieq>0) {
 			 code=2;
@@ -140,7 +141,7 @@ public class UsersController {
 
 		users.setEmail(email);
 		users.setFixPhone(fixPhone);
-		users.setInstitution(institution);
+		//users.setInstitution(institution);
 		//users.setMajor(major);
 		users.setMemo(memo);
 		users.setMobilePhone(mobilePhone);
@@ -159,11 +160,17 @@ public class UsersController {
 			users.setRoleId(null);
 		}
 		
+		if( schoolId !=null && !schoolId.equals("") ) {
+			users.setSchoolId(Integer.parseInt(schoolId));
+		}else {
+			users.setSchoolId(null);
+		}
 		
 		int result = service.createUsers(users);
 		service.createUserRole(users);
+		service.createUserSchool(users);
 		if(result!=0){
-			code =1;
+			code =0;
 			msg="用户添加成功";
 		}else{
 			code =99;
@@ -188,8 +195,7 @@ public class UsersController {
 		String email = request.getParameter("email");
 		String fixPhone = request.getParameter("fixPhone");
 		String institution = request.getParameter("institution");
-		//String major = request.getParameter("major");
-		String roleId = request.getParameter("roleId");
+		//String major = request.getParameter("major");		
 		String memo = request.getParameter("memo");
 		String mobilePhone = request.getParameter("mobilePhone");
 		String password = request.getParameter("password");
@@ -198,7 +204,8 @@ public class UsersController {
 		//String salt = request.getParameter("salt");
 		String status = request.getParameter("status");
 		String userName = request.getParameter("userName");
-		
+		String roleId = request.getParameter("roleId");
+		String schoolId = request.getParameter("schoolId");
 		
 	
 		if (id != null && !id.equals("")) {
@@ -237,6 +244,12 @@ public class UsersController {
 		}else {
 			users.setRoleId(null);
 		}
+		
+		if(!schoolId.equals("") && schoolId!=null) {
+			users.setSchoolId(Integer.parseInt(schoolId));
+		}else {
+			users.setSchoolId(null);
+		}
 			
 		if(!password.equals("") && password != null) {
 			users.setPassword(password);
@@ -247,11 +260,15 @@ public class UsersController {
 
 		int result_ur =  service.updateUserRole(users);
 		
+		int result_us = service.updateUserSchool(users);
+		
 		if(result_ur==0) {
-			service.createUserRole(users);
+			service.createUserRole(users);		
 		}
 		
-		JSONObject object = new JSONObject();
+		if(result_us==0) {
+			service.createUserSchool(users);
+		}
 		
 		if(result!=0){
 			code= 0;
@@ -266,7 +283,7 @@ public class UsersController {
 	
 	
 	@RequestMapping(value="/deleteUsers", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity deleteUsers(HttpServletRequest request) {
+	public ResponseEntity<BackendData> deleteUsers(HttpServletRequest request) {
 
 		int code=0;
 		String msg="";
@@ -274,7 +291,7 @@ public class UsersController {
 		String id = request.getParameter("id");
 		
 		int result = service.deleteUsers(Integer.parseInt(id));
-		JSONObject object = new JSONObject();
+
 		if(result!=0){
 			code= 0;
 			msg="用户删除成功";
@@ -299,13 +316,13 @@ public class UsersController {
 		}
 		
 		int result = service.batchDeleteUsers(ids);
-		JSONObject object = new JSONObject();
+
 		if(result!=0){
-			code =1;
-			object.put("msg", "用户删除成功");
+			code =0;
+			msg= "用户删除成功";
 		}else{
 			code= 99;
-			object.put("msg", "用户删除失败");
+			msg= "用户删除失败";
 		}
 		
 		return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);

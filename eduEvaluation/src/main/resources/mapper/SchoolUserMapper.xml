@@ -1,112 +1,160 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.philip.edu.eval.mapper.SchoolUserMapper" >
-  <resultMap id="SchoolMajorResultMap" type="com.philip.edu.eval.bean.TblSchoolMajor" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-     <result column="role_id" property="roleId" jdbcType="BIGINT" />
-     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
-    <result column="school_id" property="schoolId" jdbcType="BIGINT" />
-    <result column="school_name" property="schoolName" jdbcType="VARCHAR" />
-    <result column="major_id" property="majorId" jdbcType="BIGINT" />
-    <result column="major_name" property="majorName" jdbcType="VARCHAR" />
-     <result column="user_id" property="userId" jdbcType="BIGINT" />
-     <result column="user_name" property="userName" jdbcType="VARCHAR" />
-  </resultMap>
-  
-  
-  
-  <resultMap id="SchoolUserResultMap" type="com.philip.edu.eval.bean.TblSchoolUser" >
-     <id column="id" property="id" jdbcType="BIGINT" />
-      <result column="role_id" property="roleId" jdbcType="BIGINT" />
-     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
-     <result column="user_id" property="userId" jdbcType="BIGINT" />
-     <result column="user_name" property="userName" jdbcType="VARCHAR" />
-     <result column="school_id" property="schoolId" jdbcType="BIGINT" />
-     <result column="school_name" property="schoolName" jdbcType="VARCHAR" />
-  </resultMap>
+<mapper namespace="com.philip.edu.eval.mapper.SchoolUserMapper">
+	<resultMap id="SchoolMajorResultMap" type="com.philip.edu.eval.bean.TblSchoolMajor">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role_id" property="roleId" jdbcType="BIGINT" />
+		<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		<result column="school_id" property="schoolId" jdbcType="BIGINT" />
+		<result column="school_name" property="schoolName" jdbcType="VARCHAR" />
+		<result column="major_id" property="majorId" jdbcType="BIGINT" />
+		<result column="major_name" property="majorName" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_chinese" property="userChinese" jdbcType="VARCHAR" />
+	</resultMap>
 
-  
-  <select id="getNameSchoolUser" resultMap="SchoolUserResultMap"  >				
-   	SELECT '学校管理员' role_name,c.*,d.chinese_name as user_name from (	
-	select a.id school_id,a.school_name,b.user_id from tbl_school a  LEFT JOIN tbl_school_user b on a.id = b.school_id
-		) c LEFT JOIN tbl_users  d  on c.user_id = d.id
-  </select>
-  
-  <delete id="deleteSchoolUser" parameterType="int" >
-    delete from tbl_school_user
-    where school_id = #{schoolId,jdbcType=BIGINT}
-  </delete>  
 
-  <insert id="createSchoolUser" parameterType="com.philip.edu.eval.bean.TblSchoolUser" >
-    insert into tbl_school_user (user_id, school_id
-      )
-    values ( #{userId,jdbcType=BIGINT}, #{schoolId,jdbcType=BIGINT}
-      )
-  </insert>
-  
-  <update id="updateSchoolUser" parameterType="com.philip.edu.eval.bean.TblSchoolUser" >
-    update tbl_school_user
-    set user_id = #{userId,jdbcType=BIGINT} 
-    where   school_id = #{schoolId,jdbcType=BIGINT}
-  </update> 
-  
-  
-   <select id="getRolenameSchoolMajor"  resultMap="SchoolMajorResultMap" >
-     	SELECT '专业填报人' role_name,c.*,d.major_name,e.user_id,f.chinese_name user_name from (	
-						select a.id school_id,a.school_name,b.major_id from tbl_school a  LEFT JOIN
-										tbl_school_major b on a.id = b.school_id
-				) c LEFT JOIN tbl_major  d  on c.major_id = d.id  
-						LEFT JOIN tbl_major_user e on d.id = e.major_id   
-					  LEFT JOIN tbl_users  f on e.user_id = f.id
-  </select>
-  
-   <delete id="deleteMajorUser" parameterType="int" >
-    delete from tbl_major_user
-    where major_id = #{majorId,jdbcType=BIGINT}
-  </delete>  
 
-  <insert id="createMajorUser" parameterType="com.philip.edu.eval.bean.TblSchoolMajor" >
-    insert into tbl_major_user (user_id, major_id
-      )
-    values ( #{userId,jdbcType=BIGINT}, #{majorId,jdbcType=BIGINT}
-      )
-  </insert>
-  
-  <update id="updateMajorUser" parameterType="com.philip.edu.eval.bean.TblSchoolMajor" >
-    update tbl_major_user
-    set user_id = #{userId,jdbcType=BIGINT} 
-    where   major_id = #{majorId,jdbcType=BIGINT}
-  </update> 
-  
-  <select id="selectByPrimaryKeySchoolMajor" resultMap="SchoolMajorResultMap"  >
-    select *
-    from tbl_school_major
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  
-  <delete id="deleteByPrimaryKeySchoolMajor"  >
-    delete from tbl_school_major
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  
-  <insert id="insertSchoolMajor" parameterType="com.philip.edu.eval.bean.TblSchoolMajor" >
-    insert into tbl_school_major (id, school_id, major_id
-      )
-    values (#{id,jdbcType=BIGINT}, #{schoolId,jdbcType=BIGINT}, #{majorId,jdbcType=BIGINT}
-      )
-  </insert>
- 
-  <update id="updateByPrimaryKeySchoolMajor" parameterType="com.philip.edu.eval.bean.TblSchoolMajor" >
-    update tbl_school_major
-    set school_id = #{schoolId,jdbcType=BIGINT},
-      major_id = #{majorId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  
+	<resultMap id="SchoolUserResultMap" type="com.philip.edu.eval.bean.TblSchoolUser">
+		<id column="id" property="id" jdbcType="BIGINT" />
+		<result column="role_id" property="roleId" jdbcType="BIGINT" />
+		<result column="role_name" property="roleName" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_chinese" property="userChinese" jdbcType="VARCHAR" />
+		<result column="school_id" property="schoolId" jdbcType="BIGINT" />
+		<result column="school_name" property="schoolName" jdbcType="VARCHAR" />
+	</resultMap>
 
- 
 
-  
-  
+	<select id="getNameSchoolUser" parameterType="int"
+		resultMap="SchoolUserResultMap">
+		SELECT c.*, GROUP_CONCAT(e.id ORDER BY c.role_id asc) user_id,
+		GROUP_CONCAT(e.user_name ORDER BY c.role_id asc) user_name,
+		GROUP_CONCAT(e.chinese_name ORDER BY c.role_id asc) chinese_name
+		from (
+		select a.id school_id,school_name,b.id role_id,role_name from tbl_school
+		a,tbl_roles b WHERE b.id=#{0}
+		) c LEFT JOIN (
+		select a.user_id,a.school_id,b.role_id from tbl_school_user a ,
+		tbl_user_role b where a.user_id=b.user_id
+		)d ON c.school_id=d.school_id
+		AND c.role_id = d.role_id LEFT JOIN tbl_users e on d.user_id=e.id
+		GROUP BY school_id,role_id
+
+	</select>
+
+	<select id="getSchoolRolesUsers" parameterType="com.philip.edu.eval.bean.TblSchoolUser"
+		resultMap="SchoolUserResultMap">
+		select GROUP_CONCAT( a.user_id ) as user_id from tbl_school_user a ,
+		tbl_user_role b where a.user_id=b.user_id AND
+		school_id=#{schoolId,jdbcType=BIGINT} AND
+		role_id=#{roleId,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteSchoolUser" parameterType="int">
+		delete from tbl_school_user
+		where school_id = #{schoolId,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="createSchoolUser" parameterType="com.philip.edu.eval.bean.TblSchoolUser">
+		insert into tbl_school_user (user_id, school_id
+		)
+		values ( #{userId,jdbcType=BIGINT}, #{schoolId,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<update id="updateSchoolUser" parameterType="com.philip.edu.eval.bean.TblSchoolUser">
+		update tbl_school_user
+		set user_id = #{userId,jdbcType=BIGINT}
+		where school_id = #{schoolId,jdbcType=BIGINT}
+	</update>
+
+
+	<select id="getRolenameSchoolMajor" parameterType="int"
+		resultMap="SchoolMajorResultMap">
+		SELECT a.role_id role_id,a.role_name,b.id
+		school_id,b.school_name,c.major_id,d.major_name,
+		GROUP_CONCAT(e.user_id ORDER BY a.role_id asc) user_id,
+		GROUP_CONCAT(f.user_name ORDER BY a.role_id asc) user_name,
+		GROUP_CONCAT(f.chinese_name ORDER BY a.role_id asc) chinese_name
+		FROM (select id role_id,role_name from tbl_roles WHERE id=#{0})
+		a,tbl_school b JOIN tbl_school_major c ON b.id = c.school_id LEFT JOIN
+		tbl_major d
+		ON d.id = c.major_id LEFT JOIN (select
+		a.user_id,a.role_id,b.school_id,c.major_id from tbl_user_role a,
+		tbl_school_user b, tbl_major_user c where a.user_id=b.user_id AND
+		a.user_id=c.user_id) e
+		ON e.role_id=role_id AND e.school_id=b.id AND
+		e.major_id=c.major_id LEFT JOIN tbl_users f ON e.user_id=f.id
+
+	</select>
+
+
+	<select id="getMajorRolesUsers" parameterType="com.philip.edu.eval.bean.TblSchoolMajor"
+		resultMap="SchoolMajorResultMap">
+		select GROUP_CONCAT( a.user_id ) as user_id from (
+		select user_id,role_id from tbl_user_role WHERE
+		role_id=#{roleId,jdbcType=BIGINT}
+		) a,
+		(
+		SELECT user_id,school_id from tbl_school_user WHERE
+		school_id=#{schoolId,jdbcType=BIGINT}
+		)b,
+		(SELECT user_id,major_id from tbl_major_user
+		WHERE major_id=#{majorId,jdbcType=BIGINT}
+		) c where a.user_id=b.user_id AND a.user_id=c.user_id
+	</select>
+
+	<delete id="deleteMajorUser" parameterType="int">
+		delete from tbl_major_user
+		where major_id = #{majorId,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="createMajorUser" parameterType="com.philip.edu.eval.bean.TblSchoolMajor">
+		insert into tbl_major_user (user_id, major_id
+		)
+		values ( #{userId,jdbcType=BIGINT}, #{majorId,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<update id="updateMajorUser" parameterType="com.philip.edu.eval.bean.TblSchoolMajor">
+		update tbl_major_user
+		set user_id = #{userId,jdbcType=BIGINT}
+		where major_id = #{majorId,jdbcType=BIGINT}
+	</update>
+
+	<select id="selectByPrimaryKeySchoolMajor" resultMap="SchoolMajorResultMap">
+		select *
+		from tbl_school_major
+		where id = #{id,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKeySchoolMajor">
+		delete from tbl_school_major
+		where id = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insertSchoolMajor" parameterType="com.philip.edu.eval.bean.TblSchoolMajor">
+		insert into tbl_school_major (id, school_id, major_id
+		)
+		values (#{id,jdbcType=BIGINT}, #{schoolId,jdbcType=BIGINT},
+		#{majorId,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<update id="updateByPrimaryKeySchoolMajor" parameterType="com.philip.edu.eval.bean.TblSchoolMajor">
+		update tbl_school_major
+		set school_id = #{schoolId,jdbcType=BIGINT},
+		major_id = #{majorId,jdbcType=BIGINT}
+		where id = #{id,jdbcType=BIGINT}
+	</update>
+
+
+
+
+
+
 
 </mapper>

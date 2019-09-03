@@ -2,13 +2,27 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>静态表格</title>
+  <title>专业数据填报</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
+<style>
+.table-center{
+width:600px;
+}
+.table-center tbody tr td{	
+  text-align: center;
+}
+
+.table-center thead tr th{
+ text-align: center;
+}
+
+
+</style>
 <body>
 
   
@@ -19,13 +33,12 @@
          
           <div class="layui-card-body">
           
-            <table class="layui-table">
+            <table class="layui-table table-center">
               <colgroup>
-                <col width="150">
-                <col width="150">
-                <col width="200">
-                <col>
-             
+                <col width="150px">
+                <col width="150px">
+                <col width="30px">
+            
                 </colgroup>
                             <thead>
                               <tr>
@@ -38,12 +51,12 @@
                               <tr>
                                 <td>专业任务书</td>
                                 <td>要求<a id="count1">0</a>项,已提交<a id="count2">0</a>项</td>
-                                <td><button class="layui-btn layui-btn-danger layui-btn-xs"><i class="layui-icon">&#xe642;</i></button><a lay-href="template/caller_edit.html" style="left:-30px;position: relative;z-index:2;font-size: 0px;color: rgba(0,0,0,0);width:30px;height: 20px;display: inline-block;">支撑材料上传</a></td>                  
+                                <td><button class="layui-btn layui-btn-warm layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>填报</button><a lay-href="template/caller_edit.html" style="left:-30px;position: relative;z-index:2;font-size: 0px;color: rgba(0,0,0,0);width:30px;height: 20px;display: inline-block;">支撑材料上传</a></td>                  
                               </tr>
                               <tr>
                                 <td>专业自评报告</td>
                                 <td>要求<a id="count3">0</a>项,已提交<a id="count4">0</a>项</td>
-                                <td><button class="layui-btn layui-btn-danger layui-btn-xs" ><i class="layui-icon">&#xe642;</i></button><a lay-href="template/caller_edit.html" style="left:-30px;position: relative;z-index:2;font-size: 0px;color: rgba(0,0,0,0);width:30px;height: 20px;display: inline-block;">支撑材料上传</a></td>              
+                                <td><button class="layui-btn layui-btn-warm layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>填报</button><a lay-href="template/caller_edit.html" style="left:-30px;position: relative;z-index:2;font-size: 0px;color: rgba(0,0,0,0);width:30px;height: 20px;display: inline-block;">支撑材料上传</a></td>              
                               </tr>   
                             </tbody>
                           </table>

@@ -107,8 +107,9 @@ public class RolesController {
 	 * @return
 	 */
 	@RequestMapping(value = "/choseUser", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> choseUser(){
+	public ResponseEntity<BackendData> choseUser(HttpServletRequest request){
 	
+		String schoolId = request.getParameter("schoolId"); 
 		ArrayList usersList = (ArrayList) user_service.getUsersList();				 
 	 		
 		ArrayList choseUser = new ArrayList();
@@ -117,7 +118,9 @@ public class RolesController {
 			ShuttleBoxInfo info = new ShuttleBoxInfo();
 			info.setValue(user.getId().toString());
 			info.setTitle(user.getChineseName());
-			choseUser.add(info);
+			if(user.getSchoolId().toString().equals(schoolId)) {
+			    choseUser.add(info);
+			}
 		}
 		
 		logger.info("successfully get the choseuser list");
@@ -131,7 +134,7 @@ public class RolesController {
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
-	@RequestMapping(value = "/chosenUser", method = RequestMethod.GET, produces = "application/json")
+	/*@RequestMapping(value = "/chosenUser", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> chosenUser(HttpServletRequest request){
 		
 		String id = request.getParameter("roleId");		 
@@ -153,7 +156,7 @@ public class RolesController {
 		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
-	}
+	}*/
 	
 	
 	@RequestMapping(value="/saveChosenUser", method = RequestMethod.POST, produces = "application/json")

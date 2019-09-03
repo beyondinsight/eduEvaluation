@@ -10,6 +10,7 @@ public class CapitalProgressForm {
 	private char process_status;
 	private double central_disbursement_total;
 	private double central_paid_total;
+	private double central_disbursement_amount;	
 	private double region_disbursement_amount;
 	private double region_paid_amount;
 	private double region_paid_hardware_amount;
@@ -34,6 +35,12 @@ public class CapitalProgressForm {
 	private String sfh_material_num;
 	private String sfi_material_num;
 	
+	public double getCentral_disbursement_amount() {
+		return central_disbursement_amount;
+	}
+	public void setCentral_disbursement_amount(double central_disbursement_amount) {
+		this.central_disbursement_amount = central_disbursement_amount;
+	}
 
 	public double getCentral_disbursement_total() {
 		return central_disbursement_total;

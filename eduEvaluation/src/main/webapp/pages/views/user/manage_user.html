@@ -17,10 +17,10 @@
 
       <div class="layui-card-body">
         <div style="padding-bottom: 10px;">
-		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 添加</button>
-          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"> <i class="layui-icon layui-icon-delete">批量删除</i></button>
-       	  <button type="button" class="layui-btn" id="uploadUsers"><i class="layui-icon"></i>上传文件</button>
-       	  <button type="button" class="layui-btn" id="downloadUsers" onclick="downloadUsers()"><i class="layui-icon layui-icon-download-circle" style="font-size: 14px; color: #FFFFFF;"></i>下载模板</button>
+		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 新建</button>
+          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"> <i class="layui-icon layui-icon-delete"></i>删除</button>
+       	  <button type="button" class="layui-btn  layui-btn-normal" id="uploadUsers"><i class="layui-icon layui-icon-upload-circle"></i>上传文件</button>
+       	  <button type="button" class="layui-btn layui-btn-normal" id="downloadUsers" onclick="downloadUsers()"><i class="layui-icon layui-icon-download-circle" ></i>下载模板</button>
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="buttonTpl">
@@ -31,7 +31,7 @@
           {{#  } }}
         </script>
         <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+          <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
@@ -64,17 +64,18 @@
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
 		    {type: 'checkbox'}
-			,{type: 'numbers', title: '序号'}
-	    ,{field: 'userName', title: '用户登陆名', width:120}
-	    ,{field: 'chineseName', title: '用户名', width:120, }
-	    ,{field: 'roleName', title: '用户角色', width:120}
-	    ,{field: 'position', title: '职称', width:120}
-	    ,{field: 'institution', title: '所在院校', width:120}  
-	    ,{field: 'mobilePhone', title: '手机号码', width: 200}
-	    ,{field: 'email', title: '电子邮箱邮箱'}
-	    ,{field: 'creator', title: '创建人', width: 200}
-	    ,{field: 'memo', title: '备注'}
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150}
+			,{type: 'numbers', title: '序号', align:'center'}
+	    ,{field: 'userName', title: '用户账号', width:120, align:'center'}
+	    ,{field: 'chineseName', title: '用户姓名', width:120 , align:'center'}
+	    ,{field: 'roleName', title: '用户角色', width:120, align:'center'}
+	    ,{field: 'position', title: '职称', width:120, align:'center'}
+	    ,{field: 'schoolName', title: '所属院校', width:120, align:'center'}  
+	    ,{field: 'mobilePhone', title: '手机号码', width: 200, align:'center'}
+	    ,{field: 'email', title: '电子邮箱', width: 200, align:'center'}
+	    ,{field: 'creator', title: '创建人', width: 120, align:'center'}
+	    ,{field: 'creator', title: '创建人角色', width: 120, align:'center'}
+	    ,{field: 'memo', title: '备注', align:'center'}
+		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150, align:'center'}
 	  ]]
 	});
 	
@@ -112,14 +113,10 @@
 	    layer.open({
 	        type: 2 //此处以iframe举例
 	        ,title: '修改用户'
-	        ,area: ['50%', '70%']
+	        ,area: ['50%', '60%']
 	        //,shade: 0
 	        ,maxmin: true
-	       /*  ,offset: [ //为了演示，随机坐标
-	          $(window).height()-700
-	          ,$(window).width()-1200
-	        ] */
-			,btn: ['确认修改', '取消']
+			,btn: ['确认', '取消']
 			,yes: function(index, layero){
 			  //点击确认触发 iframe 内容中的按钮提交
 			  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
@@ -136,7 +133,7 @@
 	    	  $(inputList[3]).val(data.roleId);	
 	    	  $(inputList[4]).val(data.chineseName);
 	    	  $(inputList[5]).val(data.position);
-	    	  $(inputList[6]).val(data.institution);
+	    	  $(inputList[6]).val(data.schoolId);
 	    	  $(inputList[7]).val(data.mobilePhone);
 	    	  $(inputList[8]).val(data.email);	    	  
 	    	  $(inputList[9]).val(data.creator);
@@ -216,8 +213,8 @@
           ,title: '新建用户'
           ,content: 'new_user.html'
           ,maxmin: true
-          ,area: ['550px', '500px']
-          ,btn: ['确认添加', '取消']
+          ,area: ['50%', '60%']
+          ,btn: ['确认', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
             var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
@@ -240,9 +237,9 @@
 	      ,accept: 'file' //普通文件
   	  ,exts: 'xlsx' //只允许上传压缩文件
 	      ,done:function(res){
-				if(res.code==1){       
+				if(res.code==0){       
 					                        layer.msg('上传用户成功!');
-					                }else if(res.code==0) {          
+					                }else if(res.code==1) {          
 					                        layer.msg('上传用户失败!', function(){
 															layer.msg('上传用户失败!');
 													  });   

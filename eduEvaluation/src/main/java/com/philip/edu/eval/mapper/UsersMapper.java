@@ -21,4 +21,10 @@ public interface UsersMapper {
 		public int updateUserRole(TblUsers users);
 		public List<TblUsers> getRolesUsers(int id);
 		public int exsitsUser(String username);
+		
+		//User School
+		public int createUserSchool(TblUsers users);
+	    public int updateUserSchool(TblUsers users);
+	    
+	    
 }

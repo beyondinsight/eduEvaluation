@@ -64,11 +64,11 @@
  		<result property="region_paid_internal_amount" column="region_paid_internal_amount"/>
  		<result property="central_disbursement_amount" column="central_disbursement_amount"/>
  		<result property="central_paid_amount" column="central_paid_amount"/>
- 		<result property="central_paid_hardware_amout" column="central_paid_hardware_amount"/>
+ 		<result property="central_paid_hardware_amount" column="central_paid_hardware_amount"/>
  		<result property="central_paid_internal_amount" column="central_paid_internal_amount"/>
  		<result property="school_funding_total" column="school_funding_total"/>
  		<result property="school_funding_hardware" column="school_funding_hardware"/>
- 		<result property="school_funnding_internal" column="school_funding_internal"/>
+ 		<result property="school_funding_internal" column="school_funding_internal"/>
  		<result property="process_status" column="process_status"/>
  	</resultMap>
 	

@@ -20,8 +20,29 @@ public class TblUsers {
     private Integer roleId;
     
 	private String roleName;
+	
+	private Integer schoolId;
+	
+	private String schoolName;
+	
     
-    public Integer getRoleId() {
+    public Integer getSchoolId() {
+		return schoolId;
+	}
+
+	public void setSchoolId(Integer schoolId) {
+		this.schoolId = schoolId;
+	}
+
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
+	public Integer getRoleId() {
 		return roleId;
 	}
 

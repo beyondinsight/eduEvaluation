@@ -390,12 +390,20 @@ public class ColTaskController {
 	@RequestMapping(value="/getPerformanceForm", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getPerformanceForm(HttpServletRequest request){
 		
+		BackendData data = new BackendData(); 
+		
 		String collection_major_id = request.getParameter("collection_major_id");
+		if(collection_major_id == null || collection_major_id.equals("")) {
+			
+		
+			data.setMsg("获取业绩表格失败"); 
+			data.setCode(99); 
+		 	return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		}
 		
 		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id));
 		logger.info("successfully get performance form list");
 		 
-		BackendData data = new BackendData(); 
 		data.setMsg("成功获取业绩表格"); 
 		data.setCode(0); 
 		data.setData(performanceForm);
@@ -408,13 +416,21 @@ public class ColTaskController {
 	@RequestMapping(value="/getRelateMaterials", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request){
 		 
+		BackendData data = new BackendData(); 
+		
 		String pf_id = request.getParameter("form_performance_id");
 		String metrics_id = request.getParameter("metrics_id");
 		
+		if(pf_id == null || pf_id.equals("") || metrics_id==null || metrics_id.equals("")) {
+					
+			data.setMsg("获取材料表格失败"); 
+			data.setCode(99); 
+		 	return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		}
+		
 		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(pf_id), Integer.parseInt(metrics_id));
 		logger.info("successfully get materials list");
-		 
-		BackendData data = new BackendData();
+
 		data.setMsg("成功获取材料列表");   
 		data.setCode(0); 
 		data.setData(materials); 
@@ -427,20 +443,29 @@ public class ColTaskController {
 	@RequestMapping(value="/getCapitalProgress", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getCapitalProgress(HttpServletRequest request){
 		 
+		BackendData data = new BackendData(); 
+		
 		String collection_major_id = request.getParameter("collection_major_id");
 		
+		if(collection_major_id == null || collection_major_id.equals("") ) {
+			
+			data.setMsg("获取资金支出表格失败"); 
+			data.setCode(99); 
+		 	return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		}
+		
+
 		ArrayList cpf = (ArrayList)service.selectCapitalProgress(Integer.parseInt(collection_major_id));
 		CapitalProgressForm cpform = (CapitalProgressForm) cpf.get(0);
 		
 		int setNum = service.selectCapitalProgressMaterialsNum(cpform, propConfig);
+		System.out.println(collection_major_id);
 		logger.info("successfully get capitalProgress form");
-		 
-		BackendData data = new BackendData();
+
 		data.setMsg("成功获取资金支出表格");   
 		data.setCode(0); 
 		data.setData(cpf); 
 		data.setCount(cpf.size());
-		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
 	}

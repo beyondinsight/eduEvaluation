@@ -8,22 +8,27 @@ import java.util.List;
 import com.philip.edu.eval.bean.TblRoles;
 import com.philip.edu.eval.bean.TblSchoolMajor;
 import com.philip.edu.eval.bean.TblSchoolUser;
+import com.philip.edu.eval.bean.TblUsers;
 
 
 
 public interface SchoolUserService {
 	
 	//school major user
-	public List<TblSchoolMajor> getRolenameSchoolMajor();
-	public int createMajorUser(TblSchoolMajor tsu);
+	public List<TblSchoolMajor> getRolenameSchoolMajor(int roleId);
+	public int createMajorUser(TblSchoolMajor tsu);	
 	public int updateMajorUser(TblSchoolMajor tsu);
 	public int deleteMajorUser(int id);
+	
+	public TblSchoolMajor getMajorRolesUsers(TblSchoolMajor tsm);
     
 	//school user
-    public List<TblSchoolUser> getNameSchoolUser();
-    public int createSchoolUser(TblSchoolUser tsu);
-	public int updateSchoolUser(TblSchoolUser tsu);
+    public List<TblSchoolUser> getNameSchoolUser(int roleId);
+    public int createRoleUser(TblSchoolUser tsu);
+	public int updateRoleUser(TblSchoolUser tsu);
 	public int deleteSchoolUser(int id);
 
+	//School Role User
+    public TblSchoolUser getSchoolRolesUsers(TblSchoolUser tsu);
 	
 }

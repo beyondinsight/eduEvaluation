@@ -8,45 +8,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 </head>
+<style>
+.noborder td{
+border:0;
+text-align: right;
+}
+
+</style>
 <body>
 
   <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
-    <div class="layui-form-item">
-      <label class="layui-form-label">专业名称: <span style="color: red;">* </span></label>
-      <div class="layui-input-inline">
-        <input type="text" name="majorName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">专业代码: <span style="color: red;">* </span></label>
-      <div class="layui-input-inline">
-        <input type="text" name="majorCode" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">所属一级学科:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="mainLecture" placeholder="请输入" class="layui-input">
-	  </div>
-	</div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">学科门类:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="majorClass" autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">是否一流学科相关:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="isFirstClass" autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">备注</label>
-      <div class="layui-input-inline">
-        <textarea name="memo" style="width: 400px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
-      </div>
-    </div>
+    <table class="layui-table">
+	 	<tr class="noborder">
+	 		<td>专业名称:</td><td><input type="text" name="majorName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+	 		<td>专业代码:</td><td><input type="text" name="majorCode" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"><td></td>
+ 		</tr>
+ 		<tr class="noborder">
+	 		<td>所属一级学科:</td><td><input type="text" name="mainLecture" autocomplete="off" class="layui-input"></td>
+	 		<td>学科门类:</td><td> <input type="text" name="majorClass" autocomplete="off" class="layui-input"></td>
+ 		</tr>
+ 		<tr class="noborder">
+	 		<td>是否一流学科相关:</td><td><input type="text" name="isFirstClass" autocomplete="off" class="layui-input"></td>	 		
+ 		</tr>
+ 		<tr class="noborder">
+	 		<td>备注:</td><td colspan="3"><textarea name="memo"  autocomplete="off" class="layui-textarea" style="height: 200px;resize: none;" ></textarea></td>
+ 		</tr>
+	 </table> 	
     
     <div class="layui-form-item layui-hide">
       <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
@@ -84,22 +71,22 @@
 		  crossDomain: true,
 		  success:function(res){
 		  				if(res.code==0){       
-		                          layer.msg('添加专业成功!');
+		                          parent.layer.msg('添加专业成功!', {time:2000});
 		                  } else            
-		                          layer.msg('添加专业失败!', function(){
-										layer.msg('添加专业失败!');
+		                          parent.layer.msg('添加专业失败!', function(){
+			 							 parent.layer.msg('添加专业失败!', {time:2000});
 								  });   
 		                  },              
 		   error:function (data) {
-							layer.msg('添加专业的过程中出现错误!', function(){
-								layer.msg('添加专业的过程中出现错误!');
+			 			 parent.layer.msg('添加专业的过程中出现错误!', function(){
+			 				parent.layer.msg('添加专业的过程中出现错误!', {time:2000});
 							});  
 		    }
 	  });
 	  
       parent.layui.table.reload('demo'); //重载表格
       parent.layer.close(index); //再执行关闭 
-	  layer.msg('已成功添加!');
+      parent.layer.msg('已成功添加!');
     });
 	
 	/*autocomplete.render({
