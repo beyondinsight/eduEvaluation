@@ -84,25 +84,28 @@ public class SchoolUserController {
 		String schoolId = request.getParameter("schoolId");
 		
 		String[] sIds = request.getParameterValues("userId");
-		int[] ids = new int[sIds.length];
-		for(int i=0; i<sIds.length; i++){
-			ids[i] = Integer.parseInt(sIds[i]);
-		}
+		
 
 		if(roleId != null && schoolId != null && !schoolId.equals("") && !roleId.equals("")) {
 			TblSchoolUser user = new TblSchoolUser();
 			user.setSchoolId(Integer.parseInt(schoolId));
 			user.setRoleId(Integer.parseInt(roleId));
 			TblSchoolUser sur = service.getSchoolRolesUsers(user);
-			String[] userids =  sur.getUserId().split(",");
-			int[] uids = new int[userids.length];
-			for(int i=0; i<userids.length; i++){
-				uids[i] = Integer.parseInt(userids[i]);
+			if(sur != null && sur.getUserId() != null) {
+				String[] userids =  sur.getUserId().split(",");
+				int[] uids = new int[userids.length];
+				for(int i=0; i<userids.length; i++){
+					uids[i] = Integer.parseInt(userids[i]);
+				}
+				 
+				role_service.deleteChosenUser(uids);
 			}
-			 
-			role_service.deleteChosenUser(uids);
-			
-			if(ids != null && !ids.equals("") ) {
+			if(sIds != null && !sIds.equals("") ) {
+				
+				int[] ids = new int[sIds.length];
+				for(int i=0; i<sIds.length; i++){
+					ids[i] = Integer.parseInt(sIds[i]);
+				}
 				
 				for(int a : ids) {
 					TblUsers users = new TblUsers();
@@ -274,7 +277,6 @@ public class SchoolUserController {
 		data.setData(chosenUser);
 		data.setCount(chosenUser.size());
 		//BackendData data = new BackendData();
-		System.out.println("///"+chosenUser);
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
@@ -284,8 +286,9 @@ public class SchoolUserController {
 		String roleId = request.getParameter("roleId");
 		String schoolId = request.getParameter("schoolId");
 		String majorId = request.getParameter("majorId");
+
 		ArrayList<Integer> chosenUser = new ArrayList<Integer>();
-		if(roleId==null || schoolId==null) {
+		if(roleId==null || schoolId==null || majorId == null) {
 			data.setMsg("");
 			data.setCode(0); 
 			data.setData(chosenUser);
@@ -296,13 +299,7 @@ public class SchoolUserController {
 		user.setSchoolId(Integer.parseInt(schoolId));
 		user.setRoleId(Integer.parseInt(roleId));
 		user.setMajorId(Integer.parseInt(majorId));
-		if(roleId==null || schoolId==null) {
-			data.setMsg("");
-			data.setCode(0); 
-			data.setData(chosenUser);
-			data.setCount(chosenUser.size());
-			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
-		}
+		
 		TblSchoolMajor sur = service.getMajorRolesUsers(user);
 		if(sur == null || sur.getUserId() == null) {
 			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
@@ -319,8 +316,73 @@ public class SchoolUserController {
 		data.setCode(0); 
 		data.setData(chosenUser);
 		data.setCount(chosenUser.size());
-		//BackendData data = new BackendData();
-		System.out.println("///"+chosenUser);
+	
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value="/addMajorUser", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> addMajorUser(HttpServletRequest request) {
+		
+	
+		
+		String roleId = request.getParameter("roleId");
+		String schoolId = request.getParameter("schoolId");
+		String majorId = request.getParameter("majorId");
+		String[] sIds = request.getParameterValues("userId");
+		 
+		
+
+		if(roleId != null && schoolId != null && !schoolId.equals("") && !roleId.equals("")) {
+			
+	 
+			//TblSchoolUser user = new TblSchoolUser();
+			TblSchoolMajor user = new TblSchoolMajor();
+			user.setSchoolId(Integer.parseInt(schoolId));
+			user.setRoleId(Integer.parseInt(roleId));
+			user.setMajorId(Integer.parseInt(majorId));
+			TblSchoolMajor sur = service.getMajorRolesUsers(user);
+			if(sur  != null  && sur.getUserId() != null) {			
+			
+					String[] userids =  sur.getUserId().split(",");
+					int[] uids = new int[userids.length];
+					for(int i=0; i<userids.length; i++){
+						uids[i] = Integer.parseInt(userids[i]);
+					}
+					 
+					role_service.deleteChosenUser(uids);
+			}
+			if(sIds != null && !sIds.equals("") ) {
+
+				int[] ids = new int[sIds.length];
+				for(int i=0; i<sIds.length; i++){
+					ids[i] = Integer.parseInt(sIds[i]);
+				}
+				 
+				for(int a : ids) {
+					TblUsers users = new TblUsers();
+					users.setId(a);
+					users.setRoleId(Integer.parseInt(roleId));
+					
+					//users.setMajor(major);
+					int num = user_service.updateUserRole(users);
+					if(num==0) {
+						user_service.createUserRole(users);		
+					}
+					user.setId(a);
+					int num2 = service.updateMajorUser(user);
+					if(num2==0) {
+						service.createMajorUser(user);
+					}
+				}				 
+			}
+			
+		} 
+		
+
+ 
+		BackendData data = new BackendData();
+		data.setMsg("用户添加成功");
+		data.setCode(0); 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 }

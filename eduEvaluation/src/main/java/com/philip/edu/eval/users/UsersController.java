@@ -47,11 +47,11 @@ import com.philip.edu.eval.bean.TblUsers;
 
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.EvalConstants;
-import com.philip.edu.eval.util.PasswordUtil;
 //import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.role.RolesService;
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.PropertiesUtil;
+import com.philip.edu.eval.util.SecurityUtil;
 import com.philip.edu.eval.util.UsersFieldConstants;
 
 import net.sf.json.JSONArray;

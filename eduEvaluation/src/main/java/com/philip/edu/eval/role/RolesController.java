@@ -118,7 +118,7 @@ public class RolesController {
 			ShuttleBoxInfo info = new ShuttleBoxInfo();
 			info.setValue(user.getId().toString());
 			info.setTitle(user.getChineseName());
-			if(user.getSchoolId().toString().equals(schoolId)) {
+			if(user.getSchoolId() != null && user.getSchoolId().toString().equals(schoolId)) {
 			    choseUser.add(info);
 			}
 		}

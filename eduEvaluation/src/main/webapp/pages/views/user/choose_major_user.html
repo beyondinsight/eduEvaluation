@@ -14,7 +14,7 @@
        <input hidden="hidden"  name="schoolId" id="schoolId"/>
 	    <input hidden="hidden"  name="roleId" id="roleId"/>     
       	<input hidden="hidden"  name="roleName" id="roleName"  />
-      	<input hidden="hidden"  name="majorId" id="majorId"  />	      
+      	<input  hidden="hidden"  name="majorId" id="majorId"  />	      
     </div>
 	
 	<div class="layui-form-item layui-hide">
@@ -67,7 +67,7 @@
   $.ajax({
   	url: projectBase + '/schooluser/chosenMajorUser',
   	dataType: 'json',
-	data: {'roleId': $("#roleId").val(),'schoolId':$("#schoolId").val()},
+	data: {'roleId': $("#roleId").val(),'schoolId':$("#schoolId").val(),'majorId':$("#majorId").val()},
   	type: 'GET',
   	async: false,
   	success: function(res){

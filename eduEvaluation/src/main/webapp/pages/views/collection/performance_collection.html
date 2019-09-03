@@ -31,7 +31,7 @@
 					</div>
 					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 					<script type="text/html" id="test-table-toolbar-barDemo">
-					  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+					  <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
 					</script>
 				</div> 
 				<div class="layui-card-body">
@@ -95,7 +95,7 @@
 								field: 'unit',
 								title: '单位',
 								align: 'center',
-								width: 60
+								width: 100
 							}, {
 								field: 'current_value',
 								title: '当前值',
@@ -146,14 +146,13 @@
 							},  {
 								field: 'material_num',
 								title: '支撑材料',
-								align: 'center', 
-								width: 140
+								align: 'center' 
 							}, {
 								title: '操作',
 								fixed: 'right',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
-								width: 160
+								width: 100
 							}
 						]
 					]
@@ -277,7 +276,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '填报详细',
-							area: ['70%', '80%'],
+							area: ['960px', '80%'],
 							shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],

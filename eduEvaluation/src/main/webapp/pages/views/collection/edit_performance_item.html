@@ -9,7 +9,15 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<body>
+	<style>
+	.noborder td{
+		border:0;
+		text-align: right;
+		height: 50px;
+	}
+	
+	</style>
+	<body style="background-color: #ffffff;">
 
 		<div class="layui-fluid">
 			<div class="layui-card">
@@ -17,7 +25,26 @@
 					<div class="layui-form-item">
 						<input type="hidden" name="metrics_id" id="metrics_id">
 						<input type="hidden" name="performance_id" id="performance_id">
-						<div class="layui-inline">
+						
+						<table class="layui-table" style="width:900px;">
+							<tr class="noborder">
+								<td>当前值</td><td><input type="text"   name="current_value" id="current_value" autocomplete="off" class="layui-input"/></td><td style="text-align: left;">(万元)</td>
+								<td>目标值</td><td><input type="text" name="target_value" id="target_value" autocomplete="off" class="layui-input"/></td><td style="text-align: left;">(万元)</td>
+							</tr>
+							<tr class="noborder">
+								<td>实际完成值</td><td><input type="text" name="actual_value" id="actual_value" autocomplete="off" class="layui-input"></td><td style="text-align: left;">(万元)</td>								
+							</tr>
+							<tr class="noborder">
+								<td>自评分</td><td><input type="text" name="self_evaluation" id="self_evaluation" class="layui-input"></td><td style="text-align: left;">(分)</td>
+								<td>指标分值</td><td><input type="text" name="score" id="score" class="layui-input"></td><td style="text-align: left;">(分)</td>					
+							</tr>
+							<tr class="noborder"><td>备注</td>
+								<td colspan="6">							
+									<textarea name="self_introduction" id="self_introduction" style="width:675px;height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
+								</td>
+							</tr>
+						</table>
+						<!-- <div class="layui-inline">
 							<label class="layui-form-label" style="width: 70px;">当前值</label>
 								<div class="layui-inline" style="width: 120px">
 									<input type="text" name="current_value" id="current_value" autocomplete="off"
@@ -32,8 +59,8 @@
 								 class="layui-input">
 							</div>
 							<label class="layui-form-label" style="width: 70px;">万元</label>
-						</div>
-						<div class="layui-inline">
+						</div> -->
+						<!-- <div class="layui-inline">
 							<label class="layui-form-label" style="width: 70px;">实际完成值</label>
 							<div class="layui-input-inline" style="width: 120px;">
 								<input type="text" name="actual_value" id="actual_value" autocomplete="off" 
@@ -61,16 +88,16 @@
 							</div>
 							<label class="layui-form-label" style="width: 70px;">分</label>
 						</div>
-					</div>
+					</div> -->
 					
-					<div class="layui-form-item">
+					<!-- <div class="layui-form-item">
 						<label class="layui-form-label" style="width: 70px;">备注</label>
 						<div class="layui-input-inline" style="width: 300px;">
 							<textarea name="self_introduction" id="self_introduction" style="width: 300px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
-					</div>
+					</div> -->
 					
-					<div class="layui-card-body">
+					<div class="layui-card-body" style="margin-left: -15px;">
 						<div style="padding-bottom: 10px;">
 							<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>
 							<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
@@ -115,7 +142,7 @@
 
 				table.render({
 					elem: '#materials_table',  
-					width: 680,
+					width: 900,
 					height: 320,
 					url: projectBase + '/collection/getRelateMaterials' + metric_id
 						,
@@ -131,8 +158,7 @@
 							}, {
 								field: 'file_name',
 								title: '文件名',
-								align: 'center',
-								width: 250
+								align: 'center' 
 							},{
 								field: 'doc_size',
 								title: '文件大小',

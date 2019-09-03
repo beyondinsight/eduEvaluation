@@ -32,7 +32,7 @@
 		resultMap="SchoolUserResultMap">
 		SELECT c.*, GROUP_CONCAT(e.id ORDER BY c.role_id asc) user_id,
 		GROUP_CONCAT(e.user_name ORDER BY c.role_id asc) user_name,
-		GROUP_CONCAT(e.chinese_name ORDER BY c.role_id asc) chinese_name
+		GROUP_CONCAT(e.chinese_name ORDER BY c.role_id asc) user_chinese
 		from (
 		select a.id school_id,school_name,b.id role_id,role_name from tbl_school
 		a,tbl_roles b WHERE b.id=#{0}
@@ -73,22 +73,24 @@
 
 
 	<select id="getRolenameSchoolMajor" parameterType="int"
-		resultMap="SchoolMajorResultMap">
+	resultMap="SchoolMajorResultMap">
 		SELECT a.role_id role_id,a.role_name,b.id
 		school_id,b.school_name,c.major_id,d.major_name,
 		GROUP_CONCAT(e.user_id ORDER BY a.role_id asc) user_id,
 		GROUP_CONCAT(f.user_name ORDER BY a.role_id asc) user_name,
-		GROUP_CONCAT(f.chinese_name ORDER BY a.role_id asc) chinese_name
+		GROUP_CONCAT(f.chinese_name ORDER BY a.role_id asc) user_chinese
 		FROM (select id role_id,role_name from tbl_roles WHERE id=#{0})
 		a,tbl_school b JOIN tbl_school_major c ON b.id = c.school_id LEFT JOIN
 		tbl_major d
 		ON d.id = c.major_id LEFT JOIN (select
 		a.user_id,a.role_id,b.school_id,c.major_id from tbl_user_role a,
-		tbl_school_user b, tbl_major_user c where a.user_id=b.user_id AND
+		tbl_school_user b, tbl_major_user c where a.role_id=#{0} AND
+		a.user_id=b.user_id AND
 		a.user_id=c.user_id) e
-		ON e.role_id=role_id AND e.school_id=b.id AND
-		e.major_id=c.major_id LEFT JOIN tbl_users f ON e.user_id=f.id
-
+		ON e.school_id=b.id AND
+		e.major_id=c.major_id LEFT JOIN tbl_users f ON e.user_id=f.id 
+		GROUP by   a.role_id , school_id,c.major_id
+		
 	</select>
 
 
@@ -115,14 +117,14 @@
 	<insert id="createMajorUser" parameterType="com.philip.edu.eval.bean.TblSchoolMajor">
 		insert into tbl_major_user (user_id, major_id
 		)
-		values ( #{userId,jdbcType=BIGINT}, #{majorId,jdbcType=BIGINT}
+		values ( #{id,jdbcType=BIGINT}, #{majorId,jdbcType=BIGINT}
 		)
 	</insert>
 
 	<update id="updateMajorUser" parameterType="com.philip.edu.eval.bean.TblSchoolMajor">
 		update tbl_major_user
-		set user_id = #{userId,jdbcType=BIGINT}
-		where major_id = #{majorId,jdbcType=BIGINT}
+		set major_id = #{majorId,jdbcType=BIGINT}
+		where user_id = #{id,jdbcType=BIGINT}
 	</update>
 
 	<select id="selectByPrimaryKeySchoolMajor" resultMap="SchoolMajorResultMap">
