@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<title>绩效目标完成情况</title>
 		<meta name="renderer" content="webkit">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
@@ -32,9 +32,8 @@
 					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 					<script type="text/html" id="test-table-toolbar-barDemo">
 					  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-					  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
 					</script>
-				</div>
+				</div> 
 				<div class="layui-card-body">
 					
 				</div>
@@ -67,32 +66,27 @@
 				});
 
 				form.render();
-
-				layui.data('choseMajor', null);
+				
+				var data = layui.data('collection');
+				layui.data('collection',null);
+				console.log("data:" + data['collection_major_id']);
 
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getMetrics',
+					url: projectBase + '/collection/getPerformanceForm',
+					where: {
+						'collection_major_id':data['collection_major_id']
+					},
 					page: true, //开启分页
-					height: 500	,
+					height: 500	, 
 					cols: [
 						[ //表头
 							{
-								field: 'order',
-								title: '一级指标编号',
-								align: 'center',
-								width: 140
-							}, {
 								field: 'level1_name',
 								title: '一级指标',
 								align: 'center',
 								width: 160
 							},{
-								field: 'metrics_code',
-								title: '二级指标编号',
-								align: 'center',
-								width: 140
-							}, {
 								field: 'metrics_name',
 								title: '二级指标',
 								align: 'center',
@@ -103,39 +97,56 @@
 								align: 'center',
 								width: 60
 							}, {
-								field: '',
+								field: 'current_value',
 								title: '当前值',
+								templet: function(d){ if(d.current_value==0)return "";
+													  else return d.current_value;},
 								align: 'center',
 								width: 80
 							},  {
-								field: '',
+								field: 'target_value',
 								title: '目标值',
+								templet: function(d){ if(d.target_value==0)return "";
+													  else return d.target_value;},
 								align: 'center',
 								width: 80
 							},  {
-								field: '',
+								field: 'actual_value',
 								title: '实际完成值',
 								align: 'center',
+								templet: function(d){ if(d.actual_value==0)return "";
+													  else return d.actual_value;},
 								width: 120
 							},  {
-								field: '',
+								field: 'score',
 								title: '分值',
 								align: 'center',
+								templet: function(d){ if(d.score==0)return "";
+													  else return d.score;},
 								width: 80
 							},  {
-								field: '',
+								field: 'self_evaluate',
 								title: '自评分',
 								align: 'center',
+								templet: function(d){ if(d.self_evaluate==0)return "";
+													  else return d.self_evaluate;},
 								width: 80
 							},  {
-								field: '',
+								field: 'self_introduction',
 								title: '自评说明',
 								align: 'center',
+								templet: function(d){ 
+									var data = d.self_introduction;
+									console.log("data:" + data);
+									if(data == null) return "共0字";
+									console.log(data.length);
+									var str = "共"+ data.length +"字";
+									return str},
 								width: 100
 							},  {
 								field: 'material_num',
 								title: '支撑材料',
-								align: 'center',
+								align: 'center', 
 								width: 140
 							}, {
 								title: '操作',
@@ -156,7 +167,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '填报详细',
-							area: ['50%', '70%'],
+							area: ['70%', '80%'],
 							//shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
@@ -208,8 +219,27 @@
 							zIndex: layer.zIndex //重点1
 								,
 							success: function(layero, index) {
-								var school_id = layero.find('iframe').contents().find("#metrics_id");
+								var metric_id = layero.find('iframe').contents().find("#metrics_id");
 								$(metrics_id).val(data.id);
+								var current_value = layero.find('iframe').contents().find("#current_value");
+								console.log("set data");
+								if(data.current_value!=0)
+								$(current_value).val(data.current_value);
+								var target_value = layero.find('iframe').contents().find("#target_value");
+								if(data.target_value!=0)
+								$(target_value).val(data.target_value);
+								var actual_value = layero.find('iframe').contents().find("#actual_value");
+								if(data.actual_value!=0)
+								$(actual_value).val(data.actual_value);
+								var score = layero.find('iframe').contents().find("#score");
+								if(data.score!=0)
+								$(score).val(data.score);
+								var self_evaluate = layero.find('iframe').contents().find("#self_evaluate");
+								if(data.self_evaluate!=0)
+								$(self_evaluate).val(data.self_evluate);
+								var self_introduction = layero.find('iframe').contents().find("#self_introduction");
+								$(self_introduction).val(data.self_introduction);
+								
 								layer.setTop(layero); //重点2
 							}
 						});
@@ -247,13 +277,13 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '填报详细',
-							area: ['50%', '70%'],
+							area: ['70%', '80%'],
 							shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
 							yes: function(index, layero) {
 								//点击确认触发 iframe 内容中的按钮提交
-								var submit = layero.find('iframe').contents().find("#metrics_form");
+								var submit = layero.find('iframe').contents().find("#edit_performance_form");
 								submit.click();
 								
 								table.reload('LAY-app-content-list');
@@ -265,6 +295,27 @@
 								//console.log(data.id);
 								var metrics_id = layero.find('iframe').contents().find("#metrics_id");
 								$(metrics_id).val("?metrics_id=" + data.metrics_id + "&form_performance_id=" + data.id );
+								var performance_id = layero.find('iframe').contents().find("#performance_id");
+								$(performance_id).val(data.id);
+								
+								var current_value = layero.find('iframe').contents().find("#current_value");
+								console.log("set data");
+								if(data.current_value!=0)
+								$(current_value).val(data.current_value);
+								var target_value = layero.find('iframe').contents().find("#target_value");
+								if(data.target_value!=0)
+								$(target_value).val(data.target_value);
+								var actual_value = layero.find('iframe').contents().find("#actual_value");
+								if(data.actual_value!=0)
+								$(actual_value).val(data.actual_value);
+								var score = layero.find('iframe').contents().find("#score");
+								if(data.score!=0)
+								$(score).val(data.score);
+								var self_evaluate = layero.find('iframe').contents().find("#self_evaluate");
+								if(data.self_evaluate!=0)
+								$(self_evaluate).val(data.self_evluate);
+								var self_introduction = layero.find('iframe').contents().find("#self_introduction");
+								$(self_introduction).val(data.self_introduction);
 								
 								layer.setTop(layero); //重点2    
 							}   

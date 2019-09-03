@@ -108,12 +108,20 @@
 								var userinfo = {
 									'username': data[0].userName,
 									'chineseName': data[0].chineseName,
-									'role': data[0].role
+									'role': data[0].roleId
 								};
 								layui.data('userinfo',{
 									key: 'user',
 									value: userinfo
 								});
+								
+								var token = data[1];
+								//console.log(token);
+								layui.data('userinfo',{
+									key: 'token',
+									value: token
+								});
+								
 								/*layui.data(setter.tableName, {
 												key: setter.request.tokenName
 												,value: res.data.access_token

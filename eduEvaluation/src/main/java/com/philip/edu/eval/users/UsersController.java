@@ -147,11 +147,11 @@ public class UsersController {
 		users.setMobilePhone(mobilePhone);
 		users.setPosition(position);
 		users.setQq(qq);
-		users.setSalt(PasswordUtil.createSalt().toString());
+		users.setSalt(SecurityUtil.createSalt().toString());
 		users.setStatus(status);
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
-		password = PasswordUtil.md5Hex(userName + password + users.getSalt());
+		password = SecurityUtil.md5Hex(userName + password + users.getSalt());
 		users.setPassword(password);
 		
 		if( roleId !=null && !roleId.equals("") ) {
@@ -225,7 +225,6 @@ public class UsersController {
 			return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
 		}
 		
-		password = Code.encrypt(password, propConfig.getProperty("code_key"), propConfig.getProperty("code_ivs"));
 		users.setEmail(email);
 		users.setFixPhone(fixPhone);
 		users.setInstitution(institution);
@@ -252,6 +251,10 @@ public class UsersController {
 		}
 			
 		if(!password.equals("") && password != null) {
+			ArrayList tempUsers = (ArrayList)service.getUsers(userName);
+			TblUsers tempUser = (TblUsers)tempUsers.get(0);
+			
+			password = SecurityUtil.md5Hex(userName + password + tempUser.getSalt());
 			users.setPassword(password);
 		} 
 		
@@ -479,12 +482,24 @@ public class UsersController {
 		}
 		
 		logger.info("successfully login");
+		ArrayList returnInfo = new ArrayList();
+		
 		List<TblUsers> users = service.getUsers(username);
+		returnInfo.add(users.get(0)); 
 		//TblUsers user = users.get(0);
+		
+		try {
+			String token = SecurityUtil.createToken(username);
+			returnInfo.add(token);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			logger.info("生成token的时候发生错误!");
+		}
 
 		data.setMsg("登录成功!"); 
 		data.setCode(EvalConstants.LOGIN_STATUS_SUCCESS); 
-		data.setData((ArrayList)users);
+		data.setData(returnInfo);
 		//data.setCount(usersList.size());
 		//BackendData data = new BackendData();
 		

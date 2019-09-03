@@ -13,9 +13,10 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="metrics_form">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_performance_form">
 					<div class="layui-form-item">
 						<input type="hidden" name="metrics_id" id="metrics_id">
+						<input type="hidden" name="performance_id" id="performance_id">
 						<div class="layui-inline">
 							<label class="layui-form-label" style="width: 70px;">当前值</label>
 								<div class="layui-inline" style="width: 120px">
@@ -65,7 +66,7 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label" style="width: 70px;">备注</label>
 						<div class="layui-input-inline" style="width: 300px;">
-							<textarea name="memo" id="memo" style="width: 300px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
+							<textarea name="self_introduction" id="self_introduction" style="width: 300px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
 					</div>
 					
@@ -76,16 +77,18 @@
 						</div>
 						<table id="materials_table" lay-filter="materials_table"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
-						  <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i></button>
-						</script>
+							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-upload"></i>上传</a>
+							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
+						   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-download-circle"></i>删除</a>
+						</script> 
 					</div>
 					
 					<div class="layui-form-item layui-hide">
-					  <input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认添加">
+					  <input type="button" lay-submit lay-filter="edit_performance_form" id="edit_performance_form" value="确认添加">
 					</div>
 				</div>
 
-			</div>
+			</div> 
 		</div>
 
 		<script src="../../layuiadmin/layui/layui.js"></script>
@@ -129,59 +132,48 @@
 								field: 'file_name',
 								title: '文件名',
 								align: 'center',
-								width: 350
+								width: 250
 							},{
 								field: 'doc_size',
 								title: '文件大小',
 								align: 'center',
-								width: 350
+								width: 100
 							},{
 								field: 'update_time',
 								title: '上传时间',
 								align: 'center',
-								width: 350
+								width: 200
 							}, {
 								title: '操作',
 								fixed: 'right',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
-								width: 140
+								width: 200
 							}
 						]
 					]
 				});
 
 				//监听搜索
-				form.on('submit(metrics_form)', function(data) {
-										
-					var data0 = layui.data('materials');
-										
-					var metrics={
-						'level':$('#level').val(),
-						'metrics_code':$('#metrics_code').val(),
-						'unit':$('#unit').val(),
-						'name':$('#name').val(),
-						'memo': $('#memo').val(),
-						'materials': JSON.stringify(data0)
-						}; 
-
-					console.log("start to ajax");
+				form.on('submit(edit_performance_form)', function(data) {
+					var field = data.field; //获取提交的字段					
 					
+					console.log("edit performance");
 					$.ajax({
-						url: projectBase + '/collection/createMetrics',
+						url: projectBase + '/collection/editPerformanceItem',
 						dataType: 'json',
-						data: metrics,
+						data: field,
 						type: 'POST',
 						success: function(res){
 							if(res.code==1){
-								layer.msg("指标创建成功!");
+								layer.msg("修改业绩完成情况成功!");
 								setTimeout(function(){
-									parent.layui.table.reload('materials_table'); //重载表格
+									parent.layui.table.reload('LAY-app-content-list'); //重载表格
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index); //再执行关闭   
-									},1200);
+									},400);
 							} else {
-								layer.msg("指标创建失败!", function(){
+								layer.msg("修改业绩完成情况失败", function(){
 									});
 							}
 						} 
@@ -235,6 +227,8 @@
 								]
 							]
 						});*/
+					} else if(obj.event === 'upload') {
+						
 					}
 				});
 
@@ -266,12 +260,9 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '添加材料',
-								area: ['500px', '300px'],
+								area: ['50%', '70%'],
 								shade: 0,
 								maxmin: true,
-								offset: [ //为了演示，随机坐标
-									$(window).height() - 520, $(window).width() - 1000
-								],
 								btn: ['确认', '取消'],
 								yes: function(index, layero) {
 									//点击确认触发 iframe 内容中的按钮提交

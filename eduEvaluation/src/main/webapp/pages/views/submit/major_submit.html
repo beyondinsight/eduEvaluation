@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>专业填报清单</title>
+		<meta charset="UTF-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+	</head>
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" align="left">
+					<div class="layui-form-item">
+						<div class="layui-inline" align="left">
+							<label class="layui-form-label">填报任务</label>
+							<div class="layui-input-inline" style="width: 300px">
+								<select name="userTaskSelect" id="userTaskSelect" lay-filter='userTaskSelect'>
+									<option value="">请选择</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label" style="width: 200px" id="taskYearLabel"></label>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-card-body">
+					<table id="major_list" lay-filter="major_list"></table>
+					<script type="text/html" id="major_list_operation_toolbar">
+						<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="open"><i class="layui-icon layui-icon-list"></i>打开清单</a>
+					</script>
+				</div>
+
+				<div class="layui-card-body">
+					<table id="collection_list" lay-filter="collection_list"></table>
+					<script type="text/html" id="collection_list_operation_toolbar">
+						<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><i class="layui-icon layui-icon-edit"></i>填报</a>
+					</script>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../layuiadmin/layui/layui.js"></script>
+
+		<script>
+			layui
+				.config({
+					base: '../../layuiadmin/' //静态资源所在路径
+				})
+				.extend({
+					index: 'lib/index' //主入口模块
+				})
+				.use(
+					['form', 'index', 'contlist', 'table', 'layer', 'admin'],
+					function() {
+						var table = layui.table,
+							form = layui.form,
+							admin = layui.admin;
+						var $ = layui.jquery,
+							layer = layui.layer;
+							
+						var userinfo = layui.data('userinfo');
+
+						table.render({
+							elem: '#major_list',
+							//height: 300,
+							//width: 900,
+							//page: true, //开启分页
+							data: [],
+							cols: [
+								[ //表头
+									{
+										type: 'numbers',
+										title: '序号',
+										align: 'center',
+										width: 60
+									},
+									{
+										field: 'school_name',
+										title: '院校名称',
+										align: 'center'
+									},
+									{
+										field: 'major_name',
+										title: '填报专业',
+										align: 'center'
+									},
+									{
+										field: 'major_status',
+										title: '专业填报状态',
+										align: 'center'
+									},
+									{
+										field: 'update_time',
+										title: '状态更新时间',
+										align: 'center',
+										width: 180
+									},
+									{
+										fixed: 'right',
+										title: '操作',
+										toolbar: '#major_list_operation_toolbar',
+										align: 'center',
+										width: 120
+									}
+								]
+							]
+						});
+
+						table.render({
+							elem: '#collection_list',
+							//height: 300,
+							width: 800,
+							data: [],
+							//page: true, //开启分页
+							cols: [
+								[ //表头
+									{
+										type: 'numbers',
+										title: '序号',
+										align: 'center',
+										width: 60
+									},
+									{
+										field: 'collection_template_name',
+										title: '填报内容',
+										align: 'center'
+									},
+									{
+										field: 'process_status',
+										title: '填报状态',
+										align: 'center',
+										width: 200
+									},
+									{
+										fixed: 'right',
+										title: '操作',
+										toolbar: '#collection_list_operation_toolbar',
+										align: 'center',
+										width: 100
+									}
+								]
+							]
+						});
+
+						console.log("token:" + userinfo['token']);
+						$.ajax({
+							url: '/eduEvaluation/userTask/userTaskList',
+							dataType: 'json',
+							data: {
+								'token' : userinfo['token']
+							},
+							type: 'get',
+							success: function(res) {
+								var userTaskList = res.data;
+								$.each(userTaskList, function(index, item) {
+									var opt = new Option(item.task_name,
+										item.task_id);
+									$('#userTaskSelect').append(opt); // 下拉菜单里添加元素   		    			
+								});
+								//重新渲染 固定写法
+								layui.form.render("select");
+							},
+							error: function(res) {
+								//alert('test');
+							}
+						});
+
+						form.on('select(userTaskSelect)', function(data) {
+							//alert(data.value);
+
+							if (data.value !=null && data.value!="") {
+								$.ajax({
+									url: '/eduEvaluation/userTask/userTaskByTaskID',
+									dataType: 'json',
+									type: 'get',
+									data: {
+										task_id: data.value,
+										'token': userinfo['token']
+									},
+									success: function(res) {
+										$('#taskYearLabel').text("填报任务所属年度:   " + res.data[0].task_year);
+									}
+								});
+
+								table.reload('major_list', {
+									url: '/eduEvaluation/userTask/majorStatus',
+									where: {
+										task_id: data.value,
+										'token': userinfo['token']
+									}
+								});
+
+								table.reload('collection_list', {
+									url: '/eduEvaluation/userTask/majorCollectionStatus',
+									where: {
+										task_id: -1,
+										school_id: -1,
+										major_id: -1
+									}
+								});
+							}
+
+						});
+
+						table.on('tool(major_list)', function(obj) {
+							if (obj.event == 'open') {
+								table.reload('collection_list', {
+									url: '/eduEvaluation/userTask/majorCollectionStatus',
+									where: {
+										task_id: obj.data.task_id,
+										school_id: obj.data.school_id,
+										major_id: obj.data.major_id
+									}
+								});
+							}
+						});
+						
+						table.on('tool(collection_list)', function(obj) {
+							var data = obj.data;
+							console.log("id:" + data.collection_major_id); 
+							if (obj.event == 'set') {
+								console.log("entering set");
+								layui.data('collection',{
+									key:'collection_major_id',
+									value:data.collection_major_id
+								});
+								if( data.template_type_string=="major_performance"){
+									parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
+								} else if( data.template_type_string == "major_capital_process"){
+									parent.layui.index.openTabsPage("collection/capital_progress_collection.html", "资金支出进度填报");
+								} else if( data.template_type_string == "major_basic_info"){
+									console.log("entering basic info");
+									parent.layui.index.openTabsPage("template/caller.html", "专业数据填报"); 
+								}
+							} 
+						});
+
+					});
+		</script>
+	</body>
+</html>

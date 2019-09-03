@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>专业数据填报</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-card">
+
+      <div class="layui-card-body">
+     	  <div  style="font-size:1em;margin:15px 0 0px 15px;">
+			  <input type="hidden" id="collection_major_id" name="collection_major_id"/>
+	     	  <div style="float: left;">填报任务：<input type="text" style="border:0;background-color: none;"   readonly="readonly" value="2018特色专业填报任务"/></div>
+	     	  <div style="float: left;">填报任务所属年度：<input type="text" style="border:0;background-color: none;"  readonly="readonly" value="2018"/></div>
+	     	  <div style="float: left;">院校：<input type="text" style="border:0;background-color: none;"  readonly="readonly" value="广西大学"/></div>
+	     	  <div style="float: left;">专业：<input type="text" style="border:0;background-color: none;"  readonly="readonly" value="计算机技术与科学"/></div>
+	     	  <br/>
+	     	  <button class="layui-btn layuiadmin-btn-list" type="button" data-type="edit" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
+     	  </div>			
+       		<div class="layui-card-body">  		        
+            <table class="layui-table" id="demo">      
+	             <thead>
+	               <tr>
+	                 <th>资金支出进度</th>
+	                 <th>实际值（万元）</th>
+	                 <th>支撑材料<th>
+                 	   操作	                            
+	               </tr> 
+	             </thead>
+	             <tbody>
+	               <tr>
+	                 <td>自治区财政拨付额度</td>
+	                 <td><div id="rda_amount"></div></td>
+	                 <td><div id="region_disbursement"></div></td>
+	                 <td><button id="rda_btn" type="button" class="layui-btn layui-btn-danger layuiadmin-btn-list layui-btn-xs"  style="font-size: 0;"><i class="layui-icon">&#xe642;</i></button></td>                  
+	               </tr>
+	               <tr>
+	                 <td>'     其中：硬件建设支出额度</td>
+	                 <td><div id="rpha_amount"></div></td>
+	                 <td><div id="region_hardware"></div></td>
+	                 <td><button id="rha_btn" class="layui-btn layui-btn-danger layui-btn-xs" style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>
+	               <tr>
+	                 <td>'     其中：内涵建设支出额度</td>
+	                 <td><div id="rpia_amount"></div></td>
+	                 <td><div id="region_internal"></div></td>
+	                 <td><button id="ria_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>
+	               <tr>
+	                 <td>中央财政拨付额度</td>
+	                 <td><div id="cda_amount"></div></td>
+	                 <td><div id="central_disbursement"></div></td>
+	                 <td><button id="cda_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">中央财政拨付额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>  
+	               <tr>
+	                 <td>'     其中：硬件建设支出额度</td>
+	                 <td><div id="cpha_amount"></div></td>
+	                 <td><div id="central_hardware"></div></td>
+	                 <td><button id="cha_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>
+	               <tr>
+	                 <td>'     其中：内涵建设支出额度</td>
+	                 <td><div id="cpia_amount"></div></td>
+	                 <td><div id="central_internal"></div></td>
+	                 <td><button id="cia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>
+	               <tr>
+	                 <td>学校配套经费额度</td>
+	                 <td><div id="sft_amount"></div></td>
+	                 <td><div id="school_total"></div></td>
+	                 <td><button id="sta_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">学校配套经费额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>  
+	               <tr>
+	                 <td>'     其中：硬件建设支出额度</td>
+	                 <td><div id="sfh_amount"></div></td>
+	                 <td><div id="school_hardware"></div></td>
+	                 <td><button id="sha_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>
+	               <tr>
+	                 <td>'     其中：内涵建设支出额度</td>
+	                 <td><div id="sfi_amount"></div></td>
+	                 <td><div id="school_internal"></div></td>
+	                 <td><button id="sia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	               </tr>  
+	             </tbody>
+	           </table>
+	         </div>
+       
+       
+        </div>      
+      </div>
+    </div>
+  
+  
+
+
+  <script src="../../layuiadmin/layui/layui.js"></script> 
+  <script src="../util/Constants.js"></script> 
+  <script>
+  var projectBase = Class.getURL();
+  
+  layui.config({
+	    base: '../../layuiadmin/' //静态资源所在路径
+	  }).extend({
+	    index: 'lib/index' //主入口模块
+	  }).use(['index','form','laytpl','jquery'],function(){
+		  var $ = layui.$,
+		  form = layui.form,
+		  router = layui.router(),
+		  da;
+		  
+		  var data = layui.data('collection');
+		  layui.data('collection',null);
+		  console.log("data:" + data['collection_major_id']);
+		  
+		  $.ajax({
+				url: projectBase + '/collection/getCapitalProgress',
+				data:{"collection_major_id":data['collection_major_id']},
+				dataType:'json',				
+				async: false,
+				success:function(res){
+								if(res.code==0){       
+				                        //layer.msg('成功!');
+				                } else {          
+				                        layer.msg('失败!', function(){
+														layer.msg('失败!');
+												  });   
+				                }
+			 
+					da = res.data;
+					console.log("text is:" + da[0]);
+					if(da[0].region_disbursement_amount!=null && da[0].region_disbursement_amount!=0)
+						$('#rda_amount').html(da[0].region_disbursement_amount);
+					$('#region_disbursement').html(da[0].rda_material_num);
+					
+					if(da[0].region_paid_hardware_amount!=null && da[0].region_paid_hardware_amount!=0)
+						$('#rpha_amount').html(da[0].region_paid_hardware_amount);	
+					$('#region_hardware').html(da[0].rpha_material_num);
+					
+					if(da[0].region_paid_internal_amount!=null && da[0].region_paid_internal_amount!=0)
+						$('#rpia_amount').html(da[0].region_paid_internal_amount);
+					$('#region_internal').html(da[0].rpia_material_num);
+					
+					if(da[0].central_disbursment_amount!=null && da[0].central_disbursment_amount!=0)
+						$('#cda_amount').html(da[0].central_disbursment_amount);
+					$('#central_disbursement').html(da[0].cda_material_num);
+					
+					if(da[0].central_paid_hardware_amount!=null && da[0].central_paid_hardware_amount!=0)
+						$('#cpha_amount').html(da[0].central_paid_hardware_amount);
+					$('#central_hardware').html(da[0].cpha_material_num);
+					
+					if(da[0].central_paid_internal_amount!=null && da[0].central_paid_internal_amount!=0)
+						$('#cpia_amount').html(da[0].central_paid_internal_amount);
+					$('#central_internal').html(da[0].cpia_material_num);
+					
+					if(da[0].school_funding_total!=null && da[0].school_funding_total!=0)
+						$('#sft_amount').html(da[0].school_funding_total);
+					$('#school_total').html(da[0].sft_material_num);
+					
+					if(da[0].school_funding_hardware!=null && da[0].school_funding_hardware!=0)
+						$('#sfh_amount').html(da[0].school_funding_hardware);
+					$('#school_hardware').html(da[0].sfh_material_num);
+					
+					if(da[0].school_funding_internal!=null && da[0].school_funding_internal!=0)
+						$('#sfi_amount').html(da[0].school_funding_internal);
+					$('#school_internal').html(da[0].sfi_material_num);
+				},             
+				 error:function(data){
+					
+							layer.msg('错误!', function(){
+								layer.msg('错误!');
+							});  
+				  }     
+			});
+			
+			var active = {
+					edit_cp: function() {
+						console.log("open page");
+					}
+				};
+				
+			var $ = layui.$, test = {
+				
+				edit_cp: function editCP(){
+						console.log("entering.");
+					}
+				};
+				
+			
+			$('#rda_btn').on('click', function() {
+				layer.open({
+					type: 2 //此处以iframe举例
+						,
+					title: '填报资金支出进度',
+					area: ['70%', '80%'],
+					shade: 0,
+					maxmin: true,
+					btn: ['保存', '取消'],
+					yes: function(index, layero) {
+						//点击确认触发 iframe 内容中的按钮提交
+						var submit = layero.find('iframe').contents().find("#edit_capital_form");
+						console.log(submit);
+						submit.click();
+						
+						
+					},
+					content: 'capital_progress_edit.html',
+					zIndex: layer.zIndex //重点1
+						,
+					success: function(layero, index) {
+						var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+						console.log("form performance:" + da[0].rda_pf_id);
+						$(pf_id).val(da[0].rda_pf_id);
+						var edit_type = layero.find('iframe').contents().find("#edit_type");
+						$(edit_type).val('rda');
+						layer.setTop(layero); //重点2
+					} 
+			});
+		 });
+ 
+		$('#rha_btn').on('click', function() {
+						layer.open({
+							type: 2 //此处以iframe举例
+								,
+							title: '填报资金支出进度',
+							area: ['70%', '80%'],
+							shade: 0,
+							maxmin: true,
+							btn: ['保存', '取消'],
+							yes: function(index, layero) {
+								//点击确认触发 iframe 内容中的按钮提交
+								var submit = layero.find('iframe').contents().find("#material_form");
+								console.log(submit);
+								submit.click();
+								
+								var materials = layui.data('materials');
+								console.log(materials);
+								var data0 = [];
+							},
+							content: 'capital_progress_edit.html',
+							zIndex: layer.zIndex //重点1
+								,
+							success: function(layero, index) {
+								var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+								console.log("form performance:" + da[0].rda_pf_id);
+								$(pf_id).val(da[0].rda_pf_id);
+								layer.setTop(layero); //重点2
+							} 
+					});
+		});
+	  });
+
+  </script>
+</body>
+</html>

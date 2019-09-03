@@ -10,7 +10,7 @@ public interface CollectionMaterialMapper {
 
 	int deleteByPrimaryKey(Integer id);
 
-	List<TblCollectionMaterial> getCollectionMaterial();
+	List<TblCollectionMaterial> getCollectionMaterial(int form_performance_id);
 
 	List<TblCollectionMaterial> CollectionMaterial();
 

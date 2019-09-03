@@ -7,6 +7,23 @@
 		<result property="school_id" column="school_id"/>
 		<result property="school_name" column="school_name"/>
 		<result property="school_code" column="school_code"/>
+		<result property="collection_school_id" column="cid"/>
+		<result property="process_status" column="process_status"/>
+	</resultMap>
+	
+	<resultMap id="colTaskMajorResultMap" type="com.philip.edu.eval.bean.ColTaskMajor">
+		<id property="id" column="id"/>
+		<result property="major_id" column="major_id"/>
+		<result property="major_name" column="major_name"/>
+		<result property="major_code" column="major_code"/>
+	</resultMap>
+	
+	<resultMap id="CapitalPerformanceIdMap" type="int">
+		<id property="id" column="id"/>
+	</resultMap>
+	
+	<resultMap id="BasicPerfromanceIdMap" type="int">
+		<id property="id" column="id"/>
 	</resultMap>
 	
 	<resultMap id="colTaskListResultMap" type="com.philip.edu.eval.bean.CollectionTask">
@@ -16,7 +33,11 @@
 		<result property="status" column="status"/>
 		<result property="start_time" column="start_time"/>
 		<result property="end_time" column="end_time"/>
+		<result property="form_basic_weight" column="form_basic_weight"/>
+		<result property="form_performance_weight" column="form_performance_weight"/>
+		<result property="form_capitalprogress_weight" column="form_capitalprogress_weight"/>
 	</resultMap> 
+	
 	
 	<resultMap id="metricsListResultMap" type="com.philip.edu.eval.bean.MetricsDetail">
 		<id property="id" column="id"/>
@@ -80,8 +101,13 @@
     	<selectKey resultType="int" keyProperty="id" order="AFTER">
     		select LAST_INSERT_ID() As id
   		</selectKey>
-    	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system, form_basic_weight, form_performance_weight, form_capitalprogress_weight) 
-    	values(#{task_name}, #{task_year}, #{start_time}, #{end_time}, #{status}, #{use_metrics_system}, #{form_basic_weight}, #{form_performance_weight}, #{form_capitalprogress_weight})
+    	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system, form_basic_weight, form_performance_weight, form_capitalprogress_weight, create_time, update_time) 
+    	values(#{task_name}, #{task_year}, #{start_time}, #{end_time}, #{status}, #{use_metrics_system}, #{form_basic_weight}, #{form_performance_weight}, #{form_capitalprogress_weight}, #{create_time}, #{update_time})
+    </insert>
+    
+    <insert id="insertTaskSchool" parameterType="com.philip.edu.eval.bean.ColTaskSchool" useGeneratedKeys="true" keyProperty="id" >
+    	insert into tbl_collection_school(collection_task_id, school_id, process_status)
+    	values(#{task_id},#{school_id},#{process_status})
     </insert>
     
     <insert id="insertColSchool" parameterType="java.util.List">
@@ -116,6 +142,19 @@
     	select id from tbl_collection_school where collection_task_id=#{task_id} and school_id=#{school_id}
     </select>
     
+    <delete id="deleteTaskSchools" parameterType="int[]">
+    	delete from tbl_collection_school where
+    	school_id in 
+    	<foreach collection="array" item="school" index="no" open="(" separator="," close=")">
+    		#{school}
+    	</foreach> 
+    </delete>
+    
+    <delete id="deleteTaskMajors" parameterType="int">
+    	delete from tbl_collection_major where
+    	collection_school_id = #{collectoin_schools_id}
+    </delete>
+    
     <delete id="deleteTaskOldSchools" parameterType="int[]">
     	delete from tbl_collection_major where 
     	collection_school_id in
@@ -124,20 +163,25 @@
     	</foreach> 
     </delete> 
     
+    <delete id="deleteTaskSchool" parameterType="int">
+    	delete from tbl_collection_school where
+    	collection_task_id=#{task_id}
+    </delete>
+    
     <insert id="insertBasicForm" parameterType="com.philip.edu.eval.bean.BasicForm">
     	insert into tbl_form_basic(collection_major_id, process_status, create_time, update_time)
     	values(#{collection_major_id}, #{process_status}, #{create_time}, #{update_time})
     </insert>
     
     <insert id="insertPerformanceForms" parameterType="com.philip.edu.eval.bean.PerformanceForm">
-    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status)
-    	select #{collection_major_id}, id, unit, #{create_time}, #{update_time}, #{process_status}
+    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status, for_template)
+    	select #{collection_major_id}, id, unit, #{create_time}, #{update_time}, #{process_status}, #{for_template}
     	from tbl_metrics_detail where m_system_id=#{m_system_id}
     </insert>
     
     <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm" useGeneratedKeys="true" keyProperty="id">
-    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status)
-    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status})
+    	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status, for_template)
+    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status}, for_template)
     </insert>
     
     <insert id="insertCapitalProgressForm" parameterType="com.philip.edu.eval.bean.CapitalProgressForm">
@@ -146,7 +190,7 @@
     </insert>
     
     <select id="getColTaskList" resultMap="colTaskListResultMap">
-    	select id, task_name, task_year, start_time, end_time, status from tbl_collection_tasks order by id desc
+    	select id, task_name, task_year, start_time, end_time, status, form_basic_weight, form_performance_weight, form_capitalprogress_weight from tbl_collection_tasks order by id desc
     </select>
     
     <select id="countTaskSchool" resultType="int" parameterType="int">
@@ -210,7 +254,7 @@
     
     <select id="getPerformanceForm" resultMap="performanceResultMap" >
     	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
-    	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id}
+    	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id} and for_template=#{for_template}
     </select>
     
     <select id="getRelateMaterials" resultMap="materialResultMap">
@@ -235,7 +279,228 @@
     	select count(*) from tbl_collection_material where form_performance_id=#{form_performance_id} and doc is not null
     </select>
     
-    <select id="getCapitalProgressItemId">
+    <select id="getCapitalProgressItemId" resultMap="CapitalPerformanceIdMap">
     	select id from tbl_form_performance where collection_major_id=#{collection_major_id} and metrics_id=#{metrics_id}
     </select>
+    
+    <select id="getCapitalProgress" resultMap="capitalResultMap">
+    	select cp.id,cp.collection_major_id from tbl_form_capitalprogress cp, tbl_form_performance p where cp.collection_major_id=p.collection_major_id and p.id=#{performance_form_id}
+    </select> 
+    
+    <select id="getBasicFormItemId" resultMap="BasicPerfromanceIdMap">
+    	select id from tbl_form_performance where collection_major_id=#{collection_major_id} and metrics_id=#{metrics_id}
+    </select>
+    
+    <insert id="updatePerformanceForm">
+    	update tbl_form_performance set current_value=#{current_value}, target_value=#{target_value}, actual_value=#{actual_value}, score=#{score}, self_evaluate=#{self_evaluate}, update_time=#{update_time}, self_introduction=#{self_introduction}
+    	where id=#{id}
+    </insert>
+    
+    <insert id="updatePerformanceFormStatus">
+    	update tbl_form_performance set process_status=#{process_status} where collection_major_id=#{collection_major_id}
+    </insert>
+    
+    <update id="updateCapitalProgressForm">
+        update tbl_form_capitalprogress
+    <set >
+      <if test="collection_major_id != null" >
+        collection_major_id = #{collection_major_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null" >
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null" >
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="central_disbursement_total != null" >
+        central_disbursement_total = #{central_disbursement_total,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_total != null" >
+        central_paid_total = #{central_paid_total,jdbcType=DOUBLE},
+      </if>
+      <if test="region_disbursement_amount != null" >
+        region_disbursement_amount = #{region_disbursement_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="region_paid_amount != null" >
+        region_paid_amount = #{region_paid_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="region_paid_hardware_amount != null" >
+        region_paid_hardware_amount = #{region_paid_hardware_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="region_paid_internal_amount != null" >
+        region_paid_internal_amount = #{region_paid_internal_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_disbursement_amount != null" >
+        central_disbursement_amount = #{central_disbursement_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_amount != null" >
+        central_paid_amount = #{central_paid_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_hardware_amount != null" >
+        central_paid_hardware_amount = #{central_paid_hardware_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_internal_amount != null" >
+        central_paid_internal_amount = #{central_paid_internal_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="school_funding_total != null" >
+        school_funding_total = #{school_funding_total,jdbcType=DOUBLE},
+      </if>
+      <if test="school_funding_hardware != null" >
+        school_funding_hardware = #{school_funding_hardware,jdbcType=DOUBLE},
+      </if>
+      <if test="school_funding_internal != null" >
+        school_funding_internal = #{school_funding_internal,jdbcType=DOUBLE},
+      </if>
+      <if test="process_status != null" >
+        process_status = #{process_status,jdbcType=CHAR},
+      </if>
+    </set>
+	 where id = #{id,jdbcType=BIGINT}
+  </update>
+    
+    <select id="selectPerformanceItem" resultMap="performanceResultMap">
+    	select * from tbl_form_performance where id=#{form_performance_id}
+   	</select>
+    
+    <select id="getChosenSchools" resultMap="colTaskSchoolResultMap">
+    	select cs.school_id,s.school_name,s.school_code, cs.id as cid from tbl_collection_school cs, tbl_school s
+    	where cs.school_id = s.id and collection_task_id=#{task_id}
+    </select>
+    
+    <select id="getChosenMajors" resultMap="colTaskMajorResultMap">
+    	select cm.major_id, m.major_code, m.major_name from tbl_collection_major cm, tbl_major m
+    	where cm.major_id = m.id and collection_school_id=#{collection_school_id}
+    </select>
+    
+    <select id="getChosenMajorId" resultMap="colTaskMajorResultMap">
+    	select cm.major_id, m.major_code, m.major_name from tbl_collection_major cm, tbl_major m
+    	where cm.major_id = m.id and collection_school_id=#{collection_school_id}
+    </select>
+    
+    	<select id="getMajorStatusByTask"
+		resultMap="majorStatusResultMap">
+		select
+		v_task_school_major.task_id,
+		v_task_school_major.task_name,
+		tbl_config.config_value as task_status,
+		v_task_school_major.task_year,
+		tbl_major.id as major_id,
+		tbl_major.major_name,
+		tbl_school.id as school_id,
+		tbl_school.school_name,
+		v_task_school_major.major_status,
+		v_task_school_major.update_time
+		from
+		v_user_school_major,
+		v_task_school_major,
+		tbl_major, tbl_school,
+		tbl_config
+		where
+		v_user_school_major.user_id=#{user_id}
+		AND
+		v_task_school_major.task_id=#{task_id}
+		and
+		v_task_school_major.major_id
+		= tbl_major.id
+		and
+		v_task_school_major.school_id = tbl_school.id
+		and
+		v_user_school_major.major_id
+		= v_task_school_major.major_id
+		and
+		v_user_school_major.school_id =v_task_school_major.school_id
+		AND
+		tbl_config.key_string = v_task_school_major.task_status
+		and tbl_config.config_type = 'collection_status'
+	</select>
+
+	<select id="getMajorCollectionStatus"
+		resultMap="majorCollectionStatusResultMap">
+		select * from
+		v_school_major_template_status_2
+		where
+		v_school_major_template_status_2.task_id=#{task_id}
+		AND
+		v_school_major_template_status_2.major_id = #{major_id}
+		and
+		v_school_major_template_status_2.school_id = #{school_id}
+	</select>
+    
+    	<resultMap id="userTaskResultMap"
+		type="com.philip.edu.eval.bean.UserTask">
+		<result property="user_id" column="user_id" />
+		<result property="task_id" column="task_id" />
+		<result property="task_name" column="task_name" />
+		<result property="task_status" column="task_status" />
+		<result property="task_year" column="task_year" />
+	</resultMap>
+
+	<resultMap id="majorStatusResultMap"
+		type="com.philip.edu.eval.bean.MajorStatus">
+		<result property="task_id" column="task_id" />
+		<result property="task_name" column="task_name" />
+		<result property="major_status" column="major_status" />
+		<result property="major_name" column="major_name" />
+		<result property="major_id" column="major_id" />
+		<result property="school_id" column="school_id" />
+		<result property="task_year" column="task_year" />
+		<result property="school_name" column="school_name" />
+		<result property="major_status" column="major_status" />
+		<result property="update_time" column="update_time" />
+	</resultMap>
+
+
+	<resultMap id="majorCollectionStatusResultMap"
+		type="com.philip.edu.eval.bean.MajorCollectionStatus">
+		<result property="task_id" column="task_id" />
+		<result property="school_id;" column="school_id;" />
+		<result property="major_id;" column="major_id;" />
+		<result property="collection_template_name;"
+			column="collection_template_name;" />
+		<result property="template_type_string" column="template_type" />
+		<result property="process_status;" column="process_status;" />
+		<result property="collection_major_id" column="collection_major_id" />
+	</resultMap>
+	
+		<select id="getUserTaskList" resultMap="userTaskResultMap">
+		select distinct
+		v_task_school_major.task_id,
+		v_task_school_major.task_name,
+		v_task_school_major.task_status,
+		v_task_school_major.task_year
+		from
+		v_user_school_major,
+		v_task_school_major
+		where
+		v_user_school_major.user_id=#{user_id}
+		and
+		v_user_school_major.major_id
+		= v_task_school_major.major_id
+		and
+		v_user_school_major.school_id =
+		v_task_school_major.school_id
+	</select>
+
+	<select id="getUserTaskByTaskID" resultMap="userTaskResultMap">
+		select distinct
+		v_task_school_major.task_id,
+		v_task_school_major.task_name,
+		v_task_school_major.task_status,
+		v_task_school_major.task_year
+		from
+		v_user_school_major,
+		v_task_school_major
+		where
+		v_user_school_major.user_id=#{user_id}
+		and
+		v_task_school_major.task_id=#{task_id}
+		and
+		v_user_school_major.major_id
+		=
+		v_task_school_major.major_id
+		and
+		v_user_school_major.school_id =
+		v_task_school_major.school_id
+	</select>
+	
 </mapper>

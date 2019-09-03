@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,16 +58,18 @@ public class CollectionMaterialController {
 	}
 
 	@RequestMapping(value = "/getCollectionMaterial", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getCollectionMaterial() {
+	public ResponseEntity<BackendData> getCollectionMaterial(HttpServletRequest request) {
 
-		ArrayList usersList = (ArrayList) service.getCollectionMaterial();
-		logger.info("successfully get the roles list");
+		String form_performance_id = request.getParameter("form_performance_id");
+		
+		ArrayList materialList = (ArrayList) service.getCollectionMaterial(Integer.parseInt(form_performance_id));
+		logger.info("successfully get the materials list");
 
 		BackendData data = new BackendData();
 		data.setMsg("");
 		data.setCode(0);
-		data.setData(usersList);
-		data.setCount(usersList.size());
+		data.setData(materialList);
+		data.setCount(materialList.size());
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
@@ -96,10 +99,17 @@ public class CollectionMaterialController {
 
 		checkFile(file);
 		String fileName = new String(file.getOriginalFilename().getBytes("ISO-8859-1"), "UTF-8");
+		String sname = fileName.substring(fileName.lastIndexOf("."));
+		String fileFirstName = fileName.substring(0, fileName.lastIndexOf("."));
+		
+		SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyyMMddHHmmssSSS");
+		String timeStamp=simpleDateFormat.format(new Date());
+		fileName = fileFirstName + timeStamp + sname;
+		
 		String savePath = propConfig.getProperty("download_path") + fileName;
 
 		file.transferTo(new File(savePath));
-
+   
 		Date uploadtime = new Date();
 		// 大小
 		long size = file.getSize();
@@ -111,9 +121,10 @@ public class CollectionMaterialController {
 		}
 
 		material.setUpdateTime(uploadtime);
-		material.setCreateTime(uploadtime);
+		//material.setCreateTime(uploadtime);
 		material.setDoc(fileName);
-		material.setDocsize(sizes);
+		//material.setDocsize(sizes);
+		material.setDoc_size(size/1024);
 
 		int result = service.updateMaterial(material);
 
@@ -122,7 +133,7 @@ public class CollectionMaterialController {
 		data.setCode(0);
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 
-	}
+	} 
 
 	@RequestMapping(value = "downloadMaterial", method = RequestMethod.GET, produces = "text/html;charset=UTF-8") // json中文乱码解决produces="text/html;charset=UTF-8"
 	public void downloadMaterial(HttpServletRequest request, HttpServletResponse response) throws IOException {

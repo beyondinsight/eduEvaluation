@@ -7,7 +7,7 @@ import com.philip.edu.eval.bean.TblCollectionMaterial;
 
 public interface CollectionMaterialService {
 	
-	List<TblCollectionMaterial> getCollectionMaterial();
+	List<TblCollectionMaterial> getCollectionMaterial(int form_performance_id);
 
 	List<TblCollectionMaterial> CollectionMaterial();
 

@@ -98,7 +98,7 @@
           </div>
           
           <ul class="layui-nav layui-nav-tree" lay-shrink="all" id="LAY-system-side-menu" lay-filter="layadmin-system-side-menu">
-            <li data-name="home" class="layui-nav-item layui-nav-itemed">
+            <li id="dictionary" data-name="home" class="layui-nav-item layui-nav-itemed">
               <a href="javascript:;" lay-tips="数据字典" lay-direction="2">
                 <i class="layui-icon layui-icon-read"></i>
                 <cite>数据字典</cite>
@@ -112,51 +112,42 @@
                 </dd>
               </dl>
             </li>
-            <li data-name="component" class="layui-nav-item">
+            <li id="user" data-name="component" class="layui-nav-item">
               <a href="javascript:;" lay-tips="用户及角色管理" lay-direction="2">
                 <i class="layui-icon layui-icon-user"></i>
                 <cite>用户及角色管理</cite> 
               </a>
               <dl class="layui-nav-child">
-                <dd data-name="user">
+                <dd id="user_m" data-name="user">
                   <a  lay-href="user/manage_user.html" >用户管理</a>
                 </dd>
-                <dd data-name="school_asign">
+                <dd id="school_m" data-name="school_asign">
                   <a lay-href="user/school_user.html">院校分配</a>
                 </dd>
-                <dd data-name="major_asign">
+                <dd id="major_m" data-name="major_asign">
                   <a lay-href="user/major_user.html">专业分配</a>
                 </dd>
 			   </dl>
 			 </li> 
                 
-            <li data-name="major_report" class="layui-nav-item">
+            <li id="collection" data-name="major_report" class="layui-nav-item">
               <a href="javascript:;" lay-tips="专业填报" lay-direction="2">
                 <i class="layui-icon layui-icon-survey"></i>
-                <cite>专业填报</cite>
-              </a>
+                <cite>填报管理</cite>
+              </a> 
               <dl class="layui-nav-child">
-                <dd><a lay-href="collection/performance_template.html">填报模板维护</a></dd>
-                <dd><a lay-href="collection/manage_col_task.html">填报任务管理</a></dd>
-                <dd><a lay-href="template/caller.html">专业数据填报</a></dd>
-              </dl>
-                <dd data-name="major">
-					<a href="javascript:;">专业数据填报</a>
-					<dl class="layui-nav-child">
-						<dd data-name="report_basic"><a lay-href="template/caller.html">专业基本情况</a></dd>
-						<dd data-name="report_performance"><a lay-href="component/grid/mobile.html">绩效目标完成</a></dd>
-						<dd data-name="report_capital"><a lay-href="component/grid/mobile-pc.html">资金支出进度</a></dd>
-                  </dl>
-				</dd> 
+                <dd><a id="temp_m" lay-href="collection/performance_template.html">填报模板维护</a></dd>
+                <dd><a id="task_m" lay-href="collection/manage_col_task.html">填报任务管理</a></dd>
+                <dd><a id="report_c" lay-href="submit/major_submit.html">专业数据填报</a></dd> 
               </dl> 
             </li>
-            <li data-name="report_audit" class="layui-nav-item">
+            <li id="audit" data-name="report_audit" class="layui-nav-item">
               <a href="javascript:;" lay-tips="填报数据审核" lay-direction="2">
                 <i class="layui-icon layui-icon-templeate-1"></i>
                 <cite>填报数据审核</cite>
               </a>
             </li>
-            <li data-name="expert_eval" class="layui-nav-item">
+            <li id="evaluate" data-name="expert_eval" class="layui-nav-item">
               <a href="javascript:;" lay-tips="专家评估" lay-direction="2">
                 <i class="layui-icon layui-icon-tabs"></i>
                 <cite>专家评估</cite>
@@ -172,7 +163,7 @@
 			    </dd>
 			  </dl>
             </li>
-            <li data-name="report" class="layui-nav-item">
+            <li id="report" data-name="report" class="layui-nav-item">
               <a href="javascript:;" lay-tips="报表输出" lay-direction="2">
                 <i class="layui-icon layui-icon-chart-screen"></i>
                 <cite>报表输出</cite>
@@ -243,23 +234,49 @@
   }).use(['index','form','laytpl'],function(){
 	  var $ = layui.$,
 	  form = layui.form,
-	  router = layui.router();
+	  router = layui.router(),
+	  laytpl = layui.laytpl;
 	  
 	  var userinfo = layui.data('userinfo');
 	  //console.log(userinfo);
 	  chine_name = userinfo['user']['chineseName'];
+	  var role = userinfo['user']['role'];
 	  console.log(userinfo['user']['chineseName']);
 	  $('#cName').val(userinfo['user']['chineseName']);
 	  form.render();
 	  
 	  var data = {
-		  "c_name":chine_name
+		  "c_name":chine_name,
+		  "role":role
 	  };
 	  
 	  var getTpl = demo.innerHTML, view = document.getElementById('view');
 	  laytpl(getTpl).render(data, function(html){
 		  view.innerHTML = html;
 	  });
+	  
+	  console.log("role:" + role);
+	  if(role==2){
+		 $('#dictionary').css('display','none');
+		 $('#school_m').css('display','none');
+		 $('#collection').css('display','none');
+		 $('#evaluate').css('display','none');
+	  } else if(role==3){
+		  $('#dictionary').css('display','none');
+		  $('#user').css('display','none'); 
+		  $('#temp_m').css('display','none');
+		  $('#task_m').css('display','none');
+		  $('#audit').css('display','none');
+		  $('#evaluate').css('display','none');
+		  $('#report').css('display','none');
+	  } else if(role==4){
+		  $('#dictionary').css('display','none');
+		  $('#user').css('display','none');
+		  $('#collection').css('display','none');
+		  $('#audit').css('display','none');
+		  $('#report').css('display','none');
+	  }
+
   });
   </script>
   

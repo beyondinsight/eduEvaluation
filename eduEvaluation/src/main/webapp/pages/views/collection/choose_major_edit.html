@@ -52,11 +52,11 @@
   	} 
   });
   
-  var id = $('#school_id').val();
+  var id = $('#school_id').val(); 
   $.ajax({
-  	url: projectBase + '/dictionary/chosenMajor',
+  	url: projectBase + '/collection/chosenMajorTran',
   	dataType: 'json',
-	data: {"school_id":id},
+	data: {"collection_school_id":id},
   	type: 'GET',
   	async: false,
   	success: function(res){
@@ -64,8 +64,9 @@
   		data1 = res.data;
   	} 
   });
-  
-  console.log("major id:" +data1);
+	
+	console.log("chosen id:");
+	console.log("ids:" + data1); 
 	
     transfer.render({
       elem: '#majorChose',
@@ -87,30 +88,30 @@
 	  
 	  var chosen = transfer.getData('keyChosen');
 	  for(i=0; i<chosen.length; i++){
-		  var str = chosen[i].title.split("--");
-		  major={
-			  'major_id':chosen[i].value,
-			  'major_code': str[0],
-			  'major_name': str[1]
-		  };
-		  majors.push(major);
+		  majors.push(chosen[i].value);
 	  }
-	  
-	  layui.data('choseMajor',{
-	    key: s_id,
-		value: majors,
-	  });
-	  
-	  var strChosen="[";
-	  for(i=0; i<chosen.length; i++){
-		  strChosen = strChosen + "{\"id\":\"" + chosen[i].value + "\",";
-		  var str = chosen[i].title.split("--");
-		  strChosen = strChosen + "\"major_code\":\"" + str[0] + "\",\"major_name\":\"" + str[1] + "\"}";
-		  if(i != chosen.length-1) strChosen = strChosen + ",";
-	  }
-	  strChosen = strChosen + "]";
-	   
-	  $('#choseId').val(strChosen);
+
+		$.ajax({
+			  url: projectBase + '/collection/changeMajor',
+			  dataType: 'json',
+			  type: 'POST',
+				  traditional: true,
+				  data:{
+					  'collection_school_id':id,
+					  'ids':majors}, 
+			  async: false,
+			  success: function(res){
+					  console.log("it is success!");
+				  if(res.code==0){
+				  	layer.msg("修改填报专业成功");
+				  	setTimeout(function(){
+				  		//console.log(parent.layui.admin.events);
+				  		//parent.index.refreshAndCloseTabs();
+				  		parent.layer.close(index);
+				  		},1000);
+				  }	  
+			  }
+		})
 	  
 	  parent.layer.close(index);
 	});

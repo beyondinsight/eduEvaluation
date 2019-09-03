@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.mapper.UsersMapper;
 import com.philip.edu.eval.util.Code;
-import com.philip.edu.eval.util.PasswordUtil;
+import com.philip.edu.eval.util.SecurityUtil;
 //import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.util.PropertiesUtil;
 
@@ -88,7 +88,7 @@ public class UsersImpl implements UsersService {
 		List<TblUsers> users = dao.getUsers(username);
 		TblUsers user = users.get(0);
 		
-		String temp = PasswordUtil.md5Hex(username + password + user.getSalt());
+		String temp = SecurityUtil.md5Hex(username + password + user.getSalt());
 		if(temp.equals(user.getPassword()))right = true;
 		
 		return right;

@@ -17,10 +17,31 @@ public class PerformanceForm {
 	private double actual_value;
 	private double score;
 	private double self_evaluate;
-	private double self_introduction;
+	private String self_introduction;
 	private String unit;
+	private String memo;
+	private String material_num;
+	private int for_template;
 	
 	
+	public int getFor_template() {
+		return for_template;
+	}
+	public void setFor_template(int for_template) {
+		this.for_template = for_template;
+	}
+	public String getMaterial_num() {
+		return material_num;
+	}
+	public void setMaterial_num(String material_num) {
+		this.material_num = material_num;
+	}
+	public String getMemo() {
+		return memo;
+	}
+	public void setMemo(String memo) {
+		this.memo = memo;
+	}
 	public String getUnit() {
 		return unit;
 	}
@@ -63,10 +84,10 @@ public class PerformanceForm {
 	public void setSelf_evaluate(double self_evaluate) {
 		this.self_evaluate = self_evaluate;
 	}
-	public double getSelf_introduction() {
+	public String getSelf_introduction() {
 		return self_introduction;
 	}
-	public void setSelf_introduction(double self_introduction) {
+	public void setSelf_introduction(String self_introduction) {
 		this.self_introduction = self_introduction;
 	}
 	public int getM_system_id() {
