@@ -18,8 +18,14 @@ public interface UsersService {
 	public boolean exsitsUser(String username);
 	public boolean checkPassword(@Param("username")String username, @Param("password")String password);
 	
-	//User Role
+	//User Role	
 	public int createUserRole(TblUsers users);
 	public int updateUserRole(TblUsers users);
     public List<TblUsers> getRolesUsers(int id);
+    
+    //User School   
+    public int createUserSchool(TblUsers users);
+    public int updateUserSchool(TblUsers users);
+    
+ 
 }

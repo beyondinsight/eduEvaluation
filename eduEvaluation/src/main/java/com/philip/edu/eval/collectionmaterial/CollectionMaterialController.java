@@ -115,8 +115,7 @@ public class CollectionMaterialController {
 		long size = file.getSize();
 		String sizes = size / 1024 + "KB";
 
-		String id = request.getParameter("id");
-
+		String id = request.getParameter("upload_id");
 		if (id != null && !id.equals("")) {
 			material.setId(Integer.parseInt(id));
 		}
@@ -136,8 +135,6 @@ public class CollectionMaterialController {
 
 	} 
 
-	@SuppressWarnings("resource")
-	@ResponseBody
 	@RequestMapping(value = "downloadMaterial", method = RequestMethod.GET, produces = "text/html;charset=UTF-8") // json中文乱码解决produces="text/html;charset=UTF-8"
 	public void downloadMaterial(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -145,7 +142,12 @@ public class CollectionMaterialController {
 		String filePath = propConfig.getProperty("download_path") + fileName;
 
 		File f = new File(filePath);
-
+		
+		//如果文件为空，则不继续执行
+		if(!f.exists()) {
+			return;
+		}
+		
 		fileName = URLEncoder.encode(fileName, "utf-8");
 		BufferedInputStream br = new BufferedInputStream(new FileInputStream(f));
 		byte[] buf = new byte[1024];
@@ -159,8 +161,6 @@ public class CollectionMaterialController {
 		} else { // 纯下载方式
 			response.setContentType("application/x-msdownload");
 			response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
-			System.out.println("===" + fileName);
-
 		}
 		OutputStream out = response.getOutputStream();
 		while ((len = br.read(buf)) > 0)

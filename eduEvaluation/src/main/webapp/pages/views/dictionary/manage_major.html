@@ -17,7 +17,7 @@
       <div class="layui-card-body">
         <div style="padding-bottom: 10px;">
 		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 添加</button>
-          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel">批量删除 <i class="layui-icon layui-icon-delete"></i></button>
+          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i>删除 </button>
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="buttonTpl">
@@ -28,7 +28,7 @@
           {{#  } }}
         </script>
         <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+          <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
       </div>
@@ -55,15 +55,15 @@
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
-		    {type: 'checkbox'}
-			,{type: 'numbers', title: '序号'}
-	    ,{field: 'majorCode', title: '专业代码', width:120}
-	    ,{field: 'majorName', title: '专业名称', width:200, }
-	    ,{field: 'mainLecture', title: '所属一级学科', width:200}
-	    ,{field: 'majorClass', title: '学科门类', width: 200}
-	    ,{field: 'isFirstClass', title: '是否一流学科相关', width: 200}
-	    ,{field: 'memo', title: '备注'}
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150}
+		    {type: 'checkbox', align:'center'}
+			,{type: 'numbers', title: '序号', align:'center'}
+	    ,{field: 'majorCode', title: '专业代码', width:120, align:'center'}
+	    ,{field: 'majorName', title: '专业名称', width:200, align:'center' }
+	    ,{field: 'mainLecture', title: '所属一级学科', width:200, align:'center'}
+	    ,{field: 'majorClass', title: '学科门类', width: 200, align:'center'}
+	    ,{field: 'isFirstClass', title: '是否一流学科相关', width: 200, align:'center'}
+	    ,{field: 'memo', title: '备注', align:'center'}
+		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:160, align:'center'}
 	  ]]
 	});
 	
@@ -108,7 +108,7 @@
 	          $(window).height()-550
 	          ,$(window).width()-900
 	        ] */
-			,btn: ['确认修改', '取消']
+			,btn: ['确认', '取消']
 			,yes: function(index, layero){
 			  //点击确认触发 iframe 内容中的按钮提交
 			  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
@@ -200,7 +200,7 @@
           ,content: 'new_major.html'
           ,maxmin: true
           ,area: ['50%', '70%']
-          ,btn: ['确认添加', '取消']
+          ,btn: ['确认', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
             var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");

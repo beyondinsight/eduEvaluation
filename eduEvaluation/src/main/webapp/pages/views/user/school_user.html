@@ -14,7 +14,7 @@
 
   <div class="layui-fluid">
 		<div class="layui-card">
-
+			<input type="text" hidden="hidden" id = "selectRoleId"/>
 			<div class="layui-card-body">
 				<table id="demo" lay-filter="demo"></table>
 				<script type="text/html" id="test-table-toolbar-barDemo">
@@ -24,8 +24,8 @@
 
 			<div class="layui-card-body">
 				<table id="demo2" lay-filter="demo2"></table>
-				<script type="text/html" id="test-table-toolbar-barDemo">
-       			   <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><i class="layui-icon layui-icon-set"></i>设置</a>
+				<script type="text/html" id="test-table-toolbar-barDemo2">
+       			   <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
        			</script>
 			</div>
 		</div>
@@ -47,33 +47,35 @@
 	    ,upload = layui.upload;
 	    var $ = layui.jquery
 	    ,layer = layui.layer;
-  
 	table.render({
 	  elem: '#demo'
-	  ,height: 400
+	  ,height: 300
+	  ,width: 600
 	  ,url: projectBase + '/role/roles_usersCount'//数据接口
-	  //toolbar:'#toolbarDemo'
-	  ,page: true //开启分页
+	  //,toolbar:'#toolbarDemo'
+	  ,page: false //开启分页
 	  ,cols: [[ //表头
-		 {type: 'numbers', title: '序号'}
-	    ,{field: 'roleName', title: '角色名称'}
-	    ,{field: 'counts', title: '关联用户'}    
-		,{fixed: 'right', title:'操作',  toolbar: '#test-table-toolbar-barDemo'}
+		 {type: 'numbers', title: '序号', align:'center'}
+		  ,{field: 'id', title: '角色名称', align:'center'}
+	    ,{field: 'roleName', title: '角色名称', align:'center'}
+	    ,{field: 'counts', title: '角色下属用户', align:'center'}    
+		,{fixed: 'right', title:'操作', width: 80 ,  toolbar: '#test-table-toolbar-barDemo', align:'center'}
 	  ]]
 	});
 	
 	table.render({
 		  elem: '#demo2'
 		  ,height: 400
+		  , width: 1000
 		  ,url: projectBase + '/schooluser/schoolUser'//数据接口
 		  //toolbar:'#toolbarDemo'
 		  ,page: true //开启分页
 		  ,cols: [[ //表头
-			 {type: 'numbers', title: '序号'}
-			,{field: "roleName", title: '角色'}
-		    ,{field: 'schoolName', title: '院校名称'}
-		    ,{field: 'userName', title: '关联用户'}    
-			,{fixed: 'right', title:'操作',  toolbar: '#test-table-toolbar-barDemo'}
+			 {type: 'numbers', title: '序号', align:'center'}
+			,{field: "roleName", title: '角色', align:'center'}
+		    ,{field: 'schoolName', title: '院校名称', align:'center'}
+		    ,{field: 'userName', title: '分配用户', align:'center'}    
+			,{fixed: 'right', title:'操作', width: 80,  toolbar: '#test-table-toolbar-barDemo2', align:'center'}
 		  ]]
 		});
 	
@@ -83,35 +85,13 @@
 	  if(obj.event === 'del'){
 	  } else if(obj.event === 'edit'){
 	  } else if(obj.event === 'set') {
-		
-		   layer.open({
-			    type: 2 //此处以iframe举例
-			    ,title: '选择用户'
-			    ,area: ['50%', '70%']
-			    //,shade: 0
-			    ,maxmin: true
-			    /* ,offset: [ //为了演示，随机坐标
-			    	 $(window).height()-700
-			          ,$(window).width()-1200
-			    ] */
-				,btn: ['确认', '取消']
-				,yes: function(index, layero){
-				  //点击确认触发 iframe 内容中的按钮提交
-				  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
-				  submit.click();
-				  table.reload('demo');
-				}
-			    ,content: 'choose_user.html'
-				,zIndex: layer.zIndex //重点1
-			    ,success: function(layero, index){
-				  var roleName = layero.find('iframe').contents().find("#roleName");
-				  var roleId = layero.find('iframe').contents().find("#roleId");
-				  $(roleName).val(data.roleName);
-				  $(roleId).val(data.id);
- 
-			      layer.setTop(layero); //重点2  
-			    }
-			  });   
+		  $("#selectRoleId").val(data.id);
+	  
+		  table.reload('demo2', {
+		        where: {"roleId":$("#selectRoleId").val()}
+		      });
+		  
+		   /*   */
 
       }
 	});
@@ -120,20 +100,15 @@
 	//监听行工具事件
 	table.on('tool(demo2)', function(obj){
 	  var data = obj.data;
-	  if(obj.event === 'del'){
-	  } else if(obj.event === 'edit'){
-	  } else if(obj.event === 'set') {
-		
-		   layer.open({
+	  if(obj.event == 'del'){
+	  } else if(obj.event == 'edit'){
+		 /*  layer.open({
 			    type: 2 //此处以iframe举例
 			    ,title: '选择用户'
 			    ,area: ['50%', '70%']
 			    //,shade: 0
 			    ,maxmin: true
-			    /* ,offset: [ //为了演示，随机坐标
-			    	 $(window).height()-700
-			          ,$(window).width()-1200
-			    ] */
+			  
 				,btn: ['确认', '取消']
 				,yes: function(index, layero){
 				  //点击确认触发 iframe 内容中的按钮提交
@@ -146,13 +121,41 @@
 			    ,success: function(layero, index){
 			    	var body = layer.getChildFrame('body',index);
 			    	var inputList = body.find('input');
-			    	$(inputList[0]).val(data.schoolId);
+			    	$(inputList[0]).val(data.roleId);
 			    	$(inputList[1]).val(data.userId);
- 
+
 			      layer.setTop(layero); //重点2  
 			    }
-			  });   
+			  }); */
+		  layer.open({
+			    type: 2 //此处以iframe举例
+			    ,title: '选择用户-'+data.roleName
+			    ,area: ['50%', '70%']
+			    //,shade: 0
+			    ,maxmin: true
+				,btn: ['确认', '取消']
+				,yes: function(index, layero){
+				  //点击确认触发 iframe 内容中的按钮提交
+				  var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+				  submit.click();
+				  table.reload('demo');
+				}
+			    ,content: 'choose_school_user.html'
+				,zIndex: layer.zIndex //重点1
+			    ,success: function(layero, index){
+				  var roleName = layero.find('iframe').contents().find("#roleName");
+				  var roleId = layero.find('iframe').contents().find("#roleId");
+				  var schoolId =  layero.find('iframe').contents().find("#schoolId");
+				  //var userId = layero.find('iframe').contents().find("#userId");
+				  $(roleName).val(data.roleName);
+				  $(roleId).val(data.roleId);
+				  $(schoolId).val(data.schoolId);
 
+			      layer.setTop(layero); //重点2  
+			    }
+			  });
+		
+	  } else if(obj.event == 'set') { 	     
       }
 	});
 

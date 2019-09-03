@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>选择专业</title>
+  <title></title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -11,22 +11,26 @@
 <body>
   <div align="center" class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
     <div class="layui-form-item" align="center">
-	    <input type="hidden" name="school_id" id="school_id"/>    
+       <input hidden="hidden"  name="schoolId" id="schoolId"/>
+	    <input hidden="hidden"  name="roleId" id="roleId"/>     
+      	<input hidden="hidden"  name="roleName" id="roleName"  >	      
     </div>
 	
 	<div class="layui-form-item layui-hide">
-	  <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
-	  <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="确认编辑">
+	  <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认">
+	  <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="取消">
 	</div>
   </div>
   
-  <div id="majorChose" class="demo-transfer" align="center">
+  <div id="userChose" class="demo-transfer" align="center">
 	  
   </div>
 
   <script src="../../layuiadmin/layui/layui.js"></script>
   <script src="../util/Constants.js"></script>
   <script>
+  var projectBase = Class.getURL();
+  
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
@@ -38,7 +42,7 @@
 	,admin = layui.admin
 	,transfer = layui.transfer
 	,util = layui.util;
-	var projectBase = Class.getURL();
+	
 	var data0, data1;
 	
 	form.render();
@@ -46,35 +50,36 @@
 	//模拟数据
   
   $.ajax({
-  	url: projectBase + '/dictionary/choseMajor',
+  	url: projectBase + '/role/choseUser',
   	dataType: 'json',
+  	data: {'schoolId':$("#schoolId").val()},
   	type: 'GET',
 	async: false,
   	success: function(res){
   		//data0 = JSON.parse(res.data);
+
 		data0 = res.data;
   	} 
   });
   
-  var id = $("#school_id").val();
+ 
   $.ajax({
-  	url: projectBase + '/dictionary/chosenMajor',
+  	url: projectBase + '/schooluser/chosenSchoolUser',
   	dataType: 'json',
-	data: {'school_id': id},
+	data: {'roleId': $("#roleId").val(),'schoolId':$("#schoolId").val()},
   	type: 'GET',
   	async: false,
   	success: function(res){
-  		//data0 = JSON.parse(res.data);
   		data1 = res.data;
   	} 
   });
-	
+
     transfer.render({
-      elem: '#majorChose',
+      elem: '#userChose',
 	  data: data0,
 	  width: 270,
 	  value: data1
-      ,title: ['备选专业列表', '已选专业列表']
+      ,title: ['备选用户列表', '已选用户列表']
       ,showSearch: true,
 	  id: 'keyChosen'
     });
@@ -88,28 +93,30 @@
 	  for(i=0; i<chosen.length; i++){
 		  ids[i] = chosen[i].value;
 	  }
-	  var school_id = $('#school_id').val();
-	
+	 
 	  //提交 Ajax 成功后，关闭当前ajax弹层并重载表格
 	  //$.ajax({});
 	  $.ajax({
 		  type: 'POST',
-		  url: projectBase + '/dictionary/saveChosenMajor',
-	      data: {"school_id":school_id, "majors":ids},
+		  url: projectBase + '/schooluser/addSchoolUser',
+	      data: {"roleId":$('#roleId').val(), "userId":ids,"schoolId":$('#schoolId').val()},
 		  dataType:'json',
 		  async: false,
 		  traditional: true,
 		  success:function(res){
-							layer.msg('已成功添加!');
+			  parent.layer.msg('已成功添加!');
 		                    parent.layui.table.reload('demo'); //重载表格
 							parent.layer.close(index); //再执行关闭   
 						},           
 		   error:function (data) {
-							layer.msg('选择专业的过程中出现错误!', function(){
-								layer.msg('选择专业的过程中出现错误!');
+			  parent.layer.msg('选择用户的过程中出现错误!', function(){
+				  parent.layer.msg('选择用户的过程中出现错误!');
 							});  
 		    }
 	  });
+	  
+	  parent.layui.table.reload('demo2'); //重载表格
+      parent.layer.close(index); //再执行关闭 
 	});
   });
  </script>

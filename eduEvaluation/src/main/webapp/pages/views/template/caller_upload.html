@@ -10,6 +10,21 @@
 </head>
 <body>
 
+<<<<<<< HEAD
+  <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list"  >
+ 
+	
+	  <div class="layui-card-body"  >
+					<div style="padding-bottom: 10px;">
+				<div align="center">
+					 
+						<input type="text"  hidden="hidden" id="upload_id" name="upload_id">
+      					<button type="button" class="layui-btn layui-btn-normal" id="upload" >上传文件</button> 
+					 
+				</div>
+			</div>
+	</div>
+=======
   <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 180px 50px 0 0;padding-left:60px">
    <div class="layui-form-item">
 	  <input type="hidden" id="form_performance_id" name="form_performance_id"/>
@@ -17,6 +32,7 @@
      
     </div>
 
+>>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
     <div class="layui-form-item layui-hide">
       <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
       <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="确认编辑">
@@ -44,13 +60,19 @@
 	  var $ = layui.jquery
 	  ,upload = layui.upload;
 	  var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+	  var upload_id =  $('#upload_id').val();
 	  //指定允许上传的文件类型
+	  alert(999);
 	  upload.render({
 	      elem: '#upload'
 	      ,url: projectBase + '/collectionMaterial/uploadCollectionmaterial'
+<<<<<<< HEAD
+	      ,data:{"upload_id":$('#upload_id').val()}
+=======
 		  ,data: {
 			  'id':$('#form_performance_id').val()
 		  }
+>>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
 	      ,accept: 'file' //普通文件 
 	      ,done: function(res){
 	    	  parent.layer.msg('上传成功');

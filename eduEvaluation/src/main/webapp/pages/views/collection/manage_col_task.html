@@ -16,11 +16,11 @@
  
       <div class="layui-card-body">
         <div style="padding-bottom: 10px;">
-		  <button class="layui-btn layuiadmin-btn-list layui-btn-normal" lay-href="collection/new_col_task.html"> <i class="layui-icon layui-icon-add-1"></i> 添加</button>
-		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm" data-type="edit"> <i class="layui-icon layui-icon-edit"></i> 编辑</button>
-		  <button class="layui-btn layuiadmin-btn-list layui-btn-checked" data-type="start"> <i class="layui-icon layui-icon-ok-circle"></i> 启用</button>
-		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm" data-type="stop"> <i class="layui-icon layui-icon-pause"></i> 禁用</button>
-          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 删除</button>
+		  <button class="layui-btn layuiadmin-btn-list" lay-href="collection/new_col_task.html"> <i class="layui-icon layui-icon-add-1"></i>新建<span style="font-size:0;">填报任务</span></button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm" data-type="edit"> <i class="layui-icon layui-icon-edit"></i>编辑<span style="font-size:0;">填报任务</span></button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-checked" data-type="start"> <i class="layui-icon layui-icon-ok-circle"></i>启用</button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm" data-type="stop"> <i class="layui-icon layui-icon-pause"></i>禁用</button>
+          <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i>删除</button>
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="buttonTpl">
@@ -60,17 +60,18 @@
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
+	  ,width:1000
 	  ,url: projectBase + '/collection/colTask'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
 		    {type: 'checkbox'}
-	    ,{field: 'task_name', title: '专业填报任务', width:240}
-	    ,{field: 'task_year', title: '所属年度', width:100, }
-	    ,{field: 'school_major', title: '填报院校及专业'} 
-	    ,{field: 'start_time', title: '开始日期', width: 150}
-	    ,{field: 'end_time', title: '结束日期', width:150}
-		,{field: 'status_info', title:'状态', width:100}
+	    ,{field: 'task_name', title: '专业填报任务', align:'center', width:240}
+	    ,{field: 'task_year', title: '所属年度', align:'center', width:100, }
+	    ,{field: 'school_major', title: '填报院校及专业', align:'center'} 
+	    ,{field: 'start_time', title: '开始日期', align:'center', width: 150}
+	    ,{field: 'end_time', title: '结束日期', align:'center', width:150}
+		,{field: 'status_info', title:'状态', align:'center', width:100}
 	  ]]
 	});
     

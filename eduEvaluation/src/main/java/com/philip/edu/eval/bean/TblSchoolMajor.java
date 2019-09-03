@@ -8,9 +8,11 @@ public class TblSchoolMajor {
     
     private String roleName;
 
-	private Integer userId;
+	private String userId;
     
     private String userName;
+    
+    private String userChinese;
     
     private Integer schoolId;
     
@@ -19,6 +21,15 @@ public class TblSchoolMajor {
     private  Integer majorId;
     
     private String majorName;
+
+    
+	public String getUserChinese() {
+		return userChinese;
+	}
+
+	public void setUserChinese(String userChinese) {
+		this.userChinese = userChinese;
+	}
 
 	public Integer getId() {
 		return id;
@@ -44,11 +55,11 @@ public class TblSchoolMajor {
 		this.roleName = roleName;
 	}
 
-	public Integer getUserId() {
+	public String getUserId() {
 		return userId;
 	}
 
-	public void setUserId(Integer userId) {
+	public void setUserId(String userId) {
 		this.userId = userId;
 	}
 

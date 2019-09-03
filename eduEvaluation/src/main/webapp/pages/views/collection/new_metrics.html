@@ -32,7 +32,7 @@
 							</div>
 						</div>
 						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 70px;">单位<span style="color: red;">* </span></label>
+							<label class="layui-form-label" style="width: 60px;">单位<span style="color: red;">* </span></label>
 							<div class="layui-input-inline" style="width: 120px;">
 								<input type="text" name="unit" id="unit" required lay-verify="required" autocomplete="off" class="layui-input">
 							</div>
@@ -41,7 +41,7 @@
 					
 					<div class="layui-form-item">
 						<label class="layui-form-label" style="width: 70px;">指标名称<span style="color: red;">* </span></label>
-						<div class="layui-input-inline" style="width: 610px;">
+						<div class="layui-input-inline" style="width: 600px;">
 							<input type="text" name="name" id="name" placeholder="请输入指标名称" required lay-verify="required" autocomplete="off" class="layui-input">
 						</div>
 					</div>
@@ -49,23 +49,23 @@
 					<div class="layui-form-item">
 						<label class="layui-form-label" style="width: 70px;">备注</label>
 						<div class="layui-input-inline" style="width: 610px;">
-							<textarea name="memo" style="width: 610px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
+							<textarea name="memo" style="width: 600px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
 					</div>
 					
 					<div class="layui-card-body">
 						<div style="padding-bottom: 10px;">
-							<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 新建</button>
+							<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 添加</button>
 							<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
 						</div>
 						<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
-						  <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i></button>
+					     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"  ><i class="layui-icon layui-icon-delete"  style="position:static;"></i>删除</a>
 						</script>
 					</div>
 					
 					<div class="layui-form-item layui-hide">
-					  <input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认添加">
+					  <input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认">
 					</div>
 				</div>
 
@@ -96,12 +96,12 @@
 
 				schoolTable = table.render({
 					elem: '#LAY-app-content-list',
-					width: 680,
+					width: 685,
 					height: 320,
 					data: []
 						//toolbar:'#toolbarDemo'
 						,
-					page: true //开启分页
+					page: false //开启分页
 						,
 					cols: [
 						[ //表头
@@ -113,13 +113,12 @@
 							}, {
 								field: 'memo',
 								title: '备注',
-								align: 'center',
-								width: 350
+								align: 'center' 
 							}, {
 								title: '操作',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
-								width: 140
+								width: 80
 							}
 						]
 					]
@@ -240,7 +239,7 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '添加材料',
-								area: ['50%', '70%'],
+								area: ['500px', '80%'],
 								//shade: 0,
 								maxmin: true,
 								/* offset: [ //为了演示，随机坐标
@@ -266,30 +265,27 @@
 
 									table.render({
 										elem: '#LAY-app-content-list',
-										width: 680,
+										width: 700,
 										height: 320,
 										data: data0
 											//toolbar:'#toolbarDemo'
 											,
-										page: true //开启分页
+										page: false //开启分页
 											,
 										cols: [
 											[ //表头
 												{
 													field: 'material_name',
 													title: '支撑材料',
-													align: 'center',
-													width: 190
+													align: 'center' 
 												}, {
 													field: 'memo',
 													title: '备注',
-													align: 'center',
-													width: 350
+													align: 'center' 
 												}, {
 													title: '操作',
 													toolbar: '#test-table-toolbar-barDemo',
-													align: 'center',
-													width: 140
+													align: 'center' 
 												}
 											]
 										]

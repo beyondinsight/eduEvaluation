@@ -23,33 +23,45 @@
     <result column="memo" property="memo" jdbcType="VARCHAR" />
     <result column="role_id" property="roleId" jdbcType="BIGINT" />
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
+    <result column="school_id" property="schoolId" jdbcType="BIGINT" />
+    <result column="school_name" property="schoolName" jdbcType="VARCHAR" />
     
   </resultMap>
  
 
  
   <select id="getUsersList" resultMap="UsersResultMap"   >
-    select  * from tbl_users d left join(
-			select user_id,c.role_id,c.role_name
-				from (
+                select  d.*,e.role_id,e.role_name,f.school_id,f.school_name from tbl_users d left join(
+		
 							select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
-							) c 
-		) e on d.id = e.user_id
+						
+		) e on d.id = e.user_id LEFT JOIN (
+						SELECT a.school_id,b.school_name,a.user_id from  tbl_school_user a LEFT JOIN  tbl_school  b on a.school_id = b.id
+		)f  ON d.id = f.user_id 
 	</select>
   
   <select id="getUsers" resultMap="UsersResultMap" parameterType="com.philip.edu.eval.bean.TblUsers"  >
+<<<<<<< HEAD
+  	         select  d.*,e.role_id,e.role_name,f.school_id,f.school_name from (   select  * from tbl_users where  user_name=#{userName,jdbcType=VARCHAR} ) d left join(
+		
+							select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
+						
+		) e on d.id = e.user_id LEFT JOIN (
+						SELECT a.school_id,b.school_name,a.user_id from  tbl_school_user a LEFT JOIN  tbl_school  b on a.school_id = b.id
+		)f  ON d.id = f.user_id 
+=======
   	 select  * from (   select  * from tbl_users where  user_name=#{userName,jdbcType=VARCHAR} ) d  left join(
    select user_id,c.role_id,c.role_name
     from (
        select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
        ) c 
   ) e on d.id = e.user_id 
+>>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
   </select>
   
    <select id="getRolesUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   resultMap="UsersResultMap">
-      SELECT  b.* from (select user_id from tbl_user_role where role_id= #{id,jdbcType=BIGINT}) a LEFT JOIN tbl_users b on a.user_id=b.id  
+      SELECT  b.* from (select user_id from tbl_user_role where role_id= #{0,jdbcType=BIGINT}) a LEFT JOIN tbl_users b on a.user_id=b.id  
   </select>
-  
   
   <insert id="createUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   useGeneratedKeys="true" keyProperty="id">
     
@@ -115,6 +127,15 @@
   <insert id="createUserRole" parameterType="com.philip.edu.eval.bean.TblUsers">       
          insert into tbl_user_role (user_id, role_id)
           			  values (#{id,jdbcType=BIGINT}, #{roleId,jdbcType=BIGINT})
+  </insert>
+  
+   <update id="updateUserSchool" parameterType="com.philip.edu.eval.bean.TblUsers">
+        update tbl_school_user set school_id = #{schoolId,jdbcType=BIGINT} where user_id= #{id,jdbcType=BIGINT};
+   </update> 
+  
+  <insert id="createUserSchool" parameterType="com.philip.edu.eval.bean.TblUsers">       
+         insert into tbl_school_user (user_id, school_id)
+          			  values (#{id,jdbcType=BIGINT}, #{schoolId,jdbcType=BIGINT})
   </insert>
    
   <update id="updateUsers" parameterType="com.philip.edu.eval.bean.TblUsers" >  
