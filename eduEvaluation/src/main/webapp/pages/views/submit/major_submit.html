@@ -30,6 +30,9 @@
 				</div>
 
 				<div class="layui-card-body">
+					<input type="hidden" id="school" name="school"/>
+					<input type="hidden" id="major" name="major"/>
+					<input type="hidden" id="year" name="year"/>
 					<table id="major_list" lay-filter="major_list"></table>
 					<script type="text/html" id="major_list_operation_toolbar">
 						<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="open"><i class="layui-icon layui-icon-list"></i>打开清单</a>
@@ -185,6 +188,7 @@
 									},
 									success: function(res) {
 										$('#taskYearLabel').text("填报任务所属年度:   " + res.data[0].task_year);
+										$('#year').val(res.data[0].task_year);
 									}
 								});
 
@@ -218,6 +222,8 @@
 										major_id: obj.data.major_id
 									}
 								});
+								$('#school').val(obj.data.school_name);
+								$('#major').val(obj.data.major_name);
 							}
 						});
 						
@@ -230,6 +236,20 @@
 									key:'collection_major_id',
 									value:data.collection_major_id
 								});
+								
+								var a = $('#userTaskSelect').find("option:selected").text();
+								console.log("value: " + a);
+								
+								layui.data('info',{
+									key:'basic_info',
+									value:{
+										'task_name':$('#userTaskSelect').find("option:selected").text(),
+										'task_year':$('#year').val(),
+										'school':$('#school').val(),
+										'major':$('#major').val()
+									}
+								})
+								
 								if( data.template_type_string=="major_performance"){
 									parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
 								} else if( data.template_type_string == "major_capital_process"){

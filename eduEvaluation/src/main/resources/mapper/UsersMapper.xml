@@ -41,16 +41,12 @@
 	</select>
   
   <select id="getUsers" resultMap="UsersResultMap" parameterType="com.philip.edu.eval.bean.TblUsers"  >
-  	  
- 
-    select  * from (   select  * from tbl_users where  user_name=#{userName,jdbcType=VARCHAR} ) d  left join(
+  	     	 select  * from (   select  * from tbl_users where  user_name=#{userName,jdbcType=VARCHAR} ) d  left join(
    select user_id,c.role_id,c.role_name
     from (
        select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
        ) c 
-  ) e on d.id = e.user_id 
- 
-
+  ) e on d.id = e.user_id
   </select>
   
    <select id="getRolesUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   resultMap="UsersResultMap">

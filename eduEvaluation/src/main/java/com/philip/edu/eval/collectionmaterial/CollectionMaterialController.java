@@ -99,9 +99,11 @@ public class CollectionMaterialController {
 
 		checkFile(file);
 		String fileName = new String(file.getOriginalFilename().getBytes("ISO-8859-1"), "UTF-8");
+		material.setFile_name(fileName);
+		
 		String sname = fileName.substring(fileName.lastIndexOf("."));
 		String fileFirstName = fileName.substring(0, fileName.lastIndexOf("."));
-		
+
 		SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyyMMddHHmmssSSS");
 		String timeStamp=simpleDateFormat.format(new Date());
 		fileName = fileFirstName + timeStamp + sname;
@@ -115,7 +117,12 @@ public class CollectionMaterialController {
 		long size = file.getSize();
 		String sizes = size / 1024 + "KB";
 
-		String id = request.getParameter("upload_id");
+		/*String id = request.getParameter("upload_id");
+		if (id != null && !id.equals("")) {
+			material.setId(Integer.parseInt(id));
+		}*/
+		String id = request.getParameter("id");
+
 		if (id != null && !id.equals("")) {
 			material.setId(Integer.parseInt(id));
 		}

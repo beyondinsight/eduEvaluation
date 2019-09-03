@@ -15,13 +15,14 @@
 			<div class="layui-card">
 				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form" id="col_task_form">
 	
-					<!--<div class="layui-form-item">
-					<div style="padding-right: 150px;">
-						<div align="right">
-							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit"><i class="layui-icon layui-icon-file-b"></i> 创建</button>
-						</div>
+					<div  style="font-size:1em;margin:15px 0 0px 15px;">
+								  <input type="hidden" id="collection_major_id" name="collection_major_id"/>
+						     	  <div style="float: left;">填报任务：<input type="text" id="task_name" style="border:0;background-color: none;"   readonly="readonly" value=""/></div>
+						     	  <div style="float: left;">填报任务所属年度：<input type="text" id="task_year" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
+						     	  <div style="float: left;">院校：<input type="text" id="school" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
+						     	  <div style="float: left;">专业：<input type="text" id="major" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
+						     	  <br/>
 					</div>
-					</div>-->
 				</div>
 
 				<div class="layui-card-body">
@@ -53,7 +54,8 @@
 					laydate = layui.laydate,
 					transfer = layui.transfer,
 					admin = layui.admin,
-					projectBase = Class.getURL();
+					projectBase = Class.getURL(),
+					$ = layui.$;
 				var data0, schoolTable;
 				
 
@@ -68,8 +70,13 @@
 				form.render();
 				
 				var data = layui.data('collection');
-				layui.data('collection',null);
 				console.log("data:" + data['collection_major_id']);
+				
+				var data0 = layui.data('info');
+				$('#task_name').val(data0['basic_info']['task_name']);
+				$('#task_year').val(data0['basic_info']['task_year']);
+				$('#school').val(data0['basic_info']['school']);
+				$('#major').val(data0['basic_info']['major']);
 
 				table.render({
 					elem: '#LAY-app-content-list',

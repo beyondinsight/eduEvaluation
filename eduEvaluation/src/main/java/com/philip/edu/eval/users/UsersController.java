@@ -101,7 +101,7 @@ public class UsersController {
 		//String institution = request.getParameter("institution");
 		
 		//String major = request.getParameter("major");
-		String memo = request.getParameter("memo");
+		String memo = request.getParameter("memo"); 
 		String mobilePhone = request.getParameter("mobilePhone");
 		String password = request.getParameter("password");
 		String position = request.getParameter("position");
@@ -152,7 +152,7 @@ public class UsersController {
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
 		password = SecurityUtil.md5Hex(userName + password + users.getSalt());
-		users.setPassword(password);
+		users.setPassword(password); 
 		
 		if( roleId !=null && !roleId.equals("") ) {
 			users.setRoleId(Integer.parseInt(roleId));
