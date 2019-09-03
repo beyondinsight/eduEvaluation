@@ -159,7 +159,12 @@ border:0;
 				var data = res.data;
       			setTimeout(function(){
 					console.log("collection_major_id:" + data[0].collection_major_id);
-					parent.$('#collection_major_id').val(data[0].collection_major_id);
+					
+					layui.data('collection',{
+						key:'collection_major_id',
+						value:data[0].collection_major_id
+					});					
+					//parent.$('#collection_major_id').val(data[0].collection_major_id);
       				parent.location.reload(); //parent.layui.table.reload('demo'); //重载表格
       				var index = parent.layer.getFrameIndex(window.name);
       				parent.layer.close(index); //再执行关闭   

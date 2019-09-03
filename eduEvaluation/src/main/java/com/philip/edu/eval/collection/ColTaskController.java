@@ -533,15 +533,15 @@ public class ColTaskController {
 		if (edit_type != null & !"".equals(edit_type)) {
 			if ("rda".equals(edit_type)) {
 				cpf.setRegion_disbursement_amount(Double.parseDouble(actural_value));
-			} else if ("rha".equals(edit_type)) {
+			} else if ("rpha".equals(edit_type)) {
 				cpf.setRegion_paid_hardware_amount(Double.parseDouble(actural_value));
-			} else if ("ria".equals(edit_type)) {
+			} else if ("rpia".equals(edit_type)) {
 				cpf.setRegion_paid_internal_amount(Double.parseDouble(actural_value));
 			} else if ("cda".equals(edit_type)) {
 				cpf.setCentral_disbursment_amount(Double.parseDouble(actural_value));
-			} else if ("cia".equals(edit_type)) {
+			} else if ("cpia".equals(edit_type)) {
 				cpf.setCentral_paid_internal_amount(Double.parseDouble(actural_value));
-			} else if ("cha".equals(edit_type)) {
+			} else if ("cpha".equals(edit_type)) {
 				cpf.setCentral_paid_hardware_amount(Double.parseDouble(actural_value));
 			} else if ("sft".equals(edit_type)) {
 				cpf.setSchool_funding_total(Double.parseDouble(actural_value));

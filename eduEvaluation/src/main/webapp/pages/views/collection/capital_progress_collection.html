@@ -46,7 +46,7 @@
 	                 <td>'     其中：硬件建设支出额度</td>
 	                 <td><div id="rpha_amount"></div></td>
 	                 <td><div id="region_hardware"></div></td>
-	                 <td><button id="rha_btn" class="layui-btn layui-btn-danger layui-btn-xs" style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="rpha_btn" class="layui-btn layui-btn-danger layui-btn-xs" style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>
 	               <tr>
 	                 <td>'     其中：内涵建设支出额度</td>
@@ -64,31 +64,31 @@
 	                 <td>'     其中：硬件建设支出额度</td>
 	                 <td><div id="cpha_amount"></div></td>
 	                 <td><div id="central_hardware"></div></td>
-	                 <td><button id="cha_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="cpha_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>
 	               <tr>
 	                 <td>'     其中：内涵建设支出额度</td>
 	                 <td><div id="cpia_amount"></div></td>
 	                 <td><div id="central_internal"></div></td>
-	                 <td><button id="cia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="cpia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>
 	               <tr>
 	                 <td>学校配套经费额度</td>
 	                 <td><div id="sft_amount"></div></td>
 	                 <td><div id="school_total"></div></td>
-	                 <td><button id="sta_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">学校配套经费额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="sft_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">学校配套经费额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>  
 	               <tr>
 	                 <td>'     其中：硬件建设支出额度</td>
 	                 <td><div id="sfh_amount"></div></td>
 	                 <td><div id="school_hardware"></div></td>
-	                 <td><button id="sha_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="sfh_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>
 	               <tr>
 	                 <td>'     其中：内涵建设支出额度</td>
 	                 <td><div id="sfi_amount"></div></td>
 	                 <td><div id="school_internal"></div></td>
-	                 <td><button id="sia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="sfi_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>  
 	             </tbody>
 	           </table>
@@ -226,7 +226,7 @@
 			});
 		 });
  
-		$('#rha_btn').on('click', function() {
+		$('#rpha_btn').on('click', function() {
 						layer.open({
 							type: 2 //此处以iframe举例
 								,
@@ -237,25 +237,150 @@
 							btn: ['保存', '取消'],
 							yes: function(index, layero) {
 								//点击确认触发 iframe 内容中的按钮提交
-								var submit = layero.find('iframe').contents().find("#material_form");
+								var submit = layero.find('iframe').contents().find("#edit_capital_form");
 								console.log(submit);
 								submit.click();
 								
-								var materials = layui.data('materials');
-								console.log(materials);
-								var data0 = [];
+								
 							},
 							content: 'capital_progress_edit.html',
 							zIndex: layer.zIndex //重点1
 								,
 							success: function(layero, index) {
 								var pf_id = layero.find('iframe').contents().find("#form_performance_id");
-								console.log("form performance:" + da[0].rda_pf_id);
-								$(pf_id).val(da[0].rda_pf_id);
+								//console.log("form performance:" + da[0].rda_pf_id);
+								$(pf_id).val(da[0].rpha_pf_id);
+								var edit_type = layero.find('iframe').contents().find("#edit_type");
+								$(edit_type).val('rpha');
 								layer.setTop(layero); //重点2
 							} 
 					});
 		});
+		
+		$('#rpia_btn').on('click', function() {
+						layer.open({
+							type: 2 //此处以iframe举例
+								,
+							title: '填报资金支出进度',
+							area: ['70%', '80%'],
+							shade: 0,
+							maxmin: true,
+							btn: ['保存', '取消'],
+							yes: function(index, layero) {
+								//点击确认触发 iframe 内容中的按钮提交
+								var submit = layero.find('iframe').contents().find("#edit_capital_form");
+								console.log(submit);
+								submit.click();
+								
+								
+							},
+							content: 'capital_progress_edit.html',
+							zIndex: layer.zIndex //重点1
+								,
+							success: function(layero, index) {
+								var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+								//console.log("form performance:" + da[0].rda_pf_id);
+								$(pf_id).val(da[0].rpia_pf_id);
+								var edit_type = layero.find('iframe').contents().find("#edit_type");
+								$(edit_type).val('rpia');
+								layer.setTop(layero); //重点2
+							} 
+					});
+		});
+		
+		$('#cda_btn').on('click', function() {
+						layer.open({
+							type: 2 //此处以iframe举例
+								,
+							title: '填报资金支出进度',
+							area: ['70%', '80%'],
+							shade: 0,
+							maxmin: true,
+							btn: ['保存', '取消'],
+							yes: function(index, layero) {
+								//点击确认触发 iframe 内容中的按钮提交
+								var submit = layero.find('iframe').contents().find("#edit_capital_form");
+								console.log(submit);
+								submit.click();
+								
+								
+							},
+							content: 'capital_progress_edit.html',
+							zIndex: layer.zIndex //重点1
+								,
+							success: function(layero, index) {
+								var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+								//console.log("form performance:" + da[0].rda_pf_id);
+								$(pf_id).val(da[0].cda_pf_id);
+								var edit_type = layero.find('iframe').contents().find("#edit_type");
+								$(edit_type).val('cda');
+								layer.setTop(layero); //重点2
+							} 
+					});
+		});
+		
+		$('#cpia_btn').on('click', function() {
+						layer.open({
+							type: 2 //此处以iframe举例
+								,
+							title: '填报资金支出进度',
+							area: ['70%', '80%'],
+							shade: 0,
+							maxmin: true,
+							btn: ['保存', '取消'],
+							yes: function(index, layero) {
+								//点击确认触发 iframe 内容中的按钮提交
+								var submit = layero.find('iframe').contents().find("#edit_capital_form");
+								console.log(submit);
+								submit.click();
+								
+								
+							},
+							content: 'capital_progress_edit.html',
+							zIndex: layer.zIndex //重点1
+								,
+							success: function(layero, index) {
+								var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+								//console.log("form performance:" + da[0].rda_pf_id);
+								$(pf_id).val(da[0].cpia_pf_id);
+								var edit_type = layero.find('iframe').contents().find("#edit_type");
+								$(edit_type).val('cpia');
+								layer.setTop(layero); //重点2
+							} 
+					});
+		});
+		
+		$('#cpha_btn').on('click', function() {
+						layer.open({
+							type: 2 //此处以iframe举例
+								,
+							title: '填报资金支出进度',
+							area: ['70%', '80%'],
+							shade: 0,
+							maxmin: true,
+							btn: ['保存', '取消'],
+							yes: function(index, layero) {
+								//点击确认触发 iframe 内容中的按钮提交
+								var submit = layero.find('iframe').contents().find("#edit_capital_form");
+								console.log(submit);
+								submit.click();
+								
+								
+							},
+							content: 'capital_progress_edit.html',
+							zIndex: layer.zIndex //重点1
+								,
+							success: function(layero, index) {
+								var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+								//console.log("form performance:" + da[0].rda_pf_id);
+								$(pf_id).val(da[0].cpha_pf_id);
+								var edit_type = layero.find('iframe').contents().find("#edit_type");
+								$(edit_type).val('cpha');
+								layer.setTop(layero); //重点2
+							} 
+					});
+		});
+		
 	  });
 
   </script>
