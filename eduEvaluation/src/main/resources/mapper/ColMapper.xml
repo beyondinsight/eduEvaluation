@@ -312,43 +312,31 @@
       <if test="update_time != null" >
         update_time = #{update_time,jdbcType=TIMESTAMP},
       </if>
-      <if test="central_disbursement_total != null" >
-        central_disbursement_total = #{central_disbursement_total,jdbcType=DOUBLE},
-      </if>
-      <if test="central_paid_total != null" >
-        central_paid_total = #{central_paid_total,jdbcType=DOUBLE},
-      </if>
-      <if test="region_disbursement_amount != null" >
+      <if test="region_disbursement_amount != null and region_disbursement_amount != 0 and region_disbursement_amount != 0.0" >
         region_disbursement_amount = #{region_disbursement_amount,jdbcType=DOUBLE},
       </if>
-      <if test="region_paid_amount != null" >
-        region_paid_amount = #{region_paid_amount,jdbcType=DOUBLE},
-      </if>
-      <if test="region_paid_hardware_amount != null" >
+      <if test="region_paid_hardware_amount != null and region_paid_hardware_amount != 0" >
         region_paid_hardware_amount = #{region_paid_hardware_amount,jdbcType=DOUBLE},
       </if>
-      <if test="region_paid_internal_amount != null" >
+      <if test="region_paid_internal_amount != null and region_paid_internal_amount != 0" >
         region_paid_internal_amount = #{region_paid_internal_amount,jdbcType=DOUBLE},
       </if>
-      <if test="central_disbursement_amount != null" >
+      <if test="central_disbursement_amount != null and central_disbursement_amount != 0" >
         central_disbursement_amount = #{central_disbursement_amount,jdbcType=DOUBLE},
       </if>
-      <if test="central_paid_amount != null" >
-        central_paid_amount = #{central_paid_amount,jdbcType=DOUBLE},
-      </if>
-      <if test="central_paid_hardware_amount != null" >
+      <if test="central_paid_hardware_amount != null and central_paid_hardware_amount != 0" >
         central_paid_hardware_amount = #{central_paid_hardware_amount,jdbcType=DOUBLE},
       </if>
-      <if test="central_paid_internal_amount != null" >
+      <if test="central_paid_internal_amount != null and central_paid_internal_amount != 0" >
         central_paid_internal_amount = #{central_paid_internal_amount,jdbcType=DOUBLE},
       </if>
-      <if test="school_funding_total != null" >
+      <if test="school_funding_total != null and school_funding_total != 0" >
         school_funding_total = #{school_funding_total,jdbcType=DOUBLE},
       </if>
-      <if test="school_funding_hardware != null" >
+      <if test="school_funding_hardware != null and school_funding_hardware != 0" >
         school_funding_hardware = #{school_funding_hardware,jdbcType=DOUBLE},
       </if>
-      <if test="school_funding_internal != null" >
+      <if test="school_funding_internal != null and school_funding_internal != 0" >
         school_funding_internal = #{school_funding_internal,jdbcType=DOUBLE},
       </if>
       <if test="process_status != null" >

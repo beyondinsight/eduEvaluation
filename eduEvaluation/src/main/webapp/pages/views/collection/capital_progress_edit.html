@@ -141,6 +141,7 @@ border:0;
     form.on('submit(edit_capital_form)', function(data){
       var field = data.field;
       
+	  console.log("performance_id:" + $('#form_performance_id').val());
       //执行重载
       console.log("edit capital progress");
 	  console.log("field: performance_id:" + field.form_performance_id);

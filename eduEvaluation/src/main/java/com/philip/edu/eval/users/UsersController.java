@@ -47,11 +47,11 @@ import com.philip.edu.eval.bean.TblUsers;
 
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.EvalConstants;
-import com.philip.edu.eval.util.PasswordUtil;
 //import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.role.RolesService;
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.PropertiesUtil;
+import com.philip.edu.eval.util.SecurityUtil;
 import com.philip.edu.eval.util.UsersFieldConstants;
 
 import net.sf.json.JSONArray;
@@ -101,7 +101,7 @@ public class UsersController {
 		//String institution = request.getParameter("institution");
 		
 		//String major = request.getParameter("major");
-		String memo = request.getParameter("memo");
+		String memo = request.getParameter("memo"); 
 		String mobilePhone = request.getParameter("mobilePhone");
 		String password = request.getParameter("password");
 		String position = request.getParameter("position");
@@ -152,7 +152,7 @@ public class UsersController {
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
 		password = SecurityUtil.md5Hex(userName + password + users.getSalt());
-		users.setPassword(password);
+		users.setPassword(password); 
 		
 		if( roleId !=null && !roleId.equals("") ) {
 			users.setRoleId(Integer.parseInt(roleId));

@@ -30,9 +30,19 @@ public class TblCollectionMaterial {
     
     private long doc_size;
     
+    private String file_name;
+    
     
 
-    public long getDoc_size() {
+    public String getFile_name() {
+		return file_name;
+	}
+
+	public void setFile_name(String file_name) {
+		this.file_name = file_name;
+	}
+
+	public long getDoc_size() {
 		return doc_size;
 	}
 

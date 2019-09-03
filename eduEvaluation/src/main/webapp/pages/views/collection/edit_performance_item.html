@@ -112,8 +112,28 @@
 				
 				var metric_id = $('#metrics_id').val();
 				console.log("metrics_id:" + metric_id);
-
+				
 				table.render({
+				  elem: '#materials_table'
+				  ,width: 680,
+					height: 320
+				  ,where: {
+					  'form_performance_id':$('#performance_id').val()
+				  }
+				  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
+				  //toolbar:'#toolbarDemo'
+				  ,page: true //开启分页
+				  ,cols: [[ //表头
+					{type: 'numbers', title: '序号'}
+				    ,{field: 'materialname', title: '支撑材料'}
+				    ,{field: 'file_name', title: '文件名' }
+				    ,{field: 'doc_size', title: '文件大小'} 
+				    ,{field: 'updateTime', title: '上传时间'}	    
+					,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
+				  ]]
+				});
+
+				/*table.render({
 					elem: '#materials_table',  
 					width: 680,
 					height: 320,
@@ -152,7 +172,7 @@
 							}
 						]
 					]
-				});
+				});*/
 
 				//监听搜索
 				form.on('submit(edit_performance_form)', function(data) {
@@ -188,48 +208,56 @@
 					var data = obj.data;
 					if (obj.event === 'del') {
 						
-						console.log(data.material_name);
-						layui.data("materials",{
-							key: data.material_name,
-							remove: true
-						});
+								if(data.required == 'Y')return layer.msg('这是必填文件，不能删除!',function(){
+									
+								});  
+								  
+						  layer.confirm('确定删除这个文件吗？', function(index){
+						  		$.ajax({
+						  					type:'POST',
+						  					url: projectBase + '/collectionMaterial/deleteCollectionMaterial',
+						  					data:data,
+						  					dataType:'json',
+													async: false,
+						  					done:function(res){
+						  									if(res.code='0'){       
+						  					                        layer.msg('删除文件成功!');
+						  					                } else {          
+						  					                        layer.msg('删除文件失败!', function(){
 						
-						obj.del();
-
-						/*table.render({
-							elem: '#materials_table',
-							width: 680,
-							height: 320,
-							data: []
-								//toolbar:'#toolbarDemo'
-								,
-							page: true //开启分页
-								,
-							cols: [
-								[ //表头
-									{
-										field: 'material_name',
-										title: '支撑材料',
-										align: 'center',
-										width: 190
-									}, {
-										field: 'memo',
-										title: '备注',
-										align: 'center',
-										width: 350
-									}, {
-										title: '操作',
-										toolbar: '#test-table-toolbar-barDemo',
-										},
-										align: 'center',
-										width: 140
-									}
-								]
-							]
-						});*/
+						  													  });   
+						  					                }
+													},             
+						  					 error:function(data){
+						  												layer.msg('删除文件的过程中出现错误!', function(){
+						  			
+						  												});  
+						  					  }     
+						  				});
+						    obj.del();
+						    layer.close(index);
+								  layer.msg('已成功删除!');
+								  });
 					} else if(obj.event === 'upload') {
-						
-					}
+						layer.open({
+						    type: 2 //此处以iframe举例
+						    ,title: '上传文件'
+						    ,area: ['50%', '70%']
+						    //,shade: 0
+						    ,maxmin: true
+						   
+						    ,content: 'caller_upload.html'
+							,zIndex: layer.zIndex //重点1
+						    ,success: function(layero, index){
+							  var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+							  $(pf_id).val(data.id);
+							  
+						      layer.setTop(layero); //重点2
+						    }
+						  });
+					} else if (obj.event === 'download'){			
+							window.location.href= projectBase + "/collectionMaterial/downloadMaterial?doc="+data.doc;	     
+					}  
 				});
 
 				var $ = layui.$,

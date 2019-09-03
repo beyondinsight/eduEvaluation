@@ -18,6 +18,7 @@
 		<result column="material_name" property="materialname"
 			jdbcType="VARCHAR" />
 		<result column="doc_size" property="doc_size" jdbcType="INTEGER" />
+		<result column="file_name" property="file_name" jdbcType="CHAR" />
 	</resultMap>
 
 	<insert id="createMaterial" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
@@ -129,6 +130,9 @@
 			</if>
 			<if test="updateTime != null">
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="file_name != null">
+				file_name = #{file_name, jdbcType=CHAR}
 			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}

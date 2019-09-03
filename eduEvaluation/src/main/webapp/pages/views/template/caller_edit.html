@@ -9,46 +9,23 @@
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
-<body  >
+<body>
 
   <div class="layui-fluid">
     <div class="layui-card">
 
       <div class="layui-card-body">
-		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>     
+       <!-- <div style="padding-bottom: 10px;"> -->
+		  <input type="hidden" id="form_performance_id" name="form_performance_id"/>
+		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>
+           <!--  <button class="layui-btn layuiadmin-btn-list" id="upload"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button> -->
         </div>
-        <button type="button" class="layui-btn layui-btn-normal" id="upload"  style="display: none;" >上传文件</button> 
-       	<input type="text" hidden="hidden"    id="upload_id" name="upload_id">
-        <table  id="demo"  lay-filter="demo"></table> 
+        <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-upload-circle"></i>上传</a>
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-edit"></i>上传</a>
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
-        </script> 
-        
-   <!--      <table class="layui-table" id="zdheader">	
-        <tr><td>1</td></tr>	
-         <tr><td>1</td></tr>
-          <tr><td>1</td></tr>
-           <tr><td>1</td></tr>
-            <tr><td>1</td></tr>
-             <tr><td>1</td></tr>
-              <tr><td>1</td></tr>
-               <tr><td>1</td></tr>
-                <tr><td>1</td></tr>
-                 <tr><td>1</td></tr>
-                  <tr><td>1</td></tr>
-                   <tr><td>1</td></tr>
-                    <tr><td>1</td></tr>
-                     <tr><td>1</td></tr>
-                      <tr><td>1</td></tr>
-                       <tr><td>1</td></tr>
-                        <tr><td>1</td></tr>
-                         <tr><td>1</td></tr>
-            				 		
-		</table> 
-	 	 <div id="barcon" name="barcon"></div> -->
-    		
+        </script>
       </div>
     </div>
 
@@ -56,47 +33,44 @@
   <script src="../util/Constants.js"></script> 
   <script>
   var projectBase = Class.getURL();
-
-    layui.config({
+  layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use(['laydate', 'laypage','element','index', 'contlist', 'table', 'layer','admin','upload'], function(){
-    var table = layui.table //表格
-    ,laypage = layui.laypage //分页
-    ,layer = layui.layer //弹层
+  }).use(['index', 'contlist', 'table', 'layer','admin','upload','jquery'], function(){
+    var $ = layui.$,
+	table = layui.table
     ,form = layui.form
 	,admin = layui.admin
-	,upload=layui.upload; 
-    
+	,upload=layui.upload;        
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,width:1400
-	  ,url: projectBase + '/collectionMaterial/collectionMaterial'//数据接口
+	  ,where: {
+		  'form_performance_id':$('#form_performance_id').val()
+	  }
+	  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
-		{type: 'checkbox', align:'center'}
-		,{type: 'numbers', title: '序号', align:'center'}
-	    ,{field: 'materialname', title: '支撑材料', align:'center'}
-	    ,{field: 'doc', title: '文件名', align:'center' }
-	    ,{field: 'docsize', title: '文件大小', align:'center'} 
-	    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
-            return updateTime(row.updateTime);
-        } }	    
+		{type: 'numbers', title: '序号'}
+	    ,{field: 'materialname', title: '支撑材料'}
+	    ,{field: 'file_name', title: '文件名' }
+	    ,{field: 'doc_size', title: '文件大小'} 
+	    ,{field: 'updateTime', title: '上传时间'}	    
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
-	 ,limits: [10,20,50]
-     ,limit: 10 //每页默认显示的数量
 	});
 	
 	//监听行工具事件
 	table.on('tool(demo)', function(obj){
 	  var data = obj.data;
 	  if(obj.event === 'del'){
-	    layer.confirm('确定删除这文件吗？', function(index){
-	    	
+		if(data.required == 'Y')return layer.msg('这是必填文件，不能删除!',function(){
+			
+		});  
+		  
+	    layer.confirm('确定删除这个文件吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
 	    					url: projectBase + '/collectionMaterial/deleteCollectionMaterial',
@@ -108,13 +82,13 @@
 	    					                        layer.msg('删除文件成功!');
 	    					                } else {          
 	    					                        layer.msg('删除文件失败!', function(){
-	    															layer.msg('删除文件失败!');
+
 	    													  });   
 	    					                }
 							},             
 	    					 error:function(data){
 	    												layer.msg('删除文件的过程中出现错误!', function(){
-	    													layer.msg('删除文件的过程中出现错误!');
+	    			
 	    												});  
 	    					  }     
 	    				});
@@ -123,28 +97,24 @@
 		  layer.msg('已成功删除!');
 		  });
 	  } else if(obj.event === 'upload'){
-		  
-		   $('#upload_id').val(data.id);
-		  $("#upload").click();
-	     /* layer.open({
+	    layer.open({
 	        type: 2 //此处以iframe举例
 	        ,title: '上传文件'
-	        ,area: ['500px', '200px']
+	        ,area: ['50%', '70%']
 	        //,shade: 0
-	        ,maxmin: true     
+	        ,maxmin: true
+   
 	        ,content: 'caller_upload.html'
 	    	,zIndex: layer.zIndex //重点1
 	        ,success: function(layero, index){
-	    	  var body = layer.getChildFrame('body',index);
-	    	  var inputList = body.find('input');
-	    	  $(inputList[0]).val(data.id);
-  
+	    	  var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+	    	  $(pf_id).val(data.id);
+	    	  
 	          layer.setTop(layero); //重点2
 	        }
-	      });  */
- 
+	      });
 	  } 
-	  else if (obj.event == 'download'){			
+	  else if (obj.event === 'download'){			
 		  window.location.href= projectBase + "/collectionMaterial/downloadMaterial?doc="+data.doc;	     
 		
 	  }  
@@ -154,6 +124,7 @@
     //监听搜索
     form.on('submit(LAY-app-contlist-search)', function(data){
       var field = data.field;
+      
       //执行重载
       table.reload('demo', {
         where: field
@@ -185,7 +156,7 @@
           			dataType:'json',
 					async: false,
           			success:function(res){
-          							if(res.code==0){       
+          							if(res.code='0'){       
           			                        layer.msg('删除文件成功!');
           			                } else {          
           			                        layer.msg('删除文件失败!', function(){
@@ -199,6 +170,13 @@
           										});  
           			  },       
           		});
+          //执行 Ajax 后重载
+          /*
+          admin.req({
+            url: 'xxx'
+            //,……
+          });
+          */
           table.reload('demo');
           layer.msg('已成功删除!');
         });
@@ -209,8 +187,8 @@
           ,title: '支撑材料'
           ,content: 'caller_new.html'
           ,maxmin: true
-          ,area: ['500px', '300px']
-          ,btn: ['确认', '取消']
+          ,area: ['50%', '70%']
+          ,btn: ['确认添加', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
             var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
@@ -227,97 +205,24 @@
     });
 
   });
-   
-
-    layui.use('upload', function(){
-  	  var $ = layui.jquery
-  	  ,upload = layui.upload;
-  	  var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
-
-  	  //指定允许上传的文件类型
-  	  upload.render({
-  	      elem: '#upload'
-  	      ,url: projectBase + '/collectionMaterial/uploadCollectionmaterial'
-  	      ,accept: 'file' //普通文件 
-  	      ,before: function(obj){ 
-  	    	layer.load(); //上传loading
-  	    	this.data={"upload_id":$('#upload_id').val()};
-  	    	}
-  	      ,done: function(res){
-  	    	  layer.closeAll()
-  	    	  layer.msg('上传成功');
-  	    	  layui.table.reload('demo'); //重载表格
-  	      } ,error:function(data){ 
-  	    	  layer.closeAll();
-  	    	  parent.layer.msg('上传失败');
-  	      },
-  	    
-  	    });  
-  	 
-    });
-    
-   function goPage(pno,psize){
-	    var itable = document.getElementById("zdheader");
-	    var num = itable.rows.length;//表格所有行数(所有记录数)
-
-	    var totalPage = 0;//总页数
-	    var pageSize = psize;//每页显示行数
-	    //总共分几页 
-	    if((num/pageSize) > parseInt(num/pageSize)){   
-	            totalPage = parseInt(num/pageSize)+1;   
-	       }else{   
-	            totalPage = parseInt(num/pageSize);   
-	       }   
-	    var currentPage = pno;//当前页数
-	    var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
-	    var endRow = currentPage * pageSize;//结束显示的行   40
-	    endRow = (endRow > num)? num : endRow;//    40
-		
-	       //遍历显示数据实现分页
-	    for(var i=1;i<num+1;i++){    
-	        var irow = itable.rows[i-1];
-	        if(i>=startRow && i<=endRow){
-	        	irow.hidden="";
-	        }else{
-	        	irow.hidden="hidden";
-	        }
-	    }
-	    var pageEnd = document.getElementById("pageEnd");
-	    var tempStr = "共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页";
-	    if(currentPage>1){
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+")\">首页</a>";
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\"><上一页</a>"
-	    }else{
-	        tempStr += "首页";
-	        tempStr += "<上一页";    
-	    }
-
-	    if(currentPage<totalPage){
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage+1)+","+psize+")\">下一页></a>";
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(totalPage)+","+psize+")\">尾页</a>";
-	    }else{
-	        tempStr += "下一页>";
-	        tempStr += "尾页";    
-	    }
-
-	    document.getElementById("barcon").innerHTML = tempStr;
-	}
-   
-   
-   function updateTime(v){
-		var date = new Date(v);
-	    var y = date.getFullYear();
-	    var m = date.getMonth()+1;
-	    m = m<10?'0'+m:m;
-	    var d = date.getDate();
-	    d = d<10?("0"+d):d;
-	    var h = date.getHours();
-	    h = h<10?("0"+h):h;
-	    var M = date.getMinutes();
-	    M = M<10?("0"+M):M;
-	    var str = y+"-"+m+"-"+d+" "+h+":"+M;
-	    return str;
-   }
+  
+ /* 
+  layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;	  
+	  //指定允许上传的文件类型
+	  upload.render({
+	      elem: '#upload'
+	      ,url: '/eduEvaluation/user/uploadUsers'
+	      ,accept: 'file' //普通文件
+    	  ,exts: 'xlsx' //只允许上传压缩文件
+	      ,done: function(res){
+	        console.log(res)
+	      }
+	    });  
+  }); */
+  //下载模板
+  
   
   </script>
 </body>

@@ -460,7 +460,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setSfi_material_num(num);
-		cpf.setSfh_pf_id(pf_id);
+		cpf.setSfi_pf_id(pf_id);
 
 		result = 1;
 
@@ -846,7 +846,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 	public int updatePerformanceStatus(char process_status, int performance_id) {
 		// TODO Auto-generated method stub
 		ArrayList al = dao.selectPerformanceItem(performance_id);
-		
+		    
 		return dao.updatePerformanceFormStatus(process_status, ((PerformanceForm)al.get(0)).getCollection_major_id());
 	}
 

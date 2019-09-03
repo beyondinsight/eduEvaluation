@@ -445,10 +445,10 @@ public class ColTaskController {
 		int setNum = service.selectCapitalProgressMaterialsNumAndPerformanceId(cpform, propConfig);
 		logger.info("successfully get capitalProgress form");
 
-		BackendData data = new BackendData();
-		data.setMsg("成功获取资金支出表格");
+		BackendData data = new BackendData();  
+		data.setMsg("成功获取资金支出表格"); 
 		data.setCode(0);
-		data.setData(cpf);
+		data.setData(cpf); 
 		data.setCount(cpf.size());
 		// BackendData data = new BackendData();
 
@@ -528,9 +528,12 @@ public class ColTaskController {
 		String edit_type = request.getParameter("edit_type");
 
 		ArrayList al = service.getCapitalProgess(Integer.parseInt(performance_id));
-		CapitalProgressForm cpf = (CapitalProgressForm) al.get(0);
+		CapitalProgressForm cpf1 = (CapitalProgressForm) al.get(0);
+		CapitalProgressForm cpf = new CapitalProgressForm();
+		cpf.setId(cpf1.getId());
+		cpf.setCollection_major_id(cpf1.getCollection_major_id());
  
-		if (edit_type != null & !"".equals(edit_type)) {
+ 		if (edit_type != null & !"".equals(edit_type) && actural_value!=null && !"0".equals(actural_value)) { 
 			if ("rda".equals(edit_type)) {
 				cpf.setRegion_disbursement_amount(Double.parseDouble(actural_value));
 			} else if ("rpha".equals(edit_type)) {
@@ -554,7 +557,7 @@ public class ColTaskController {
 			cpf.setProcess_status(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
 		}   
 
-		int result = service.updateCapitalProgressForm(cpf); 	
+ 		int result = service.updateCapitalProgressForm(cpf); 	
 
 		logger.info("update capital progress ");
 

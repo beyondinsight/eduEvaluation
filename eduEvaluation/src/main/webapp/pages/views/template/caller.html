@@ -32,7 +32,15 @@ width:600px;
         <div class="layui-card">
          
           <div class="layui-card-body">
-          
+          <div  style="font-size:1em;margin:15px 0 0px 15px;">
+          			  <input type="hidden" id="collection_major_id" name="collection_major_id"/>
+          	     	  <div style="float: left;">填报任务：<input type="text" id="task_name" style="border:0;background-color: none;"   readonly="readonly" value=""/></div>
+          	     	  <div style="float: left;">填报任务所属年度：<input type="text" id="task_year" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
+          	     	  <div style="float: left;">院校：<input type="text" id="school" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
+          	     	  <div style="float: left;">专业：<input type="text" id="major" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
+          	     	  <br/>
+          	     	  <button class="layui-btn layuiadmin-btn-list" type="button" data-type="edit" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
+          </div>
             <table class="layui-table table-center">
               <colgroup>
                 <col width="150px">
@@ -50,13 +58,13 @@ width:600px;
                             <tbody>
                               <tr>
                                 <td>专业任务书</td>
-                                <td>要求<a id="count1">0</a>项,已提交<a id="count2">0</a>项</td>
-                                <td><button class="layui-btn layui-btn-warm layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>填报</button><a lay-href="template/caller_edit.html" style="left:-30px;position: relative;z-index:2;font-size: 0px;color: rgba(0,0,0,0);width:30px;height: 20px;display: inline-block;">支撑材料上传</a></td>                  
+                                <td><div id="basic_form_num"></div></td>
+                                <td><button id="basic_form_btn" type="button" class="layui-btn layui-btn-warm layuiadmin-btn-list layui-btn-xs"  style="font-size: 0;"><i class="layui-icon">&#xe642;</i></button></td>                  
                               </tr>
                               <tr>
                                 <td>专业自评报告</td>
-                                <td>要求<a id="count3">0</a>项,已提交<a id="count4">0</a>项</td>
-                                <td><button class="layui-btn layui-btn-warm layui-btn-xs"><i class="layui-icon layui-icon-edit"></i>填报</button><a lay-href="template/caller_edit.html" style="left:-30px;position: relative;z-index:2;font-size: 0px;color: rgba(0,0,0,0);width:30px;height: 20px;display: inline-block;">支撑材料上传</a></td>              
+                                <td><div id="self_eval_num"></div></td>
+                                <td><button id="self_eval_btn" type="button" class="layui-btn layui-btn-warm layuiadmin-btn-list layui-btn-xs"  style="font-size: 0;"><i class="layui-icon">&#xe642;</i></button></td>              
                               </tr>   
                             </tbody>
                           </table>
@@ -83,36 +91,101 @@ layui.config({
     var $ = layui.$
     ,form = layui.form
 	,admin = layui.admin;  
+	
+	var data0 = layui.data('info');
+	$('#task_name').val(data0['basic_info']['task_name']);
+	$('#task_year').val(data0['basic_info']['task_year']);
+	$('#school').val(data0['basic_info']['school']);
+	$('#major').val(data0['basic_info']['major']);
     
-      $.ajax({
-		url: projectBase + '/collectionMaterial/getCollectionMaterial',
-		dataType:'json',
-		success:function(res){
-			
-		 var data = res.data;
-		 var zyrws;
-		 var zyzpbg;
-		 $.each(data,function(index, item){
-			
-			 if(item.metricsId=1){
-				 zyrws= item.materialcount
-				 }else if(item.metricsId=2 ){
-					 
-					 zyzpbg=item.materialcount
-				 };
-			 
-		 })
-			/* alert(zyrws);
-		    alert(zyzpbg); */
-		      $('#count1').text(zyrws);
-		      $('#count2').text(zyrws);
-		      $('#count3').text(zyzpbg);
-		      $('#count4').text(zyzpbg);
-		},             
-		 error:function(data){
-									  
-		  }     
-	});  
+      var data = layui.data('collection');
+      	console.log("data:" + data['collection_major_id']);
+      	var data0;
+      	
+            $.ajax({
+      		url: projectBase + '/collection/getBasicForm',
+      		dataType:'json',
+      		data: { 
+      			'collection_major_id':data['collection_major_id']
+      		},
+      		success:function(res){
+      			
+      			data0 = res.data;
+      			console.log(data0);
+      			console.log(data0[0].materials_num);
+      			$('#basic_form_num').html(data0[0].materials_num);
+      			$('#self_eval_num').html(data0[1].materials_num);
+      		},             
+      		 error:function(data){
+      									  
+      		  }     
+      	});  
+      	
+      	$('#basic_form_btn').on('click', function() {
+      		console.log("begin to do");
+      		layer.open({
+      			type: 2 //此处以iframe举例
+      				,
+      			title: '填报专业任务书',
+      			area: ['60%', '70%'],
+      			shade: 0,
+      			maxmin: true,
+      			btn: ['保存', '取消'],
+      			yes: function(index, layero) {
+      				//点击确认触发 iframe 内容中的按钮提交
+      				//var submit = layero.find('iframe').contents().find("#material_form");
+      				//console.log(submit);
+      				//submit.click();
+      				
+      				//var materials = layui.data('materials');
+      				//console.log(materials);
+      				//var data0 = [];
+					window.location.reload()
+					parent.layer.close(index); //再执行关闭   
+      			},
+      			content: 'caller_edit.html',
+      			zIndex: layer.zIndex //重点1
+      				,
+      			success: function(layero, index) {
+      				var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+      				$(pf_id).val(data0[0].performance_id);
+      				layer.setTop(layero); //重点2
+      			}
+      			});
+      	});
+		
+		$('#self_eval_btn').on('click', function() {
+			console.log("begin to do");
+			layer.open({
+				type: 2 //此处以iframe举例
+					,
+				title: '填报专业任务书',
+				area: ['60%', '70%'],
+				shade: 0,
+				maxmin: true,
+				btn: ['保存', '取消'],
+				yes: function(index, layero) {
+					//点击确认触发 iframe 内容中的按钮提交
+					//var submit = layero.find('iframe').contents().find("#material_form");
+					//console.log(submit);
+					//submit.click();
+					
+					//var materials = layui.data('materials');
+					//console.log(materials);
+					//var data0 = [];
+					window.location.reload()  //重载表格
+					parent.layer.close(index); //再执行关闭   
+				},
+				content: 'caller_edit.html',
+				zIndex: layer.zIndex //重点1
+					,
+				success: function(layero, index) {
+					var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+					$(pf_id).val(data0[1].performance_id);
+					layer.setTop(layero); //重点2
+				}
+				});
+		});
       
 
    });
