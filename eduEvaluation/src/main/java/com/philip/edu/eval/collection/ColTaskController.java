@@ -42,14 +42,14 @@ import com.philip.edu.test.bean.HelloBean;
 @RestController
 @EnableWebMvc
 @RequestMapping(value = "/collection")
-public class ColTaskController { 
+public class ColTaskController {
 
 	private static final Logger logger = Logger.getLogger(ColTaskController.class);
 	private Properties propConfig = PropertiesUtil.getProperty("config");
-	
+
 	private int template_form_performance_id = Integer.parseInt(propConfig.getProperty("template_performance_form_id"));
-			
-	@Autowired 
+
+	@Autowired
 	private ColTaskService service;
 
 	@RequestMapping(value = "/createTask", method = RequestMethod.POST, produces = "application/json")
@@ -70,7 +70,7 @@ public class ColTaskController {
 		taskCol.setStart_time(start_date);
 		taskCol.setEnd_time(end_date);
 		taskCol.setCreate_time(new Date());
-		taskCol.setUpdate_time(new Date()); 
+		taskCol.setUpdate_time(new Date());
 		taskCol.setForm_basic_weight(Integer.parseInt(weight1));
 		taskCol.setForm_performance_weight(Integer.parseInt(weight2));
 		taskCol.setForm_capitalprogress_weight(Integer.parseInt(weight3));
@@ -137,7 +137,7 @@ public class ColTaskController {
 	@RequestMapping(value = "/colTask", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getColTask() {
 
-		ArrayList taskList = (ArrayList) service.getColTaskList();  
+		ArrayList taskList = (ArrayList) service.getColTaskList();
 		for (int i = 0; i < taskList.size(); i++) {
 			CollectionTask task = (CollectionTask) taskList.get(i);
 			task.setForms("共3个");
@@ -246,24 +246,24 @@ public class ColTaskController {
 		String memo = request.getParameter("memo");
 		MetricsDetail metrics = new MetricsDetail();
 		metrics.setMetrics_name(name);
-		int metrics_system_id = ((Integer.parseInt((String)propConfig.get("template_performance_form_id"))));
+		int metrics_system_id = ((Integer.parseInt((String) propConfig.get("template_performance_form_id"))));
 		metrics.setM_system_id(metrics_system_id);
 		metrics.setLevel(Integer.parseInt(level));
 		metrics.setUnit(unit);
 		metrics.setDescription(memo);
 		metrics.setMetrics_code(metrics_code);
-		//decode:
-		if(Integer.parseInt(level) == 2 && metrics_code.contains(".")){
+		// decode:
+		if (Integer.parseInt(level) == 2 && metrics_code.contains(".")) {
 			String[] temp = metrics_code.split("\\.");
 			metrics.setPid(Integer.parseInt(temp[0]));
 			metrics.setOrder(Integer.parseInt(temp[1]));
-		} else if(Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
+		} else if (Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
 			metrics.setPid(0);
 			metrics.setOrder(Integer.parseInt(metrics_code));
 		}
 		logger.info("get all the fields from page.");
-		
-		//Materials:
+
+		// Materials:
 		String sMaterials = request.getParameter("materials");
 		List<Material> materials = new ArrayList();
 		if (sMaterials != null && !"".equals(sMaterials)) {
@@ -279,9 +279,9 @@ public class ColTaskController {
 			}
 		}
 		logger.info("get all the materials from page.");
-		
+
 		int result = service.createMetrics(metrics, materials);
-		
+
 		BackendData data = new BackendData();
 		// logger.info("result:" + result);
 		if (result != 0) {
@@ -294,7 +294,7 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/updateMetrics", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity updateMetrics(HttpServletRequest request) {
 
@@ -307,24 +307,24 @@ public class ColTaskController {
 		MetricsDetail metrics = new MetricsDetail();
 		metrics.setId(Integer.parseInt(id));
 		metrics.setMetrics_name(name);
-		int metrics_system_id = (Integer.parseInt((String)propConfig.get("template_performance_form_id")));
+		int metrics_system_id = (Integer.parseInt((String) propConfig.get("template_performance_form_id")));
 		metrics.setM_system_id(metrics_system_id);
 		metrics.setLevel(Integer.parseInt(level));
 		metrics.setUnit(unit);
 		metrics.setDescription(memo);
-		metrics.setMetrics_code(metrics_code);  
-		//decode:
-		if(Integer.parseInt(level) == 2 && metrics_code.contains(".")){
+		metrics.setMetrics_code(metrics_code);
+		// decode:
+		if (Integer.parseInt(level) == 2 && metrics_code.contains(".")) {
 			String[] temp = metrics_code.split(".");
 			metrics.setPid(Integer.parseInt(temp[0]));
 			metrics.setOrder(Integer.parseInt(temp[1]));
-		} else if(Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
+		} else if (Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
 			metrics.setPid(0);
 			metrics.setOrder(Integer.parseInt(metrics_code));
 		}
 		logger.info("get all the fields from page.");
-		
-		//Materials:
+
+		// Materials:
 		String sMaterials = request.getParameter("materials");
 		List<Material> materials = new ArrayList();
 		if (sMaterials != null && !"".equals(sMaterials)) {
@@ -340,9 +340,9 @@ public class ColTaskController {
 			}
 		}
 		logger.info("get all the materials from page.");
-		
+
 		int result = service.updateMetrics(metrics);
-		
+
 		BackendData data = new BackendData();
 		// logger.info("result:" + result);
 		if (result != 0) {
@@ -355,105 +355,123 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/getMetrics", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getMetrics(HttpServletRequest request){
-		
-		int metrics_system_id = (Integer.parseInt((String)propConfig.get("template_performance_form_id")));
+
+	@RequestMapping(value = "/getMetrics", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getMetrics(HttpServletRequest request) {
+
+		int metrics_system_id = (Integer.parseInt((String) propConfig.get("template_performance_form_id")));
 		ArrayList metricsList = (ArrayList) service.getMetricsList(metrics_system_id);
-		for(int i=0; i<metricsList.size(); i++){
-			MetricsDetail detail = (MetricsDetail)metricsList.get(i);
+		for (int i = 0; i < metricsList.size(); i++) {
+			MetricsDetail detail = (MetricsDetail) metricsList.get(i);
 			detail.setLevel1_name(detail.getMetrics_name());
 			detail.setMaterial_num("要求" + service.countMaterials(detail.getId()) + "项");
 		}
 		logger.info("successfully get metrics list");
-		
+
 		BackendData data = new BackendData();
 		data.setMsg("成功获取全部指标");
-		data.setCode(0); 
+		data.setCode(0);
 		data.setData(metricsList);
 		data.setCount(metricsList.size());
-		//BackendData data = new BackendData();
-		
+		// BackendData data = new BackendData();
+
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/deleteMetrics", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<BackendData> deleteMetrics(HttpServletRequest request){
-		
+
+	@RequestMapping(value = "/deleteMetrics", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> deleteMetrics(HttpServletRequest request) {
+
 		String sId = request.getParameter("id");
-		
+
 		int result = service.deleteMetrics(Integer.parseInt(sId));
 		logger.info("successfully delete metrics");
-		
+
 		BackendData data = new BackendData();
 		data.setMsg("成功删除指标");
-		data.setCode(1); 
-		//BackendData data = new BackendData();
-		
+		data.setCode(1);
+		// BackendData data = new BackendData();
+
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	 
-	@RequestMapping(value="/getPerformanceForm", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getPerformanceForm(HttpServletRequest request){
-		
+
+	@RequestMapping(value = "/getPerformanceForm", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getPerformanceForm(HttpServletRequest request) {
+
 		String collection_major_id = request.getParameter("collection_major_id");
-		
-		ArrayList performanceForm = (ArrayList)service.getPerformanceForm(Integer.parseInt(collection_major_id), this.template_form_performance_id);
+
+		ArrayList performanceForm = (ArrayList) service.getPerformanceForm(Integer.parseInt(collection_major_id),
+				this.template_form_performance_id);
 		service.selectPerformanceMaterialsNum(performanceForm);
 		logger.info("successfully get performance form list");
-		 
-		BackendData data = new BackendData();  
-		data.setMsg("成功获取业绩表格"); 
-		data.setCode(0); 
+
+		BackendData data = new BackendData();
+		data.setMsg("成功获取业绩表格");
+		data.setCode(0);
 		data.setData(performanceForm);
 		data.setCount(performanceForm.size());
-		//BackendData data = new BackendData();
-		
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/getRelateMaterials", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request){
-		 
+
+	@RequestMapping(value = "/getRelateMaterials", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request) {
+
 		String pf_id = request.getParameter("form_performance_id");
-		//String metrics_id = request.getParameter("metrics_id");
+		// String metrics_id = request.getParameter("metrics_id");
 		String metrics_id = null;
-		
-		ArrayList materials = (ArrayList)service.getRelateMaterials(Integer.parseInt(pf_id), 0);
+
+		ArrayList materials = (ArrayList) service.getRelateMaterials(Integer.parseInt(pf_id), 0);
 		logger.info("successfully get materials list");
-		 
+
 		BackendData data = new BackendData();
-		data.setMsg("成功获取材料列表");   
-		data.setCode(0); 
-		data.setData(materials); 
+		data.setMsg("成功获取材料列表");
+		data.setCode(0);
+		data.setData(materials);
 		data.setCount(materials.size());
-		//BackendData data = new BackendData();
-		
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/getCapitalProgress", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getCapitalProgress(HttpServletRequest request){
-		 
+
+	@RequestMapping(value = "/getCapitalProgress", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getCapitalProgress(HttpServletRequest request) {
+
 		String collection_major_id = request.getParameter("collection_major_id");
-		
-		ArrayList cpf = (ArrayList)service.selectCapitalProgress(Integer.parseInt(collection_major_id));
+
+		ArrayList cpf = (ArrayList) service.selectCapitalProgress(Integer.parseInt(collection_major_id));
 		CapitalProgressForm cpform = (CapitalProgressForm) cpf.get(0);
-		
-		int setNum = service.selectCapitalProgressMaterialsNum(cpform, propConfig);
+
+		int setNum = service.selectCapitalProgressMaterialsNumAndPerformanceId(cpform, propConfig);
 		logger.info("successfully get capitalProgress form");
-		 
+
 		BackendData data = new BackendData();
-		data.setMsg("成功获取资金支出表格");   
-		data.setCode(0); 
-		data.setData(cpf); 
+		data.setMsg("成功获取资金支出表格");
+		data.setCode(0);
+		data.setData(cpf);
 		data.setCount(cpf.size());
-		//BackendData data = new BackendData();
-		
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
+	@RequestMapping(value = "/getBasicForm", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getBasicForm(HttpServletRequest request) {
+
+		String collection_major_id = request.getParameter("collection_major_id");
+
+		ArrayList pfs = service.setBasicForm(Integer.parseInt(collection_major_id), propConfig);
+
+		BackendData data = new BackendData();
+		data.setMsg("成功基本信息表格");
+		data.setCode(0);
+		data.setData(pfs);
+		data.setCount(pfs.size());
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/editPerformanceItem", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity editPerformanceItem(HttpServletRequest request) {
 
@@ -465,25 +483,29 @@ public class ColTaskController {
 		String score = request.getParameter("score");
 		String self_evaluation = request.getParameter("self_evaluation");
 		String self_introduction = request.getParameter("self_introduction");
-		
+
 		PerformanceForm pf = new PerformanceForm();
 		pf.setId(Integer.parseInt(performance_id));
-		if(current_value!=null&&!"".equals(current_value))
-		pf.setCurrent_value(Double.parseDouble(current_value));
-		if(target_value!=null&&!"".equals(target_value))
-		pf.setTarget_value(Double.parseDouble(target_value));
-		if(actual_value!=null&&!"".equals(actual_value))
-		pf.setActual_value(Double.parseDouble(actual_value));
-		if(score!=null&&!"".equals(score))
-		pf.setScore(Double.parseDouble(score)); 
-		if(self_evaluation!=null&&!"".equals(self_evaluation))
-		pf.setSelf_evaluate(Double.parseDouble(self_evaluation));
+		if (current_value != null && !"".equals(current_value))
+			pf.setCurrent_value(Double.parseDouble(current_value));
+		if (target_value != null && !"".equals(target_value))
+			pf.setTarget_value(Double.parseDouble(target_value));
+		if (actual_value != null && !"".equals(actual_value))
+			pf.setActual_value(Double.parseDouble(actual_value));
+		if (score != null && !"".equals(score))
+			pf.setScore(Double.parseDouble(score));
+		if (self_evaluation != null && !"".equals(self_evaluation))
+			pf.setSelf_evaluate(Double.parseDouble(self_evaluation));
 		pf.setSelf_introduction(self_introduction);
 		pf.setUpdate_time(new Date());
 		int result = service.updatePerformanceForm(pf);
-		
+
+		// update all the status:
+		service.updatePerformanceStatus(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION,
+				Integer.parseInt(performance_id));
+
 		logger.info("update performance form success");
-		
+
 		BackendData data = new BackendData();
 		// logger.info("result:" + result);
 		if (result != 0) {
@@ -496,134 +518,189 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/chosenSchool", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getChosenSchool(HttpServletRequest request){
-		 
+
+	@RequestMapping(value = "/editCapitalProgressItem", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity editCapitalProgressItem(HttpServletRequest request) {
+
+		String performance_id = request.getParameter("form_performance_id");
+		logger.info("performance_id:" + performance_id);
+		String actural_value = request.getParameter("actural_value");
+		String edit_type = request.getParameter("edit_type");
+
+		ArrayList al = service.getCapitalProgess(Integer.parseInt(performance_id));
+		CapitalProgressForm cpf = (CapitalProgressForm) al.get(0);
+ 
+		if (edit_type != null & !"".equals(edit_type)) {
+			if ("rda".equals(edit_type)) {
+				cpf.setRegion_disbursement_amount(Double.parseDouble(actural_value));
+			} else if ("rha".equals(edit_type)) {
+				cpf.setRegion_paid_hardware_amount(Double.parseDouble(actural_value));
+			} else if ("ria".equals(edit_type)) {
+				cpf.setRegion_paid_internal_amount(Double.parseDouble(actural_value));
+			} else if ("cda".equals(edit_type)) {
+				cpf.setCentral_disbursment_amount(Double.parseDouble(actural_value));
+			} else if ("cia".equals(edit_type)) {
+				cpf.setCentral_paid_internal_amount(Double.parseDouble(actural_value));
+			} else if ("cha".equals(edit_type)) {
+				cpf.setCentral_paid_hardware_amount(Double.parseDouble(actural_value));
+			} else if ("sft".equals(edit_type)) {
+				cpf.setSchool_funding_total(Double.parseDouble(actural_value));
+			} else if ("sfh".equals(edit_type)) {
+				cpf.setSchool_funding_hardware(Double.parseDouble(actural_value));
+			} else if ("sfi".equals(edit_type)) {
+				cpf.setSchool_funding_internal(Double.parseDouble(actural_value));
+			}
+			cpf.setUpdate_time(new Date());
+			cpf.setProcess_status(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
+		}   
+
+		int result = service.updateCapitalProgressForm(cpf); 	
+
+		logger.info("update capital progress ");
+
+		BackendData data = new BackendData();
+		// logger.info("result:" + result); 
+		if (result != 0) {
+			data.setMsg("修改表格成功!");
+			data.setCode(1);
+			data.setData(al);
+		} else {
+			data.setMsg("修改表格失败!");
+			data.setCode(99);
+		}
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/chosenSchool", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getChosenSchool(HttpServletRequest request) {
+
 		String task_id = request.getParameter("task_id");
 		logger.info("task_id:" + task_id);
-		
-		ArrayList chosenSchools = (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
-		
-		logger.info("successfully get chosen school list");  
-		 
-		BackendData data = new BackendData(); 
-		data.setMsg("成功获取选中学校");   
-		data.setCode(0); 
-		data.setData(chosenSchools); 
+
+		ArrayList chosenSchools = (ArrayList) service.getChosenSchool(Integer.parseInt(task_id));
+
+		logger.info("successfully get chosen school list");
+
+		BackendData data = new BackendData();
+		data.setMsg("成功获取选中学校");
+		data.setCode(0);
+		data.setData(chosenSchools);
 		data.setCount(chosenSchools.size());
-		//BackendData data = new BackendData();
-		
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/changeSchool", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<BackendData> changeSchool(HttpServletRequest request){
-		 
+
+	@RequestMapping(value = "/changeSchool", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> changeSchool(HttpServletRequest request) {
+
 		String task_id = request.getParameter("task_id");
 		String[] school_ids = request.getParameterValues("chose_id");
-		
+
 		logger.info("task_id:" + task_id);
 		int[] chose_id = new int[school_ids.length];
-		for(int i=0; i<school_ids.length; i++){
+		for (int i = 0; i < school_ids.length; i++) {
 			chose_id[i] = Integer.parseInt(school_ids[i]);
 		}
-		
-		//ArrayList chosenSchools = (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
-		int result = service.changeSchool(Integer.parseInt(task_id), chose_id, propConfig); 
-		
-		logger.info("successfully change school list");  
-		  
+
+		// ArrayList chosenSchools =
+		// (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
+		int result = service.changeSchool(Integer.parseInt(task_id), chose_id, propConfig);
+
+		logger.info("successfully change school list");
+
 		BackendData data = new BackendData();
-		if(result!=0){
-			data.setMsg("成功改变选中学校");   
-			data.setCode(0);  
-			//data.setData(chosenSchools); 
-			//data.setCount(chosenSchools.size());
-		//BackendData data = new BackendData();
+		if (result != 0) {
+			data.setMsg("成功改变选中学校");
+			data.setCode(0);
+			// data.setData(chosenSchools);
+			// data.setCount(chosenSchools.size());
+			// BackendData data = new BackendData();
 		} else {
 			data.setMsg("修改学校失败");
 			data.setCode(99);
 		}
-		 
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/chosenMajor", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getChosenMajor(HttpServletRequest request){
-		 
+
+	@RequestMapping(value = "/chosenMajor", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getChosenMajor(HttpServletRequest request) {
+
 		String collection_school_id = request.getParameter("collection_school_id");
-		
-		ArrayList chosenMajors =  (ArrayList)service.getChosenMajor(Integer.parseInt(collection_school_id));
-		
+
+		ArrayList chosenMajors = (ArrayList) service.getChosenMajor(Integer.parseInt(collection_school_id));
+
 		logger.info("collection school id:" + collection_school_id);
 		logger.info("successfully get chosen major list");
-		  
-		BackendData data = new BackendData(); 
-		data.setMsg("成功获取选中专业");   
-		data.setCode(0); 
-		data.setData(chosenMajors); 
+
+		BackendData data = new BackendData();
+		data.setMsg("成功获取选中专业");
+		data.setCode(0);
+		data.setData(chosenMajors);
 		data.setCount(chosenMajors.size());
-		//BackendData data = new BackendData();
-		
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/chosenMajorTran", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> getChosenMajorTran(HttpServletRequest request){
-		 
+
+	@RequestMapping(value = "/chosenMajorTran", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getChosenMajorTran(HttpServletRequest request) {
+
 		String collection_school_id = request.getParameter("collection_school_id");
-		
-		ArrayList chosenMajors =  (ArrayList)service.getChosenMajor(Integer.parseInt(collection_school_id));
-		
+
+		ArrayList chosenMajors = (ArrayList) service.getChosenMajor(Integer.parseInt(collection_school_id));
+
 		logger.info("collection school id:" + collection_school_id);
 		logger.info("successfully get chosen major list");
-		
+
 		ArrayList temp = new ArrayList();
-		for(int i=0; i<chosenMajors.size(); i++){
-			ColTaskMajor major = (ColTaskMajor)chosenMajors.get(i);
+		for (int i = 0; i < chosenMajors.size(); i++) {
+			ColTaskMajor major = (ColTaskMajor) chosenMajors.get(i);
 			temp.add(new Integer(major.getMajor_id()));
 		}
-		  
-		BackendData data = new BackendData(); 
-		data.setMsg("成功获取选中专业");   
-		data.setCode(0); 
-		data.setData(temp); 
+
+		BackendData data = new BackendData();
+		data.setMsg("成功获取选中专业");
+		data.setCode(0);
+		data.setData(temp);
 		data.setCount(temp.size());
-		//BackendData data = new BackendData();
-		
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	@RequestMapping(value="/changeMajor", method = RequestMethod.POST, produces = "application/json")
-	public ResponseEntity<BackendData> changeMajor(HttpServletRequest request){
-		 
+
+	@RequestMapping(value = "/changeMajor", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> changeMajor(HttpServletRequest request) {
+
 		String task_id = request.getParameter("collection_school_id");
 		String[] major_ids = request.getParameterValues("ids");
-		
+
 		logger.info("collectio_school_id:" + task_id);
 		int[] chose_id = new int[major_ids.length];
-		for(int i=0; i<major_ids.length; i++){
+		for (int i = 0; i < major_ids.length; i++) {
 			chose_id[i] = Integer.parseInt(major_ids[i]);
 		}
-		
-		//ArrayList chosenSchools = (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
-		int result = service.changeMajor(Integer.parseInt(task_id), chose_id, propConfig); 
-		
-		logger.info("successfully change school list");  
-		  
+
+		// ArrayList chosenSchools =
+		// (ArrayList)service.getChosenSchool(Integer.parseInt(task_id));
+		int result = service.changeMajor(Integer.parseInt(task_id), chose_id, propConfig);
+
+		logger.info("successfully change school list");
+
 		BackendData data = new BackendData();
-		if(result!=0){
-			data.setMsg("成功改变选中学校");   
-			data.setCode(0);  
-			//data.setData(chosenSchools); 
-			//data.setCount(chosenSchools.size());
-		//BackendData data = new BackendData();
+		if (result != 0) {
+			data.setMsg("成功改变选中学校");
+			data.setCode(0);
+			// data.setData(chosenSchools);
+			// data.setCount(chosenSchools.size());
+			// BackendData data = new BackendData();
 		} else {
 			data.setMsg("修改学校失败");
 			data.setCode(99);
 		}
-		 
-		return new ResponseEntity<BackendData>(data, HttpStatus.OK); 
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 }

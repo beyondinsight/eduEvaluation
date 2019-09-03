@@ -9,16 +9,26 @@
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
+<style>
+.noborder td{
+border:0;
+}
+
+</style>
 <body>
 
   <div class="layui-fluid">
     <div class="layui-card">
-
       <div class="layui-card-body">
-       <!-- <div style="padding-bottom: 10px;"> -->
-		  <input type="hidden" id="form_performance_id" name="form_performance_id"/>
-		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>
-           <!--  <button class="layui-btn layuiadmin-btn-list" id="upload"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button> -->
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_capital_form">
+		   <div class="layui-form-item">
+			<input type="hidden" id="form_performance_id" name="form_performance_id"/>
+			<input type="hidden" id="edit_type" name="edit_type"/>
+			<table class="layui-table">
+				<tr class="noborder"><td>实际值</td><td><input id="actural_value" name="actural_value" type="text" class="layui-input"></td></tr>
+			</table> 
+		   </div>
+		<button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="test-table-toolbar-barDemo">
@@ -26,6 +36,11 @@
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script>
+		
+		<div class="layui-form-item layui-hide">
+		  <input type="button" lay-submit lay-filter="edit_capital_form" id="edit_capital_form" value="确认添加">
+		</div>
+		</div>
       </div>
     </div>
 
@@ -38,26 +53,25 @@
   }).extend({
     index: 'lib/index' //主入口模块
   }).use(['index', 'contlist', 'table', 'layer','admin','upload','jquery'], function(){
-    var $ = layui.$,
-	table = layui.table
+    var table = layui.table
     ,form = layui.form
 	,admin = layui.admin
-	,upload=layui.upload;        
+	,upload=layui.upload
+	,$ = layui.$;    
+		
+	console.log("pf_id:" + $("#form_performance_id").val());
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,where: {
-		  'form_performance_id':$('#form_performance_id').val()
-	  }
-	  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
+	  ,url: projectBase + '/collection/getRelateMaterials'//数据接口
+	  ,where: {'form_performance_id':$('#form_performance_id').val()} 
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
-		{type: 'checkbox'}
-		,{type: 'numbers', title: '序号'}
+		{type: 'checkbox'}		
 	    ,{field: 'materialname', title: '支撑材料'}
 	    ,{field: 'doc', title: '文件名' }
-	    ,{field: 'doc_size', title: '文件大小'} 
+	    ,{field: 'docsize', title: '文件大小'} 
 	    ,{field: 'updateTime', title: '上传时间'}	    
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
@@ -70,7 +84,7 @@
 	    layer.confirm('确定删除这文件吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: projectBase + '/collectionMaterial/deleteCollectionMaterial',
+	    					url: projectBase + '/collectionmaterial/deletecollectionmaterial',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
@@ -98,33 +112,63 @@
 	        type: 2 //此处以iframe举例
 	        ,title: '上传文件'
 	        ,area: ['50%', '70%']
-	        //,shade: 0
-	        ,maxmin: true
-   
+	        ,maxmin: true	        
 	        ,content: 'caller_upload.html'
 	    	,zIndex: layer.zIndex //重点1
 	        ,success: function(layero, index){
-	    	  var pf_id = layero.find('iframe').contents().find("#form_performance_id");
-	    	  $(pf_id).val(data.id);
+	    	  var body = layer.getChildFrame('body',index);
+	    	  var inputList = body.find('input');
+	    	  $(inputList[0]).val(data.materialname);
+	    	  $(inputList[1]).val(data.doc);
+	    	  $(inputList[2]).val(data.docsize);
+	    	  $(inputList[3]).val(data.updateTime);
+	    	  var areaList = body.find('textarea');
+	    	  $(areaList[0]).val(data.memo);
 	    	  
 	          layer.setTop(layero); //重点2
 	        }
 	      });
 	  } 
-	  else if (obj.event === 'download'){			
-		  window.location.href= projectBase + "/collectionMaterial/downloadMaterial?doc="+data.doc;	     
+	  else if (obj.event === 'download'){		   
+				
+		  window.location.href= projectBase + "/collectionmaterial/downloadmaterial?doc="+data.doc;	     
 		
 	  }  
 	});
 	
 	
     //监听搜索
-    form.on('submit(LAY-app-contlist-search)', function(data){
+    form.on('submit(edit_capital_form)', function(data){
       var field = data.field;
       
       //执行重载
-      table.reload('demo', {
-        where: field
+      console.log("edit capital progress");
+	  console.log("field: performance_id:" + field.form_performance_id);
+      $.ajax({
+      	url: projectBase + '/collection/editCapitalProgressItem',
+      	dataType: 'json',
+      	data: {
+			'form_performance_id':$('#form_performance_id').val(),
+			'edit_type':$('#edit_type').val(),
+			'actural_value':$('#actural_value').val()
+		},
+      	type: 'POST',
+      	success: function(res){
+      		if(res.code==1){
+      			layer.msg("修改资金支出情况成功!");
+				var data = res.data;
+      			setTimeout(function(){
+					console.log("collection_major_id:" + data[0].collection_major_id);
+					parent.$('#collection_major_id').val(data[0].collection_major_id);
+      				parent.location.reload(); //parent.layui.table.reload('demo'); //重载表格
+      				var index = parent.layer.getFrameIndex(window.name);
+      				parent.layer.close(index); //再执行关闭   
+      				},400);
+      		} else {
+      			layer.msg("修改资金支出情况失败", function(){
+      				});
+      		}
+      	} 
       });
     });
     
@@ -203,22 +247,6 @@
 
   });
   
- /* 
-  layui.use('upload', function(){
-	  var $ = layui.jquery
-	  ,upload = layui.upload;	  
-	  //指定允许上传的文件类型
-	  upload.render({
-	      elem: '#upload'
-	      ,url: '/eduEvaluation/user/uploadUsers'
-	      ,accept: 'file' //普通文件
-    	  ,exts: 'xlsx' //只允许上传压缩文件
-	      ,done: function(res){
-	        console.log(res)
-	      }
-	    });  
-  }); */
-  //下载模板
   
   
   </script>

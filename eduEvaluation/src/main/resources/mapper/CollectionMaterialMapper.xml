@@ -17,7 +17,7 @@
 			jdbcType="INTEGER" />
 		<result column="material_name" property="materialname"
 			jdbcType="VARCHAR" />
-		<result column="doc_size" property="docsize" jdbcType="VARCHAR" />
+		<result column="doc_size" property="doc_size" jdbcType="INTEGER" />
 	</resultMap>
 
 	<insert id="createMaterial" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
@@ -154,8 +154,7 @@
 	</delete>
 
 	<select id="getCollectionMaterial" resultMap="CollectionMaterialMap">
-		select metrics_id,count(1) materialcount from tbl_collection_material
-		GROUP by metrics_id
+		select * from tbl_collection_material where form_performance_id=#{form_performance_id}
 	</select>
 
 	<select id="CollectionMaterial" resultMap="CollectionMaterialMap">

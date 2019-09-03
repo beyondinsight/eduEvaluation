@@ -18,6 +18,14 @@
 		<result property="major_code" column="major_code"/>
 	</resultMap>
 	
+	<resultMap id="CapitalPerformanceIdMap" type="int">
+		<id property="id" column="id"/>
+	</resultMap>
+	
+	<resultMap id="BasicPerfromanceIdMap" type="int">
+		<id property="id" column="id"/>
+	</resultMap>
+	
 	<resultMap id="colTaskListResultMap" type="com.philip.edu.eval.bean.CollectionTask">
 		<id property="id" column="id"/>
 		<result property="task_name" column="task_name"/>
@@ -77,11 +85,11 @@
  		<result property="region_paid_internal_amount" column="region_paid_internal_amount"/>
  		<result property="central_disbursement_amount" column="central_disbursement_amount"/>
  		<result property="central_paid_amount" column="central_paid_amount"/>
- 		<result property="central_paid_hardware_amout" column="central_paid_hardware_amount"/>
+ 		<result property="central_paid_hardware_amount" column="central_paid_hardware_amount"/>
  		<result property="central_paid_internal_amount" column="central_paid_internal_amount"/>
  		<result property="school_funding_total" column="school_funding_total"/>
  		<result property="school_funding_hardware" column="school_funding_hardware"/>
- 		<result property="school_funnding_internal" column="school_funding_internal"/>
+ 		<result property="school_funding_internal" column="school_funding_internal"/>
  		<result property="process_status" column="process_status"/>
  	</resultMap>
 	
@@ -271,7 +279,15 @@
     	select count(*) from tbl_collection_material where form_performance_id=#{form_performance_id} and doc is not null
     </select>
     
-    <select id="getCapitalProgressItemId">
+    <select id="getCapitalProgressItemId" resultMap="CapitalPerformanceIdMap">
+    	select id from tbl_form_performance where collection_major_id=#{collection_major_id} and metrics_id=#{metrics_id}
+    </select>
+    
+    <select id="getCapitalProgress" resultMap="capitalResultMap">
+    	select cp.id,cp.collection_major_id from tbl_form_capitalprogress cp, tbl_form_performance p where cp.collection_major_id=p.collection_major_id and p.id=#{performance_form_id}
+    </select> 
+    
+    <select id="getBasicFormItemId" resultMap="BasicPerfromanceIdMap">
     	select id from tbl_form_performance where collection_major_id=#{collection_major_id} and metrics_id=#{metrics_id}
     </select>
     
@@ -279,6 +295,72 @@
     	update tbl_form_performance set current_value=#{current_value}, target_value=#{target_value}, actual_value=#{actual_value}, score=#{score}, self_evaluate=#{self_evaluate}, update_time=#{update_time}, self_introduction=#{self_introduction}
     	where id=#{id}
     </insert>
+    
+    <insert id="updatePerformanceFormStatus">
+    	update tbl_form_performance set process_status=#{process_status} where collection_major_id=#{collection_major_id}
+    </insert>
+    
+    <update id="updateCapitalProgressForm">
+        update tbl_form_capitalprogress
+    <set >
+      <if test="collection_major_id != null" >
+        collection_major_id = #{collection_major_id,jdbcType=BIGINT},
+      </if>
+      <if test="create_time != null" >
+        create_time = #{create_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="update_time != null" >
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="central_disbursement_total != null" >
+        central_disbursement_total = #{central_disbursement_total,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_total != null" >
+        central_paid_total = #{central_paid_total,jdbcType=DOUBLE},
+      </if>
+      <if test="region_disbursement_amount != null" >
+        region_disbursement_amount = #{region_disbursement_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="region_paid_amount != null" >
+        region_paid_amount = #{region_paid_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="region_paid_hardware_amount != null" >
+        region_paid_hardware_amount = #{region_paid_hardware_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="region_paid_internal_amount != null" >
+        region_paid_internal_amount = #{region_paid_internal_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_disbursement_amount != null" >
+        central_disbursement_amount = #{central_disbursement_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_amount != null" >
+        central_paid_amount = #{central_paid_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_hardware_amount != null" >
+        central_paid_hardware_amount = #{central_paid_hardware_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="central_paid_internal_amount != null" >
+        central_paid_internal_amount = #{central_paid_internal_amount,jdbcType=DOUBLE},
+      </if>
+      <if test="school_funding_total != null" >
+        school_funding_total = #{school_funding_total,jdbcType=DOUBLE},
+      </if>
+      <if test="school_funding_hardware != null" >
+        school_funding_hardware = #{school_funding_hardware,jdbcType=DOUBLE},
+      </if>
+      <if test="school_funding_internal != null" >
+        school_funding_internal = #{school_funding_internal,jdbcType=DOUBLE},
+      </if>
+      <if test="process_status != null" >
+        process_status = #{process_status,jdbcType=CHAR},
+      </if>
+    </set>
+	 where id = #{id,jdbcType=BIGINT}
+  </update>
+    
+    <select id="selectPerformanceItem" resultMap="performanceResultMap">
+    	select * from tbl_form_performance where id=#{form_performance_id}
+   	</select>
     
     <select id="getChosenSchools" resultMap="colTaskSchoolResultMap">
     	select cs.school_id,s.school_name,s.school_code, cs.id as cid from tbl_collection_school cs, tbl_school s

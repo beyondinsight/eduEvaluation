@@ -12,6 +12,7 @@
 
   <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 180px 50px 0 0;padding-left:60px">
    <div class="layui-form-item">
+	  <input type="hidden" id="form_performance_id" name="form_performance_id"/>
       <button type="button" class="layui-btn layui-btn-normal" id="upload" >上传文件</button>
      
     </div>
@@ -47,6 +48,9 @@
 	  upload.render({
 	      elem: '#upload'
 	      ,url: projectBase + '/collectionMaterial/uploadCollectionmaterial'
+		  ,data: {
+			  'id':$('#form_performance_id').val()
+		  }
 	      ,accept: 'file' //普通文件 
 	      ,done: function(res){
 	    	  parent.layer.msg('上传成功');

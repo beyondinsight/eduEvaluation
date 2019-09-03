@@ -42,17 +42,27 @@ public class UserTaskController {
 
 	@RequestMapping(value = "/userTaskList", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getUsetTaskList(HttpServletRequest request) {
+		BackendData data = new BackendData();
+		
 		// get token:
 		String token = request.getParameter("token");
+		
+		if(token==null || "".equals(token)){
+			data.setMsg("您的令牌已过期！");
+			data.setCode(10);
+			// BackendData data = new BackendData();
+
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
 
 		// check:
 		Map<String, Claim> claims = SecurityUtil.verifyToken(token);
 		Claim user_name_claim = claims.get("username");
 
-		BackendData data = new BackendData();
+
 		if (null == user_name_claim || StringUtils.isEmpty(user_name_claim.asString())) {
 			data.setMsg("您的用户验证信息不正确！");
-			data.setCode(10);
+			data.setCode(20);
 			// BackendData data = new BackendData();
 
 			return new ResponseEntity<BackendData>(data, HttpStatus.OK);

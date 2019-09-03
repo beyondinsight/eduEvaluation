@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.philip.edu.eval.bean.CapitalProgressForm;
 import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
@@ -32,7 +34,7 @@ public interface ColTaskService {
 	public List<PerformanceForm> getPerformanceForm(int collection_major_id, int for_template);
 	public List<Material> getRelateMaterials(int pf_id, int metrics_id);
 	public List<CapitalProgressForm> selectCapitalProgress(int collection_major_id);
-	public int selectCapitalProgressMaterialsNum(CapitalProgressForm cpf, Properties prop);
+	public int selectCapitalProgressMaterialsNumAndPerformanceId(CapitalProgressForm cpf, Properties prop);
 	public int selectPerformanceMaterialsNum(ArrayList performanceForm);
 	public int updatePerformanceForm(PerformanceForm pf);
 	public List<ColTaskSchool> getChosenSchool(int task_id);
@@ -41,4 +43,8 @@ public interface ColTaskService {
 	public int insertTaskSchool(ColTaskSchool colTaskSchool);
 	public int changeSchool(int task_id, int[] chose_id, Properties prop);
 	public int changeMajor(int parseInt, int[] chose_id, Properties propConfig);
+	public ArrayList setBasicForm(int collection_major_id, Properties prop);
+	public int updatePerformanceStatus(char process_status, int collection_major_id);
+	public ArrayList getCapitalProgess(int performance_form_id);
+	public int updateCapitalProgressForm(CapitalProgressForm cpf);
 }

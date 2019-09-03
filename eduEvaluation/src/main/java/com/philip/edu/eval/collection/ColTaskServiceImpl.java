@@ -11,10 +11,12 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.philip.edu.eval.bean.BasicForm;
+import com.philip.edu.eval.bean.BasicFormInfo;
 import com.philip.edu.eval.bean.CapitalProgressForm;
 import com.philip.edu.eval.bean.ChosenMajor;
 import com.philip.edu.eval.bean.ColTaskMajor;
@@ -33,6 +35,8 @@ import com.philip.edu.eval.util.EvalConstants;
 @org.springframework.stereotype.Service("colTask_service")
 public class ColTaskServiceImpl implements ColTaskService {
 
+	private static final Logger logger = Logger.getLogger(ColTaskServiceImpl.class);
+	
 	@Autowired
 	private ColMapper dao;
 	@Autowired
@@ -107,6 +111,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 				school.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 			}
 			dao.insertColSchool(schools);
+			logger.info("sucessfully insert schools.");
 
 			// 3.insert task-major:
 			// 3.1 default school majors:
@@ -165,6 +170,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 					school_id2[index++] = tempId2[0];
 				}
 				dao.deleteTaskOldSchools(school_id2);
+				logger.info("successfully delete nonchose Schools");
 
 				for (int i = 0; i < majors.size(); i++) {
 					ColTaskMajor inputMajor = (ColTaskMajor) majors.get(i);
@@ -187,8 +193,31 @@ public class ColTaskServiceImpl implements ColTaskService {
 					pf1.setFor_template(this.template_basic_form_id);
 					pf1.setMetrics_id(this.METRICS_MAJOR_BASIC_ID);
 					dao.insertPerformanceForm(pf1);
+					List<Material> materials = dao.getMaterialMetrics(this.METRICS_MAJOR_BASIC_ID);
+					for (int k = 0; k < materials.size(); k++) {
+						Material material = (Material) materials.get(k);
+						material.setCreate_time(new Date());
+						material.setUpdate_time(new Date());
+						material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+
+						material.setForm_performance_id(pf1.getId());
+						dao.insertRelateMaterial(material);
+						logger.info("successfully insert one material");
+					}
 					pf1.setMetrics_id(this.METRICS_SELF_EVAL_ID);
 					dao.insertPerformanceForm(pf1);
+					materials = dao.getMaterialMetrics(this.METRICS_SELF_EVAL_ID);
+					for (int k = 0; k < materials.size(); k++) {
+						Material material = (Material) materials.get(k);
+						material.setCreate_time(new Date());
+						material.setUpdate_time(new Date());
+						material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+
+						material.setForm_performance_id(pf1.getId());
+						dao.insertRelateMaterial(material);
+						logger.info("successfully insert one material");
+					}
+					logger.info("successfully insert basic form");
 
 					// 5.insert form 2:
 					// 5.1 insert forms;
@@ -206,9 +235,10 @@ public class ColTaskServiceImpl implements ColTaskService {
 						pf.setMetrics_id(metric.getId());
 						pf.setUnit(metric.getUnit());
 						dao.insertPerformanceForm(pf);
+						logger.info("successfully insert one performance form");
 
 						// 5.2 insert materials:
-						List<Material> materials = dao.getMaterialMetrics(metric.getId());
+						materials = dao.getMaterialMetrics(metric.getId());
 						for (int k = 0; k < materials.size(); k++) {
 							Material material = (Material) materials.get(k);
 							material.setCreate_time(new Date());
@@ -217,6 +247,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 							material.setForm_performance_id(pf.getId());
 							dao.insertRelateMaterial(material);
+							logger.info("successfully insert one material");
 						}
 					}
 
@@ -271,6 +302,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 					dao.insertPerformanceForm(pf2);
 					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id,
 							this.metrics_school_funding_internal_id);
+					logger.info("successfully insert capital progress.");
 				}
 			}
 		}
@@ -362,71 +394,73 @@ public class ColTaskServiceImpl implements ColTaskService {
 		return performanceForm.size();
 	}
 
-	public int selectCapitalProgressMaterialsNum(CapitalProgressForm cpf, Properties prop) {
+	public int selectCapitalProgressMaterialsNumAndPerformanceId(CapitalProgressForm cpf, Properties prop) {
 		int result = 0;
 
-		Integer rda_id = (Integer) prop.get("metrics_region_disbursement_amount");
-		Integer rpha_id = (Integer) prop.get("metrics_region_paid_hardware_amount");
-		Integer rpia_id = (Integer) prop.get("metrics_region_paid_internal_amount");
-		Integer cda_id = (Integer) prop.get("metrics_central_disbursement_amount");
-		Integer cpha_id = (Integer) prop.get("metrics_central_paid_hardware_amount");
-		Integer cpia_id = (Integer) prop.get("metrics_central_paid_internal_amount");
-		Integer sft_id = (Integer) prop.get("metrics_school_funding_total");
-		Integer sfh_id = (Integer) prop.get("metrics_school_funding_hardware");
-		Integer sfi_id = (Integer) prop.get("metrics_school_funding_internal");
+		this.use_properties(prop);
 		// region_disbursement_amount:
-		ArrayList al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), rda_id);
+		int test = cpf.getCollection_major_id();
+		ArrayList al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_region_disbursement_amount_id);
 		int pf_id = ((Integer) al.get(0)).intValue();
 		String num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setRda_material_num(num);
+		cpf.setRda_pf_id(pf_id);	
 
 		// region_paid_hardware_amount:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), rpha_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_region_paid_hardware_amount_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setRpha_material_num(num);
+		cpf.setRpha_pf_id(pf_id);
 
 		// region_paid_internal_amount:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), rpia_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_region_paid_internal_amount_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setRpia_material_num(num);
-
+		cpf.setRpia_pf_id(pf_id);
+		
 		// central_disbursement_amount:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), cda_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_central_disbursement_amount_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setCda_material_num(num);
+		cpf.setCda_pf_id(pf_id);
 
 		// central_paid_hardware_amount:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), cpha_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_central_paid_hardware_amount_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setCpha_material_num(num);
+		cpf.setCpha_pf_id(pf_id);
 
 		// central_paid_internal_amount:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), cpia_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_central_paid_internal_amount_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setCpia_material_num(num);
+		cpf.setCpia_pf_id(pf_id);
 
 		// school_funding_total:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), sft_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_school_funding_total_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setSft_material_num(num);
+		cpf.setSft_pf_id(pf_id);
 
 		// school_funding_hardware:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), sfh_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_school_funding_hardware_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setSfh_material_num(num);
+		cpf.setSfh_pf_id(pf_id);
 
 		// school_funding_internal:
-		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), sfi_id);
+		al = dao.getCapitalProgressItemId(cpf.getCollection_major_id(), this.metrics_school_funding_internal_id);
 		pf_id = ((Integer) al.get(0)).intValue();
 		num = "要求" + dao.countRequiredMaterial(pf_id) + "项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		cpf.setSfi_material_num(num);
+		cpf.setSfh_pf_id(pf_id);
 
 		result = 1;
 
@@ -529,8 +563,30 @@ public class ColTaskServiceImpl implements ColTaskService {
 						pf1.setUpdate_time(new Date());
 						pf1.setMetrics_id(this.METRICS_MAJOR_BASIC_ID);
 						dao.insertPerformanceForm(pf1);
+						List<Material> materials = dao.getMaterialMetrics(this.METRICS_MAJOR_BASIC_ID);
+						for (int k = 0; k < materials.size(); k++) {
+							Material material = (Material) materials.get(k);
+							material.setCreate_time(new Date());
+							material.setUpdate_time(new Date());
+							material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+
+							material.setForm_performance_id(pf1.getId());
+							dao.insertRelateMaterial(material);
+							logger.info("successfully insert one material");
+						}
 						pf1.setMetrics_id(this.METRICS_SELF_EVAL_ID);
 						dao.insertPerformanceForm(pf1);
+						materials = dao.getMaterialMetrics(this.METRICS_SELF_EVAL_ID);
+						for (int k = 0; k < materials.size(); k++) {
+							Material material = (Material) materials.get(k);
+							material.setCreate_time(new Date());
+							material.setUpdate_time(new Date());
+							material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+
+							material.setForm_performance_id(pf1.getId());
+							dao.insertRelateMaterial(material);
+							logger.info("successfully insert one material");
+						}
 
 						// 5.insert form 2:
 						// 5.1 insert forms;
@@ -549,7 +605,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 							dao.insertPerformanceForm(pf);
 
 							// 5.2 insert materials:
-							List<Material> materials = dao.getMaterialMetrics(metric.getId());
+							materials = dao.getMaterialMetrics(metric.getId());
 							for (int l = 0; l < materials.size(); l++) {
 								Material material = (Material) materials.get(l);
 								material.setCreate_time(new Date());
@@ -757,5 +813,50 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 		result = 1;
 		return result;
+	}
+
+	public ArrayList setBasicForm(int collection_major_id, Properties prop) {
+		// TODO Auto-generated method stub
+		//return dao.getBasicFormItemId(collection_major_id);
+		this.use_properties(prop);
+		ArrayList result = new ArrayList();
+		
+		ArrayList al = dao.getBasicFormItemId(collection_major_id, this.METRICS_MAJOR_BASIC_ID);
+		BasicFormInfo info = new BasicFormInfo();
+		int pf_id;
+		info.setItem_name("basic_info");
+		pf_id = ((Integer)al.get(0)).intValue();
+		info.setPerformance_id(pf_id);
+		String materials_num = "要求1项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		info.setMaterials_num(materials_num);
+		result.add(info);
+		
+		al = dao.getBasicFormItemId(collection_major_id, this.METRICS_SELF_EVAL_ID);
+		info = new BasicFormInfo();
+		info.setItem_name("self_eval");
+		pf_id = ((Integer)al.get(0)).intValue();
+		info.setPerformance_id(pf_id);
+		materials_num = "要求1项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		info.setMaterials_num(materials_num);
+		result.add(info);
+		
+		return result;
+	}
+
+	public int updatePerformanceStatus(char process_status, int performance_id) {
+		// TODO Auto-generated method stub
+		ArrayList al = dao.selectPerformanceItem(performance_id);
+		
+		return dao.updatePerformanceFormStatus(process_status, ((PerformanceForm)al.get(0)).getCollection_major_id());
+	}
+
+	public ArrayList getCapitalProgess(int performance_form_id) {
+		// TODO Auto-generated method stub
+		return dao.getCapitalProgress(performance_form_id);
+	}
+
+	public int updateCapitalProgressForm(CapitalProgressForm cpf) {
+		// TODO Auto-generated method stub
+		return dao.updateCapitalProgressForm(cpf);
 	}
 }

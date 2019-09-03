@@ -15,9 +15,9 @@ public  class CollectionMaterialServiceImpl implements CollectionMaterialService
 	@Autowired
 	private CollectionMaterialMapper dao; 
 
-	public List<TblCollectionMaterial> getCollectionMaterial() {
+	public List<TblCollectionMaterial> getCollectionMaterial(int form_performance_id) {
 		// TODO Auto-generated method stub
-		return dao.getCollectionMaterial();
+		return dao.getCollectionMaterial(form_performance_id);
 	}
 
 

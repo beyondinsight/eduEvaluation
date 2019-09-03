@@ -234,9 +234,10 @@
 								if( data.template_type_string=="major_performance"){
 									parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
 								} else if( data.template_type_string == "major_capital_process"){
-									parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
-								} else if( data.template_type_string == "major_basic_inf"){
-									parent.layui.index.openTabsPage("template/caller.html", "专业基本情况");
+									parent.layui.index.openTabsPage("collection/capital_progress_collection.html", "资金支出进度填报");
+								} else if( data.template_type_string == "major_basic_info"){
+									console.log("entering basic info");
+									parent.layui.index.openTabsPage("template/caller.html", "专业数据填报"); 
 								}
 							} 
 						});

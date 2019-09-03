@@ -72,7 +72,7 @@ public class UsersController {
 	@Autowired
 	private RolesService role_service;
 
-	
+	 
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> users(){
 		
@@ -218,10 +218,9 @@ public class UsersController {
 			return new ResponseEntity<BackendData>(mes(code,msg), HttpStatus.OK);
 		}
 		
-		password = Code.encrypt(password, propConfig.getProperty("code_key"), propConfig.getProperty("code_ivs"));
 		users.setEmail(email);
 		users.setFixPhone(fixPhone);
-		users.setInstitution(institution);
+		users.setInstitution(institution); 
 		//users.setMajor(major);
 		users.setMemo(memo);
 		users.setMobilePhone(mobilePhone);
@@ -239,6 +238,10 @@ public class UsersController {
 		}
 			
 		if(!password.equals("") && password != null) {
+			ArrayList tempUsers = (ArrayList)service.getUsers(userName);
+			TblUsers tempUser = (TblUsers)tempUsers.get(0);
+			
+			password = SecurityUtil.md5Hex(userName + password + tempUser.getSalt());
 			users.setPassword(password);
 		} 
 		
@@ -465,7 +468,7 @@ public class UsersController {
 		ArrayList returnInfo = new ArrayList();
 		
 		List<TblUsers> users = service.getUsers(username);
-		returnInfo.add(users.get(0));
+		returnInfo.add(users.get(0)); 
 		//TblUsers user = users.get(0);
 		
 		try {

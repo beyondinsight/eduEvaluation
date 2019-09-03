@@ -27,8 +27,20 @@ public class TblCollectionMaterial {
     private String docsize;
     
     private String materialname;
+    
+    private long doc_size;
+    
+    
 
-    public String getDocsize() {
+    public long getDoc_size() {
+		return doc_size;
+	}
+
+	public void setDoc_size(long l) {
+		this.doc_size = l;
+	}
+
+	public String getDocsize() {
 		return docsize;
 	}
 

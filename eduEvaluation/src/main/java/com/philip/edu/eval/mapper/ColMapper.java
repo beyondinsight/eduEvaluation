@@ -50,10 +50,11 @@ public interface ColMapper {
 	public int insertPerformanceForm(PerformanceForm pf);
 	public int insertRelateMaterial(Material material);
 	public List<Material> getMaterialMetrics(int pf_id);
-	public List<CapitalProgressForm> selectCapitalProgress(int collection_major_id);
+	public List<CapitalProgressForm> selectCapitalProgress(@Param("collection_major_id")int collection_major_id);
 	public int countUploadedMaterial(int form_performance_id);
 	public int countRequiredMaterial(int form_performance_id);  
-	public ArrayList getCapitalProgressItemId(int collection_major_id,int metrics_id);
+	public ArrayList getCapitalProgressItemId(@Param("collection_major_id")int collection_major_id,@Param("metrics_id")int metrics_id);
+	public ArrayList getBasicFormItemId(@Param("collection_major_id")int collection_major_id,@Param("metrics_id")int metrics_id);
 	public int updatePerformanceForm(PerformanceForm pf);
 	public List<ColTaskSchool> getChosenSchools(int task_id);
 	public List<ColTaskMajor> getChosenMajors(int collection_school_id);
@@ -61,6 +62,10 @@ public interface ColMapper {
 	public int insertTaskSchool(ColTaskSchool colTaskSchool);
 	public int deleteTaskSchools(int[] school_ids);
 	public int deleteTaskMajors(int collection_school_id);
+	public int updatePerformanceFormStatus(@Param("process_status")char process_status, @Param("collection_major_id")int collection_major_id);
+	public ArrayList selectPerformanceItem(int form_performance_id);
+	public ArrayList getCapitalProgress(int form_performance_id);
+	public int updateCapitalProgressForm(CapitalProgressForm cpf);
 	
 	//add by xiewei
 	public List<UserTask> getUserTaskList(@Param("user_id") int user_id);
