@@ -177,6 +177,10 @@
     	</foreach> 
     </delete>
     
+    <delete id="deleteMaterial" parameterType="int">
+    	delete from tbl_support_material where id=#{id}
+    </delete>
+    
     <delete id="deleteTaskMajors" parameterType="int">
     	delete from tbl_collection_major where
     	collection_school_id = #{collectoin_schools_id}
@@ -464,7 +468,6 @@
 		<result property="update_time" column="update_time" />
 	</resultMap>
 
-
 	<resultMap id="majorCollectionStatusResultMap"
 		type="com.philip.edu.eval.bean.MajorCollectionStatus">
 		<result property="task_id" column="task_id" />
@@ -477,7 +480,7 @@
 		<result property="collection_major_id" column="collection_major_id" />
 	</resultMap>
 	
-		<select id="getUserTaskList" resultMap="userTaskResultMap">
+	<select id="getUserTaskList" resultMap="userTaskResultMap">
 		select distinct
 		v_task_school_major.task_id,
 		v_task_school_major.task_name,

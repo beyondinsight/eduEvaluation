@@ -27,7 +27,7 @@
 
 				<div class="layui-card-body">
 					<div style="padding-bottom: 10px;">
-						<button class="layui-btn layuiadmin-btn-list layui-btn-checked" data-type="edit" ><i class="layui-icon layui-icon-senior"></i> 校验并完成填报</button>
+						<button type="button" class="layui-btn layuiadmin-btn-list layui-btn-checked" id="verify_button"><i class="layui-icon layui-icon-senior"></i> 校验并完成填报</button>
 						<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
 					</div>
 					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
@@ -284,7 +284,7 @@
 								,
 							title: '填报详细',
 							area: ['960px', '80%'],
-							shade: 0,
+							//shade: 0,
 							maxmin: true,
 							btn: ['保存', '取消'],
 							yes: function(index, layero) {
@@ -331,26 +331,10 @@
 
 				var $ = layui.$,
 					active = {
-						batchdel: function() {
-							var checkStatus = table.checkStatus('LAY-app-content-list'),
-								checkData = checkStatus.data; //得到选中的数据
-
-							if (checkData.length === 0) {
-								return layer.msg('请选择数据');
-							}
-
-							layer.confirm('确定删除吗？', function(index) {
-
-								//执行 Ajax 后重载
-								/*
-								admin.req({
-								  url: 'xxx'
-								  //,……
-								});
-								*/
-								table.reload('LAY-app-content-list');
-								layer.msg('已删除');
-							});
+						edit: function() {
+							console.log("start to verify");
+							
+							
 						},
 						add: function() {
 							layer.open({
@@ -381,9 +365,26 @@
 						}
 					};
 
-				$('.layui-btn.layuiadmin-btn-list').on('click', function() {
-					var type = $(this).data('type');
-					active[type] ? active[type].call(this) : '';
+				var data = layui.data('collection');
+				
+				console.log("collection_major_id:" + data['collection_major_id']);
+				$('#verify_button').on('click', function() {
+					$.ajax({
+						url: projectBase + '/collection/completePerformanceForm',
+						dataType: 'json',
+						data: {
+							'collection_major_id':data['collection_major_id']
+							},
+						type: 'POST',
+						success: function(res){
+							if(res.code==0){
+								layer.msg("报表完成并提交!");
+							} else {
+								layer.msg("报表提交过程中遇到错误!", function(){
+									});
+							}
+						} 
+					});
 				});
 
 			});

@@ -51,4 +51,9 @@ public interface ColTaskService {
 	public int updateCapitalProgressForm(CapitalProgressForm cpf);
 	public List<ProcessStatus> selectStatusList();
 	public int updateBasicForm(BasicForm bf);
+	public List<MetricsDetail> getCapitalMetrics(Properties prop);
+	public List<Material> getMaterials(int metrics_id);
+	public int insertMaterials(List<Material> materials);
+	public int deleteMaterial(int id);
+	public int updatePerformanceFormStatus(char status, int collection_major_id);
 }

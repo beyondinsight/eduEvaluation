@@ -25,14 +25,9 @@
 				</div>
 
 				<div class="layui-card-body">
-					<div style="padding-bottom: 10px;">
-						<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 新建指标</button>
-						<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
-					</div>
 					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 					<script type="text/html" id="test-table-toolbar-barDemo">
 					  <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-					  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
 					</script>
 				</div>
 				<div class="layui-card-body">
@@ -72,69 +67,28 @@
 
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getMetrics',
+					url: projectBase + '/collection/getCapitalMetrics',
 					page: true, //开启分页
 					height: 500	,
 					cols: [
 						[ //表头
 							{
-								field: 'order',
-								title: '一级指标编号',
-								align: 'center' 
-							}, {
-								field: 'level1_name',
-								title: '一级指标',
-								align: 'center' 
-							},{
-								field: 'metrics_code',
-								title: '二级指标编号',
-								align: 'center' 
-							}, {
 								field: 'metrics_name',
-								title: '二级指标',
-								align: 'center',
-								width: 250
+								title: '资金支出进度',
+								align: 'center' 
 							}, {
 								field: 'unit',
 								title: '单位',
-								align: 'center',
-								width: 60
+								align: 'center' 
+							},{
+								field: 'value',
+								title: '实际值',
+								align: 'center' 
 							}, {
-								field: '',
-								title: '当前值',
-								align: 'center',
-								width: 80
-							},  {
-								field: '',
-								title: '目标值',
-								align: 'center',
-								width: 80
-							},  {
-								field: '',
-								title: '实际完成值',
-								align: 'center',
-								width: 120
-							},  {
-								field: '',
-								title: '分值',
-								align: 'center',
-								width: 80
-							},   {
-								field: '',
-								title: '自评分',
-								align: 'center',
-								width: 80
-							},  {
-								field: '',
-								title: '自评说明',
-								align: 'center',
-								width: 100
-							},  {
 								field: 'material_num',
 								title: '支撑材料',
-								align: 'center',
-								width: 140
-							},  {
+								align: 'center' 
+							},{
 								title: '操作',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
@@ -176,34 +130,8 @@
 								//console.log(cate.data)
 								//test1 = choseM.value;
 								//alert(test1.key);
-
-								table.render({ 
-									elem: '#major-list',
-									width: 680,
-									height: 320,
-									data: choseM[data.id]
-										//toolbar:'#toolbarDemo'
-										,
-									page: true //开启分页
-										,
-									cols: [
-										[ //表头
-											{
-												field: 'major_code',
-												title: '专业代码',
-												align: 'center',
-												width: 230
-											}, {
-												field: 'major_name',
-												title: '专业名称',
-												align: 'center',
-												width: 450
-											}
-										]
-									]
-								});
 							},
-							content: 'choose_major.html',
+							content: 'edit_capital_item.html',
 							zIndex: layer.zIndex //重点1
 								,
 							success: function(layero, index) {
@@ -245,38 +173,29 @@
 						layer.open({
 							type: 2 //此处以iframe举例
 								,
-							title: '修改指标定义',
-							area: ['50%', '70%'],
-							//shade: 0,
+							title: '设置支撑材料',
+							area: ['70%', '80%'],
+							//shade: 0,     
 							maxmin: true,
 							btn: ['确认', '取消'],
 							yes: function(index, layero) {
 								//点击确认触发 iframe 内容中的按钮提交
-								var submit = layero.find('iframe').contents().find("#metrics_form");
-								submit.click();
+								//var submit = layero.find('iframe').contents().find("#metrics_form");
+								//submit.click();
 								
-								table.reload('LAY-app-content-list');
+								//table.reload('LAY-app-content-list');
+								var index = parent.layer.getFrameIndex(window.name);
+								parent.layer.close(index); //再执行关闭   
 							},
-							content: 'edit_metrics.html',
+							content: 'edit_capital_item.html',
 							zIndex: layer.zIndex //重点1
 								,
 							success: function(layero, index) {
 								console.log(data.id);
 								var contents = layero.find('iframe').contents();
-								var level = contents.find('#level');
-								var select = 'dd[lay-value=' + data.level + ']';
-								$(level).siblings("div.layui-form-select").find('dl').find(select).click();  
-								var metrics_code = contents.find('#metrics_code');
-								$(metrics_code).val(data.metrics_code);
-								var unit = contents.find('#unit');
-								$(unit).val(data.unit);
-								var name = contents.find('#name');
-								$(name).val(data.metrics_name);
-								var memo = contents.find('#memo');
-								$(memo).val(data.description);
-								var id = contents.find('#id');
-								$(id).val(data.id);
-								
+								var metrics_id = contents.find('#metrics_id');
+								$(metrics_id).val(data.id);  
+																
 								layer.setTop(layero); //重点2
 							} 
 						});

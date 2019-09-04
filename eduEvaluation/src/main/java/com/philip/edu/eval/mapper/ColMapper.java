@@ -73,6 +73,7 @@ public interface ColMapper {
 	public List<SchoolTask> selectSchoolTaskList(int user_id);
 	public List<MajorTask> searchTaskList(@Param("task_id")int task_id, @Param("school_id")int school_id,@Param("major_id")int major_id,@Param("process_status")char process_status);
 	public int updateBasicForm(BasicForm bf);
+	public int deleteMaterial(int id);
 	 
 	//add by xiewei
 	public List<UserTask> getUserTaskList(@Param("user_id") int user_id);
