@@ -134,12 +134,14 @@ text-align: right;
 		                  } else            
 		                          parent.layer.msg(res.msg, function(){
 			  								parent.layer.msg(res.msg, {time:3000});
-								  });   
+								  }); 
+		  				 parent.layui.table.reload('demo'); //重载表格  
 		                  },              
 		   error:function (data) {
 							layer.msg('修改用户的过程中出现错误!', function(){
 								parent.layer.msg('修改用户的过程中出现错误!', {time:3000});
-							});  
+							});
+							parent.layui.table.reload('demo'); //重载表格 
 		    } 
 	  });
 	  

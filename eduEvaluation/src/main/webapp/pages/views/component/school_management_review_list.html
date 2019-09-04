@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>专业数据填报</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+</head>
+<style>
+.noborder td{
+border:0;
+text-align: left;
+}
+</style>
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-card">
+
+      <div class="layui-form">
+     	    	
+       		<div class="layui-card-body">  
+       		<table class="layui-table" style="width:70%;border: 1px solid #e6e6e6;">
+     	    	<tr class="noborder">
+     	    		<td style="width:60px;">填报任务</td><td>
+     	    			<select lay-search="">
+     	    				<option value="">直接选择或搜索选择</option>
+     	    			</select>
+     	    		</td>
+     	    		<td style="width:120px;"> 填报任务所属年度</td><td>2018</td> 
+     	    		<td></td><td></td>    	    		
+     	    	</tr >
+     	    	<tr class="noborder">
+     	    		<td style="width:60px;">学校搜索</td><td>
+     	    			<select id="school_list" lay-search="">
+     	    			   	<option value="">直接选择或搜索选择</option>
+     	    			</select>
+     	    		</td>
+     	    		<td style="width:100px;">专业搜索</td><td>
+	     	    		<select id="major_list" lay-search="">
+	     	    			<option value="">直接选择或搜索选择</option>
+	     	    		</select>
+     	    		</td>
+     	    		<td style="width:90px;">填报状态搜素</td><td>
+	     	    		<select id="status_lists" lay-search="">
+	     	    		<option value="">直接选择或搜索选择</option>
+		     	    		<option>1</option>
+		     	    		<option>2</option>
+	 	    			</select>
+ 					</td>
+     	    	</tr>
+     	    </table>		        
+            <table id="demo" class="layui-table" style="width:70%;"></table>
+            <script type="text/html" id="test-table-toolbar-barDemo">
+       			   <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+       		</script>
+	        </div>
+    
+        </div>      
+      </div>
+    </div>
+  
+  
+
+
+  <script src="../../layuiadmin/layui/layui.js"></script> 
+  <script src="../util/Constants.js"></script> 
+  <script>
+    
+  var projectBase = Class.getURL();
+  var userinfo = layui.data('userinfo');
+  
+  layui.config({
+	    base: '../../layuiadmin/' //静态资源所在路径
+	  }).extend({
+	    index: 'lib/index' //主入口模块
+	  }).use(['index','form','table','laytpl'],function(){
+		  var table = layui.table
+		    ,form = layui.form
+			,admin = layui.admin
+		    ,$ = layui.jquery
+		    ,layer = layui.layer;
+		  
+			  table.render({
+			  elem: '#demo'
+			  ,height: 300
+			  ,url: projectBase + '/role/roles_usersCount'//数据接口
+			  //,toolbar:'#toolbarDemo'
+			  ,page: false //开启分页
+			  ,cols: [[  //表头
+				/*  {type: 'numbers', title: '院校', align:'center'}
+				   ,{field: 'id', title: '专业', align:'center'}
+				   ,{field: 'roleName', title: '专业填报状态', align:'center'}
+				   ,{field: 'counts', title: '状态更新时间', align:'center'}    
+				    ,{fixed: 'right', title:'操作',   toolbar: '#test-table-toolbar-barDemo', align:'center'} */
+			  ]]
+			});  
+		  //获取用户能看到的学校的权限
+		  $.ajax({
+				url: projectBase + '/dictionary/school',
+				data:{'token' : userinfo['token']},
+				dataType:'json',				
+				async: false,
+				success:function(res){
+								if(res.code==0){       
+				                       // layer.msg('成功!');
+									var school_list = res.data;
+									
+									$.each(school_list, function (index, item) {
+								   		 var opt =  new Option(item.school_name, item.id);    		 		
+								   			$('#school_list').append(opt);// 下拉菜单里添加元素   		    			
+								   		});
+							    	layui.form.render("select");
+				                } else {          
+				                        layer.msg('学校列表失败!', function(){
+														layer.msg('学校列表失败!');
+												  });   
+				                }
+			 					
+				},             
+				 error:function(data){
+					
+							layer.msg('学校列表失败!', function(){
+								layer.msg('学校列表失败!');
+							});  
+				  }     
+			});
+		  
+		   //获取专业列表
+		  $.ajax({
+				url: projectBase + '/dictionary/major',
+				data:{'token' : userinfo['token']},
+				dataType:'json',				
+				async: false,
+				success:function(res){
+								if(res.code==0){       
+				                        //layer.msg('成功!');
+									var major_list = res.data;
+									
+									$.each(major_list, function (index, item) {
+								   		 var opt =  new Option(item.majorName, item.id);    		 		
+								   			$('#major_list').append(opt);// 下拉菜单里添加元素   		    			
+								   		});
+							    	layui.form.render("select");
+								
+				                } else {          
+				                        layer.msg('专业列表失败!', function(){
+														layer.msg('专业列表失败!');
+												  });   
+				                }
+			 
+				
+				},             
+				 error:function(data){
+					
+							layer.msg('专业列表失败!', function(){
+								layer.msg('专业列表失败!');
+							});  
+				  }     
+			});
+		  
+		  //获取状态列表
+		  $.ajax({
+				url: projectBase + ' /collection/status',
+				data:{'token' : userinfo['token']},
+				dataType:'json',				
+				async: false,
+				success:function(res){
+								if(res.code==0){       
+				                    //layer.msg('成功!');
+									var status_list = res.data;
+									
+									$.each(status_list, function (index, item) {
+								   		 var opt =  new Option(item.statusName, item.id);    		 		
+								   			$('#status_list').append(opt);// 下拉菜单里添加元素   		    			
+								   		});
+							    	layui.form.render("select");
+				                } else {          
+				                        layer.msg('状态列表失败!', function(){
+														layer.msg('状态列表失败!');
+												  });   
+				                }
+			 
+				},             
+				 error:function(data){					
+							layer.msg('状态列表失败!', function(){
+								layer.msg('状态列表失败!');
+							});  
+				  }     
+			});
+ 
+	  });
+  
+  </script>
+</body>
+</html>

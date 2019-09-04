@@ -105,13 +105,14 @@
 		  traditional: true,
 		  success:function(res){
 			  parent.layer.msg('已成功添加!');
-		                    parent.layui.table.reload('demo'); //重载表格
+		                    parent.layui.table.reload('demo2'); //重载表格
 							parent.layer.close(index); //再执行关闭   
 						},           
 		   error:function (data) {
 			  parent.layer.msg('选择用户的过程中出现错误!', function(){
 				  parent.layer.msg('选择用户的过程中出现错误!');
-							});  
+							});
+			    parent.layui.table.reload('demo2'); //重载表格 
 		    }
 	  });
 	  

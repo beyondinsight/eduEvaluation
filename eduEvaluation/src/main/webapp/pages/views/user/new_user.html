@@ -44,72 +44,14 @@ text-align: right;
    		</tr>
    		
    		<tr  class="noborder">
-   			<td>手机号码:</td><td><input type="text" name="mobilePhone" lay-verify="phone"   autocomplete="off" class="layui-input"></td>
-   			<td>邮箱:</td><td> <input type="text" name="email" lay-verify="email"  autocomplete="off" class="layui-input"></td>
+   			<td>手机号码:</td><td><input type="text" name="mobilePhone"  autocomplete="off" class="layui-input"></td>
+   			<td>邮箱:</td><td> <input type="text" name="email"    autocomplete="off" class="layui-input"></td>
    		</tr>
    		<tr  class="noborder">
    			<td>备注:</td><td><input type="text" name="memo"  autocomplete="off" class="layui-input" syule="width:100%"></td>
    		</tr>
    </table>
    
-   <!--  <div class="layui-form-item" style="float: left;">
-      <label class="layui-form-label">用户登陆名: <span style="color: red;">* </span></label>
-      <div class="layui-input-inline">
-        <input type="text" name="userName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item" style="float: left;">
-      <label class="layui-form-label">密码: <span style="color: red;">* </span></label>
-      <div class="layui-input-inline">
-        <input type="text" name="password" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input">
-      </div>
-    </div> 
-	<div class="layui-form-item">
-	  <label class="layui-form-label">用户角色:</label>
-	  <div class="layui-input-inline">	 
-        <select name="roleId" id="roleId"  lay-search="">
-          <option value="">直接选择或搜索选择</option>
-        </select>
-   
-	  </div>
-	</div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">用户名:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="chineseName" autocomplete="off" class="layui-input">
-	  </div>
-	</div> 
-	<div class="layui-form-item">
-	  <label class="layui-form-label">职称:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="position" autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">所在院校:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="institution" autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">手机号码:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name=mobilePhone autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-	<div class="layui-form-item">
-	  <label class="layui-form-label">邮箱:</label>
-	  <div class="layui-input-inline">
-	    <input type="text" name="email" autocomplete="off" class="layui-input">
-	  </div>
-	</div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">备注：</label>
-      <div class="layui-input-inline">
-        <textarea name="memo" style="width: 400px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
-      </div>
-    </div>-->
-
     <div class="layui-form-item layui-hide">
       <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认">
       <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="取消">
@@ -191,7 +133,8 @@ text-align: right;
 								  });
 		  						  parent.layui.table.reload('demo'); //重载表格
 				  			      parent.layer.close(index); //再执行关闭 
-		  						}    
+		  						}
+		  				    parent.layui.table.reload('demo'); //重载表格   
 		                  },              
 		   error:function (data) {
 							layer.msg('添加用户的过程中出现错误!', function(){
@@ -199,11 +142,12 @@ text-align: right;
 							});
 							  parent.layui.table.reload('demo'); //重载表格
 			  			      parent.layer.close(index); //再执行关闭  
+			  			       parent.layui.table.reload('demo'); //重载表格
 		    }
 	  });
 	  
-     
-	  layer.msg('已成功添加!');
+	  parent.layui.table.reload('demo'); //重载表格
+	  layer.msg('已成功添加!');	  
     });
 
   })
