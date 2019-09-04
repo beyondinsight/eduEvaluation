@@ -129,6 +129,42 @@ public class UserTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/searchTaskList", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> searchTaskList(HttpServletRequest request) {
+		BackendData data = new BackendData();
+		
+		String sTask_id = request.getParameter("task_id");
+		String sSchool_id = request.getParameter("school_id");
+		String sMajor_id = request.getParameter("major_id");
+		String sProcess_status = request.getParameter("process_status");
+		int task_id = 0;
+		int school_id = 0;
+		int major_id = 0;
+		char process_status;
+		
+		if(sTask_id!=null && !"".equals(sTask_id))
+			task_id = Integer.parseInt(sTask_id);
+		if(sSchool_id!=null && !"".equals(sSchool_id))
+			school_id = Integer.parseInt(sSchool_id);
+		if(sMajor_id!=null && !"".equals(sMajor_id))
+			major_id = Integer.parseInt(sMajor_id);
+		if(sProcess_status != null && !"".equals(sProcess_status))
+			process_status = sProcess_status.charAt(0);
+		else process_status = '-';
+		
+		ArrayList taskList = (ArrayList) userTaskService.searchTaskList(task_id, school_id, major_id, process_status);
+ 
+		logger.info("successfully get major task list");
+
+		data.setMsg("已获取所有专业的任务情况");
+		data.setCode(0);
+		data.setData(taskList);
+		data.setCount(taskList.size());
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "/userTaskByTaskID", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getUserTaskByTaskID(HttpServletRequest request) {
