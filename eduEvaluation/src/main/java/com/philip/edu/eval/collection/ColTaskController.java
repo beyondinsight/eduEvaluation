@@ -701,8 +701,25 @@ public class ColTaskController {
 			// BackendData data = new BackendData();
 		} else {
 			data.setMsg("修改学校失败");
-			data.setCode(99);
+			data.setCode(99); 
 		}
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/status", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getStatusList() {
+
+		ArrayList statusList = (ArrayList) service.selectStatusList();
+
+		logger.info("successfully get status list"); 
+   
+		BackendData data = new BackendData();
+		data.setMsg("成功获取状态列表");
+		data.setCode(0);
+		data.setData(statusList);
+		data.setCount(statusList.size());
+		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}

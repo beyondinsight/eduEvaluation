@@ -30,7 +30,7 @@ import com.philip.edu.eval.bean.TblUsers;
 
 @RestController
 @EnableWebMvc
-@RequestMapping(value = "/userTask")
+@RequestMapping(value = "/userTask") 
 public class UserTaskController {
 
 	private static final Logger logger = Logger.getLogger(UserTaskController.class);
@@ -75,6 +75,51 @@ public class UserTaskController {
 		ArrayList lUserTask = (ArrayList) userTaskService.getUserTaskList(user_id);
 
 		logger.info("successfully get collection task list");
+
+		data.setMsg("");
+		data.setCode(0);
+		data.setData(lUserTask);
+		data.setCount(lUserTask.size());
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/schoolTaskList", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getSchoolTaskList(HttpServletRequest request) {
+		BackendData data = new BackendData();
+		
+		// get token:
+		String token = request.getParameter("token");
+		
+		if(token==null || "".equals(token)){
+			data.setMsg("您的令牌已过期！");
+			data.setCode(10);
+			// BackendData data = new BackendData();
+
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+
+		// check:
+		Map<String, Claim> claims = SecurityUtil.verifyToken(token);
+		Claim user_name_claim = claims.get("username");
+
+
+		if (null == user_name_claim || StringUtils.isEmpty(user_name_claim.asString())) {
+			data.setMsg("您的用户验证信息不正确！");
+			data.setCode(20);
+			// BackendData data = new BackendData();
+
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+
+		// get user id:
+		String username = user_name_claim.asString();
+		int user_id = ((TblUsers) usersService.getUsers(username).get(0)).getId();
+
+		ArrayList lUserTask = (ArrayList) userTaskService.getSchoolTaskList(user_id);
+
+		logger.info("successfully get school task list");
 
 		data.setMsg("");
 		data.setCode(0);

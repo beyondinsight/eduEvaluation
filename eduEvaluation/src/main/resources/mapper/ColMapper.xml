@@ -38,6 +38,16 @@
 		<result property="form_capitalprogress_weight" column="form_capitalprogress_weight"/>
 	</resultMap> 
 	
+	<resultMap id="SchoolTaskResultMap" type="com.philip.edu.eval.bean.SchoolTask">
+		<id property="id" column="id"/>
+		<result property="task_name" column="task_name"/>
+		<result property="task_year" column="task_year"/>
+		<result property="start_time" column="start_time"/>
+		<result property="end_time" column="end_time"/>
+		<result property="school_id" column="school_id"/>
+		<result property="user_id" column="user_id"/>
+	</resultMap>
+	
 	
 	<resultMap id="metricsListResultMap" type="com.philip.edu.eval.bean.MetricsDetail">
 		<id property="id" column="id"/>
@@ -95,6 +105,12 @@
 	
 	<resultMap id="colTaskSchoolId" type="int">
 		<id property="id" column="id"/>
+	</resultMap>
+	
+	<resultMap id="statusResultMap" type="com.philip.edu.eval.bean.ProcessStatus">
+		<result property="status_code" column="key_int"/>
+		<result property="msg" column="config_value"/>
+		<result property="status_string" column="key_string"/>
 	</resultMap>
     
     <insert id="insertColTask" parameterType="com.philip.edu.eval.bean.CollectionTask" useGeneratedKeys="true" keyProperty="id" >
@@ -467,6 +483,8 @@
 		and
 		v_user_school_major.school_id =
 		v_task_school_major.school_id
+		and
+		v_task_school_major.task_status='A'
 	</select>
 
 	<select id="getUserTaskByTaskID" resultMap="userTaskResultMap">
@@ -489,6 +507,16 @@
 		and
 		v_user_school_major.school_id =
 		v_task_school_major.school_id
+	</select>
+	
+	<select id="selectStatusList" resultMap="statusResultMap">
+		select key_int, config_value, key_string from tbl_config where config_type='collection_status' 
+	</select>
+	
+	<select id="selectSchoolTaskList" resultMap="SchoolTaskResultMap">
+		SELECT t.id, t.task_name, t.task_year, t.start_time, t.end_time, s.school_id, u.user_id 
+		FROM tbl_collection_tasks t, tbl_collection_school s, tbl_school_user u 
+		where t.id = s.collection_task_id and s.school_id = u.school_id and user_id=#{user_id} and t.status='A';
 	</select>
 	
 </mapper>
