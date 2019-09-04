@@ -18,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.auth0.jwt.interfaces.Claim;
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.CollectionTask;
+import com.philip.edu.eval.bean.MajorCollectionStatus;
 import com.philip.edu.eval.bean.MajorStatus;
 import com.philip.edu.eval.bean.UserTask;
 import com.philip.edu.eval.collection.ColTaskController;
@@ -30,7 +31,7 @@ import com.philip.edu.eval.bean.TblUsers;
 
 @RestController
 @EnableWebMvc
-@RequestMapping(value = "/userTask") 
+@RequestMapping(value = "/userTask")
 public class UserTaskController {
 
 	private static final Logger logger = Logger.getLogger(UserTaskController.class);
@@ -43,11 +44,11 @@ public class UserTaskController {
 	@RequestMapping(value = "/userTaskList", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getUsetTaskList(HttpServletRequest request) {
 		BackendData data = new BackendData();
-		
+
 		// get token:
 		String token = request.getParameter("token");
-		
-		if(token==null || "".equals(token)){
+
+		if (token == null || "".equals(token)) {
 			data.setMsg("您的令牌已过期！");
 			data.setCode(10);
 			// BackendData data = new BackendData();
@@ -58,7 +59,6 @@ public class UserTaskController {
 		// check:
 		Map<String, Claim> claims = SecurityUtil.verifyToken(token);
 		Claim user_name_claim = claims.get("username");
-
 
 		if (null == user_name_claim || StringUtils.isEmpty(user_name_claim.asString())) {
 			data.setMsg("您的用户验证信息不正确！");
@@ -84,15 +84,15 @@ public class UserTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/schoolTaskList", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getSchoolTaskList(HttpServletRequest request) {
 		BackendData data = new BackendData();
-		
+
 		// get token:
 		String token = request.getParameter("token");
-		
-		if(token==null || "".equals(token)){
+
+		if (token == null || "".equals(token)) {
 			data.setMsg("您的令牌已过期！");
 			data.setCode(10);
 			// BackendData data = new BackendData();
@@ -103,7 +103,6 @@ public class UserTaskController {
 		// check:
 		Map<String, Claim> claims = SecurityUtil.verifyToken(token);
 		Claim user_name_claim = claims.get("username");
-
 
 		if (null == user_name_claim || StringUtils.isEmpty(user_name_claim.asString())) {
 			data.setMsg("您的用户验证信息不正确！");
@@ -129,11 +128,11 @@ public class UserTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/searchTaskList", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> searchTaskList(HttpServletRequest request) {
 		BackendData data = new BackendData();
-		
+
 		String sTask_id = request.getParameter("task_id");
 		String sSchool_id = request.getParameter("school_id");
 		String sMajor_id = request.getParameter("major_id");
@@ -142,29 +141,30 @@ public class UserTaskController {
 		int school_id = 0;
 		int major_id = 0;
 		char process_status;
-		
-		if(sTask_id!=null && !"".equals(sTask_id))
+
+		if (sTask_id != null && !"".equals(sTask_id))
 			task_id = Integer.parseInt(sTask_id);
-		if(sSchool_id!=null && !"".equals(sSchool_id))
+		if (sSchool_id != null && !"".equals(sSchool_id))
 			school_id = Integer.parseInt(sSchool_id);
-		if(sMajor_id!=null && !"".equals(sMajor_id))
+		if (sMajor_id != null && !"".equals(sMajor_id))
 			major_id = Integer.parseInt(sMajor_id);
-		if(sProcess_status != null && !"".equals(sProcess_status))
+		if (sProcess_status != null && !"".equals(sProcess_status))
 			process_status = sProcess_status.charAt(0);
-		else process_status = '-';
-		
+		else
+			process_status = '-';
+
 		ArrayList taskList = (ArrayList) userTaskService.searchTaskList(task_id, school_id, major_id, process_status);
- 
+   
 		logger.info("successfully get major task list");
 
 		data.setMsg("已获取所有专业的任务情况");
 		data.setCode(0);
 		data.setData(taskList);
 		data.setCount(taskList.size());
-		// BackendData data = new BackendData();
+		// BackendData data = new BackendData();   
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
-	}
+	} 
 
 	@RequestMapping(value = "/userTaskByTaskID", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getUserTaskByTaskID(HttpServletRequest request) {
@@ -246,7 +246,7 @@ public class UserTaskController {
 
 	@RequestMapping(value = "/majorCollectionStatus", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getMajorCollectionStatus(HttpServletRequest request) {
-  
+
 		String task_id = (String) request.getParameter("task_id");
 		String school_id = (String) request.getParameter("school_id");
 		String major_id = (String) request.getParameter("major_id");
@@ -255,13 +255,22 @@ public class UserTaskController {
 				(new Integer(task_id)).intValue(), (new Integer(school_id)).intValue(),
 				(new Integer(major_id)).intValue());
 
+		ArrayList tempList = new ArrayList();
+		if (lMajorCollectionStatus != null && lMajorCollectionStatus.size() != 0) {
+			MajorCollectionStatus performance = (MajorCollectionStatus) lMajorCollectionStatus.get(0);
+			MajorCollectionStatus basic = (MajorCollectionStatus) lMajorCollectionStatus.get(1);
+			tempList.add(basic);
+			tempList.add(performance);
+			tempList.add(lMajorCollectionStatus.get(2));
+		}
+
 		logger.info("successfully get major status by task id: " + task_id);
 
 		BackendData data = new BackendData();
 		data.setMsg("");
 		data.setCode(0);
-		data.setData(lMajorCollectionStatus);
-		data.setCount(lMajorCollectionStatus.size());
+		data.setData(tempList);
+		data.setCount(tempList.size());
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);

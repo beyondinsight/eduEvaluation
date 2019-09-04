@@ -24,6 +24,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.philip.edu.eval.bean.BackendData;
 import com.philip.edu.eval.bean.BackendData1;
+import com.philip.edu.eval.bean.BasicForm;
 import com.philip.edu.eval.bean.CapitalProgressForm;
 import com.philip.edu.eval.bean.ChosenMajor;
 import com.philip.edu.eval.bean.ColTaskMajor;
@@ -719,6 +720,31 @@ public class ColTaskController {
 		data.setCode(0);
 		data.setData(statusList);
 		data.setCount(statusList.size());
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/saveBasicForm", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> saveBasicForm(HttpServletRequest request) {
+
+		BackendData data = new BackendData();
+		String collection_major_id = request.getParameter("collection_major_id");
+		int result = 0;
+		
+		if(collection_major_id!=null && !"".equals(collection_major_id)){
+			BasicForm bf = new BasicForm();
+			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
+			bf.setProcess_status(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
+			bf.setUpdate_time(new Date());
+			result = service.updateBasicForm(bf);
+		}
+		logger.info("successfully save the basic form"); 
+    
+		if(result!=0){
+			data.setMsg("成功保存基本情况表");
+			data.setCode(0);
+		}
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);

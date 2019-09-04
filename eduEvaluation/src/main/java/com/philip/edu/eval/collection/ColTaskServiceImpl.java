@@ -865,4 +865,9 @@ public class ColTaskServiceImpl implements ColTaskService {
 		// TODO Auto-generated method stub
 		return dao.selectStatusList();
 	}
+
+	public int updateBasicForm(BasicForm bf) {
+		// TODO Auto-generated method stub
+		return dao.updateBasicForm(bf);
+	}
 }
