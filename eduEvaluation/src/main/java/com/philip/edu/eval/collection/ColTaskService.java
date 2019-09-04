@@ -14,6 +14,7 @@ import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
 import com.philip.edu.eval.bean.PerformanceForm;
+import com.philip.edu.eval.bean.ProcessStatus;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 
@@ -47,4 +48,5 @@ public interface ColTaskService {
 	public int updatePerformanceStatus(char process_status, int collection_major_id);
 	public ArrayList getCapitalProgess(int performance_form_id);
 	public int updateCapitalProgressForm(CapitalProgressForm cpf);
+	public List<ProcessStatus> selectStatusList();
 }

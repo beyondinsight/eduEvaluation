@@ -26,6 +26,7 @@ import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
 import com.philip.edu.eval.bean.PerformanceForm;
+import com.philip.edu.eval.bean.ProcessStatus;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
 import com.philip.edu.eval.mapper.ColMapper;
@@ -858,5 +859,10 @@ public class ColTaskServiceImpl implements ColTaskService {
 	public int updateCapitalProgressForm(CapitalProgressForm cpf) {
 		// TODO Auto-generated method stub
 		return dao.updateCapitalProgressForm(cpf);
+	}
+
+	public List<ProcessStatus> selectStatusList() {
+		// TODO Auto-generated method stub
+		return dao.selectStatusList();
 	}
 }
