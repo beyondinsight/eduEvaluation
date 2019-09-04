@@ -48,6 +48,16 @@
 		<result property="user_id" column="user_id"/>
 	</resultMap>
 	
+	<resultMap id="MajorTaskResultMap" type="com.philip.edu.eval.bean.MajorTask">
+		<id property="collection_major_id" column="colletion_major_id"/>
+		<result property="school_id" column="school_id"/>
+		<result property="school_name" column="school_name"/>
+		<result property="major_id" column="major_id"/>
+		<result property="major_name" column="major_name"/>
+		<result property="process_status" column="process_status"/>
+		<result property="status_msg" column="config_value"/>
+	</resultMap>
+	
 	
 	<resultMap id="metricsListResultMap" type="com.philip.edu.eval.bean.MetricsDetail">
 		<id property="id" column="id"/>
@@ -517,6 +527,24 @@
 		SELECT t.id, t.task_name, t.task_year, t.start_time, t.end_time, s.school_id, u.user_id 
 		FROM tbl_collection_tasks t, tbl_collection_school s, tbl_school_user u 
 		where t.id = s.collection_task_id and s.school_id = u.school_id and user_id=#{user_id} and t.status='A';
+	</select>
+	
+	<select id="searchTaskList" resultMap="MajorTaskResultMap">
+		select m.id as collection_major_id, s.school_id, s1.school_name, m.major_id, m1.major_name, m.process_status, c.config_value  
+		from tbl_collection_tasks t, tbl_collection_school s, tbl_collection_major m, tbl_school s1, tbl_major m1, tbl_config c 
+		where t.id = s.collection_task_id and s.id = m.collection_school_id and s1.id = s.school_id and m1.id = m.major_id and c.key_string = m.process_status
+		<if test="task_id!=0">
+			and t.id=#{task_id}
+		</if>
+		<if test="school_id!=0">
+			and s.school_id=#{school_id}
+		</if>
+		<if test="major_id!=0">
+			and m.major_id=#{major_id}
+		</if>
+		<if test="process_status!='-'">
+			and m.process_status=#{process_status}
+		</if>
 	</select>
 	
 </mapper>

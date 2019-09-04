@@ -14,6 +14,7 @@ import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Major;
 import com.philip.edu.eval.bean.MajorCollectionStatus;
 import com.philip.edu.eval.bean.MajorStatus;
+import com.philip.edu.eval.bean.MajorTask;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsDetail;
 import com.philip.edu.eval.bean.PerformanceForm;
@@ -70,7 +71,8 @@ public interface ColMapper {
 	public int updateCapitalProgressForm(CapitalProgressForm cpf);
 	public List<ProcessStatus> selectStatusList();
 	public List<SchoolTask> selectSchoolTaskList(int user_id);
-	
+	public List<MajorTask> searchTaskList(@Param("task_id")int task_id, @Param("school_id")int school_id,@Param("major_id")int major_id,@Param("process_status")char process_status);
+	 
 	//add by xiewei
 	public List<UserTask> getUserTaskList(@Param("user_id") int user_id);
 	

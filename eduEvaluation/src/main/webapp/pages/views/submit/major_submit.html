@@ -214,6 +214,7 @@
 
 						table.on('tool(major_list)', function(obj) {
 							if (obj.event == 'open') {
+								console.log("schoo_id:" + obj.data.school_id);
 								table.reload('collection_list', {
 									url: '/eduEvaluation/userTask/majorCollectionStatus',
 									where: {
@@ -250,9 +251,12 @@
 									}
 								})
 								
+								console.log("template:" + data.template_type_string);
 								if( data.template_type_string=="major_performance"){
+									Console.log("to open performance page");
 									parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
 								} else if( data.template_type_string == "major_capital_process"){
+									Console.log("to open capital page");
 									parent.layui.index.openTabsPage("collection/capital_progress_collection.html", "资金支出进度填报");
 								} else if( data.template_type_string == "major_basic_info"){
 									console.log("entering basic info");
