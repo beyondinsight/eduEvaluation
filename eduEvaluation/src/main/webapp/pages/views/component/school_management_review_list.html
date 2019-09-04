@@ -25,7 +25,7 @@ text-align: left;
        		<table class="layui-table" style="width:70%;border: 1px solid #e6e6e6;">
      	    	<tr class="noborder">
      	    		<td style="width:60px;">填报任务</td><td>
-     	    			<select lay-search="">
+     	    			<select id="task_list" lay-search="">
      	    				<option value="">直接选择或搜索选择</option>
      	    			</select>
      	    		</td>
@@ -44,10 +44,8 @@ text-align: left;
 	     	    		</select>
      	    		</td>
      	    		<td style="width:90px;">填报状态搜素</td><td>
-	     	    		<select id="status_lists" lay-search="">
+	     	    		<select id="status_list" lay-search="">
 	     	    		<option value="">直接选择或搜索选择</option>
-		     	    		<option>1</option>
-		     	    		<option>2</option>
 	 	    			</select>
  					</td>
      	    	</tr>
@@ -97,6 +95,38 @@ text-align: left;
 				    ,{fixed: 'right', title:'操作',   toolbar: '#test-table-toolbar-barDemo', align:'center'} */
 			  ]]
 			});  
+			  
+			  //获取任务填报清单
+			  $.ajax({
+					url: projectBase + '/userTask/schoolTaskList',
+					data:{'token' : userinfo['token']},
+					dataType:'json',				
+					async: false,
+					success:function(res){
+									if(res.code==0){       
+					                       // layer.msg('成功!');
+										var task_list = res.data;
+										
+										$.each(task_list, function (index, item) {
+									   		 var opt =  new Option(item.task_name, item.id);    		 		
+									   			$('#task_list').append(opt);// 下拉菜单里添加元素   		    			
+									   		});
+								    	layui.form.render("select");
+					                } else {          
+					                        layer.msg('任务列表失败!', function(){
+															layer.msg('任务列表失败!');
+													  });   
+					                }
+				 					
+					},             
+					 error:function(data){
+						
+								layer.msg('任务列表失败!', function(){
+									layer.msg('任务列表失败!');
+								});  
+					  }     
+				});
+			  	  
 		  //获取用户能看到的学校的权限
 		  $.ajax({
 				url: projectBase + '/dictionary/school',
@@ -163,7 +193,7 @@ text-align: left;
 		  
 		  //获取状态列表
 		  $.ajax({
-				url: projectBase + ' /collection/status',
+				url: projectBase + '/collection/status',
 				data:{'token' : userinfo['token']},
 				dataType:'json',				
 				async: false,
@@ -173,7 +203,7 @@ text-align: left;
 									var status_list = res.data;
 									
 									$.each(status_list, function (index, item) {
-								   		 var opt =  new Option(item.statusName, item.id);    		 		
+								   		 var opt =  new Option(item.msg, item.status_code);    		 		
 								   			$('#status_list').append(opt);// 下拉菜单里添加元素   		    			
 								   		});
 							    	layui.form.render("select");

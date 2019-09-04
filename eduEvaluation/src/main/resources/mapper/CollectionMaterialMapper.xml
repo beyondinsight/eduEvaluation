@@ -17,8 +17,8 @@
 			jdbcType="INTEGER" />
 		<result column="material_name" property="materialname"
 			jdbcType="VARCHAR" />
-		<result column="doc_size" property="doc_size" jdbcType="INTEGER" />
-		<result column="file_name" property="file_name" jdbcType="CHAR" />
+		<result column="doc_size" property="docsize" jdbcType="INTEGER" />
+		<result column="file_name" property="file_name" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<insert id="createMaterial" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
@@ -30,7 +30,7 @@
 		values ( #{formPerformanceId,jdbcType=BIGINT},
 		#{metricsId,jdbcType=INTEGER},#{materialname,jdbcType=VARCHAR},
 		#{materialId,jdbcType=INTEGER}, #{required,jdbcType=CHAR},
-		#{doc,jdbcType=VARCHAR},#{docsize,jdbcType=VARCHAR},
+		#{doc,jdbcType=VARCHAR},#{docsize,jdbcType=INTEGER},
 		#{description,jdbcType=CHAR}, #{createTime,jdbcType=TIMESTAMP},
 		#{updateTime,jdbcType=TIMESTAMP}
 		)
@@ -98,6 +98,8 @@
 	</insert>
 
 
+ 
+	
 	<update id="updateMaterial" parameterType="com.philip.edu.eval.bean.TblCollectionMaterial">
 		update tbl_collection_material
 		<set>
@@ -114,7 +116,7 @@
 				material_name = #{materialname,jdbcType=VARCHAR},
 			</if>
 			<if test="docsize != null">
-				doc_size = #{docsize,jdbcType=VARCHAR},
+				doc_size = #{docsize,jdbcType=INTEGER},
 			</if>
 			<if test="required != null">
 				required = #{required,jdbcType=CHAR},
@@ -132,7 +134,7 @@
 				update_time = #{updateTime,jdbcType=TIMESTAMP},
 			</if>
 			<if test="file_name != null">
-				file_name = #{file_name, jdbcType=CHAR}
+				file_name = #{file_name, jdbcType=VARCHAR}
 			</if>
 		</set>
 		where id = #{id,jdbcType=BIGINT}
@@ -145,7 +147,7 @@
 		material_name = #{materialname,jdbcType=VARCHAR},
 		required = #{required,jdbcType=CHAR},
 		doc = #{doc,jdbcType=VARCHAR},
-		doc_size = #{docsize,jdbcType=VARCHAR},
+		doc_size = #{docsize,jdbcType=INTEGER},
 		description = #{description,jdbcType=CHAR},
 		create_time = #{createTime,jdbcType=TIMESTAMP},
 		update_time = #{updateTime,jdbcType=TIMESTAMP}

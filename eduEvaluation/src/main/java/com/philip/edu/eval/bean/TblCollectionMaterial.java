@@ -24,11 +24,9 @@ public class TblCollectionMaterial {
     
     private Integer materialcount;
     
-    private String docsize;
+    private Integer docsize;
     
     private String materialname;
-    
-    private long doc_size;
     
     private String file_name;
     
@@ -42,19 +40,12 @@ public class TblCollectionMaterial {
 		this.file_name = file_name;
 	}
 
-	public long getDoc_size() {
-		return doc_size;
-	}
 
-	public void setDoc_size(long l) {
-		this.doc_size = l;
-	}
-
-	public String getDocsize() {
+	public Integer getDocsize() {
 		return docsize;
 	}
 
-	public void setDocsize(String docsize) {
+	public void setDocsize(Integer docsize) {
 		this.docsize = docsize;
 	}
 

@@ -115,14 +115,9 @@ public class CollectionMaterialController {
 		Date uploadtime = new Date();
 		// 大小
 		long size = file.getSize();
-		String sizes = size / 1024 + "KB";
+		int sizes = (int) (size / 1024);
 
-		/*String id = request.getParameter("upload_id");
-		if (id != null && !id.equals("")) {
-			material.setId(Integer.parseInt(id));
-		}*/
-		String id = request.getParameter("id");
-
+		String id = request.getParameter("upload_id");
 		if (id != null && !id.equals("")) {
 			material.setId(Integer.parseInt(id));
 		}
@@ -130,14 +125,18 @@ public class CollectionMaterialController {
 		material.setUpdateTime(uploadtime);
 		//material.setCreateTime(uploadtime);
 		material.setDoc(fileName);
-		//material.setDocsize(sizes);
-		material.setDoc_size(size/1024);
+		material.setDocsize(sizes);
 
 		int result = service.updateMaterial(material);
-
 		BackendData data = new BackendData();
-		data.setMsg("");
-		data.setCode(0);
+		if(result != 0) {
+			data.setMsg("失败");
+			data.setCode(0);
+		}else {
+			data.setMsg("成功");
+			data.setCode(1);
+		}
+		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 
 	} 
