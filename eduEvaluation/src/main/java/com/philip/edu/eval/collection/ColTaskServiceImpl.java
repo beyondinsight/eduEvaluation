@@ -865,4 +865,101 @@ public class ColTaskServiceImpl implements ColTaskService {
 		// TODO Auto-generated method stub
 		return dao.selectStatusList();
 	}
+
+	public int updateBasicForm(BasicForm bf) {
+		// TODO Auto-generated method stub
+		return dao.updateBasicForm(bf);
+	}
+
+	public List<MetricsDetail> getCapitalMetrics(Properties prop) {
+		List<MetricsDetail> list = new ArrayList();
+		// TODO Auto-generated method stub
+		use_properties(prop);
+		MetricsDetail metrics = new MetricsDetail();
+		metrics.setId(this.metrics_region_disbursement_amount_id);
+		metrics.setMetrics_name("自治区财政拨付额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_disbursement_amount_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_region_paid_hardware_amount_id);
+		metrics.setMetrics_name("’   其中：硬件建设支出额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_hardware_amount_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_region_paid_internal_amount_id);
+		metrics.setMetrics_name("’   其中：内涵建设支出额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_region_paid_internal_amount_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_central_disbursement_amount_id);
+		metrics.setMetrics_name("中央财政拨付额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_disbursement_amount_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_central_paid_hardware_amount_id);
+		metrics.setMetrics_name("’   其中：硬件建设支出额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_hardware_amount_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_central_paid_internal_amount_id);
+		metrics.setMetrics_name("’   其中：内涵建设支出额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_internal_amount_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_school_funding_total_id);
+		metrics.setMetrics_name("学校配套经费额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_total_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_school_funding_hardware_id);
+		metrics.setMetrics_name("’   其中：硬件建设支出额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_hardware_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.metrics_school_funding_internal_id);
+		metrics.setMetrics_name("’   其中：内涵建设支出额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_internal_id) + "项");
+		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		return list;
+	}
+
+	public List<Material> getMaterials(int metrics_id) {
+		// TODO Auto-generated method stub
+		return dao.getMaterialMetrics(metrics_id);
+	}
+
+	public int insertMaterials(List<Material> materials) {
+		// TODO Auto-generated method stub
+		return dao.insertMaterials(materials);
+	}
+
+	public int deleteMaterial(int id) {
+		// TODO Auto-generated method stub
+		return dao.deleteMaterial(id);
+	}
+
+	public int updatePerformanceFormStatus(char status, int collection_major_id) {
+		// TODO Auto-generated method stub
+		return dao.updatePerformanceFormStatus(status, collection_major_id);
+	}
+	
+	
 }

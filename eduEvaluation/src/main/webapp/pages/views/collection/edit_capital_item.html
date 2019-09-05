@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>指标定义</title>
+		<title>修改指标定义</title>
 		<meta name="renderer" content="webkit">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
@@ -14,58 +14,21 @@
 		<div class="layui-fluid">
 			<div class="layui-card">
 				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="metrics_form">
-					<div class="layui-form-item">
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 70px;">指标级别<span style="color: red;">* </span></label>
-							<div class="layui-input-inline" style="width: 120px">
-								<select name="level" id="level">
-									<option value="1">一级指标</option>
-									<option value="2">二级指标</option>
-								</select>
-							</div>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 70px;">指标编号<span style="color: red;">* </span></label>
-							<div class="layui-input-inline" style="width: 120px;">
-								<input type="text" name="metrics_code" id="metrics_code" required lay-verify="required" autocomplete="off"
-								 class="layui-input">
-							</div>
-						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 60px;">单位<span style="color: red;">* </span></label>
-							<div class="layui-input-inline" style="width: 120px;">
-								<input type="text" name="unit" id="unit" required lay-verify="required" autocomplete="off" class="layui-input">
-							</div>
-						</div>
-					</div>					
-					
-					<div class="layui-form-item">
-						<label class="layui-form-label" style="width: 70px;">指标名称<span style="color: red;">* </span></label>
-						<div class="layui-input-inline" style="width: 600px;">
-							<input type="text" name="name" id="name" placeholder="请输入指标名称" required lay-verify="required" autocomplete="off" class="layui-input">
-						</div>
-					</div>
-					
-					<div class="layui-form-item">
-						<label class="layui-form-label" style="width: 70px;">备注</label>
-						<div class="layui-input-inline" style="width: 610px;">
-							<textarea name="memo" style="width: 600px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
-						</div>
-					</div>
 					
 					<div class="layui-card-body">
 						<div style="padding-bottom: 10px;">
+							<input type="hidden" id="metrics_id" name="metrics_id"/>
 							<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 添加</button>
 							<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
 						</div>
 						<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
-					     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"  ><i class="layui-icon layui-icon-delete"  style="position:static;"></i>删除</a>
+						  <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i></button>
 						</script>
 					</div>
 					
 					<div class="layui-form-item layui-hide">
-					  <input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认">
+					  <input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认添加">
 					</div>
 				</div>
 
@@ -85,23 +48,20 @@
 					laydate = layui.laydate,
 					transfer = layui.transfer,
 					admin = layui.admin,
-					projectBase = Class.getURL();
+					projectBase = Class.getURL(),
+					$ = layui.$;
 				var data0, schoolTable;
 
 				form.render();
-
-				layui.data('materials', null);
-				
-				var data0 = layui.data('materials');
-
-				schoolTable = table.render({
+			
+				console.log("metrics_id" + $('#metrics_id').val());
+				table.render({
 					elem: '#LAY-app-content-list',
-					width: 685,
+					width: 680,
 					height: 320,
-					data: []
-						//toolbar:'#toolbarDemo'
-						,
-					page: false //开启分页
+					url: projectBase + "/collection/getMaterials" 
+					,where: {'metrics_id':$('#metrics_id').val()} ,
+					page: true //开启分页
 						,
 					cols: [
 						[ //表头
@@ -113,12 +73,13 @@
 							}, {
 								field: 'memo',
 								title: '备注',
-								align: 'center' 
+								align: 'center',
+								width: 350
 							}, {
 								title: '操作',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
-								width: 80
+								width: 140
 							}
 						]
 					]
@@ -130,6 +91,7 @@
 					var data0 = layui.data('materials');
 										
 					var metrics={
+						'id':$('#id').val(),
 						'level':$('#level').val(),
 						'metrics_code':$('#metrics_code').val(),
 						'unit':$('#unit').val(),
@@ -141,20 +103,20 @@
 					console.log("start to ajax");
 					
 					$.ajax({
-						url: projectBase + '/collection/createMetrics',
+						url: projectBase + '/collection/updateMetrics',
 						dataType: 'json',
 						data: metrics,
 						type: 'POST',
 						success: function(res){
 							if(res.code==1){
-								layer.msg("指标创建成功!");
+								layer.msg("指标修改成功!");
 								setTimeout(function(){
 									parent.layui.table.reload('LAY-app-content-list'); //重载表格
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index); //再执行关闭   
 									},1200);
 							} else {
-								layer.msg("指标创建失败!", function(){
+								layer.msg("指标修改失败!", function(){
 									});
 							}
 						} 
@@ -169,45 +131,28 @@
 					var data = obj.data;
 					if (obj.event === 'del') {
 						
-						console.log(data.material_name);
-						layui.data("materials",{
-							key: data.material_name,
-							remove: true
+						$.ajax({  
+							url: projectBase + '/collection/deleteMaterial',
+							dataType: 'json',
+							data: {'id': data.id},
+							type: 'POST',
+							success: function(res){
+								if(res.code==0){
+									setTimeout(function(){
+										layer.msg("该材料已删除");
+										parent.layui.table.reload('LAY-app-content-list'); //重载表格
+										//var index = parent.layer.getFrameIndex(window.name);
+										//parent.layer.close(index); //再执行关闭   
+										},300);
+								} else {
+									layer.msg("指标修改失败!", function(){
+										});
+								}
+							} 
 						});
 						
-						obj.del();
+						table.reload('LAY-app-content-list');
 
-						/*table.render({
-							elem: '#LAY-app-content-list',
-							width: 680,
-							height: 320,
-							data: []
-								//toolbar:'#toolbarDemo'
-								,
-							page: true //开启分页
-								,
-							cols: [
-								[ //表头
-									{
-										field: 'material_name',
-										title: '支撑材料',
-										align: 'center',
-										width: 190
-									}, {
-										field: 'memo',
-										title: '备注',
-										align: 'center',
-										width: 350
-									}, {
-										title: '操作',
-										toolbar: '#test-table-toolbar-barDemo',
-										},
-										align: 'center',
-										width: 140
-									}
-								]
-							]
-						});*/
 					}
 				});
 
@@ -252,49 +197,14 @@
 									console.log(submit);
 									submit.click();
 									
-									var materials = layui.data('materials');
-									console.log(materials);
-									var data0 = [];
-									for(var val in materials){
-										var material = {
-											'material_name':val,
-											'memo':materials[val]
-										}
-										data0.push(material);
-									}
-
-									table.render({
-										elem: '#LAY-app-content-list',
-										width: 700,
-										height: 320,
-										data: data0
-											//toolbar:'#toolbarDemo'
-											,
-										page: false //开启分页
-											,
-										cols: [
-											[ //表头
-												{
-													field: 'material_name',
-													title: '支撑材料',
-													align: 'center' 
-												}, {
-													field: 'memo',
-													title: '备注',
-													align: 'center' 
-												}, {
-													title: '操作',
-													toolbar: '#test-table-toolbar-barDemo',
-													align: 'center' 
-												}
-											]
-										]
-									});
+									table.reload('LAY-app-content-list');
 								},
-								content: 'new_material.html',
+								content: 'edit_capital_material.html',
 								zIndex: layer.zIndex //重点1
 									,
 								success: function(layero, index) {
+									var metrics_id = layero.find('iframe').contents().find("#metrics_id");
+									$(metrics_id).val($('#metrics_id').val());
 									layer.setTop(layero); //重点2
 								} 
 							});

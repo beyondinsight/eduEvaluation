@@ -77,6 +77,7 @@
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
+<<<<<<< HEAD
 		{type: 'checkbox', align:'center'}
 		,{type: 'numbers', title: '序号', align:'center'}
 	    ,{field: 'materialname', title: '支撑材料', align:'center'}
@@ -92,6 +93,13 @@
 	    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
             return updateTime(row.updateTime);
         } }	    
+=======
+		{type: 'numbers', title: '序号'}
+	    ,{field: 'materialname', title: '支撑材料', align: 'center'}
+	    ,{field: 'file_name', title: '文件名' , align: 'center'}
+	    ,{field: 'doc_size', title: '文件大小', align: 'center'} 
+	    ,{field: 'updateTime', title: '上传时间', align: 'center'}	    
+>>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
 	 ,limits: [10,20,50]

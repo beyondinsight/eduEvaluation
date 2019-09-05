@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.philip.edu.eval.bean.BasicForm;
 import com.philip.edu.eval.bean.CapitalProgressForm;
 import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
@@ -49,4 +50,10 @@ public interface ColTaskService {
 	public ArrayList getCapitalProgess(int performance_form_id);
 	public int updateCapitalProgressForm(CapitalProgressForm cpf);
 	public List<ProcessStatus> selectStatusList();
+	public int updateBasicForm(BasicForm bf);
+	public List<MetricsDetail> getCapitalMetrics(Properties prop);
+	public List<Material> getMaterials(int metrics_id);
+	public int insertMaterials(List<Material> materials);
+	public int deleteMaterial(int id);
+	public int updatePerformanceFormStatus(char status, int collection_major_id);
 }

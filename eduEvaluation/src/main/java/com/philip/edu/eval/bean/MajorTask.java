@@ -1,5 +1,7 @@
 package com.philip.edu.eval.bean;
 
+import java.util.Date;
+
 public class MajorTask {
 	private int collection_major_id;
 	private int school_id;
@@ -8,6 +10,15 @@ public class MajorTask {
 	private String major_name;
 	private char process_status;
 	private String status_msg;
+	private Date update_time;
+	
+	
+	public Date getUpdate_time() {
+		return update_time;
+	}
+	public void setUpdate_time(Date update_time) {
+		this.update_time = update_time;
+	}
 	public int getCollection_major_id() {
 		return collection_major_id;
 	}

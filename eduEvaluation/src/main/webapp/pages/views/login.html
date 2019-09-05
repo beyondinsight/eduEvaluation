@@ -79,6 +79,8 @@
 					projectBase = Class.getURL();
 
 				form.render();
+				
+				layui.data('userinfo',null);
 
 				//提交
 				form.on('submit(LAY-user-login-submit)', function(obj) {

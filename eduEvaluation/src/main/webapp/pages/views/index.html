@@ -31,7 +31,7 @@
             </a>
           </li>
           <li class="layui-nav-item layui-hide-xs" lay-unselect>
-            <a href="" target="_blank" title="前台">
+            <a href="login.html" target="_blank" title="前台">
               <i class="layui-icon layui-icon-website"></i>
             </a> 
           </li>
@@ -77,16 +77,16 @@
               <dd><a lay-href="set/user/info.html">基本资料</a></dd>
               <dd><a lay-href="set/user/password.html">修改密码</a></dd>
               <hr>
-              <dd layadmin-event="logout" style="text-align: center;"><a>退出</a></dd>
+              <dd style="text-align: center;"><a href="login.html">退出</a></dd>
             </dl>
           </li> 
           
-          <li class="layui-nav-item layui-hide-xs" lay-unselect>
+          <!--<li class="layui-nav-item layui-hide-xs" lay-unselect>
             <a href="javascript:;" layadmin-event="about"><i class="layui-icon layui-icon-more-vertical"></i></a>
           </li>
           <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-unselect>
             <a href="javascript:;" layadmin-event="more"><i class="layui-icon layui-icon-more-vertical"></i></a>
-          </li>
+          </li>-->
         </ul>
       </div>
       
@@ -136,7 +136,12 @@
                 <cite>填报管理</cite>
               </a> 
               <dl class="layui-nav-child">
-                <dd><a id="temp_m" lay-href="collection/performance_template.html">填报模板维护</a></dd>
+                <dd><a id="temp_m" href="javascript:;">填报模板维护</a>
+				<dl class="layui-nav-child">
+				  <dd data-name="list"><a lay-href="collection/performance_template.html">绩效目标完成</a></dd>
+				  <dd data-name="mobile"><a lay-href="collection/capital_template.html">资金支出进度</a></dd>
+				</dl>
+				</dd>
                 <dd><a id="task_m" lay-href="collection/manage_col_task.html">填报任务管理</a></dd>
                 <dd><a id="report_c" lay-href="submit/major_submit.html">专业数据填报</a></dd> 
               </dl> 
@@ -237,7 +242,7 @@
     base: '../layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use(['index','form','laytpl'],function(){
+  }).use(['index','form','laytpl','jquery'],function(){
 	  var $ = layui.$,
 	  form = layui.form,
 	  router = layui.router(),
@@ -286,7 +291,58 @@
 	  var userinfo = layui.data('userinfo');
 	  console.log("token:" + userinfo['token']);
 	  
-
+		var $ = layui.$,
+			active = {
+				batchdel: function() {
+					var checkStatus = table.checkStatus('LAY-app-content-list'),
+						checkData = checkStatus.data; //得到选中的数据
+		
+					if (checkData.length === 0) {
+						return layer.msg('请选择数据');
+					}
+		
+					layer.confirm('确定删除吗？', function(index) {
+		
+						//执行 Ajax 后重载
+						/*
+						admin.req({
+						  url: 'xxx'
+						  //,……
+						});
+						*/
+						table.reload('LAY-app-content-list');
+						layer.msg('已删除');
+					});
+				},
+				add: function() {
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '指标定义',
+						area: ['800px', '90%'],
+						//shade: 0,
+						maxmin: true,
+					 
+						btn: ['确认', '取消'],
+						yes: function(index, layero) {
+							//点击确认触发 iframe 内容中的按钮提交
+							var submit = layero.find('iframe').contents().find("#metrics_form");
+							submit.click();
+							
+							table.reload('LAY-app-content-list');
+						},
+						content: 'new_metrics.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							layer.setTop(layero); //重点2
+						} 
+					});
+				},
+				exit_system: function() {
+					console.log("entering here");
+				}
+			};
   });
   </script>
   
