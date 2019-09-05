@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -79,8 +78,8 @@
 					projectBase = Class.getURL();
 
 				form.render();
-				
-				layui.data('userinfo',null);
+
+				layui.data('userinfo', null);
 
 				//提交
 				form.on('submit(LAY-user-login-submit)', function(obj) {
@@ -112,18 +111,18 @@
 									'chineseName': data[0].chineseName,
 									'role': data[0].roleId
 								};
-								layui.data('userinfo',{
+								layui.data('userinfo', {
 									key: 'user',
 									value: userinfo
 								});
-								
+
 								var token = data[1];
-								console.log(token);
-								layui.data('userinfo',{
+								//console.log(token);
+								layui.data('userinfo', {
 									key: 'token',
 									value: token
 								});
-								
+
 								/*layui.data(setter.tableName, {
 												key: setter.request.tokenName
 												,value: res.data.access_token

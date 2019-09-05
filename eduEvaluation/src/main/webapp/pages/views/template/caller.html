@@ -39,7 +39,7 @@ width:600px;
           	     	  <div style="float: left;">院校：<input type="text" id="school" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
           	     	  <div style="float: left;">专业：<input type="text" id="major" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
           	     	  <br/>
-          	     	  <button class="layui-btn layuiadmin-btn-list" type="button" data-type="edit" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
+          	     	  <button class="layui-btn layuiadmin-btn-list" type="button" id="verify_btn" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
           </div>
             <table class="layui-table table-center">
               <colgroup>
@@ -224,6 +224,26 @@ layui.config({
 					layer.setTop(layero); //重点2
 				}
 				});
+		});
+		
+		$('#verify_btn').on('click', function() {
+			console.log("entering verify");
+			$.ajax({
+				url: projectBase + '/collection/completeBasicForm',
+				dataType: 'json',
+				data: {
+					'collection_major_id':data['collection_major_id']
+					},
+				type: 'POST',
+				success: function(res){
+					if(res.code==0){
+						layer.msg("报表完成并提交!");
+					} else {
+						layer.msg("报表提交过程中遇到错误!", function(){
+							});
+					}
+				} 
+			});
 		});
       
 

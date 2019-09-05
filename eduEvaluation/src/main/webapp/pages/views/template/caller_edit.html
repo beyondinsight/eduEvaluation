@@ -19,6 +19,7 @@
         </div>
         <button type="button" class="layui-btn layui-btn-normal" id="upload"  style="display: none;" >上传文件</button> 
        	<input type="text" hidden="hidden"    id="upload_id" name="upload_id">
+		<input type="hidden" id="form_performance_id" name="form_performance_id">
         <table  id="demo"  lay-filter="demo"></table> 
         <script type="text/html" id="test-table-toolbar-barDemo">
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-upload-circle"></i>上传</a>
@@ -67,17 +68,17 @@
     ,layer = layui.layer //弹层
     ,form = layui.form
 	,admin = layui.admin
-	,upload=layui.upload; 
+	,upload=layui.upload,
+	$ = layui.$; 
     
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
 	  ,width:1400
-	  ,url: projectBase + '/collectionMaterial/collectionMaterial'//数据接口
-	  //toolbar:'#toolbarDemo'
+	  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
+	  ,where: {'form_performance_id':$('#form_performance_id').val()}
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
-<<<<<<< HEAD
 		{type: 'checkbox', align:'center'}
 		,{type: 'numbers', title: '序号', align:'center'}
 	    ,{field: 'materialname', title: '支撑材料', align:'center'}
@@ -92,14 +93,7 @@
         } } 
 	    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
             return updateTime(row.updateTime);
-        } }	    
-=======
-		{type: 'numbers', title: '序号'}
-	    ,{field: 'materialname', title: '支撑材料', align: 'center'}
-	    ,{field: 'file_name', title: '文件名' , align: 'center'}
-	    ,{field: 'doc_size', title: '文件大小', align: 'center'} 
-	    ,{field: 'updateTime', title: '上传时间', align: 'center'}	    
->>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
+        } }	 
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
 	 ,limits: [10,20,50]
@@ -110,6 +104,9 @@
 	table.on('tool(demo)', function(obj){
 	  var data = obj.data;
 	  if(obj.event === 'del'){
+				if(data.required == 'Y')return layer.msg('这是必填文件，不能删除!',function(){
+					
+				}); 
 	    layer.confirm('确定删除这文件吗？', function(index){
 	    	
 	    		$.ajax({
@@ -138,7 +135,7 @@
 		  layer.msg('已成功删除!');
 		  });
 	  } else if(obj.event === 'upload'){
-		  alert(data.docsize);
+		  //alert(data.docsize);
 		   $('#upload_id').val(data.id);
 		   $("#upload").click();
  
@@ -214,7 +211,12 @@
             //点击确认触发 iframe 内容中的按钮提交
             var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
             submit.click();
-          }
+          },
+		  success: function(layero, index) {
+      			var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+      			$(pf_id).val($('#form_performance_id').val());
+      			layer.setTop(layero); //重点2
+      		}
         }); 
       }
     }; 

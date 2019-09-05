@@ -79,8 +79,12 @@ public class CollectionMaterialController {
 
 		TblCollectionMaterial material = new TblCollectionMaterial();
 		String materialname = request.getParameter("materialname");
+		String memo = request.getParameter("memo");
+		String form_performance_id = request.getParameter("form_performance_id");
 
+		material.setFormPerformanceId(new Integer(form_performance_id));
 		material.setMaterialname(materialname);
+		material.setDescription(memo);
 
 		int result = service.createMaterial(material);
 

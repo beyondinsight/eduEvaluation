@@ -23,7 +23,7 @@
 	     	  <div style="float: left;">院校：<input type="text" id="school" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
 	     	  <div style="float: left;">专业：<input type="text" id="major" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
 	     	  <br/>
-	     	  <button class="layui-btn layuiadmin-btn-list" type="button" data-type="edit" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
+	     	  <button class="layui-btn layuiadmin-btn-list" type="button" id="verify_btn" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
      	  </div>			
        		<div class="layui-card-body">  		        
             <table class="layui-table" id="demo">      
@@ -43,13 +43,13 @@
 	                 <td><button id="rda_btn" type="button" class="layui-btn layui-btn-danger layuiadmin-btn-list layui-btn-xs"  style="font-size: 0;"><i class="layui-icon">&#xe642;</i></button></td>                  
 	               </tr>
 	               <tr>
-	                 <td>'     其中：硬件建设支出额度</td>
+	                 <td>     其中：硬件建设支出额度</td>
 	                 <td><div id="rpha_amount"></div></td>
 	                 <td><div id="region_hardware"></div></td>
 	                 <td><button id="rpha_btn" class="layui-btn layui-btn-danger layui-btn-xs" style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>
 	               <tr>
-	                 <td>'     其中：内涵建设支出额度</td>
+	                 <td>     其中：内涵建设支出额度</td>
 	                 <td><div id="rpia_amount"></div></td>
 	                 <td><div id="region_internal"></div></td>
 	                 <td><button id="rpia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
@@ -61,13 +61,13 @@
 	                 <td><button id="cda_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">中央财政拨付额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>  
 	               <tr>
-	                 <td>'     其中：硬件建设支出额度</td>
+	                 <td>     其中：硬件建设支出额度</td>
 	                 <td><div id="cpha_amount"></div></td>
 	                 <td><div id="central_hardware"></div></td>
 	                 <td><button id="cpha_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>
 	               <tr>
-	                 <td>'     其中：内涵建设支出额度</td>
+	                 <td>     其中：内涵建设支出额度</td>
 	                 <td><div id="cpia_amount"></div></td>
 	                 <td><div id="central_internal"></div></td>
 	                 <td><button id="cpia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
@@ -79,13 +79,13 @@
 	                 <td><button id="sft_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">学校配套经费额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>  
 	               <tr>
-	                 <td>'     其中：硬件建设支出额度</td>
+	                 <td>     其中：硬件建设支出额度</td>
 	                 <td><div id="sfh_amount"></div></td>
 	                 <td><div id="school_hardware"></div></td>
 	                 <td><button id="sfh_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
 	               </tr>
 	               <tr>
-	                 <td>'     其中：内涵建设支出额度</td>
+	                 <td>     其中：内涵建设支出额度</td>
 	                 <td><div id="sfi_amount"></div></td>
 	                 <td><div id="school_internal"></div></td>
 	                 <td><button id="sfi_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
@@ -493,6 +493,26 @@
 								layer.setTop(layero); //重点2
 							} 
 					});
+		});
+		
+		$('#verify_btn').on('click', function() {
+			console.log("entering verify");
+			$.ajax({
+				url: projectBase + '/collection/completeCapitalForm',
+				dataType: 'json',
+				data: {
+					'collection_major_id':data['collection_major_id']
+					},
+				type: 'POST',
+				success: function(res){
+					if(res.code==0){
+						layer.msg("报表完成并提交!");
+					} else {
+						layer.msg("报表提交过程中遇到错误!", function(){
+							});
+					}
+				} 
+			});
 		});
 		
 	  });

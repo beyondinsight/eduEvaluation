@@ -265,7 +265,7 @@
     </insert>
     
     <select id="selectMetricsList" resultMap="metricsListResultMap">
-    	select * from tbl_metrics_detail where m_system_id=#{m_system_id}
+    	select * from tbl_metrics_detail where m_system_id=#{m_system_id} order by pid, morder
     </select>
     
     <select id="countMaterials" resultType="int">
@@ -375,6 +375,10 @@
       </if>
     </set>
 	 where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <update id="updateCapitalFormStatus">
+  	update tbl_form_capitalprogress set process_status=#{process_status}, update_time=#{update_time} where collection_major_id=#{collection_major_id}
   </update>
     
     <select id="selectPerformanceItem" resultMap="performanceResultMap">
