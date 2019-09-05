@@ -19,8 +19,8 @@
         <div style="padding-bottom: 10px;">
 		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 新建</button>
           <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"> <i class="layui-icon layui-icon-delete"></i>删除</button>
-       	  <button type="button" class="layui-btn  layui-btn-normal" id="uploadUsers"><i class="layui-icon layui-icon-upload-circle"></i>上传文件</button>
-       	  <button type="button" class="layui-btn layui-btn-normal" id="downloadUsers" onclick="downloadUsers()"><i class="layui-icon layui-icon-download-circle" ></i>下载模板</button>
+       	  <button type="button" class="layui-btn layuiadmin-btn-list layui-btn-normal" id="uploadUsers"><svg t="1567620814285" style="margin-bottom: -3px;" class="icon" viewBox="0 0 1101 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1851" width="15" height="15"><path d="M261.91751 376.864179l-43.78184-43.78184 332.61822-332.618221 332.618221 332.618221-43.781841 43.78184L581.69512 118.969029v710.565342h-61.882459V118.969029L261.91751 376.864179zM946.956338 181.006194v61.88246h92.668983v717.836531h-977.742861V242.888654h92.668983v-61.88246H0v841.601451h1101.507781V181.006194H946.956338z m0 0" p-id="1852" fill="#ffffff"></path></svg> &nbsp;上传文件</button>
+       	  <button type="button" class="layui-btn layuiadmin-btn-list layui-btn-normal" id="downloadUsers" onclick="downloadUsers()" style="margin-left: 10px;"><svg t="1567621206639" style="margin-bottom: -3px;"  class="icon" viewBox="0 0 1101 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2202" width="15" height="15"><path d="M519.812661 711.029461V0.464118h61.882459v710.565343L839.435564 453.289016l43.78184 43.781841-332.61822 332.463514-332.61822-332.618221 43.78184-43.78184 258.049857 257.895151zM946.956338 181.006194v61.88246h92.668983v717.836531h-977.742861V242.888654h92.668983v-61.88246H0v841.601451h1101.507781V181.006194H946.956338z m0 0" p-id="2203" fill="#ffffff"></path></svg> &nbsp;下载模板</button>
         </div>
         <table id="demo" lay-filter="demo"></table> 
         <script type="text/html" id="buttonTpl">
@@ -30,9 +30,13 @@
             <button class="layui-btn layui-btn-primary layui-btn-xs">待修改</button>
           {{#  } }}
         </script>
-        <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+         <script type="text/html" id="test-table-toolbar-barDemo">
+ 			{{#  if(d.id == d.loginId ){ }}
+ 			 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>             
+            {{#  } else if((d.loginRoleId == 1 && d.roleId != 1) || d.creator == d.loginId) { }}
+           	 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+			 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+           {{#  } }}
         </script>
       </div>
     </div>
@@ -43,6 +47,7 @@
   <script src="../util/Constants.js"></script>
   <script>
   var projectBase = Class.getURL();
+  var userinfo = layui.data('userinfo');
   
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
@@ -55,6 +60,9 @@
     ,upload = layui.upload;
     var $ = layui.jquery
     ,layer = layui.layer;
+    
+
+	 
  
 	table.render({
 	  elem: '#demo'
@@ -72,13 +80,16 @@
 	    ,{field: 'schoolName', title: '所属院校', width:120, align:'center'}  
 	    ,{field: 'mobilePhone', title: '手机号码', width: 200, align:'center'}
 	    ,{field: 'email', title: '电子邮箱', width: 200, align:'center'}
-	    ,{field: 'creator', title: '创建人', width: 120, align:'center'}
-	    ,{field: 'creator', title: '创建人角色', width: 120, align:'center'}
+	    ,{field: 'parentName', title: '创建人', width: 120, align:'center'}
+	    ,{field: 'parentRole', title: '创建人角色', width: 120, align:'center'}
 	    ,{field: 'memo', title: '备注', align:'center'}
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150, align:'center'}
+		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:150, align:'left'}
 	  ]]
 	});
 	
+	 table.reload('demo', {
+	        where: {'token' : userinfo['token']}
+	      });
 	//监听行工具事件
 	table.on('tool(demo)', function(obj){
 	  var data = obj.data;
@@ -136,7 +147,7 @@
 	    	  $(inputList[6]).val(data.schoolId);
 	    	  $(inputList[7]).val(data.mobilePhone);
 	    	  $(inputList[8]).val(data.email);	    	  
-	    	  $(inputList[9]).val(data.creator);
+	    	  $(inputList[9]).val(data.schoolName);
 	    	  
 	    	  var areaList = body.find('textarea');
 	    	  $(areaList[0]).val(data.memo);
@@ -234,19 +245,25 @@
     upload.render({
 	      elem: '#uploadUsers'
 	      ,url: projectBase + '/user/uploadUsers'
-	      ,accept: 'file' //普通文件
-  	  ,exts: 'xlsx' //只允许上传压缩文件
+	      ,accept: 'file' //普通文件	      
+  	      ,exts: 'xlsx' //只允许上传压缩文件
+ 	      ,before: function(obj){ 	  	    	 
+  	  	    	 this.data={'token' : userinfo['token']};
+  	  	    	 
+  	  	    	}
 	      ,done:function(res){
 				if(res.code==0){       
-					                        layer.msg('上传用户成功!');
+					                        layer.msg(res.msg);
 					                }else if(res.code==1) {          
-					                        layer.msg('上传用户失败!', function(){
-															layer.msg('上传用户失败!');
+					                        layer.msg(res.msg, function(){
+															layer.msg(res.msg);
 													  });   
 					                }else if(res.code==2){
-						 			layer.msg("用户名已存在");
+						 			layer.msg(res.msg);
+								}if(res.code==3){
+									layer.msg(res.msg);
 								}else{
-									 layer.msg("文件中存在非法用户名");
+									 layer.msg(res.msg);
 								}
 				 table.reload('demo');
 					},             

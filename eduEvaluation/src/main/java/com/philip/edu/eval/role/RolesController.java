@@ -110,7 +110,7 @@ public class RolesController {
 	public ResponseEntity<BackendData> choseUser(HttpServletRequest request){
 	
 		String schoolId = request.getParameter("schoolId"); 
-		ArrayList usersList = (ArrayList) user_service.getUsersList();				 
+		ArrayList usersList = (ArrayList) user_service.getUsersList(0);				 
 	 		
 		ArrayList choseUser = new ArrayList();
 		for(int i=0; i<usersList.size(); i++){

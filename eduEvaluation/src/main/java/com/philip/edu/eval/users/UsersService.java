@@ -8,7 +8,7 @@ import com.philip.edu.eval.bean.TblUsers;
 
 public interface UsersService {
 	//Users:  
-	public List<TblUsers> getUsersList();
+	public List<TblUsers> getUsersList(int id);
 	public List<TblUsers> getUsers(String userName);
 	public int createUsers(TblUsers users);
 	public int updateUsers(TblUsers users);
@@ -26,6 +26,8 @@ public interface UsersService {
     //User School   
     public int createUserSchool(TblUsers users);
     public int updateUserSchool(TblUsers users);
+    public TblUsers getUserSchool(int id);
+    public List<TblUsers> getUsersListByFiled(TblUsers users);
     
  
 }

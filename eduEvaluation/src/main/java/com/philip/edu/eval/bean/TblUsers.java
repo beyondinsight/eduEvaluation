@@ -24,39 +24,6 @@ public class TblUsers {
 	private Integer schoolId;
 	
 	private String schoolName;
-	
-    
-    public Integer getSchoolId() {
-		return schoolId;
-	}
-
-	public void setSchoolId(Integer schoolId) {
-		this.schoolId = schoolId;
-	}
-
-	public String getSchoolName() {
-		return schoolName;
-	}
-
-	public void setSchoolName(String schoolName) {
-		this.schoolName = schoolName;
-	}
-
-	public Integer getRoleId() {
-		return roleId;
-	}
-
-	public void setRoleId(Integer roleId) {
-		this.roleId = roleId;
-	}
-
-    public String getRoleName() {
-		return roleName;
-	}
-
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
-	}
 
 	private String status;
 
@@ -79,12 +46,52 @@ public class TblUsers {
     private String email;
 
     private String memo;
+    
+    private String parentName;
+    
+    private String parentRole;
+    
+    private Integer loginId;
+    
+    private Integer loginRoleId;
 
-    public Integer getId() {
+    public Integer getLoginRoleId() {
+		return loginRoleId;
+	}
+
+	public void setLoginRoleId(Integer loginRoleId) {
+		this.loginRoleId = loginRoleId;
+	}
+
+	public Integer getLoginId() {
+		return loginId;
+	}
+
+	public void setLoginId(Integer loginId) {
+		this.loginId = loginId;
+	}
+
+	public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public String getParentName() {
+		return parentName;
+	}
+
+	public void setParentName(String parentName) {
+		this.parentName = parentName;
+	}
+
+	public String getParentRole() {
+		return parentRole;
+	}
+
+	public void setParentRole(String parentRole) {
+		this.parentRole = parentRole;
+	}
+
+	public void setId(Integer id) {
         this.id = id;
     }
 
@@ -223,15 +230,49 @@ public class TblUsers {
     public void setMemo(String memo) {
         this.memo = memo == null ? null : memo.trim();
     }
+    public Integer getSchoolId() {
+		return schoolId;
+	}
 
+	public void setSchoolId(Integer schoolId) {
+		this.schoolId = schoolId;
+	}
 
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
+	}
+
+    public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	@Override
 	public String toString() {
 		return "TblUsers [id=" + id + ", userName=" + userName + ", chineseName=" + chineseName + ", password="
 				+ password + ", salt=" + salt + ", institution=" + institution + ", major=" + major + ", roleId="
-				+ roleId + ", roleName=" + roleName + ", status=" + status + ", creator=" + creator + ", createTime="
-				+ createTime + ", updateTime=" + updateTime + ", lastOperation=" + lastOperation + ", position="
-				+ position + ", qq=" + qq + ", fixPhone=" + fixPhone + ", mobilePhone=" + mobilePhone + ", email="
-				+ email + ", memo=" + memo + "]";
+				+ roleId + ", roleName=" + roleName + ", schoolId=" + schoolId + ", schoolName=" + schoolName
+				+ ", status=" + status + ", creator=" + creator + ", createTime=" + createTime + ", updateTime="
+				+ updateTime + ", lastOperation=" + lastOperation + ", position=" + position + ", qq=" + qq
+				+ ", fixPhone=" + fixPhone + ", mobilePhone=" + mobilePhone + ", email=" + email + ", memo=" + memo
+				+ ", parentName=" + parentName + ", parentRole=" + parentRole + ", loginId=" + loginId + "]";
 	}
+
+ 
     
 }

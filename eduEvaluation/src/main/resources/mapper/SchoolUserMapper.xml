@@ -27,6 +27,7 @@
 		<result column="school_name" property="schoolName" jdbcType="VARCHAR" />
 	</resultMap>
 
+ 
 
 	<select id="getNameSchoolUser" parameterType="int"
 		resultMap="SchoolUserResultMap">

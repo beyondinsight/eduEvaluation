@@ -21,11 +21,11 @@ text-align: left;
 
       <div class="layui-form">
      	    	
-       		<div class="layui-card-body">  
-       		<table class="layui-table" style="width:70%;border: 1px solid #e6e6e6;">
+       		<div class="layui-card-body"  style="width:70%;">  
+       		<table class="layui-table" style="border: 1px solid #e6e6e6;">
      	    	<tr class="noborder">
      	    		<td style="width:60px;">填报任务</td><td>
-     	    			<select id="task_list" lay-search="">
+     	    			<select id="task_list" lay-search=""  lay-filter="task_list">
      	    				<option value="">直接选择或搜索选择</option>
      	    			</select>
      	    		</td>
@@ -34,23 +34,23 @@ text-align: left;
      	    	</tr >
      	    	<tr class="noborder">
      	    		<td style="width:60px;">学校搜索</td><td>
-     	    			<select id="school_list" lay-search="">
+     	    			<select id="school_list" lay-search="" lay-filter="school_list" >
      	    			   	<option value="">直接选择或搜索选择</option>
      	    			</select>
      	    		</td>
      	    		<td style="width:100px;">专业搜索</td><td>
-	     	    		<select id="major_list" lay-search="">
+	     	    		<select id="major_list" lay-search="" lay-filter="major_list">
 	     	    			<option value="">直接选择或搜索选择</option>
 	     	    		</select>
      	    		</td>
      	    		<td style="width:90px;">填报状态搜素</td><td>
-	     	    		<select id="status_list" lay-search="">
+	     	    		<select id="status_list" lay-search="" lay-filter="status_list">
 	     	    		<option value="">直接选择或搜索选择</option>
 	 	    			</select>
  					</td>
      	    	</tr>
      	    </table>		        
-            <table id="demo" class="layui-table" style="width:70%;"></table>
+            <table  id="demo" class="layui-table"  ></table>
             <script type="text/html" id="test-table-toolbar-barDemo">
        			   <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
        		</script>
@@ -74,7 +74,7 @@ text-align: left;
 	    base: '../../layuiadmin/' //静态资源所在路径
 	  }).extend({
 	    index: 'lib/index' //主入口模块
-	  }).use(['index','form','table','laytpl'],function(){
+	  }).use(['index', 'contlist','element', 'table', 'layer','admin'],function(){
 		  var table = layui.table
 		    ,form = layui.form
 			,admin = layui.admin
@@ -83,19 +83,32 @@ text-align: left;
 		  
 			  table.render({
 			  elem: '#demo'
-			  ,height: 300
-			  ,url: projectBase + '/role/roles_usersCount'//数据接口
+			  ,height: 500
+			  ,url: projectBase + '/userTask/searchTaskList'//数据接口
 			  //,toolbar:'#toolbarDemo'
 			  ,page: false //开启分页
 			  ,cols: [[  //表头
-				/*  {type: 'numbers', title: '院校', align:'center'}
-				   ,{field: 'id', title: '专业', align:'center'}
-				   ,{field: 'roleName', title: '专业填报状态', align:'center'}
-				   ,{field: 'counts', title: '状态更新时间', align:'center'}    
-				    ,{fixed: 'right', title:'操作',   toolbar: '#test-table-toolbar-barDemo', align:'center'} */
+				   {field: 'school_name', title: '院校', align:'center'}
+				   ,{field: 'major_name', title: '专业', align:'center'}
+				   ,{field: 'status_msg', title: '专业填报状态', align:'center'}
+				   //,{field: 'counts', title: '状态更新时间', align:'center'}    
+				   ,{fixed: 'right', title:'操作',   toolbar: '#test-table-toolbar-barDemo', align:'center'} 
 			  ]]
 			});  
+				
+			
+			  var schoolid=-1;
 			  
+			  $.ajax({
+					url: projectBase + '/user/userSchool',
+					data:{'token' : userinfo['token']},
+					dataType:'json',				
+					async: false,
+					success:function(res){					
+						  schoolid =  res.code;
+						}
+					});
+			 
 			  //获取任务填报清单
 			  $.ajax({
 					url: projectBase + '/userTask/schoolTaskList',
@@ -142,7 +155,12 @@ text-align: left;
 								   		 var opt =  new Option(item.school_name, item.id);    		 		
 								   			$('#school_list').append(opt);// 下拉菜单里添加元素   		    			
 								   		});
-							    	layui.form.render("select");
+									layui.form.render("select");
+ 
+									var select = 'dd[lay-value=' + schoolid + ']';  	
+							   		$('#school_list').siblings("div.layui-form-select").find('dl').find(select).click();
+									
+							    	
 				                } else {          
 				                        layer.msg('学校列表失败!', function(){
 														layer.msg('学校列表失败!');
@@ -158,6 +176,7 @@ text-align: left;
 				  }     
 			});
 		  
+		  $('#school_list').attr("disabled",true); 
 		   //获取专业列表
 		  $.ajax({
 				url: projectBase + '/dictionary/major',
@@ -220,9 +239,50 @@ text-align: left;
 							});  
 				  }     
 			});
- 
+		  
+		  
+		  //监听任务change事件
+		  form.on('select(task_list)', function(data){
+			    table.reload('demo', {
+			        where: {"task_id":$("#task_list").val(),"school_id":$("#school_list").val(),
+			        		"major_id":$("#major_list").val(),"process_status":$("#status_list").val()}
+			      });  		 
+		 }); 
+		 form.on('select(school_list)', function(data){
+			    table.reload('demo', {
+			        where: {"task_id":$("#task_list").val(),"school_id":$("#school_list").val(),
+			        		"major_id":$("#major_list").val(),"process_status":$("#status_list").val()}
+			      });  		 
+		 }); 
+		  
+		  form.on('select(major_list)', function(data){
+			    table.reload('demo', {
+			        where: {"task_id":$("#task_list").val(),"school_id":$("#school_list").val(),
+			        		"major_id":$("#major_list").val(),"process_status":$("#status_list").val()}
+			      });  		 
+		 });
+		  form.on('select(status_list)', function(data){
+			    table.reload('demo', {
+			        where: {"task_id":$("#task_list").val(),"school_id":$("#school_list").val(),
+			        		"major_id":$("#major_list").val(),"process_status":$("#status_list").val()}
+			      });  		 
+		 });
+		  
+		
+ 	 
+		  
+		  table.reload('demo', {
+		        where: {"task_id":$("#task_list").val(),"school_id":$("#school_list").val(),
+		        		"major_id":$("#major_list").val(),"process_status":$("#status_list").val()}
+		      });
+		  
+		
+	 
 	  });
-  
+   
+  	
+   
+ 
   </script>
 </body>
 </html>

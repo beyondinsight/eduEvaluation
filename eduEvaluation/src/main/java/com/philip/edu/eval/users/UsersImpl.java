@@ -38,9 +38,9 @@ public class UsersImpl implements UsersService {
 		return dao.deleteUsers(id);
 	}
 
-	public List<TblUsers> getUsersList() {
+	public List<TblUsers> getUsersList(int id) {
 		// TODO Auto-generated method stub
-		return this.dao.getUsersList();
+		return this.dao.getUsersList(id);
 	}
 	
 	public int batchDeleteUsers(int ids[]){
@@ -102,6 +102,16 @@ public class UsersImpl implements UsersService {
 	public int updateUserSchool(TblUsers users) {
 		// TODO Auto-generated method stub
 		return dao.updateUserSchool(users);
+	}
+
+	public TblUsers getUserSchool(int id) {
+		// TODO Auto-generated method stub
+		return dao.getUserSchool(id);
+	}
+
+	public List<TblUsers> getUsersListByFiled(TblUsers users) {
+		// TODO Auto-generated method stub
+		return dao.getUsersListByFiled(users);
 	}
 
 	

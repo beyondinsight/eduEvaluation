@@ -14,6 +14,9 @@ border:0;
 text-align: right;
 }
 
+span{
+color:red;
+}
 </style>
 <body>
 
@@ -21,34 +24,38 @@ text-align: right;
    
    <table class="layui-table">
    		<tr  class="noborder">
-   			<td>用户账号:</td><td><input type="text" name="userName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
-   			<td>密码:</td><td> <input type="text" name="password" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+   			<td><span>*</span>用户账号:</td><td><input type="text" name="userName"   lay-verify="required|user_exp" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+   			<td><span>*</span>登录密码:</td><td> <input type="password" name="password"   lay-verify="required|pass_exp" placeholder="必填项" autocomplete="off" class="layui-input"></td>
    		</tr>
    		
    		<tr  class="noborder">  			
-   			<td>用户角色:</td><td style="text-align: left;">
+   			<td><span>*</span>用户角色:</td><td style="text-align: left;">
    							<input hidden="hidden" id="roleId_hidden"/>
-   							<select name="roleId" id="roleId" lay-search="" >
-								<option value="">直接选择或搜索选择</option>
-							</select></td>
-			<td>用户姓名:</td><td><input type="text" name="chineseName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+   							<select name="roleId" id="roleId" lay-search="" placeholder="必填项" lay-filter="roleId" lay-verify="required" >
+									<option value=""></option>
+							</select>
+			</td>
+			<td><span>*</span>用户姓名:</td><td><input type="text" name="chineseName"   lay-verify="required|chinese_exp" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+			
+   			
 		</tr>
    		
    		<tr  class="noborder">
    			<td>职称:</td><td><input type="text" name="position"   autocomplete="off" class="layui-input"></td>
-   			<td>所属院校:</td><td style="text-align: left;">
-   							<select name="schoolId" id="schoolId" lay-search="" >
-								<option value="">直接选择或搜索选择</option>
-							</select>
-   			</td>
+   			<td><span id="isRed"  hidden="hidden">*</span>所属院校:</td><td style="text-align: left;">
+   							<select name="schoolId" id="schoolId" lay-search="" lay-filter="schoolId" >
+   									<option value="">直接选择或搜索选择</option>
+   							</select>
+			</td>				
    		</tr>
    		
    		<tr  class="noborder">
-   			<td>手机号码:</td><td><input type="text" name="mobilePhone"  autocomplete="off" class="layui-input"></td>
-   			<td>邮箱:</td><td> <input type="text" name="email"    autocomplete="off" class="layui-input"></td>
-   		</tr>
+   		    <td>手机号码:</td><td><input type="text" name="mobilePhone" lay-verify="phone_exp"  autocomplete="off" class="layui-input"></td>		
+   			<td>邮箱:</td><td> <input type="text" name="email" lay-verify="email_exp"   autocomplete="off" class="layui-input">  			
+      	</tr>
    		<tr  class="noborder">
-   			<td>备注:</td><td><input type="text" name="memo"  autocomplete="off" class="layui-input" syule="width:100%"></td>
+   			<td>备注:</td><td><textarea   name="memo"  lay-verify="lenth_exp" autocomplete="off" class="layui-input" style="width:100%;height: 100px;resize: none;"></textarea></td>
+   			<input type="text"  name="creator" id="creator" hidden="hidden"/>
    		</tr>
    </table>
    
@@ -62,6 +69,7 @@ text-align: right;
   <script src="../util/Constants.js"></script>
   <script>
   var projectBase = Class.getURL();
+  var userinfo = layui.data('userinfo');
   
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
@@ -73,7 +81,24 @@ text-align: right;
     ,form = layui.form
 	,admin = layui.admin;
 
-    $.ajax({
+	  var getschool=-1;
+	  var getuser="";
+	  var getrole=99;
+	  
+	  $.ajax({
+			url: projectBase + '/user/userSchool',
+			data:{'token' : userinfo['token']},
+			dataType:'json',				
+			async: false,
+			success:function(res){					
+				getschool =  res.code;
+				getuser = res.msg;
+				getrole = res.count;
+				$("#creator").val(getuser);
+				}
+			});  
+	
+	 $.ajax({
     	url: projectBase + '/role/roles',
     	dataType: 'json',
     	type: 'get',
@@ -81,8 +106,10 @@ text-align: right;
     	var roleIds = data.data;
      
     	$.each(roleIds, function (index, item) {
-   		 var opt =  new Option(item.roleName, item.id);    		 		
-   			$('#roleId').append(opt);// 下拉菜单里添加元素   		    			
+   		 var opt =  new Option(item.roleName, item.id); 
+   		 	if(item.id>getrole){
+					$('#roleId').append(opt);// 下拉菜单里添加元素  
+   		 	}
    		});
     	layui.form.render("select");
 
@@ -98,21 +125,95 @@ text-align: right;
     	var schoolId = data.data;
      
     	$.each(schoolId, function (index, item) {
-   		 var opt =  new Option(item.school_name, item.id);    		 		
-   			$('#schoolId').append(opt);// 下拉菜单里添加元素   		    			
+   		 var opt =  new Option(item.school_name, item.id);
+   		 if(getrole ==1 ||getschool == item.id ){
+	   			$('#schoolId').append(opt);
+   		 }
+	   			// 下拉菜单里添加元素   		    			
    		});
     	layui.form.render("select");
-
+    	var select = 'dd[lay-value=' + getschool + ']';  	
+   		$('#schoolId').siblings("div.layui-form-select").find('dl').find(select).click();
+		
     	//重新渲染 固定写法
     	}
     	});
     
+ 
+   	   // $('#schoolId').attr("disabled",true); 
+	    
+	    
+   //自定义校验
+   form.verify({
+   	    user_exp: function(value, item){ //value：表单的值、item：表单的DOM对象
+
+   	    if(!(/^[a-zA-Z0-9_-]{4,9}$/.test(value))){
+   	      return '用户名必须为4-10位字母,数字';
+   	    }
+   	   
+   	  },
+
+   	  //我们既支持上述函数式的方式，也支持下述数组的形式
+   	  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+   	  pass_exp: [
+   	    /^[\S]{6,12}$/
+   	    ,'密码必须6到12位，且不能出现空格'
+   	  ],chinese_exp :[
+   		/^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,8}$/
+   		, '姓名必须为2到20位中文汉字' 
+   	  ],lenth_exp: function(value, item){ //value：表单的值、item：表单的DOM对象
+   			if(value.length>201){				
+   				return '备注文字长度必须小于200';
+   			}	
+     	   
+     	  },phone_exp: function(value, item){
+     		 if(value !="" && value!= null && !(/^1[3456789]\d{9}$/.test(value))){ 
+     	        return "手机号码格式有误，请重填"; 
+     	    } 
+     	  },email_exp: function(value, item){
+     		 if(value !="" && value!= null && !(/^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/.test(value))){ 
+      	        return "邮箱格式有误，请重填"; 
+      	    } 
+     	  }
+   	  
+   	});  
+	
+  	//监听选择角色框事件
+    form.on('select(roleId)', function(data){
+     
+	   	if($("#roleId").val() == 2 || $("#roleId").val() == 3){
+	   		$("#isRed").attr("hidden",false); 
+	   		$("#schoolId").attr("lay-verify","required");
+	   	}else{
+	   		$("#isRed").attr("hidden",true);
+	   		$("#schoolId").attr("lay-verify","");
+	   	}
+	   		 
+	});
+   
     //监听提交
     form.on('submit(layuiadmin-app-form-submit)', function(data){
       var field = data.field; //获取提交的字段
       var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
       //提交 Ajax 成功后，关闭当前ajax弹层并重载表格
       //$.ajax({});
+      
+ 
+		  /* var uname = field.userName;
+		  alert(uname);
+		  //用户名验证
+		    username_regExp = /^[a-zA-Z0-9_-]{4,9}$/;
+		    //密码
+		    password_regExp = /^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]{6,20}$/;
+		    //真实姓名
+		    fullname_regExp = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/;
+		   
+		    var user_name = username_regExp.test(field.userName);
+	        var pass_word = password_regExp.test(field.password);
+		    var full_name = fullname_regExp.test(field.chineseName); */
+		    
+		    
+    
 	  $.ajax({
 		  type: 'POST',
 		  url: projectBase + '/user/addUsers',
@@ -142,15 +243,20 @@ text-align: right;
 							});
 							  parent.layui.table.reload('demo'); //重载表格
 			  			      parent.layer.close(index); //再执行关闭  
-			  			       parent.layui.table.reload('demo'); //重载表格
+			  			      parent.layui.table.reload('demo'); //重载表格
 		    }
 	  });
 	  
 	  parent.layui.table.reload('demo'); //重载表格
-	  layer.msg('已成功添加!');	  
+	  
     });
+	
 
+    
   })
+  
+  
+  
   </script>
 </body>
 </html>

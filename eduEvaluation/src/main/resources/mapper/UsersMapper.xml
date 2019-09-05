@@ -25,28 +25,60 @@
     <result column="role_name" property="roleName" jdbcType="VARCHAR" />
     <result column="school_id" property="schoolId" jdbcType="BIGINT" />
     <result column="school_name" property="schoolName" jdbcType="VARCHAR" />
-    
+    <result column="parent_name" property="parentName" jdbcType="VARCHAR" />
+    <result column="parent_role" property="parentRole" jdbcType="VARCHAR" />
+    <result column="login_id" property="loginId" jdbcType="VARCHAR" />
+    <result column="login_roleid" property="loginRoleId" jdbcType="VARCHAR" />
   </resultMap>
- 
 
- 
-  <select id="getUsersList" resultMap="UsersResultMap"   >
-                select  d.*,e.role_id,e.role_name,f.school_id,f.school_name from tbl_users d left join(
-		
-							select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
-						
+
+
+	<select id="getUsersList"  parameterType="int" resultMap="UsersResultMap">
+		select d.*,e.role_id,e.role_name,f.school_id,f.school_name,t.chinese_name
+		parent_name,u.role_name parent_role,#{0} login_id,1 login_roleid from tbl_users d left join(
+
+		select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN
+		tbl_roles b ON a.role_id=b.id
+
 		) e on d.id = e.user_id LEFT JOIN (
-						SELECT a.school_id,b.school_name,a.user_id from  tbl_school_user a LEFT JOIN  tbl_school  b on a.school_id = b.id
-		)f  ON d.id = f.user_id 
+		SELECT a.school_id,b.school_name,a.user_id from tbl_school_user a LEFT JOIN
+		tbl_school b on a.school_id = b.id
+		)f ON d.id = f.user_id LEFT JOIN
+		tbl_users t ON d.creator=t.id LEFT JOIN tbl_user_role y ON
+		d.creator=y.user_id LEFT JOIN tbl_roles u ON y.role_id=u.id
 	</select>
+	
+	<select id="getUsersListByFiled"   parameterType="com.philip.edu.eval.bean.TblUsers" resultMap="UsersResultMap">
+		SELECT  * from (
+	select d.*,e.role_id,e.role_name,f.school_id,f.school_name,t.chinese_name
+			parent_name,u.role_name parent_role,#{id,jdbcType=BIGINT} login_id,#{roleId,jdbcType=BIGINT} login_roleid from tbl_users d left join(
+
+			select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN
+			tbl_roles b ON a.role_id=b.id 
+
+			) e on d.id = e.user_id LEFT JOIN (
+			SELECT a.school_id,b.school_name,a.user_id from tbl_school_user a LEFT JOIN
+			tbl_school b on  a.school_id = b.id
+			)f ON d.id = f.user_id LEFT JOIN
+			tbl_users t ON d.creator=t.id LEFT JOIN tbl_user_role y ON
+			d.creator=y.user_id LEFT JOIN tbl_roles u ON y.role_id=u.id) t WHERE t.role_id>=#{roleId,jdbcType=BIGINT} AND  t.school_id = #{schoolId,jdbcType=BIGINT}  
+	</select>
+	
   
   <select id="getUsers" resultMap="UsersResultMap" parameterType="com.philip.edu.eval.bean.TblUsers"  >
-  	     	 select  * from (   select  * from tbl_users where  user_name=#{userName,jdbcType=VARCHAR} ) d  left join(
+  	     	  select  e.*,d.*,f.school_id,g.school_name  from (   select  * from tbl_users where  user_name=#{userName,jdbcType=VARCHAR} ) d  left join(
    select user_id,c.role_id,c.role_name
     from (
        select a.user_id,a.role_id,b.role_name from tbl_user_role a LEFT JOIN tbl_roles b  ON a.role_id=b.id  
        ) c 
-  ) e on d.id = e.user_id
+  ) e on d.id = e.user_id LEFT JOIN tbl_school_user f ON  e.user_id=f.user_id LEFT JOIN tbl_school g on f.school_id = g.id
+  </select>
+  
+  <select id="getUserSchool"  parameterType="int" resultMap="UsersResultMap"    >
+			select  * from (
+				select b.school_id  from tbl_user_role a  JOIN  tbl_school_user b where 
+					a.user_id=#{0}  AND a.user_id = b.user_id
+			) c JOIN  tbl_school  d  ON  c.school_id = d.id;
   </select>
   
    <select id="getRolesUsers" parameterType="com.philip.edu.eval.bean.TblUsers"   resultMap="UsersResultMap">

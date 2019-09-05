@@ -40,7 +40,7 @@
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
-  }).use(['index', 'contlist', 'table', 'layer','admin'], function(){
+  }).use(['index', 'contlist','element', 'table', 'layer','admin'], function(){
 	  var table = layui.table
 	    ,form = layui.form
 		,admin = layui.admin
@@ -56,7 +56,6 @@
 	  ,page: false //开启分页
 	  ,cols: [[ //表头
 		 {type: 'numbers', title: '序号', align:'center'}
-		  ,{field: 'id', title: '角色名称', align:'center'}
 	    ,{field: 'roleName', title: '角色名称', align:'center'}
 	    ,{field: 'counts', title: '角色下属用户', align:'center'}    
 		,{fixed: 'right', title:'操作', width: 80 ,  toolbar: '#test-table-toolbar-barDemo', align:'center'}
