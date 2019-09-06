@@ -76,9 +76,9 @@ public class ColTaskController {
 		taskCol.setForm_basic_weight(Integer.parseInt(weight1));
 		taskCol.setForm_performance_weight(Integer.parseInt(weight2));
 		taskCol.setForm_capitalprogress_weight(Integer.parseInt(weight3));
-		taskCol.setStatus(EvalConstants.COLLECTION_STATUS_INACTIVE);
-
-		taskCol.setUse_metrics_system(EvalConstants.DEFAULT_METRICS_SYSTEM_ID);
+		taskCol.setStatus(EvalConstants.COLLECTION_STATUS_INACTIVE); 
+    
+		taskCol.setUse_metrics_system(this.template_form_performance_id);
 		logger.info("get collection task basic information from page.");
 
 		String sSchools = request.getParameter("schoolChose");
@@ -296,8 +296,6 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
-	
 
 	@RequestMapping(value = "/updateMetrics", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity updateMetrics(HttpServletRequest request) {
@@ -365,74 +363,74 @@ public class ColTaskController {
 
 		int metrics_system_id = (Integer.parseInt((String) propConfig.get("template_performance_form_id")));
 		ArrayList metricsList = (ArrayList) service.getMetricsList(metrics_system_id);
-		//level 1 and 2:
+		// level 1 and 2:
 		ArrayList level1List = new ArrayList();
 		ArrayList level2List = new ArrayList();
 		ArrayList newList = new ArrayList();
 		int i = 0;
-		
-		for(i=0; i<metricsList.size(); i++){
-			MetricsDetail metrics = (MetricsDetail)metricsList.get(i);
-			if(metrics.getLevel()==1){
+
+		for (i = 0; i < metricsList.size(); i++) {
+			MetricsDetail metrics = (MetricsDetail) metricsList.get(i);
+			if (metrics.getLevel() == 1) {
 				level1List.add(metrics);
-			} else break;
+			} else
+				break;
 		}
-		
-		
+
 		int index = 0;
 		int[] parent = new int[30];
-		MetricsDetail metricsParent = (MetricsDetail)level1List.get(index++);
-		for(int j=i; j<metricsList.size(); j++){
-			MetricsDetail metrics = (MetricsDetail)metricsList.get(j);
-			if(metrics.getPid()==Integer.parseInt(metricsParent.getMetrics_code())){
+		MetricsDetail temp = null;
+		MetricsDetail metricsParent = (MetricsDetail) level1List.get(index++);
+		for (int j = i; j < metricsList.size(); j++) {
+			MetricsDetail metrics = (MetricsDetail) metricsList.get(j);
+			if (metrics.getPid() == metricsParent.getOrder()) {
 				metrics.setLevel1_name(metricsParent.getMetrics_name());
 				metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
 				newList.add(metrics);
 				parent[index]++;
-			} else {
-				if(parent[index]==0){
-					metricsParent.setLevel1_name(metricsParent.getMetrics_name());
-					metricsParent.setPid(Integer.parseInt(metricsParent.getMetrics_code()));
-					metricsParent.setMetrics_code("");
-					metricsParent.setMetrics_name("");
-					newList.add(metricsParent);
-					metricsParent = (MetricsDetail)level1List.get(index++);
-				}
+
+			} else if (metrics.getPid() < metricsParent.getOrder()) {
+				metricsParent.setLevel1_name(metricsParent.getMetrics_name());
+				metricsParent.setPid(metricsParent.getOrder());
+				metricsParent.setMetrics_code("");
+				metricsParent.setMetrics_name("");
+				newList.add(metricsParent);
+				if (index < level1List.size())
+					metricsParent = (MetricsDetail) level1List.get(index++);
+			} else if (metrics.getPid() > metricsParent.getOrder()){
+				metricsParent = (MetricsDetail) level1List.get(index++); 
+				metrics.setLevel1_name(metricsParent.getMetrics_name());
+				metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
+				newList.add(metrics);
+				parent[index]++;
 			}
 		}
-		for(int k=index; k<level1List.size(); k++){
-			metricsParent = (MetricsDetail)level1List.get(k);
-			metricsParent.setLevel1_name(metricsParent.getMetrics_name());
-			metricsParent.setPid(Integer.parseInt(metricsParent.getMetrics_code()));
-			metricsParent.setMetrics_code("");
-			metricsParent.setMetrics_name("");
-			newList.add(metricsParent);
-		}
-		
+
 		logger.info("successfully get metrics list");
 
 		BackendData data = new BackendData();
 		data.setMsg("成功获取全部指标");
-		data.setCode(0); 
+		data.setCode(0);
 		data.setData(newList);
 		data.setCount(newList.size());
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getMaterials", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getMaterials(HttpServletRequest request) {
 
-		//int metrics_system_id = (Integer.parseInt((String) propConfig.get("template_capital_progress_form_id")));
+		// int metrics_system_id = (Integer.parseInt((String)
+		// propConfig.get("template_capital_progress_form_id")));
 		String sMetrics_id = request.getParameter("metrics_id");
 		logger.info("successfully get material list");
 		List<Material> list = service.getMaterials(Integer.parseInt(sMetrics_id));
-		
+
 		BackendData data = new BackendData();
 		data.setMsg("成功获取支撑材料");
 		data.setCode(0);
-		data.setData((ArrayList)list);
+		data.setData((ArrayList) list);
 		data.setCount(list.size());
 		// BackendData data = new BackendData();
 
@@ -463,7 +461,7 @@ public class ColTaskController {
 		ArrayList performanceForm = (ArrayList) service.getPerformanceForm(Integer.parseInt(collection_major_id),
 				this.template_form_performance_id);
 		service.selectPerformanceMaterialsNum(performanceForm);
-		logger.info("successfully get performance form list");
+		logger.info("successfully get performance form list"); 
 
 		BackendData data = new BackendData();
 		data.setMsg("成功获取业绩表格");
@@ -506,10 +504,10 @@ public class ColTaskController {
 		int setNum = service.selectCapitalProgressMaterialsNumAndPerformanceId(cpform, propConfig);
 		logger.info("successfully get capitalProgress form");
 
-		BackendData data = new BackendData();  
-		data.setMsg("成功获取资金支出表格"); 
+		BackendData data = new BackendData();
+		data.setMsg("成功获取资金支出表格");
 		data.setCode(0);
-		data.setData(cpf); 
+		data.setData(cpf);
 		data.setCount(cpf.size());
 		// BackendData data = new BackendData();
 
@@ -593,8 +591,8 @@ public class ColTaskController {
 		CapitalProgressForm cpf = new CapitalProgressForm();
 		cpf.setId(cpf1.getId());
 		cpf.setCollection_major_id(cpf1.getCollection_major_id());
- 
- 		if (edit_type != null & !"".equals(edit_type) && actural_value!=null && !"0".equals(actural_value)) { 
+
+		if (edit_type != null & !"".equals(edit_type) && actural_value != null && !"0".equals(actural_value)) {
 			if ("rda".equals(edit_type)) {
 				cpf.setRegion_disbursement_amount(Double.parseDouble(actural_value));
 			} else if ("rpha".equals(edit_type)) {
@@ -616,14 +614,14 @@ public class ColTaskController {
 			}
 			cpf.setUpdate_time(new Date());
 			cpf.setProcess_status(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
-		}   
+		}
 
- 		int result = service.updateCapitalProgressForm(cpf); 	
+		int result = service.updateCapitalProgressForm(cpf);
 
 		logger.info("update capital progress ");
 
 		BackendData data = new BackendData();
-		// logger.info("result:" + result); 
+		// logger.info("result:" + result);
 		if (result != 0) {
 			data.setMsg("修改表格成功!");
 			data.setCode(1);
@@ -635,27 +633,27 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/addMaterial", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> addMaterial(HttpServletRequest request) {
 
 		String metrics_id = request.getParameter("metrics_id");
-		//logger.info("metrics_id:" + metric);
+		// logger.info("metrics_id:" + metric);
 		String material_name = request.getParameter("material_name");
 		String memo = request.getParameter("memo");
-		
+
 		Material material = new Material();
-		if(metrics_id!=null && !"".equals(metrics_id))
+		if (metrics_id != null && !"".equals(metrics_id))
 			material.setMetrics_id(Integer.parseInt(metrics_id));
-		if(material_name!=null && !"".equals(material_name))
+		if (material_name != null && !"".equals(material_name))
 			material.setMaterial_name(material_name);
-		if(memo!=null && !"".equals(memo))
+		if (memo != null && !"".equals(memo))
 			material.setMemo(memo);
-		
+
 		ArrayList materials = new ArrayList();
 		materials.add(material);
 		int result = service.insertMaterials(materials);
-		
+
 		logger.info("successfully insert material.");
 
 		BackendData data = new BackendData();
@@ -792,19 +790,19 @@ public class ColTaskController {
 			// BackendData data = new BackendData();
 		} else {
 			data.setMsg("修改学校失败");
-			data.setCode(99); 
+			data.setCode(99);
 		}
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/status", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getStatusList() {
 
 		ArrayList statusList = (ArrayList) service.selectStatusList();
 
-		logger.info("successfully get status list"); 
-   
+		logger.info("successfully get status list");
+
 		BackendData data = new BackendData();
 		data.setMsg("成功获取状态列表");
 		data.setCode(0);
@@ -814,14 +812,14 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/getCapitalMetrics", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getCapitalTemplateList() {
 
 		ArrayList capitals = (ArrayList) service.getCapitalMetrics(propConfig);
 
-		logger.info("successfully get capital list"); 
-   
+		logger.info("successfully get capital list");
+
 		BackendData data = new BackendData();
 		data.setMsg("成功获取指标列表");
 		data.setCode(0);
@@ -831,24 +829,24 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/saveBasicForm", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> saveBasicForm(HttpServletRequest request) {
 
 		BackendData data = new BackendData();
 		String collection_major_id = request.getParameter("collection_major_id");
 		int result = 0;
-		
-		if(collection_major_id!=null && !"".equals(collection_major_id)){
+
+		if (collection_major_id != null && !"".equals(collection_major_id)) {
 			BasicForm bf = new BasicForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
 			bf.setProcess_status(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
 			bf.setUpdate_time(new Date());
 			result = service.updateBasicForm(bf);
 		}
-		logger.info("successfully save the basic form"); 
-    
-		if(result!=0){
+		logger.info("successfully save the basic form");
+
+		if (result != 0) {
 			data.setMsg("成功保存基本情况表");
 			data.setCode(0);
 		}
@@ -856,22 +854,20 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
 
-	
 	@RequestMapping(value = "/deleteMaterial", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> deleteMaterial(HttpServletRequest request) {
 
 		BackendData data = new BackendData();
 		String material_id = request.getParameter("id");
 		int result = 0;
-		
-		if(material_id!=null && !"".equals(material_id)){
+
+		if (material_id != null && !"".equals(material_id)) {
 			result = service.deleteMaterial(Integer.parseInt(material_id));
 		}
-		logger.info("successfully delete the material"); 
-    
-		if(result!=0){
+		logger.info("successfully delete the material");
+
+		if (result != 0) {
 			data.setMsg("成功删除材料");
 			data.setCode(0);
 		}
@@ -886,17 +882,17 @@ public class ColTaskController {
 		BackendData data = new BackendData();
 		String collection_major_id = request.getParameter("collection_major_id");
 		int result = 0;
-		
-		if(collection_major_id!=null && !"".equals(collection_major_id)){
+
+		if (collection_major_id != null && !"".equals(collection_major_id)) {
 			BasicForm bf = new BasicForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
 			bf.setProcess_status(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY);
 			bf.setUpdate_time(new Date());
 			result = service.updateBasicForm(bf);
 		}
-		logger.info("successfully update the basic form"); 
-    
-		if(result!=0){
+		logger.info("successfully update the basic form");
+
+		if (result != 0) {
 			data.setMsg("验证并完成填报情况表");
 			data.setCode(0);
 		}
@@ -904,24 +900,24 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/completeCapitalForm", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> completeCapitalForm(HttpServletRequest request) {
 
 		BackendData data = new BackendData();
 		String collection_major_id = request.getParameter("collection_major_id");
 		int result = 0;
-		
-		if(collection_major_id!=null && !"".equals(collection_major_id)){
+
+		if (collection_major_id != null && !"".equals(collection_major_id)) {
 			CapitalProgressForm bf = new CapitalProgressForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
 			bf.setProcess_status(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY);
 			bf.setUpdate_time(new Date());
 			result = service.updateCapitalFormStatus(bf);
-		} 
-		logger.info("successfully update the basic form"); 
-    
-		if(result!=0){
+		}
+		logger.info("successfully update the basic form");
+
+		if (result != 0) {
 			data.setMsg("验证并完成填报情况表");
 			data.setCode(0);
 		}
@@ -929,20 +925,21 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/completePerformanceForm", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> completePerformanceForm(HttpServletRequest request) {
 
 		BackendData data = new BackendData();
 		String collection_major_id = request.getParameter("collection_major_id");
 		int result = 0;
-		
-		if(collection_major_id!=null && !"".equals(collection_major_id)){
-			result = service.updatePerformanceFormStatus(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY, Integer.parseInt(collection_major_id));
+
+		if (collection_major_id != null && !"".equals(collection_major_id)) {
+			result = service.updatePerformanceFormStatus(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY,
+					Integer.parseInt(collection_major_id));
 		}
-		logger.info("successfully update the performance form"); 
-    
-		if(result!=0){
+		logger.info("successfully update the performance form");
+
+		if (result != 0) {
 			data.setMsg("验证并完成业绩完成表");
 			data.setCode(0);
 		}

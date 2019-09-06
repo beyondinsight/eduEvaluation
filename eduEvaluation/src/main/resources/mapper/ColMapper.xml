@@ -212,7 +212,7 @@
     
     <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm" useGeneratedKeys="true" keyProperty="id">
     	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status, for_template)
-    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status}, for_template)
+    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status}, #{for_template})
     </insert>
     
     <insert id="insertCapitalProgressForm" parameterType="com.philip.edu.eval.bean.CapitalProgressForm">
