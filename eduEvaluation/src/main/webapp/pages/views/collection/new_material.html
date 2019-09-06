@@ -16,6 +16,7 @@
 				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="material_form">
 					<div class="layui-form-item">
 						<div class="layui-inline">
+							<input type="hidden" id="metrics_id" name="metrics_id"/>
 							<label class="layui-form-label" style="width: 70px;">材料名称<span style="color: red;">* </span></label>
 							<div class="layui-input-inline" style="width: 200px;">
 								<input type="text" name="material_name" id="material_name" required lay-verify="required" autocomplete="off"
@@ -68,12 +69,33 @@
 
 				//监听搜索
 				form.on('submit(material_form)', function(data) {
-
+					
+					
+					/*$.ajax({
+						url: projectBase + '/collection/addMaterial',
+						dataType: 'json',
+						data: data.field,
+						type: 'POST',
+						success: function(res){
+							if(res.code==1){
+								layer.msg("成功添加材料!");
+								setTimeout(function(){
+									parent.layui.table.reload('LAY-app-content-list'); //重载表格
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index); //再执行关闭   
+									},600);
+							} else {
+								layer.msg("添加材料失败!", function(){
+									});
+							}
+						} 
+					});*/
 					layui.data('materials',{
 						key: $(material_name).val(),
 						value: $(memo).val()
 					});
-   
+					
+					
 					var index = parent.layer.getFrameIndex(window.name);
 					parent.layer.close(index);
 				});

@@ -77,6 +77,9 @@
 		<result property="collection_major_id" column="collection_major_id" />
 		<result property="metrics_id" column="metrics_id" />
 		<result property="metrics_name" column="metric_name" />
+		<result property="metrics_level" column="level" />
+		<result property="metrics_pid" column="pid" />
+		<result property="metrics_order" column="morder"/>
 		<result property="unit" column="unit" />
 		<result property="current_value" column="current_value" />
 		<result property="target_value" column="target_value" />
@@ -309,7 +312,7 @@
     </delete>
     
     <select id="getPerformanceForm" resultMap="performanceResultMap" >
-    	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
+    	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, m.level, m.pid, m.morder, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
     	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id} and for_template=#{for_template}
     </select>
     

@@ -34,6 +34,7 @@ import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Material;
 import com.philip.edu.eval.bean.MetricsAdd;
 import com.philip.edu.eval.bean.MetricsDetail;
+import com.philip.edu.eval.bean.PerformanceAdd;
 import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.TblMajor;
@@ -287,12 +288,42 @@ public class ColTaskController {
 
 	@RequestMapping(value = "/createMetrics", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity createMetrics(HttpServletRequest request) {
+		
+		BackendData data = new BackendData();
+		
+		/*List<MetricsDetail>  aa =    service.getMetricsList(template_form_performance_id);
+		List<String> dd = new ArrayList<String>();
+		for(MetricsDetail  c :  aa) {
+			
+			dd.add(c.getMetrics_code());
+			
+		}
+		
+		//System.out.print("0======"+aa);
+		
+
+		
+		//System.out.print("000000"+metrics_code);
+		
+		String contain;
+		
+		if(dd.contains(metrics_code)) {
+			contain="0";
+		}else{
+			contain="1";
+
+			data.setMsg(contain);
+			data.setCode(10);
+
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}*/
+		
 
 		String level = request.getParameter("level");
-		String metrics_code = request.getParameter("metrics_code");
 		String unit = request.getParameter("unit");
 		String name = request.getParameter("name");
 		String memo = request.getParameter("memo");
+		String metrics_code = request.getParameter("metrics_code");
 		MetricsDetail metrics = new MetricsDetail();
 		metrics.setMetrics_name(name);
 		int metrics_system_id = ((Integer.parseInt((String) propConfig.get("template_performance_form_id"))));
@@ -331,7 +362,6 @@ public class ColTaskController {
 
 		int result = service.createMetrics(metrics, materials);
  
-		BackendData data = new BackendData();
 		// logger.info("result:" + result);
 		if (result != 0) {
 			data.setMsg("创建指标成功!");
@@ -364,7 +394,7 @@ public class ColTaskController {
 		metrics.setMetrics_code(metrics_code);
 		// decode:
 		if (Integer.parseInt(level) == 2 && metrics_code.contains(".")) {
-			String[] temp = metrics_code.split(".");
+			String[] temp = metrics_code.split("\\.");
 			metrics.setPid(Integer.parseInt(temp[0]));
 			metrics.setOrder(Integer.parseInt(temp[1]));
 		} else if (Integer.parseInt(level) == 1 && !metrics_code.contains(".")) {
@@ -554,13 +584,65 @@ public class ColTaskController {
 		ArrayList performanceForm = (ArrayList) service.getPerformanceForm(Integer.parseInt(collection_major_id),
 				this.template_form_performance_id);
 		service.selectPerformanceMaterialsNum(performanceForm);
+		
+		ArrayList level1List = new ArrayList();
+		ArrayList level2List = new ArrayList();
+		ArrayList newList = new ArrayList();
+		int i = 0;
+
+		for (i = 0; i < performanceForm.size(); i++) {
+			PerformanceForm metrics = (PerformanceForm) performanceForm.get(i);
+			if (metrics.getMetrics_level() == 1) {
+				PerformanceAdd metricsAdd = new PerformanceAdd();
+				metricsAdd.setParent(metrics);
+				level1List.add(metricsAdd);
+			} else {
+				break;
+			}
+		}
+		
+		int index = 0;
+		for (int j = i; j<performanceForm.size(); j++){
+			PerformanceForm metrics = (PerformanceForm) performanceForm.get(j);
+			PerformanceAdd metricsParent = (PerformanceAdd) level1List.get(index);
+			PerformanceForm mParent = metricsParent.getParent();
+			if(metrics.getMetrics_pid() == mParent.getMetrics_order()){
+				ArrayList children = metricsParent.getChildren();
+				children.add(metrics);
+			} else if(metrics.getMetrics_pid() > mParent.getMetrics_order()){
+				index++; 
+				j--;
+			}
+		}
+		
+		for (int k=0; k<level1List.size(); k++){
+			PerformanceAdd metricsA = (PerformanceAdd)level1List.get(k);
+			PerformanceForm metricsP = metricsA.getParent();
+			ArrayList metricsC = metricsA.getChildren();
+			if(metricsC.size()==0){
+				metricsP.setLevel1_name(metricsP.getMetrics_name());
+				metricsP.setMetrics_pid(metricsP.getMetrics_order());
+				//metricsP.setMetrics_code("");
+				metricsP.setMetrics_name("");
+				newList.add(metricsP);
+			} else {
+				for(int l=0; l<metricsC.size(); l++){
+					PerformanceForm metrics = (PerformanceForm)metricsC.get(l);
+					metrics.setLevel1_name(metricsP.getMetrics_name());
+					metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
+					newList.add(metrics);
+				}
+			}
+		}
+	
+		
 		logger.info("successfully get performance form list"); 
 
 		BackendData data = new BackendData();
 		data.setMsg("成功获取业绩表格");
 		data.setCode(0);
-		data.setData(performanceForm);
-		data.setCount(performanceForm.size());
+		data.setData(newList);
+		data.setCount(newList.size());
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
@@ -909,7 +991,7 @@ public class ColTaskController {
 	@RequestMapping(value = "/getCapitalMetrics", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getCapitalTemplateList() {
 
-		ArrayList capitals = (ArrayList) service.getCapitalMetrics(propConfig);
+		ArrayList capitals = (ArrayList) service.getCapitalMetrics(propConfig); 
 
 		logger.info("successfully get capital list");
 
@@ -918,6 +1000,23 @@ public class ColTaskController {
 		data.setCode(0);
 		data.setData(capitals);
 		data.setCount(capitals.size());
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getBasicMetrics", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getBasicTemplateList() {
+
+		ArrayList basic = (ArrayList) service.getBasicMetrics(propConfig);
+		
+		logger.info("successfully get basic form list");
+
+		BackendData data = new BackendData();
+		data.setMsg("成功获取指标列表");
+		data.setCode(0);
+		data.setData(basic);
+		data.setCount(basic.size());
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);

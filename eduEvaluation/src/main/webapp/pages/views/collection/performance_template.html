@@ -355,8 +355,8 @@
 								console.log(data.id);
 								var contents = layero.find('iframe').contents();
 								var level = contents.find('#level');
-								var select = 'dd[lay-value=' + data.level + ']';
-								$(level).siblings("div.layui-form-select").find('dl').find(select).click();  
+								var level_temp = contents.find('#level_temp');
+								$(level_temp).val(data.level);
 								var metrics_code = contents.find('#metrics_code');
 								$(metrics_code).val(data.metrics_code);
 								var unit = contents.find('#unit');

@@ -87,10 +87,13 @@
 
 				//监听搜索
 				form.on('submit(metrics_form)', function(data) {
+					var index = parent.layer.getFrameIndex(window.name);
+					
+					parent.layui.table.reload('LAY-app-content-list'); //重载表格
+					parent.layer.close(index); //再执行关闭  
+					//var data0 = layui.data('materials');
 										
-					var data0 = layui.data('materials');
-										
-					var metrics={
+					/*var metrics={
 						'id':$('#id').val(),
 						'level':$('#level').val(),
 						'metrics_code':$('#metrics_code').val(),
@@ -120,7 +123,7 @@
 									});
 							}
 						} 
-					});
+					});*/
 					
 					
 				});

@@ -37,22 +37,23 @@
 								<input type="text" name="unit" id="unit" required lay-verify="required" autocomplete="off" class="layui-input">
 							</div>
 						</div>
-					</div>					
-					
+					</div>
+
 					<div class="layui-form-item">
 						<label class="layui-form-label" style="width: 70px;">指标名称<span style="color: red;">* </span></label>
 						<div class="layui-input-inline" style="width: 600px;">
-							<input type="text" name="name" id="name" placeholder="请输入指标名称" required lay-verify="required" autocomplete="off" class="layui-input">
+							<input type="text" name="name" id="name" placeholder="请输入指标名称" required lay-verify="required" autocomplete="off"
+							 class="layui-input">
 						</div>
 					</div>
-					
+
 					<div class="layui-form-item">
 						<label class="layui-form-label" style="width: 70px;">备注</label>
 						<div class="layui-input-inline" style="width: 610px;">
 							<textarea name="memo" style="width: 600px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
 					</div>
-					
+
 					<div class="layui-card-body">
 						<div style="padding-bottom: 10px;">
 							<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 添加</button>
@@ -60,12 +61,12 @@
 						</div>
 						<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
-					     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"  ><i class="layui-icon layui-icon-delete"  style="position:static;"></i>删除</a>
+							<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"  ><i class="layui-icon layui-icon-delete"  style="position:static;"></i>删除</a>
 						</script>
 					</div>
-					
+
 					<div class="layui-form-item layui-hide">
-					  <input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认">
+						<input type="button" lay-submit lay-filter="metrics_form" id="metrics_form" value="确认">
 					</div>
 				</div>
 
@@ -91,7 +92,7 @@
 				form.render();
 
 				layui.data('materials', null);
-				
+
 				var data0 = layui.data('materials');
 
 				schoolTable = table.render({
@@ -113,7 +114,7 @@
 							}, {
 								field: 'memo',
 								title: '备注',
-								align: 'center' 
+								align: 'center'
 							}, {
 								title: '操作',
 								toolbar: '#test-table-toolbar-barDemo',
@@ -126,41 +127,68 @@
 
 				//监听搜索
 				form.on('submit(metrics_form)', function(data) {
-										
+
 					var data0 = layui.data('materials');
-										
-					var metrics={
-						'level':$('#level').val(),
-						'metrics_code':$('#metrics_code').val(),
-						'unit':$('#unit').val(),
-						'name':$('#name').val(),
+					/*var level = $('#level').val();
+					//alert(level);
+					var numb = $('#metrics_code').val();
+					//var testr = /^\+?[1-9][0-9]*$/;
+					//boolean flag=testr.test(numb);
+					//alert(numb); 
+					
+					if (numb % 1 == 0) {
+						if (level == 1) {
+
+						} else {
+							return layer.msg('您输入的不是一级指标!', function(){
+								
+							});
+
+						}
+
+					} else {
+						if (level == 2) {
+
+						} else {
+
+							layer.msg('您输入的不是二级指标!');
+							return;
+						}
+
+					}*/
+
+					var metrics = {
+						'level': $('#level').val(),
+						'metrics_code': $('#metrics_code').val(),
+						'unit': $('#unit').val(),
+						'name': $('#name').val(),
 						'memo': $('#memo').val(),
 						'materials': JSON.stringify(data0)
-						}; 
+					};
 
 					console.log("start to ajax");
-					
+
 					$.ajax({
 						url: projectBase + '/collection/createMetrics',
 						dataType: 'json',
 						data: metrics,
 						type: 'POST',
-						success: function(res){
-							if(res.code==1){
+						success: function(res) {
+							if (res.code == 1) {
 								layer.msg("指标创建成功!");
-								setTimeout(function(){
+								setTimeout(function() {
 									parent.layui.table.reload('LAY-app-content-list'); //重载表格
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index); //再执行关闭   
-									},1200);
-							} else {
-								layer.msg("指标创建失败!", function(){
-									});
+								}, 1200);
+							} else if(res.code == 10){
+								
+								layer.msg("指标创建失败!", function() {});
 							}
-						} 
+						}
 					});
-					
-					
+
+
 				});
 
 				//监听行单击事件（单击事件为：rowDouble）
@@ -168,13 +196,13 @@
 				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'del') {
-						
+
 						console.log(data.material_name);
-						layui.data("materials",{
+						layui.data("materials", {
 							key: data.material_name,
 							remove: true
 						});
-						
+
 						obj.del();
 
 						/*table.render({
@@ -251,17 +279,19 @@
 									var submit = layero.find('iframe').contents().find("#material_form");
 									console.log(submit);
 									submit.click();
-									
+
 									var materials = layui.data('materials');
 									console.log(materials);
 									var data0 = [];
-									for(var val in materials){
+									for (var val in materials) {
 										var material = {
-											'material_name':val,
-											'memo':materials[val]
+											'material_name': val,
+											'memo': materials[val]
 										}
 										data0.push(material);
 									}
+
+									console.log("data:" + data0);
 
 									table.render({
 										elem: '#LAY-app-content-list',
@@ -277,15 +307,15 @@
 												{
 													field: 'material_name',
 													title: '支撑材料',
-													align: 'center' 
+													align: 'center'
 												}, {
 													field: 'memo',
 													title: '备注',
-													align: 'center' 
+													align: 'center'
 												}, {
 													title: '操作',
 													toolbar: '#test-table-toolbar-barDemo',
-													align: 'center' 
+													align: 'center'
 												}
 											]
 										]
@@ -296,7 +326,7 @@
 									,
 								success: function(layero, index) {
 									layer.setTop(layero); //重点2
-								} 
+								}
 							});
 						}
 					};

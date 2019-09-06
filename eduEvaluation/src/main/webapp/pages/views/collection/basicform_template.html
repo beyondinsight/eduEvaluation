@@ -51,39 +51,20 @@
 					admin = layui.admin,
 					projectBase = Class.getURL();
 				var data0, schoolTable;
-				
-
-				laydate.render({
-					elem: '#startDate'
-				});
-
-				laydate.render({
-					elem: '#endDate'
-				});
 
 				form.render();
 
-				layui.data('choseMajor', null);
-
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getCapitalMetrics',
+					url: projectBase + '/collection/getBasicMetrics',
 					page: true, //开启分页
 					height: 500	,
 					cols: [
 						[ //表头
 							{
 								field: 'metrics_name',
-								title: '资金支出进度',
+								title: '专业基本情况',
 								align: 'left' 
-							}, { 
-								field: 'unit',
-								title: '单位',
-								align: 'center' 
-							},{
-								field: 'value',
-								title: '实际值',
-								align: 'center' 
 							}, {
 								field: 'material_num',
 								title: '支撑材料',
