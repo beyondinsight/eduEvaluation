@@ -107,7 +107,7 @@ color:red;
      
     	$.each(roleIds, function (index, item) {
    		 var opt =  new Option(item.roleName, item.id); 
-   		 	if(item.id>getrole){
+   		 	if(item.id>getrole || getrole==1){
 					$('#roleId').append(opt);// 下拉菜单里添加元素  
    		 	}
    		});

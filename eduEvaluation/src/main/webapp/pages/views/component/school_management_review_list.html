@@ -52,7 +52,9 @@ text-align: left;
      	    </table>		        
             <table  id="demo" class="layui-table"  ></table>
             <script type="text/html" id="test-table-toolbar-barDemo">
-       			   <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+       	
+    	 
+ 					 
        		</script>
 	        </div>
     
@@ -91,7 +93,8 @@ text-align: left;
 				   {field: 'school_name', title: '院校', align:'center'}
 				   ,{field: 'major_name', title: '专业', align:'center'}
 				   ,{field: 'status_msg', title: '专业填报状态', align:'center'}
-				   //,{field: 'counts', title: '状态更新时间', align:'center'}    
+				   //,{field: 'counts', title: '状态更新时间', align:'center'}
+				    ,{field: 'process_status', title: '填报状态码', align:'center'}
 				   ,{fixed: 'right', title:'操作',   toolbar: '#test-table-toolbar-barDemo', align:'center'} 
 			  ]]
 			});  

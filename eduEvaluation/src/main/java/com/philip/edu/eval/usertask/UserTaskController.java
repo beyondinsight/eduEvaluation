@@ -91,13 +91,8 @@ public class UserTaskController {
 
 		// get token:
 		String token = request.getParameter("token");
-<<<<<<< HEAD
-		System.out.println("---"+token);
-		if(token==null || "".equals(token)){
-=======
 
 		if (token == null || "".equals(token)) {
->>>>>>> branch 'master' of https://github.com/beyondinsight/eduEvaluation.git
 			data.setMsg("您的令牌已过期！");
 			data.setCode(10);
 			// BackendData data = new BackendData();
