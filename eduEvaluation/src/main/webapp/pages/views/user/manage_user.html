@@ -94,6 +94,9 @@
 	table.on('tool(demo)', function(obj){
 	  var data = obj.data;
 	  if(obj.event === 'del'){
+		  if(data.roleId <= data.loginRoleId && data.roleId != null){
+			  return layer.msg('只能删除权限比你小的用户');
+		} 
 	    layer.confirm('确定删除这个用户吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
@@ -173,13 +176,18 @@
         var checkStatus = table.checkStatus('demo')
         ,checkData = checkStatus.data
 		,id=[]; //得到选中的数据
-
-        if(checkData.length === 0){
+	 
+        if(checkData.length == 0){
           return layer.msg('请选择用户');
         }
 		
+	
+
 		if(checkData.length > 0){
 			for (var i in checkData){
+				 if(checkData[i].roleId <= checkData[i].loginRoleId  && checkData[i].roleId != null){
+					  return layer.msg('只能删除权限比你小的用户');
+				} 
 				id.push(checkData[i].id);
 			}
 		}

@@ -195,9 +195,11 @@ color:red;
  	   		 
  	});
         
-        if($("#roleId_hidden").val() == getrole){
-            $("#schoolId").find("option:selected").text(getschoolname);
-      	    $("#schoolId").attr("disabled",true);	
+        if($("#roleId_hidden").val() <= getrole  ){
+        	if(  getrole != 1 && getuser == $("#id").val()){
+	            $("#schoolId").find("option:selected").text(getschoolname);
+	      	    $("#schoolId").attr("disabled",true);
+      	    }	
   		}
       
     //监听提交
