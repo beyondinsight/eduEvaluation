@@ -132,6 +132,31 @@
     	values(#{task_name}, #{task_year}, #{start_time}, #{end_time}, #{status}, #{use_metrics_system}, #{form_basic_weight}, #{form_performance_weight}, #{form_capitalprogress_weight}, #{create_time}, #{update_time})
     </insert>
     
+    <update id="updateColTask" parameterType="com.philip.edu.eval.bean.CollectionTask">
+    	 update tbl_collection_tasks
+    <set >
+      <if test="task_name != null" >
+        task_name = #{task_name,jdbcType=VARCHAR},
+      </if>
+      <if test="task_year != null" >
+        task_year = #{task_year,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != null" >
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="form_basic_weight != null" >
+        form_basic_weight = #{form_basic_weight,jdbcType=INTEGER},
+      </if>
+      <if test="form_performance_weight != null" >
+        form_performance_weight = #{form_performance_weight,jdbcType=INTEGER},
+      </if>
+      <if test="form_capitalprogress_weight != null" >
+        form_capitalprogress_weight = #{form_capitalprogress_weight,jdbcType=INTEGER},
+      </if>
+    </set>
+          where id = #{id,jdbcType=BIGINT}
+    </update>
+    
     <insert id="insertTaskSchool" parameterType="com.philip.edu.eval.bean.ColTaskSchool" useGeneratedKeys="true" keyProperty="id" >
     	insert into tbl_collection_school(collection_task_id, school_id, process_status)
     	values(#{task_id},#{school_id},#{process_status})

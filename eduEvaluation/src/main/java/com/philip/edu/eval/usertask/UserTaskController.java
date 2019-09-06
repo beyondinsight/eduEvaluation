@@ -92,9 +92,6 @@ public class UserTaskController {
 		// get token:
 		String token = request.getParameter("token");
 
-
-
-
 		if (token == null || "".equals(token)) {
 
 			data.setMsg("您的令牌已过期！");

@@ -57,4 +57,5 @@ public interface ColTaskService {
 	public int deleteMaterial(int id);
 	public int updatePerformanceFormStatus(char status, int collection_major_id);
 	public int updateCapitalFormStatus(CapitalProgressForm cpf);
+	public int updateColTask(CollectionTask task);
 }

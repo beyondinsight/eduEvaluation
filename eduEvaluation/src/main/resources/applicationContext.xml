@@ -25,6 +25,12 @@
     
     <mvc:default-servlet-handler/>
    
+    <!--  <mvc:interceptors>
+    	<mvc:interceptor>
+    	    <mvc:mapping path="/**" />
+    		<bean class="com.philip.edu.eval.interceptor.PermissionCheckInterceptor"></bean>
+    	</mvc:interceptor>
+    </mvc:interceptors>-->
     
     <!--导入数据库配置  -->
     <import resource="/mybatis-db.xml"/>

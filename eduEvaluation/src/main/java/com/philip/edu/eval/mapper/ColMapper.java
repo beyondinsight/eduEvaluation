@@ -75,6 +75,7 @@ public interface ColMapper {
 	public int updateBasicForm(BasicForm bf);
 	public int deleteMaterial(int id);
 	public int updateCapitalFormStatus(CapitalProgressForm cpf);
+	public int updateColTask(CollectionTask task);
 	 
 	//add by xiewei
 	public List<UserTask> getUserTaskList(@Param("user_id") int user_id);

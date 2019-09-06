@@ -26,38 +26,13 @@
 							<label class="layui-form-label" style="width: 120px;">填报任务所属年度</label>
 							<div class="layui-input-inline">
 								<select name="year" id="year">
+									<option value="2018">2018</option>
 									<option value="2019">2019</option>
 									<option value="2020">2020</option>
 									<option value="2021">2021</option>
 									<option value="2022">2022</option>
 									<option value="2023">2023</option>
 									<option value="2024">2024</option>
-									<option value="2025">2025</option>
-									<option value="2026">2026</option>
-									<option value="2027">2027</option>
-									<option value="2028">2028</option>
-									<option value="2029">2029</option>
-									<option value="2030">2030</option>
-									<option value="2031">2031</option>
-									<option value="2032">2032</option>
-									<option value="2033">2033</option>
-									<option value="2034">2034</option>
-									<option value="2035">2035</option>
-									<option value="2036">2036</option>
-									<option value="2037">2037</option>
-									<option value="2038">2038</option>
-									<option value="2039">2039</option>
-									<option value="2040">2040</option>
-									<option value="2041">2041</option>
-									<option value="2042">2042</option>
-									<option value="2043">2043</option>
-									<option value="2044">2044</option>
-									<option value="2045">2045</option>
-									<option value="2046">2046</option>
-									<option value="2047">2047</option>
-									<option value="2048">2048</option>
-									<option value="2049">2049</option>
-									<option value="2050">2050</option>
 								</select>
 							</div>
 						</div>
@@ -135,7 +110,7 @@
 				<div class="layui-card-body">
 					<div style="padding-bottom: 10px;">
 						<div align="center">
-							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit"><i class="layui-icon layui-icon-file-b"></i> 创建</button>
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit"><i class="layui-icon layui-icon-file-b"></i> 保存</button>
 						</div>
 					</div>
 				</div>
@@ -306,6 +281,7 @@
 					}
 					
 					task={
+						'task_id':$('#task_id').val(),
 						'name':$('#name').val(),
 						'year':$('#year').val(),
 						'startDate':test1,
@@ -319,7 +295,7 @@
 
 					
 					$.ajax({
-						url: projectBase + '/collection/createTask',
+						url: projectBase + '/collection/editTask',
 						dataType: 'json',
 						data: task,
 						type: 'POST',
@@ -327,7 +303,7 @@
 						success: function(res){
 							//data0 = JSON.parse(res.data);
 							/*if(res.code==1){*/
-								layer.msg("填报任务创建成功!");
+								layer.msg("填报任务修改成功!");
 								setTimeout(function(){
 									//console.log(parent.layui.admin.events);
 									//parent.index.refreshAndCloseTabs();

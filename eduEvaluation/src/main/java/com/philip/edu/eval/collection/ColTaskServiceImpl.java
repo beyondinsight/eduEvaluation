@@ -965,6 +965,11 @@ public class ColTaskServiceImpl implements ColTaskService {
 		// TODO Auto-generated method stub
 		return dao.updateCapitalFormStatus(cpf);
 	}
+
+	public int updateColTask(CollectionTask task) {
+		// TODO Auto-generated method stub
+		return dao.updateColTask(task);
+	}
 	
 	
 }

@@ -32,6 +32,7 @@ import com.philip.edu.eval.bean.ColTaskMajor;
 import com.philip.edu.eval.bean.ColTaskSchool;
 import com.philip.edu.eval.bean.CollectionTask;
 import com.philip.edu.eval.bean.Material;
+import com.philip.edu.eval.bean.MetricsAdd;
 import com.philip.edu.eval.bean.MetricsDetail;
 import com.philip.edu.eval.bean.PerformanceForm;
 import com.philip.edu.eval.bean.School;
@@ -129,6 +130,52 @@ public class ColTaskController {
 		} else {
 			object.put("code", 99);
 			object.put("msg", "创建填报任务失败");
+		}
+
+		logger.info("return the message.");
+
+		return new ResponseEntity(object, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/editTask", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> editTask(HttpServletRequest request) {
+
+		logger.info("entering edit task method.");
+		CollectionTask taskCol = new CollectionTask();
+		String task_id = request.getParameter("task_id");
+		String task_name = request.getParameter("name");
+		String task_year = request.getParameter("year");
+		String start_date = request.getParameter("startDate");
+		String end_date = request.getParameter("endDate");
+		String weight1 = request.getParameter("weighting1");
+		String weight2 = request.getParameter("weighting2");
+		String weight3 = request.getParameter("weighting3");
+
+		taskCol.setId(Integer.parseInt(task_id));
+		taskCol.setTask_name(task_name);
+		taskCol.setTask_year(task_year);
+		taskCol.setStart_time(start_date);
+		taskCol.setEnd_time(end_date);
+		taskCol.setCreate_time(new Date());
+		taskCol.setUpdate_time(new Date());
+		taskCol.setForm_basic_weight(Integer.parseInt(weight1));
+		taskCol.setForm_performance_weight(Integer.parseInt(weight2));
+		taskCol.setForm_capitalprogress_weight(Integer.parseInt(weight3));
+		taskCol.setStatus(EvalConstants.COLLECTION_STATUS_INACTIVE); 
+    
+		taskCol.setUse_metrics_system(this.template_form_performance_id);
+		logger.info("get collection task basic information from page.");
+
+		int result = service.updateColTask(taskCol);
+		logger.info("the update method successfully executed.");
+
+		JSONObject object = new JSONObject();
+		if (result != 0) {
+			object.put("code", 1);
+			object.put("msg", "成功创建填报任务"); 
+		} else { 
+			object.put("code", 99);
+			object.put("msg", "创建填报任务失败"); 
 		}
 
 		logger.info("return the message.");
@@ -283,7 +330,7 @@ public class ColTaskController {
 		logger.info("get all the materials from page.");
 
 		int result = service.createMetrics(metrics, materials);
-
+ 
 		BackendData data = new BackendData();
 		// logger.info("result:" + result);
 		if (result != 0) {
@@ -372,15 +419,52 @@ public class ColTaskController {
 		for (i = 0; i < metricsList.size(); i++) {
 			MetricsDetail metrics = (MetricsDetail) metricsList.get(i);
 			if (metrics.getLevel() == 1) {
-				level1List.add(metrics);
-			} else
+				MetricsAdd metricsAdd = new MetricsAdd();
+				metricsAdd.setParentMetrics(metrics);
+				level1List.add(metricsAdd);
+			} else {
 				break;
+			}
+		}
+		
+		int index = 0;
+		for (int j = i; j<metricsList.size(); j++){
+			MetricsDetail metrics = (MetricsDetail) metricsList.get(j);
+			MetricsAdd metricsParent = (MetricsAdd) level1List.get(index);
+			MetricsDetail mParent = metricsParent.getParentMetrics();
+			if(metrics.getPid() == mParent.getOrder()){
+				ArrayList children = metricsParent.getChildrenMetrics();
+				children.add(metrics);
+			} else if(metrics.getPid() > mParent.getOrder()){
+				index++; 
+				j--;
+			}
+		}
+		
+		for (int k=0; k<level1List.size(); k++){
+			MetricsAdd metricsA = (MetricsAdd)level1List.get(k);
+			MetricsDetail metricsP = metricsA.getParentMetrics();
+			ArrayList metricsC = metricsA.getChildrenMetrics();
+			if(metricsC.size()==0){
+				metricsP.setLevel1_name(metricsP.getMetrics_name());
+				metricsP.setPid(metricsP.getOrder());
+				metricsP.setMetrics_code("");
+				metricsP.setMetrics_name("");
+				newList.add(metricsP);
+			} else {
+				for(int l=0; l<metricsC.size(); l++){
+					MetricsDetail metrics = (MetricsDetail)metricsC.get(l);
+					metrics.setLevel1_name(metricsP.getMetrics_name());
+					metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
+					newList.add(metrics);
+				}
+			}
 		}
 
-		int index = 0;
+		/*int index = 0;
 		int[] parent = new int[30];
 		MetricsDetail temp = null;
-		MetricsDetail metricsParent = (MetricsDetail) level1List.get(index++);
+		MetricsDetail metricsParent = (MetricsDetail) level1List.get(0);
 		for (int j = i; j < metricsList.size(); j++) {
 			MetricsDetail metrics = (MetricsDetail) metricsList.get(j);
 			if (metrics.getPid() == metricsParent.getOrder()) {
@@ -405,6 +489,15 @@ public class ColTaskController {
 				parent[index]++;
 			}
 		}
+		for(int k=index; k<level1List.size(); k++){
+			metricsParent = (MetricsDetail) level1List.get(k);
+			metricsParent.setLevel1_name(metricsParent.getMetrics_name());
+			metricsParent.setPid(metricsParent.getOrder());
+			metricsParent.setMetrics_code("");
+			metricsParent.setMetrics_name("");
+			newList.add(metricsParent);
+		}*/
+		
 
 		logger.info("successfully get metrics list");
 
