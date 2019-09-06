@@ -2,6 +2,7 @@ package com.philip.edu.eval.collection;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
@@ -364,18 +365,57 @@ public class ColTaskController {
 
 		int metrics_system_id = (Integer.parseInt((String) propConfig.get("template_performance_form_id")));
 		ArrayList metricsList = (ArrayList) service.getMetricsList(metrics_system_id);
-		for (int i = 0; i < metricsList.size(); i++) {
-			MetricsDetail detail = (MetricsDetail) metricsList.get(i);
-			detail.setLevel1_name(detail.getMetrics_name());
-			detail.setMaterial_num("要求" + service.countMaterials(detail.getId()) + "项");
+		//level 1 and 2:
+		ArrayList level1List = new ArrayList();
+		ArrayList level2List = new ArrayList();
+		ArrayList newList = new ArrayList();
+		int i = 0;
+		
+		for(i=0; i<metricsList.size(); i++){
+			MetricsDetail metrics = (MetricsDetail)metricsList.get(i);
+			if(metrics.getLevel()==1){
+				level1List.add(metrics);
+			} else break;
 		}
+		
+		
+		int index = 0;
+		int[] parent = new int[30];
+		MetricsDetail metricsParent = (MetricsDetail)level1List.get(index++);
+		for(int j=i; j<metricsList.size(); j++){
+			MetricsDetail metrics = (MetricsDetail)metricsList.get(j);
+			if(metrics.getPid()==Integer.parseInt(metricsParent.getMetrics_code())){
+				metrics.setLevel1_name(metricsParent.getMetrics_name());
+				metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
+				newList.add(metrics);
+				parent[index]++;
+			} else {
+				if(parent[index]==0){
+					metricsParent.setLevel1_name(metricsParent.getMetrics_name());
+					metricsParent.setPid(Integer.parseInt(metricsParent.getMetrics_code()));
+					metricsParent.setMetrics_code("");
+					metricsParent.setMetrics_name("");
+					newList.add(metricsParent);
+					metricsParent = (MetricsDetail)level1List.get(index++);
+				}
+			}
+		}
+		for(int k=index; k<level1List.size(); k++){
+			metricsParent = (MetricsDetail)level1List.get(k);
+			metricsParent.setLevel1_name(metricsParent.getMetrics_name());
+			metricsParent.setPid(Integer.parseInt(metricsParent.getMetrics_code()));
+			metricsParent.setMetrics_code("");
+			metricsParent.setMetrics_name("");
+			newList.add(metricsParent);
+		}
+		
 		logger.info("successfully get metrics list");
 
 		BackendData data = new BackendData();
 		data.setMsg("成功获取全部指标");
-		data.setCode(0);
-		data.setData(metricsList);
-		data.setCount(metricsList.size());
+		data.setCode(0); 
+		data.setData(newList);
+		data.setCount(newList.size());
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
@@ -817,6 +857,8 @@ public class ColTaskController {
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 	
+
+	
 	@RequestMapping(value = "/deleteMaterial", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> deleteMaterial(HttpServletRequest request) {
 
@@ -852,6 +894,31 @@ public class ColTaskController {
 			bf.setUpdate_time(new Date());
 			result = service.updateBasicForm(bf);
 		}
+		logger.info("successfully update the basic form"); 
+    
+		if(result!=0){
+			data.setMsg("验证并完成填报情况表");
+			data.setCode(0);
+		}
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/completeCapitalForm", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> completeCapitalForm(HttpServletRequest request) {
+
+		BackendData data = new BackendData();
+		String collection_major_id = request.getParameter("collection_major_id");
+		int result = 0;
+		
+		if(collection_major_id!=null && !"".equals(collection_major_id)){
+			CapitalProgressForm bf = new CapitalProgressForm();
+			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
+			bf.setProcess_status(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY);
+			bf.setUpdate_time(new Date());
+			result = service.updateCapitalFormStatus(bf);
+		} 
 		logger.info("successfully update the basic form"); 
     
 		if(result!=0){

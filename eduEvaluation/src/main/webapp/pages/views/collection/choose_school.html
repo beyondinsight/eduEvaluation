@@ -12,6 +12,7 @@
   <div align="center" class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
 	<div class="layui-form-item layui-hide">
 	   <input type="hidden" id="choseId" name="choseId"/>
+	   <input type="hidden" id="schools" name="schools"/>
 	  <input type="button" lay-submit lay-filter="layuiadmin-app-form-submit" id="layuiadmin-app-form-submit" value="确认添加">
 	  <input type="button" lay-submit lay-filter="layuiadmin-app-form-edit" id="layuiadmin-app-form-edit" value="确认编辑">
 	</div>
@@ -53,9 +54,18 @@
   	} 
   });
 	
+	var chosed_schools = JSON.parse($('#schools').val());
+	console.log("json:" + chosed_schools);
+	
+	var temp = [];
+	for(i=0; i<chosed_schools.length; i++){
+		temp.push(chosed_schools[i].id);
+	}
+	
     transfer.render({
       elem: '#schoolChose',
 	  data: data0,
+	  value: temp,
 	  width: 270
       ,title: ['备选院校列表', '已选院校列表']
       ,showSearch: true,

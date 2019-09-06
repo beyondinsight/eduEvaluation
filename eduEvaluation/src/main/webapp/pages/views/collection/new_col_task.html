@@ -62,9 +62,9 @@
 					</td>
 				 </tr>
 				 <tr class="noborder">
-				 	<td>开始日期</td><td>	<input type="text" name="date" id="startDate" required lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off"
+				 	<td>开始日期</td><td>	<input type="text" name="date" id="startDate" required lay-verify="required|date" placeholder="yyyy-MM-dd" autocomplete="off"
 								 class="layui-input"></td>
-				 	<td>结束日期</td><td><input type="text" name="date" id="endDate" required lay-verify="date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input"></td>
+				 	<td>结束日期</td><td><input type="text" name="date" id="endDate" required lay-verify="required|date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input"></td>
 				 </tr>				 
 				</table>
 				<table class="layui-table" id="weightForm" style="table-layout:fixed; width:800px; text-align: center;">			 
@@ -79,17 +79,17 @@
 					    <tr align="center">
 					      <td align="center">1</td>
 					      <td align="center">专业基本情况</td>
-					      <td align="center"><input type="number" name="weighting1" required lay-verify="required" id="weighting1"  class="layui-input"></td>
+					      <td align="center"><input type="number" name="weighting1" value="20" required lay-verify="required" id="weighting1"  class="layui-input"></td>
 					    </tr>
 					    <tr>
 					      <td>2</td>
 					      <td>绩效目标完成情况</td>
-					      <td><input type="number" name="weighting2" required lay-verify="required" id="weighting2"  class="layui-input"></td>
+					      <td><input type="number" name="weighting2" required value="60" lay-verify="required" id="weighting2"  class="layui-input"></td>
 					    </tr>
 					    <tr>
 					      <td>3</td>
 					      <td>资金支出进度</td>
-					      <td><input type="number" name="weighting3" required lay-verify="required" id="weighting3"   class="layui-input"></td>
+					      <td><input type="number" name="weighting3" value="20" required lay-verify="required" id="weighting3"   class="layui-input"></td>
 					    </tr>
 					   </tbody>
 					  </table>
@@ -534,6 +534,8 @@
 								zIndex: layer.zIndex //重点1
 									,
 								success: function(layero, index) {
+									var schools = layero.find('iframe').contents().find("#schools");
+									schools.val(JSON.stringify(schoolTable.config.data));
 									layer.setTop(layero); //重点2
 								} 
 							});

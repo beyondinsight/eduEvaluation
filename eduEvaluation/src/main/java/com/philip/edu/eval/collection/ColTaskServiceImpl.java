@@ -884,14 +884,14 @@ public class ColTaskServiceImpl implements ColTaskService {
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_region_paid_hardware_amount_id);
-		metrics.setMetrics_name("’   其中：硬件建设支出额度");
+		metrics.setMetrics_name("     其中：硬件建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_hardware_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_region_paid_internal_amount_id);
-		metrics.setMetrics_name("’   其中：内涵建设支出额度");
+		metrics.setMetrics_name("     其中：内涵建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_region_paid_internal_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
@@ -905,14 +905,14 @@ public class ColTaskServiceImpl implements ColTaskService {
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_central_paid_hardware_amount_id);
-		metrics.setMetrics_name("’   其中：硬件建设支出额度");
+		metrics.setMetrics_name("     其中：硬件建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_hardware_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_central_paid_internal_amount_id);
-		metrics.setMetrics_name("’   其中：内涵建设支出额度");
+		metrics.setMetrics_name("     其中：内涵建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_internal_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
@@ -926,14 +926,14 @@ public class ColTaskServiceImpl implements ColTaskService {
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_school_funding_hardware_id);
-		metrics.setMetrics_name("’   其中：硬件建设支出额度");
+		metrics.setMetrics_name("     其中：硬件建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_hardware_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_school_funding_internal_id);
-		metrics.setMetrics_name("’   其中：内涵建设支出额度");
+		metrics.setMetrics_name("     其中：内涵建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_internal_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
@@ -959,6 +959,11 @@ public class ColTaskServiceImpl implements ColTaskService {
 	public int updatePerformanceFormStatus(char status, int collection_major_id) {
 		// TODO Auto-generated method stub
 		return dao.updatePerformanceFormStatus(status, collection_major_id);
+	}
+
+	public int updateCapitalFormStatus(CapitalProgressForm cpf) {
+		// TODO Auto-generated method stub
+		return dao.updateCapitalFormStatus(cpf);
 	}
 	
 	

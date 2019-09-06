@@ -15,7 +15,7 @@
     <div class="layui-card-body"  >
 			<div style="padding-bottom: 10px;margin-top:50px;">
 				<div align="center">
-					 
+						<input type="hidden" id="form_performance_id" name="form_performance_id"/>
 						<label  style="width:150px;">支撑材料名称:
 							<span style="color: red;">* </span>
 						</label>
@@ -24,6 +24,8 @@
 								lay-verify="required" placeholder="必填项" autocomplete="off"
 								class="layui-input">
 						</div>
+						
+						<td>备注:</td><td colspan="3"><textarea name="memo"  autocomplete="off" class="layui-textarea" style="height: 200px;resize: none;" ></textarea></td>
 					 
 				</div>
 			</div>
@@ -56,7 +58,8 @@
 
       //提交 Ajax 成功后，关闭当前ajax弹层并重载表格
       //$.ajax({});
-	  $.ajax({
+	  console.log("form_performance_id:" + $('#form_performance_id').val());
+	  $.ajax({ 
 		  type: 'POST',
 		  url: projectBase + '/collectionMaterial/addCollectionMaterial',
 	      data: field,
