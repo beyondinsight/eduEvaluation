@@ -68,7 +68,7 @@
 						data: data.field,
 						type: 'POST',
 						success: function(res){
-							if(res.code==1){
+							if(res.code==0){
 								//layer.msg("添加材料成功!");
 								setTimeout(function(){
 									parent.layui.table.reload('LAY-app-content-list'); //重载表格
