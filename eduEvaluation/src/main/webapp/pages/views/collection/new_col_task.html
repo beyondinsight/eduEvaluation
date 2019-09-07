@@ -28,38 +28,13 @@
 					<td><span>*</span>专业填报任务名称：</td><td><input type="text" name="name" id="name" placeholder="请输入填报任务名称"   lay-verify="required" autocomplete="off" class="layui-input"></td>
 					<td><span>*</span>填报任务所属年度：</td><td style="text-align: left;">
 						<select name="year" id="year">
-								   <option value="2019">2019</option>
+								   <option value="2018">2018</option>
+									<option value="2019">2019</option>
 									<option value="2020">2020</option>
 									<option value="2021">2021</option>
 									<option value="2022">2022</option>
 									<option value="2023">2023</option>
-									<option value="2024">2024</option>
-									<option value="2025">2025</option>
-									<option value="2026">2026</option>
-									<option value="2027">2027</option>
-									<option value="2028">2028</option>
-									<option value="2029">2029</option>
-									<option value="2030">2030</option>
-									<option value="2031">2031</option>
-									<option value="2032">2032</option>
-									<option value="2033">2033</option>
-									<option value="2034">2034</option>
-									<option value="2035">2035</option>
-									<option value="2036">2036</option>
-									<option value="2037">2037</option>
-									<option value="2038">2038</option>
-									<option value="2039">2039</option>
-									<option value="2040">2040</option>
-									<option value="2041">2041</option>
-									<option value="2042">2042</option>
-									<option value="2043">2043</option>
-									<option value="2044">2044</option>
-									<option value="2045">2045</option>
-									<option value="2046">2046</option>
-									<option value="2047">2047</option>
-									<option value="2048">2048</option>
-									<option value="2049">2049</option>
-									<option value="2050">2050</option>
+									<option value="2024">2024</option>	
 								</select>
 					</td>
 				 </tr>
@@ -103,7 +78,7 @@
 				 
 				<div class="layui-card-body">
 					<div style="padding-bottom: 10px;">
-						<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 添加</button>
+						<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 为任务分配院校</button>
 						<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
 					</div>
 					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
@@ -117,7 +92,7 @@
 				<div class="layui-card-body" style="width:800px;">
 					<div style="padding-bottom: 10px;">
 						<div align="center">
-							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit">为任务分配院校</button>
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit">确认</button>
 						</div>
 					</div>
 				</div>
@@ -221,11 +196,13 @@
 							}, {
 								field: 'school_code',
 								title: '院校代码',
-								align: 'center'
+								align: 'center',
+								width: 185
 							}, {
 								field: 'school_name',
 								title: '院校名称',
-								align: 'center'
+								align: 'center',
+								width: 330
 							}, {
 								title: '操作',
 								toolbar: '#table-content-list',
