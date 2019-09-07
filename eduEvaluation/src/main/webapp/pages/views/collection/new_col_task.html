@@ -235,18 +235,9 @@
 
 				//监听搜索
 				form.on('submit(col_task_form)', function(data) {
-					//var field = data.field;
-					//alert("executed!");
-					
-					//title:
-					//console.log($('#name').val());
-					//console.log($('#year').val());
-					//console.log(test);
-					//console.log($('#endDate').val());
-					//console.log($('#weighting'));
+
 					var choseM = layui.data('choseMajor');
-					//console.log(choseM);
-					//console.log(itemTable.config.data);
+
 					
 					var task={};
 					var test1 = $('#startDate').val();
@@ -304,25 +295,7 @@
 				//监听行单击事件（单击事件为：rowDouble）
 				table.on('row(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
-
-					/*layer.alert(JSON.stringify(data), {
-					  title: '当前行数据：'
-					});*/
-
-					/*$.ajax({
-						url: projectBase + '/dictionary/chosenMajorInfo',
-						dataType: 'json',
-						data: {
-							"school_id": data.id
-						},
-						type: 'GET',
-						async: false,
-						success: function(res) {
-							//data0 = JSON.parse(res.data);
-							data0 = res.data;
-						}
-					});*/
-					
+		
 					var choseM = layui.data('choseMajor');
 					console.log(choseM[data.id]);
 
