@@ -11,8 +11,16 @@ public class MajorTask {
 	private char process_status;
 	private String status_msg;
 	private Date update_time;
+	private int task_id;
 	
 	
+	
+	public int getTask_id() {
+		return task_id;
+	}
+	public void setTask_id(int task_id) {
+		this.task_id = task_id;
+	}
 	public Date getUpdate_time() {
 		return update_time;
 	}

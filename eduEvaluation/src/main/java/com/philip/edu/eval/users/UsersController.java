@@ -412,31 +412,38 @@ public class UsersController {
 		// check:
 		Map<String, Claim> claims = SecurityUtil.verifyToken(token);
 		Claim user_name_claim = claims.get("username");
-
-		if (null == user_name_claim || StringUtils.isEmpty(user_name_claim.asString())) {
-			data.setMsg("您的用户验证信息不正确！");
-			data.setCode(20);
+		
+		// get user id:
+		String username = user_name_claim.asString();
+		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
+		
+		// check old password:
+		String oldPassword = request.getParameter("oldPassword");
+		String tempPassword = SecurityUtil.md5Hex(user_mes.getUserName() + oldPassword + user_mes.getSalt());
+		if(!tempPassword.equals(user_mes.getPassword())){
+			data.setMsg("您的旧密码不正确！");
+			data.setCode(30);
 			// BackendData data = new BackendData();
 
 			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 		}
 		
-		// get user id:
-		String username = user_name_claim.asString();
-		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
-
-		TblUsers usersschool = service.getUserSchool(user_mes.getId());
-
-		logger.info("successfully get the users list");
-
-		//int result = service.deleteUsers(Integer.parseInt(id));
+		// save new password:
+		TblUsers user = new TblUsers();
+		String newPassword = request.getParameter("password");
+		String newTempPassword = SecurityUtil.md5Hex(user_mes.getUserName() + newPassword + user_mes.getSalt());
+		user.setPassword(newTempPassword);
+		user.setUpdateTime(new Date());
+		user.setId(user_mes.getId());
+		
+		result = service.updateUsers(user);
 
 		if (result != 0) {
 			code = 0;
-			msg = "用户删除成功";
+			msg = "密码更新成功";
 		} else {
 			code = 99;
-			msg = "用户删除失败";
+			msg = "密码更新失败";
 		}
 
 		return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);

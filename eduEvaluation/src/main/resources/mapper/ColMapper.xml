@@ -50,6 +50,7 @@
 	
 	<resultMap id="MajorTaskResultMap" type="com.philip.edu.eval.bean.MajorTask">
 		<id property="collection_major_id" column="colletion_major_id"/>
+		<result property="task_id" column="task_id"/>
 		<result property="school_id" column="school_id"/>
 		<result property="school_name" column="school_name"/>
 		<result property="major_id" column="major_id"/>
@@ -470,7 +471,7 @@
 		AND
 		major_status.key_string = v_task_school_major.major_status
 		and
-		major_status.config_type = 'collection_status'
+		major_status.config_type = 'major_status'
 
 	</select>
 
@@ -568,7 +569,7 @@
 	</select>
 	
 	<select id="selectStatusList" resultMap="statusResultMap">
-		select key_int, config_value, key_string from tbl_config where config_type='collection_status' 
+		select key_int, config_value, key_string from tbl_config where config_type='major_status' 
 	</select>
 	
 	<select id="selectSchoolTaskList" resultMap="SchoolTaskResultMap">
@@ -578,7 +579,7 @@
 	</select>
 	
 	<select id="searchTaskList" resultMap="MajorTaskResultMap">
-		select m.id as collection_major_id, s.school_id, s1.school_name, m.major_id, m1.major_name, m.process_status, c.config_value, m.update_time  
+		select t.id as task_id, m.id as collection_major_id, s.school_id, s1.school_name, m.major_id, m1.major_name, m.process_status, c.config_value, m.update_time  
 		from tbl_collection_tasks t, tbl_collection_school s, tbl_collection_major m, tbl_school s1, tbl_major m1, tbl_config c 
 		where t.id = s.collection_task_id and s.id = m.collection_school_id and s1.id = s.school_id and m1.id = m.major_id and c.key_string = m.process_status
 		<if test="task_id!=0">

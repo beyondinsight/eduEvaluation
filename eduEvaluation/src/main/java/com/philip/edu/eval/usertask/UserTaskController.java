@@ -156,7 +156,7 @@ public class UserTaskController {
 
 		ArrayList taskList = (ArrayList) userTaskService.searchTaskList(task_id, school_id, major_id, process_status);
 
-		logger.info("successfully get major task list");
+		logger.info("successfully get major task list"); 
 
 		data.setMsg("已获取所有专业的任务情况");
 		data.setCode(0);

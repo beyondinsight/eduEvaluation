@@ -580,6 +580,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 						pf1.setCreate_time(new Date());
 						pf1.setUpdate_time(new Date());
 						pf1.setMetrics_id(this.METRICS_MAJOR_BASIC_ID);
+						pf1.setFor_template(this.template_basic_form_id);
 						dao.insertPerformanceForm(pf1);
 						List<Material> materials = dao.getMaterialMetrics(this.METRICS_MAJOR_BASIC_ID);
 						for (int k = 0; k < materials.size(); k++) {
@@ -612,6 +613,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 						pf.setCollection_major_id(taskMajor.getId());
 						pf.setM_system_id(this.template_performance_form_id);
 						pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+						pf.setFor_template(this.template_performance_form_id);
 
 						ArrayList metrics = (ArrayList) dao.selectMetricsList(this.template_performance_form_id);
 						for (int k = 0; k < metrics.size(); k++) {
@@ -650,6 +652,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 						pf2.setCreate_time(new Date());
 						pf2.setUpdate_time(new Date());
 						pf2.setMetrics_id(this.metrics_central_disbursement_amount_id);
+						pf2.setFor_template(this.template_capital_progress_form_id);
 						dao.insertPerformanceForm(pf2);
 						this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id,
 								this.metrics_central_disbursement_amount_id);
@@ -743,6 +746,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 			pf1.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 			pf1.setCreate_time(new Date());
 			pf1.setUpdate_time(new Date());
+			pf1.setFor_template(this.template_basic_form_id);
 			pf1.setMetrics_id(this.METRICS_MAJOR_BASIC_ID);
 			dao.insertPerformanceForm(pf1);
 			pf1.setMetrics_id(this.METRICS_SELF_EVAL_ID);
@@ -754,6 +758,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 			pf.setCollection_major_id(taskMajor.getId());
 			pf.setM_system_id(this.template_performance_form_id);
 			pf.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
+			pf.setFor_template(this.template_performance_form_id);
 
 			ArrayList metrics = (ArrayList) dao.selectMetricsList(this.template_performance_form_id);
 			for (int k = 0; k < metrics.size(); k++) {
@@ -791,6 +796,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 			pf2.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 			pf2.setCreate_time(new Date());
 			pf2.setUpdate_time(new Date());
+			pf2.setFor_template(this.template_capital_progress_form_id);
 			pf2.setMetrics_id(this.metrics_central_disbursement_amount_id);
 			dao.insertPerformanceForm(pf2);
 			this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id,

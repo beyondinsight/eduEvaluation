@@ -25,11 +25,11 @@ text-align: left;
        		<table class="layui-table" style="border: 1px solid #e6e6e6;">
      	    	<tr class="noborder">
      	    		<td style="width:60px;">填报任务</td><td>
-     	    			<select id="task_list" lay-search=""  lay-filter="task_list">
-     	    				<option value="">直接选择或搜索选择</option>
+     	    			<select id="task_list" lay-search=""  lay-filter="task_list" id=task_id>
+     	    				<option value=""></option>
      	    			</select>
      	    		</td>
-     	    		<td style="width:120px;"> 填报任务所属年度</td><td>2018</td> 
+     	    		<td style="width:120px;"> </td><td><input type="text" id="year" style="border: 0;background: white;"></td> 
      	    		<td></td><td></td>    	    		
      	    	</tr >
      	    	<tr class="noborder">
@@ -50,24 +50,36 @@ text-align: left;
  					</td>
      	    	</tr>
      	    </table>		        
-            <table  id="demo" class="layui-table"  ></table>
+            <table  id="demo" class="layui-table"  lay-filter="demo" ></table>
              <script type="text/html" id="test-table-toolbar-barDemo">
  			  {{#  if(d.process_status == 'N' ){ }}
- 					             
+ 					 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"  ><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#cdcdcd"></path></svg>查看</a>
+					 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              		 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a>             
               {{#  } else if(d.process_status == 'I' ) { }}
-           		
+           		 	 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="view"  ><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#cdcdcd"></path></svg>查看</a>
+					 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              		 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a>             
               {{#  } else if(d.process_status == 'S' ) { }}
-					 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+					 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#ffffff"></path></svg>查看</a>
 					 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
               		 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a>
 			  {{#  } else if(d.process_status == 'R' ) { }}
-
+					  <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="view"  ><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#cdcdcd"></path></svg>查看</a>
+					 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              		 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a>             
  			  {{#  } else if(d.process_status == 'G' ) { }}
-			        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+			         <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#ffffff"></path></svg>查看</a>
+					 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              		 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a> 
  			  {{#  } else if(d.process_status == 'E' ) { }}
-
+					 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="view"  ><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#cdcdcd"></path></svg>查看</a>
+					 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              		 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a>             
  			  {{#  } else if(d.process_status == 'A' ) { }}
-					 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+					 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#ffffff"></path></svg>查看</a>
+					 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              		 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a> 
 			  {{#  } }}
             </script>
 	        </div>
@@ -82,7 +94,7 @@ text-align: left;
   <script src="../../layuiadmin/layui/layui.js"></script> 
   <script src="../util/Constants.js"></script> 
   <script>
-    
+ 
   var projectBase = Class.getURL();
   var userinfo = layui.data('userinfo');
   
@@ -90,7 +102,7 @@ text-align: left;
 	    base: '../../layuiadmin/' //静态资源所在路径
 	  }).extend({
 	    index: 'lib/index' //主入口模块
-	  }).use(['index', 'contlist','element', 'table', 'layer','admin'],function(){
+	  }).use(['index', 'contlist','element', 'table', 'layer','admin','jquery'],function(){
 		  var table = layui.table
 		    ,form = layui.form
 			,admin = layui.admin
@@ -112,7 +124,29 @@ text-align: left;
 				   ,{fixed: 'right', title:'操作',   toolbar: '#test-table-toolbar-barDemo', align:'center'} 
 			  ]]
 			});  
-				
+ 
+			  
+			    table.on('tool(demo)', function(obj){
+				  var datas = obj.data;
+				  var task_name =  $("#task_list").find("option:selected").text();
+				  if(obj.event === 'view'){
+					     layui.data('viewTask_top',{
+						  key: "taskInfo",
+						  value:{"task_name":task_name,"year":$("#year").val(),"school_id":$("#school_list").val(),"major_id":$("#major_list").val()}
+						}); 
+					    
+					     layui.data('viewTask_bot',{
+						  key: "taskInfo",
+						  value: datas
+						 });
+
+						   					  
+						//Tap跳转
+						parent.layui.index.openTabsPage("component/school_management_review.html", "修改填报任务");
+				  }
+					 
+		      });  
+	   
 			
 			  var schoolid=-1;
 			  
@@ -239,7 +273,7 @@ text-align: left;
 									var status_list = res.data;
 									
 									$.each(status_list, function (index, item) {
-								   		 var opt =  new Option(item.msg, item.status_code);    		 		
+								   		 var opt =  new Option(item.msg, item.status_string);    		 		
 								   			$('#status_list').append(opt);// 下拉菜单里添加元素   		    			
 								   		});
 							    	layui.form.render("select");
@@ -292,12 +326,10 @@ text-align: left;
 		        where: {"task_id":$("#task_list").val(),"school_id":$("#school_list").val(),
 		        		"major_id":$("#major_list").val(),"process_status":$("#status_list").val()}
 		      });
+		 
 		  
 		
-	 
 	  });
-   
-  	
    
  
   </script>
