@@ -486,7 +486,7 @@ public class ColTaskController {
 					MetricsDetail metrics = (MetricsDetail)metricsC.get(l);
 					metrics.setLevel1_name(metricsP.getMetrics_name());
 					metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
-					newList.add(metrics);
+					newList.add(metrics); 
 				}
 			}
 		}
@@ -737,6 +737,8 @@ public class ColTaskController {
 		// update all the status:
 		service.updatePerformanceStatus(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION,
 				Integer.parseInt(performance_id));
+		
+		//service.updateTaskStatus(id, process_status)
 
 		logger.info("update performance form success");
 
@@ -1137,6 +1139,37 @@ public class ColTaskController {
 		}
 		// BackendData data = new BackendData();
 
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/auditReport", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> auditReport(HttpServletRequest request) {
+
+		int result = 0;
+		BackendData data = new BackendData();
+		String collection_major_id = request.getParameter("collection_major_id");
+		String role = request.getParameter("role");
+		String operation = request.getParameter("operation");		
+		
+		if("SCHOOL".equals(role)){
+			if("APPROVE".equals(operation)){
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id),EvalConstants.PROCESS_STATUS_GOVERNMENT_VERIFY);
+			} else if("REJECT".equals(operation)) {
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_SCHOOL_REJECT);
+			}
+		} else if("GOVERNMENT".equals(role)){
+			if("APPROVE".equals(operation)){
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GORVERNMENT_APPROVE);
+			} else if("REJECT".equals(operation)) {
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GOVERNMENT_REJECT);
+			}
+		}
+		
+		if (result != 0) {
+			data.setMsg("成功完成审批");
+			data.setCode(0);
+		}
+		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 }

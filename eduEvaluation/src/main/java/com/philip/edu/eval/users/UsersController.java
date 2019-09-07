@@ -258,7 +258,10 @@ public class UsersController {
 		users.setStatus(status);
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
-		password = SecurityUtil.md5Hex(userName + password + users.getSalt());
+		
+		//set password MD5 twice:
+		String tempPassword = SecurityUtil.md5Hex(password);
+		password = SecurityUtil.md5Hex(userName + tempPassword + users.getSalt());
 		users.setPassword(password);
 
 		if (roleId != null && !roleId.equals("")) {
@@ -382,6 +385,58 @@ public class UsersController {
 		} else {
 			code = 99;
 			msg = "用户修改失败";
+		}
+
+		return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> changePassword(HttpServletRequest request) {
+
+		int code = 0;
+		String msg = "";
+		int result = 0;
+
+		BackendData data = new BackendData();
+		// get token:
+		String token = request.getParameter("token");
+
+		if (token == null || "".equals(token)) {
+			data.setMsg("您的令牌已过期！");
+			data.setCode(10);
+			// BackendData data = new BackendData();
+
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+
+		// check:
+		Map<String, Claim> claims = SecurityUtil.verifyToken(token);
+		Claim user_name_claim = claims.get("username");
+
+		if (null == user_name_claim || StringUtils.isEmpty(user_name_claim.asString())) {
+			data.setMsg("您的用户验证信息不正确！");
+			data.setCode(20);
+			// BackendData data = new BackendData();
+
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		// get user id:
+		String username = user_name_claim.asString();
+		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
+
+		TblUsers usersschool = service.getUserSchool(user_mes.getId());
+
+		logger.info("successfully get the users list");
+
+		//int result = service.deleteUsers(Integer.parseInt(id));
+
+		if (result != 0) {
+			code = 0;
+			msg = "用户删除成功";
+		} else {
+			code = 99;
+			msg = "用户删除失败";
 		}
 
 		return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);

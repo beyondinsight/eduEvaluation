@@ -428,31 +428,34 @@
     	where cm.major_id = m.id and collection_school_id=#{collection_school_id}
     </select>
     
-    	<select id="getMajorStatusByTask"
+	<select id="getMajorStatusByTask"
 		resultMap="majorStatusResultMap">
 		select
 		v_task_school_major.task_id,
 		v_task_school_major.task_name,
-		tbl_config.config_value as task_status,
+		task_status.config_value as task_status,
+		major_status.config_value as major_status,
+		major_status.key_string as major_status_key,
 		v_task_school_major.task_year,
 		tbl_major.id as major_id,
 		tbl_major.major_name,
 		tbl_school.id as school_id,
 		tbl_school.school_name,
-		v_task_school_major.major_status,
-		v_task_school_major.update_time
+		v_task_school_major.update_time,
+		v_task_school_major.collection_school_id
 		from
 		v_user_school_major,
 		v_task_school_major,
 		tbl_major, tbl_school,
-		tbl_config
+		tbl_config as task_status,
+		tbl_config as major_status
 		where
 		v_user_school_major.user_id=#{user_id}
 		AND
 		v_task_school_major.task_id=#{task_id}
 		and
-		v_task_school_major.major_id
-		= tbl_major.id
+		v_task_school_major.major_id=
+		tbl_major.id
 		and
 		v_task_school_major.school_id = tbl_school.id
 		and
@@ -461,8 +464,14 @@
 		and
 		v_user_school_major.school_id =v_task_school_major.school_id
 		AND
-		tbl_config.key_string = v_task_school_major.task_status
-		and tbl_config.config_type = 'collection_status'
+		task_status.key_string = v_task_school_major.task_status
+		and
+		task_status.config_type = 'task_status'
+		AND
+		major_status.key_string = v_task_school_major.major_status
+		and
+		major_status.config_type = 'collection_status'
+
 	</select>
 
 	<select id="getMajorCollectionStatus"
@@ -486,31 +495,34 @@
 		<result property="task_year" column="task_year" />
 	</resultMap>
 
-	<resultMap id="majorStatusResultMap"
-		type="com.philip.edu.eval.bean.MajorStatus">
-		<result property="task_id" column="task_id" />
-		<result property="task_name" column="task_name" />
-		<result property="major_status" column="major_status" />
-		<result property="major_name" column="major_name" />
-		<result property="major_id" column="major_id" />
-		<result property="school_id" column="school_id" />
-		<result property="task_year" column="task_year" />
-		<result property="school_name" column="school_name" />
-		<result property="major_status" column="major_status" />
-		<result property="update_time" column="update_time" />
-	</resultMap>
+<resultMap id="majorStatusResultMap"
+  type="com.philip.edu.eval.bean.MajorStatus">
+  <result property="task_id" column="task_id" />
+  <result property="task_name" column="task_name" />
+  <result property="major_status" column="major_status" />
+  <result property="major_name" column="major_name" />
+  <result property="major_id" column="major_id" />
+  <result property="school_id" column="school_id" />
+  <result property="task_year" column="task_year" />
+  <result property="school_name" column="school_name" />
+  <result property="major_status" column="major_status" />
+  <result property="update_time" column="update_time" />
+  <result property="collection_school_id" column="collection_school_id" />
+ </resultMap>
 
-	<resultMap id="majorCollectionStatusResultMap"
-		type="com.philip.edu.eval.bean.MajorCollectionStatus">
-		<result property="task_id" column="task_id" />
-		<result property="school_id;" column="school_id;" />
-		<result property="major_id;" column="major_id;" />
-		<result property="collection_template_name;"
-			column="collection_template_name;" />
-		<result property="template_type_string" column="template_type" />
-		<result property="process_status;" column="process_status;" />
-		<result property="collection_major_id" column="collection_major_id" />
-	</resultMap>
+<resultMap id="majorCollectionStatusResultMap"
+  type="com.philip.edu.eval.bean.MajorCollectionStatus">
+  <result property="task_id" column="task_id" />
+  <result property="school_id" column="school_id;" />
+  <result property="major_id" column="major_id" />
+  <result property="collection_template_name"
+   column="collection_template_name" />
+  <result property="template_type_string" column="template_type" />
+  <result property="process_status" column="process_status" />
+  <result property="process_status_key" column="process_status_key" />
+  <result property="collection_major_id"
+   column="collection_major_id" />
+ </resultMap>
 	
 	<select id="getUserTaskList" resultMap="userTaskResultMap">
 		select distinct
@@ -585,6 +597,18 @@
 	
 	<update id="updateBasicForm">
 		update tbl_form_basic set process_status=#{process_status}, update_time=#{update_time} where collection_major_id=#{collection_major_id}
+	</update>
+	
+	<update id="updateTaskStatus">
+		update tbl_collection_major set process_status=#{process_status}, update_time=now()
+		where id=#{id}
+	</update>
+	
+	<update id="updateMajorStatus">
+	  update tbl_collection_major set
+	  process_status='S' , update_time =NOW()
+	  where collection_school_id=#{collection_school_id}
+	  and major_id = #{major_id}
 	</update>
 	
 </mapper>

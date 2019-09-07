@@ -47,4 +47,8 @@ public class UserTaskServiceImpl implements UserTaskService {
 		return collectionDAO.searchTaskList(task_id, school_id, major_id, process_status);
 	}
 
+	
+	public int updateMajorStatus( int collection_school_id,  int major_id) {
+		return collectionDAO.updateMajorStatus(collection_school_id, major_id);
+	}
 }

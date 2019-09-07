@@ -76,6 +76,7 @@ public interface ColMapper {
 	public int deleteMaterial(int id);
 	public int updateCapitalFormStatus(CapitalProgressForm cpf);
 	public int updateColTask(CollectionTask task);
+	public int updateTaskStatus(@Param("id")int id, @Param("process_status")char process_status);
 	 
 	//add by xiewei
 	public List<UserTask> getUserTaskList(@Param("user_id") int user_id);
@@ -85,4 +86,6 @@ public interface ColMapper {
 	public List<MajorStatus> getMajorStatusByTask(@Param("user_id") int user_id, @Param("task_id") int task_id);
 	
 	public List<MajorCollectionStatus> getMajorCollectionStatus(@Param("task_id") int task_id, @Param("school_id") int school_id, @Param("major_id") int major_id);
+	
+	public int updateMajorStatus( @Param("collection_school_id") int collection_school_id, @Param("major_id") int major_id);
 } 

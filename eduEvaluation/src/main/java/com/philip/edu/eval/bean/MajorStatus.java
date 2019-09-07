@@ -18,10 +18,29 @@ public class MajorStatus {
 	private int task_year;
 
 	private String school_name;
+	private Date update_time;
 
 	private String major_status;
+	private String major_status_key;
+	
+	public String getMajor_status_key() {
+		return major_status_key;
+	}
 
-	private Date update_time;
+	public void setMajor_status_key(String major_status_key) {
+		this.major_status_key = major_status_key;
+	}
+
+	private int collection_school_id;
+
+	public int getCollection_school_id() {
+		return collection_school_id;
+	}
+
+	public void setCollection_school_id(int collection_school_id) {
+		this.collection_school_id = collection_school_id;
+	}
+
 
 	public String getMajor_name() {
 		return major_name;
