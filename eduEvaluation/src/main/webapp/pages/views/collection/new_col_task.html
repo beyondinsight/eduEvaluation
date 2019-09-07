@@ -14,32 +14,59 @@
 	border:0;
 	text-align: right;
 	}
-	
+	#main-tb span{
+	color:red;
+	}
 	</style>
 	<body style="background-color:white">
 
 		<div class="layui-fluid" style="border: 0;">
-			<div class="layui-card" style="border: 0;">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form" style="border: 0;">
-				<table class="layui-table" style="width:800px;border: 1px solid #e6e6e6;">
+			<div class="layui-card-body" style="border: 0;">
+				<div class="layui-form  layuiadmin-card-header-auto" lay-filter="col_task_form" style="border: 0;">
+				<table class="layui-table" style="width:800px;border: 1px solid #e6e6e6;" id="main-tb">
 				 <tr class="noborder">
-					<td>专业填报任务名称</td><td><input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input"></td>
-					<td>填报任务所属年度</td><td style="text-align: left;">
+					<td><span>*</span>专业填报任务名称：</td><td><input type="text" name="name" id="name" placeholder="请输入填报任务名称"   lay-verify="required" autocomplete="off" class="layui-input"></td>
+					<td><span>*</span>填报任务所属年度：</td><td style="text-align: left;">
 						<select name="year" id="year">
-								    <option value="2018">2018</option>
-									<option value="2019">2019</option>
+								   <option value="2019">2019</option>
 									<option value="2020">2020</option>
 									<option value="2021">2021</option>
 									<option value="2022">2022</option>
 									<option value="2023">2023</option>
 									<option value="2024">2024</option>
+									<option value="2025">2025</option>
+									<option value="2026">2026</option>
+									<option value="2027">2027</option>
+									<option value="2028">2028</option>
+									<option value="2029">2029</option>
+									<option value="2030">2030</option>
+									<option value="2031">2031</option>
+									<option value="2032">2032</option>
+									<option value="2033">2033</option>
+									<option value="2034">2034</option>
+									<option value="2035">2035</option>
+									<option value="2036">2036</option>
+									<option value="2037">2037</option>
+									<option value="2038">2038</option>
+									<option value="2039">2039</option>
+									<option value="2040">2040</option>
+									<option value="2041">2041</option>
+									<option value="2042">2042</option>
+									<option value="2043">2043</option>
+									<option value="2044">2044</option>
+									<option value="2045">2045</option>
+									<option value="2046">2046</option>
+									<option value="2047">2047</option>
+									<option value="2048">2048</option>
+									<option value="2049">2049</option>
+									<option value="2050">2050</option>
 								</select>
 					</td>
 				 </tr>
 				 <tr class="noborder">
-				 	<td>开始日期</td><td>	<input type="text" name="date" id="startDate" required lay-verify="required|date" placeholder="yyyy-MM-dd" autocomplete="off"
+				 	<td><span>*</span>开始日期：</td><td>	<input type="text" name="date" id="startDate"   lay-verify="required|date" placeholder="yyyy-MM-dd" autocomplete="off"
 								 class="layui-input"></td>
-				 	<td>结束日期</td><td><input type="text" name="date" id="endDate" required lay-verify="required|date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input"></td>
+				 	<td><span>*</span>结束日期：</td><td><input type="text" name="date" id="endDate" required lay-verify="required|date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input"></td>
 				 </tr>				 
 				</table>
 				<table class="layui-table" id="weightForm" style="table-layout:fixed; width:800px; text-align: center;">			 
@@ -51,20 +78,20 @@
 					    </tr> 
 					  </thead> 
 					  <tbody>
-					    <tr align="center">
+					     <tr align="center">
 					      <td align="center">1</td>
 					      <td align="center">专业基本情况</td>
-					      <td align="center"><input type="number" name="weighting1" value="20" required lay-verify="required" id="weighting1"  class="layui-input"></td>
+					      <td align="center"><input   name="weighting1" value="20"   lay-verify="required" id="weighting1"   class="layui-input layui-input-number" min="0" max="100"   data-prec="0"></td>
 					    </tr>
 					    <tr>
 					      <td>2</td>
 					      <td>绩效目标完成情况</td>
-					      <td><input type="number" name="weighting2" required value="60" lay-verify="required" id="weighting2"  class="layui-input"></td>
+					      <td><input   name="weighting2"   value="60" lay-verify="required" id="weighting2"   class="layui-input layui-input-number" min="0" max="100" step="1" data-prec="0"></td>
 					    </tr>
 					    <tr>
 					      <td>3</td>
 					      <td>资金支出进度</td>
-					      <td><input type="number" name="weighting3" value="20" required lay-verify="required" id="weighting3"   class="layui-input"></td>
+					      <td><input   name="weighting3" value="20"   lay-verify="required" id="weighting3"    class="layui-input layui-input-number" min="0" max="100" step="1" data-prec="0"></td>
 					    </tr>
 					   </tbody>
 					  </table>
@@ -73,18 +100,7 @@
 				</div>
 
 
-				<div class="layui-card-body">
-					<div class="layui-form layui-card-header layuiadmin-card-header-auto">
-					<!--<table id="forms" lay-filter="forms" name="forms"></table>-->
-					<div style="text-align: left;">
-					
-					</div> 
-					<script type="text/html" id="weight">
-						<!-- 这里的 checked 的状态只是演示 -->
-							<input type="number" name="weighting" id="weighting" style="width:150px">
-					</script>
-					</div>
-				</div>
+				 
 				<div class="layui-card-body">
 					<div style="padding-bottom: 10px;">
 						<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 添加</button>
@@ -92,14 +108,16 @@
 					</div>
 					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 					<script type="text/html" id="table-content-list">
-						<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="editMajor"><i class="layui-icon layui-icon-set"></i></a>
+						<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#ffffff"></path></svg>查看</a>
+						<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+						<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
 					</script>
 					<table id="major-list" lay-filter="major-list"></table>
 				</div>
 				<div class="layui-card-body" style="width:800px;">
 					<div style="padding-bottom: 10px;">
 						<div align="center">
-							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit">确认</button>
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit">为任务分配院校</button>
 						</div>
 					</div>
 				</div>
@@ -113,12 +131,28 @@
 				base: '../../layuiadmin/' //静态资源所在路径
 			}).extend({
 				index: 'lib/index' //主入口模块
-			}).use(['index', 'contlist', 'table', 'laydate', 'form', 'transfer'], function() {
-				var table = layui.table,
-					form = layui.form,
-					laydate = layui.laydate,
-					transfer = layui.transfer,
-					projectBase = Class.getURL();
+			}).use(['index', 'contlist', 'table', 'laydate', 'form', 'transfer', 'numinput', 'admin'], function() {
+				var $ = layui.$,
+				table = layui.table,
+				form = layui.form,
+				admin = layui.admin,
+				numinp = layui.numinput,
+				laydate = layui.laydate,
+				transfer = layui.transfer,
+				projectBase = Class.getURL();
+			
+			numinp.init({
+				    // 123：123键置顶, 789：789键置顶
+				    topBtns: 123,
+				    // 右侧功能按钮
+				    rightBtns: false,
+				    // 监听键盘事件
+				    listening: false,
+				    // 批量配置默认小数精确度
+				    defaultPrec: '0'
+				  });
+			
+			
 				var data0, schoolTable;
 				
 
@@ -187,21 +221,15 @@
 							}, {
 								field: 'school_code',
 								title: '院校代码',
-								align: 'center',
-								width: 160
+								align: 'center'
 							}, {
 								field: 'school_name',
 								title: '院校名称',
-								align: 'center',
-								width: 350
+								align: 'center'
 							}, {
 								title: '操作',
-								templet: function(d) {
-									return '<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="editMajor" lay-id="' + d.tempId +
-										'"><i class="layui-icon layui-icon-set"></i></a>';
-								},
-								align: 'center',
-								width: 120
+								toolbar: '#table-content-list',
+								align: 'center' 
 							}
 						]
 					]
@@ -219,15 +247,21 @@
 					cols: [
 						[ //表头
 							{
+								field: 'school_code',
+								title: '院校代码',
+								align: 'center' 
+							}, {
+								field: 'school_name',
+								title: '院校名称',
+								align: 'center' 
+							},{
 								field: 'major_code',
 								title: '专业代码',
-								align: 'center',
-								width: 230
+								align: 'center'
 							}, {
 								field: 'major_name',
 								title: '专业名称',
-								align: 'center',
-								width: 450
+								align: 'center'
 							}
 						]
 					]
@@ -249,17 +283,17 @@
 						layer.msg('权重相加不等于100!', function(){
 						  //layer.msg('权重相加不等于100!');
 						});
-						return false;
+						return ;
 					}
-					
+ 
 					task={
 						'name':$('#name').val(),
 						'year':$('#year').val(),
 						'startDate':test1,
 						'endDate':test2,
-						'weighting1': $('#weighting1').val(),
-						'weighting2': $('#weighting2').val(),
-						 'weighting3': $('#weighting3').val(), 
+						'weighting1': parseInt($('#weighting1').val()),
+						'weighting2': parseInt($('#weighting2').val()),
+						 'weighting3': parseInt($('#weighting3').val()), 
 						'schoolChose':JSON.stringify(schoolTable.config.data),
 						'majorChose':JSON.stringify(choseM)
 						};
@@ -274,13 +308,14 @@
 						success: function(res){
 							//data0 = JSON.parse(res.data);
 							/*if(res.code==1){*/
-								layer.msg("填报任务创建成功!");
+								
 								setTimeout(function(){
 									//console.log(parent.layui.admin.events);
 									//parent.index.refreshAndCloseTabs();
 									parent.layui.admin.events.refresh();
 									parent.layui.admin.events.closeThisTabs();
 									},1200);
+								layer.msg("填报任务创建成功!");
 							/*} else {
 								layer.msg('创建填报任务时出错!',function(){ 
 									
@@ -293,7 +328,7 @@
 				});
 
 				//监听行单击事件（单击事件为：rowDouble）
-				table.on('row(LAY-app-content-list)', function(obj) {
+				/* table.on('row(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
 		
 					var choseM = layui.data('choseMajor');
@@ -312,10 +347,22 @@
 						cols: [
 							[ //表头
 								{
+									 
+									title: '院校代码',
+									align: 'center',
+									templet: function(d) {								    	 
+										return data.school_code;							  
+									}
+								}, {
+									title: '院校名称',
+									align: 'center',
+									templet: function(d) {								    	 
+										return data.school_name;							  
+									} 
+								},{
 									field: 'major_code',
 									title: '专业代码',
-									align: 'center',
-									width: 230
+									align: 'center'
 								}, {
 									field: 'major_name',
 									title: '专业名称',
@@ -327,7 +374,7 @@
 
 					//标注选中样式
 					//obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
-				});
+				}); */
 
 				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
@@ -336,7 +383,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '选择专业',
-							area: ['50%', '70%'],
+							area: ['660px', '500px'],
 							//shade: 0,
 							maxmin: true,
 							/* offset: [ //为了演示，随机坐标
@@ -373,15 +420,26 @@
 									cols: [
 										[ //表头
 											{
+												 
+												title: '院校代码',
+												align: 'center',
+												templet: function(d) {								    	 
+													return data.school_code;							  
+												}
+											}, {
+												title: '院校名称',
+												align: 'center',
+												templet: function(d) {								    	 
+													return data.school_name;							  
+												} 
+											},{
 												field: 'major_code',
 												title: '专业代码',
-												align: 'center',
-												width: 230
+												align: 'center'
 											}, {
 												field: 'major_name',
 												title: '专业名称',
-												align: 'center',
-												width: 450
+												align: 'center'
 											}
 										]
 									]
@@ -395,6 +453,49 @@
 								$(school_id).val(data.id);
 								layer.setTop(layero); //重点2
 							}
+						});
+
+					}else if(obj.event === 'view'){
+						
+						var choseM = layui.data('choseMajor');
+						console.log(choseM[data.id]);
+
+						
+						table.render({
+							elem: '#major-list',
+							width: 800,
+							height: 320,
+							data: choseM[data.id]
+								//toolbar:'#toolbarDemo'
+								,
+							page: true //开启分页
+								,
+							cols: [
+								[ //表头
+									{
+										 
+										title: '院校代码',
+										align: 'center',
+										templet: function(d) {								    	 
+											return data.school_code;							  
+										}
+									}, {
+										title: '院校名称',
+										align: 'center',
+										templet: function(d) {								    	 
+											return data.school_name;							  
+										} 
+									},{
+										field: 'major_code',
+										title: '专业代码',
+										align: 'center'
+									}, {
+										field: 'major_name',
+										title: '专业名称',
+										align: 'center' 
+									}
+								]
+							]
 						});
 
 					}
@@ -428,7 +529,7 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '选择院校',
-								area: ['50%', '70%'],
+								area: ['660px', '500px'],
 								//shade: 0,
 								maxmin: true,
 								/* offset: [ //为了演示，随机坐标
@@ -459,20 +560,16 @@
 													field: 'school_code',
 													title: '院校代码',
 													align: 'center',
-													width: 160
+													width: 185
 												}, {
 													field: 'school_name',
 													title: '院校名称',
 													align: 'center',
-													width: 350
+													width: 330
 												}, {
 													title: '操作',
-													templet: function(d) {
-														return '<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="edit" lay-id="' + d.tempId +
-															'"><i class="layui-icon layui-icon-set"></i></a>';
-													},
-													align: 'center',
-													width: 120
+													toolbar: '#table-content-list',
+													align: 'center'
 												}
 											]
 										]

@@ -111,7 +111,6 @@ public class RolesController {
 	
 		String schoolId = request.getParameter("schoolId"); 
 		String types = request.getParameter("types");
-		System.out.println("*****"+types);
 		ArrayList usersList = (ArrayList) user_service.getUsersList(0);				 
 	 		
 		ArrayList choseUser = new ArrayList();
@@ -121,11 +120,11 @@ public class RolesController {
 			info.setValue(user.getId().toString());
 			info.setTitle(user.getChineseName());
 			int roleid=0;
-			if(user.getSchoolId() != null) {
-				roleid =user.getSchoolId();
+			if(user.getRoleId() != null) {
+				roleid =user.getRoleId();
 			}
 			if(types.equals("1")) {
-				if(user.getSchoolId() != null && user.getSchoolId().toString().equals(schoolId) &&  roleid !=1) {
+				if(user.getSchoolId() != null && user.getSchoolId().toString().equals(schoolId) &&  roleid !=1 ) {
 					
 				    choseUser.add(info);
 				}

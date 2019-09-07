@@ -15,8 +15,9 @@ public interface SchoolUserMapper {
 	public int updateMajorUser(TblSchoolMajor tsu);
 	public int deleteMajorUser(int id);  
 	public List<TblSchoolMajor> getRolenameSchoolMajor(int roleId);
+	public List<TblSchoolMajor> getRolenameSchoolMajorBySchool(TblSchoolMajor tsu);
 	public TblSchoolMajor getMajorRolesUsers(TblSchoolMajor tsm);
-    
+	
 	//school user
     public List<TblSchoolUser> getNameSchoolUser(int roleId);
     public int createRoleUser(TblSchoolUser tsu);

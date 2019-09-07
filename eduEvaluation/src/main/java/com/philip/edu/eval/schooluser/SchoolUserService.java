@@ -4,6 +4,7 @@ package com.philip.edu.eval.schooluser;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 
 import com.philip.edu.eval.bean.TblRoles;
 import com.philip.edu.eval.bean.TblSchoolMajor;
@@ -19,7 +20,7 @@ public interface SchoolUserService {
 	public int createMajorUser(TblSchoolMajor tsu);	
 	public int updateMajorUser(TblSchoolMajor tsu);
 	public int deleteMajorUser(int id);
-	
+	public List<TblSchoolMajor> getRolenameSchoolMajorBySchool(TblSchoolMajor tsu);
 	public TblSchoolMajor getMajorRolesUsers(TblSchoolMajor tsm);
     
 	//school user

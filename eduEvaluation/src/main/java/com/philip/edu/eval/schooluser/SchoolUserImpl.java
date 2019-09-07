@@ -80,5 +80,11 @@ public  class SchoolUserImpl implements SchoolUserService {
 	}
 
 
+	public List<TblSchoolMajor> getRolenameSchoolMajorBySchool(TblSchoolMajor tsm) {
+		// TODO Auto-generated method stub
+		return dao.getRolenameSchoolMajorBySchool(tsm);
+	}
+
+
 	
 }

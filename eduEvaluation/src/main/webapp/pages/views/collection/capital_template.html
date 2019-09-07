@@ -68,7 +68,7 @@
 				table.render({
 					elem: '#LAY-app-content-list',
 					url: projectBase + '/collection/getCapitalMetrics',
-					page: true, //开启分页
+					//page: true, //开启分页
 					height: 500	,
 					cols: [
 						[ //表头
@@ -99,7 +99,7 @@
 				});
 
 				
-				/*table.on('tool(LAY-app-content-list)', function(obj) {
+				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'edit') {
 						layer.open({
@@ -140,7 +140,7 @@
 						});
 
 					}
-				});*/
+				});
 				
 				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
@@ -172,7 +172,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '设置支撑材料',
-							area: ['70%', '80%'],
+							area: ['800px', '600px'],
 							//shade: 0,     
 							maxmin: true,
 							btn: ['确认', '取消'],

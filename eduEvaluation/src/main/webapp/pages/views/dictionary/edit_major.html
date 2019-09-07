@@ -13,26 +13,34 @@
 border:0;
 text-align: right;
 }
-
+span{
+color:red;
+}
 </style>
 <body>
 
-  <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
+  <div class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 10px 10px 0 10px;">
 	  <div class="layui-form-item">
 	      <input type="hidden" name="id">
 	  </div>
 	  
 	 <table class="layui-table">
 	 	<tr class="noborder">
-	 		<td>专业名称:</td><td><input type="text" name="majorName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
-	 		<td>专业代码:</td><td><input type="text" name="majorCode" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"><td></td>
+	 		<td><span>*</span>专业名称:</td><td><input type="text" name="majorName" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+	 		<td><span>*</span>专业名称:</td><td><input type="text" name="majorCode" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"></td>
  		</tr>
  		<tr class="noborder">
 	 		<td>所属一级学科:</td><td><input type="text" name="mainLecture" autocomplete="off" class="layui-input"></td>
 	 		<td>学科门类:</td><td> <input type="text" name="majorClass" autocomplete="off" class="layui-input"></td>
  		</tr>
  		<tr class="noborder">
-	 		<td>是否一流学科相关:</td><td><input type="text" name="isFirstClass" autocomplete="off" class="layui-input"></td>	 		
+	 		<td>是否一流学科相关:</td><td style="text-align: left;"><input type="text" id="isFirstClass_hidden" hidden="hidden" autocomplete="off"  />
+	 							     <select lay-search="" name="isFirstClass" id="isFirstClass">
+	 								 	<option value=''></option>
+	 								 	<option value='1'>是</option>
+	 								 	<option value='0'>否</option>
+	 								 </select>
+	 							  </td>	 		
  		</tr>
  		<tr class="noborder">
 	 		<td>备注:</td><td colspan="3"><textarea name="memo"  autocomplete="off" class="layui-textarea" style="height: 200px;resize: none;" ></textarea></td>
@@ -58,6 +66,11 @@ text-align: right;
 	,admin = layui.admin;
 	var projectBase = Class.getURL();
     
+	 var isFirstvalue = $('#isFirstClass_hidden').val();
+	 var select = 'dd[lay-value=' + isFirstvalue + ']';  	
+	$('#isFirstClass').siblings("div.layui-form-select").find('dl').find(select).click();  
+	 
+   
     //监听提交
     form.on('submit(layuiadmin-app-form-submit)', function(data){
       var field = data.field; //获取提交的字段
