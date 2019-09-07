@@ -51,39 +51,20 @@
 					admin = layui.admin,
 					projectBase = Class.getURL();
 				var data0, schoolTable;
-				
-
-				laydate.render({
-					elem: '#startDate'
-				});
-
-				laydate.render({
-					elem: '#endDate'
-				});
 
 				form.render();
 
-				layui.data('choseMajor', null);
-
 				table.render({
 					elem: '#LAY-app-content-list',
-					url: projectBase + '/collection/getCapitalMetrics',
-					//page: true, //开启分页
+					url: projectBase + '/collection/getBasicMetrics',
+					page: true, //开启分页
 					height: 500	,
 					cols: [
 						[ //表头
 							{
 								field: 'metrics_name',
-								title: '资金支出进度',
+								title: '专业基本情况',
 								align: 'left' 
-							}, { 
-								field: 'unit',
-								title: '单位',
-								align: 'center' 
-							},{
-								field: 'value',
-								title: '实际值',
-								align: 'center' 
 							}, {
 								field: 'material_num',
 								title: '支撑材料',
@@ -99,7 +80,7 @@
 				});
 
 				
-				table.on('tool(LAY-app-content-list)', function(obj) {
+				/*table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
 					if (obj.event === 'edit') {
 						layer.open({
@@ -140,7 +121,7 @@
 						});
 
 					}
-				});
+				});*/
 				
 				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
@@ -172,7 +153,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '设置支撑材料',
-							area: ['800px', '600px'],
+							area: ['70%', '80%'],
 							//shade: 0,     
 							maxmin: true,
 							btn: ['确认', '取消'],

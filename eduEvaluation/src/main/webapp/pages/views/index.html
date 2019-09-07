@@ -30,6 +30,11 @@
               <i class="layui-icon layui-icon-shrink-right" id="LAY_app_flexible"></i>
             </a>
           </li>
+		  <li class="layui-nav-item" lay-unselect>
+		    <a href="javascript:;" layadmin-event="refresh" title="刷新">
+		      <i class="layui-icon layui-icon-refresh-3"></i>
+		    </a>
+		  </li>
         </ul>
         <ul class="layui-nav layui-layout-right" lay-filter="layadmin-layout-right">
           
@@ -107,6 +112,7 @@
               <dl class="layui-nav-child">
                 <dd><a id="temp_m" href="javascript:;">填报模板维护</a>
 				<dl class="layui-nav-child">
+				  <dd data-name="basic"><a lay-href="collection/basicform_template.html">专业基本情况</a></dd>
 				  <dd data-name="list"><a lay-href="collection/performance_template.html">绩效目标完成</a></dd>
 				  <dd data-name="mobile"><a lay-href="collection/capital_template.html">资金支出进度</a></dd>
 				</dl>

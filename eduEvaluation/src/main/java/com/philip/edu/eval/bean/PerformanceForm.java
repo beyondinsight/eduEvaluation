@@ -7,6 +7,9 @@ public class PerformanceForm {
 	private int collection_major_id;
 	private int metrics_id;
 	private String metrics_name;
+	private int metrics_level;
+	private int metrics_pid;
+	private int metrics_order;
 	private Date create_time;
 	private Date update_time;
 	private int op_user;
@@ -22,8 +25,34 @@ public class PerformanceForm {
 	private String memo;
 	private String material_num;
 	private int for_template;
+	private String level1_name;
 	
 	
+	
+	public String getLevel1_name() {
+		return level1_name;
+	}
+	public void setLevel1_name(String level1_name) {
+		this.level1_name = level1_name;
+	}
+	public int getMetrics_level() {
+		return metrics_level;
+	}
+	public void setMetrics_level(int metrics_level) {
+		this.metrics_level = metrics_level;
+	}
+	public int getMetrics_pid() {
+		return metrics_pid;
+	}
+	public void setMetrics_pid(int metrics_pid) {
+		this.metrics_pid = metrics_pid;
+	}
+	public int getMetrics_order() {
+		return metrics_order;
+	}
+	public void setMetrics_order(int metrics_order) {
+		this.metrics_order = metrics_order;
+	}
 	public int getFor_template() {
 		return for_template;
 	}

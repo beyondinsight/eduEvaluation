@@ -9,7 +9,7 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<body style="background-color: white;">
+	<body>
 
 		<div class="layui-fluid">
 			<div class="layui-card">
@@ -17,6 +17,7 @@
 					<div class="layui-form-item">
 						<input type="hidden" name="id" id="id">
 						<div class="layui-inline">
+							<input type="hidden" id="level_temp" name="level_temp"/>
 							<label class="layui-form-label" style="width: 80px;"><span style="color: red;">* </span>指标级别：</label>
 							<div class="layui-input-inline" style="width: 120px">
 								<select name="level" id="level">
@@ -86,9 +87,14 @@
 					laydate = layui.laydate,
 					transfer = layui.transfer,
 					admin = layui.admin,
+					$ = layui.$,
 					projectBase = Class.getURL();
 				var data0, schoolTable;
-
+				
+				layui.form.render("select");
+				var select = 'dd[lay-value=' + $('#level_temp').val() + ']';
+				$(level).siblings("div.layui-form-select").find('dl').find(select).click();  
+				
 				form.render();
 
 				layui.data('materials', null);
@@ -99,9 +105,8 @@
 					elem: '#LAY-app-content-list',
 					width: 705,
 					height: 320,
-					data: []
-						//toolbar:'#toolbarDemo'
-						,
+					url: projectBase + "/collection/getMaterials",
+					where: {'metrics_id':$('#id').val()},
 					page: true //开启分页
 						,
 					cols: [
@@ -129,7 +134,8 @@
 				form.on('submit(metrics_form)', function(data) {
 										
 					var data0 = layui.data('materials');
-										
+					
+					console.log('metrics_code:' + $('#metrics_code').val());
 					var metrics={
 						'id':$('#id').val(),
 						'level':$('#level').val(),
@@ -171,14 +177,31 @@
 					var data = obj.data;
 					if (obj.event === 'del') {
 						
-						console.log(data.material_name);
+						/*console.log(data.material_name);
 						layui.data("materials",{
 							key: data.material_name,
 							remove: true
 						});
 						
-						obj.del();
-
+						obj.del();*/
+						
+						$.ajax({
+							url: projectBase + '/collection/deleteMaterial',
+							dataType: 'json',
+							data: {
+								'id':data.id,
+								},
+							type: 'POST',
+							success: function(res){
+								if(res.code==0){
+									layer.msg("材料删除成功!");
+									table.reload('LAY-app-content-list');
+								} else {
+									layer.msg("材料删除失败!", function(){
+										});
+								}
+							} 
+						});
 						/*table.render({
 							elem: '#LAY-app-content-list',
 							width: 680,
@@ -254,7 +277,8 @@
 									console.log(submit);
 									submit.click();
 									
-									var materials = layui.data('materials');
+									table.reload('LAY-app-content-list');
+									/*var materials = layui.data('materials');
 									console.log(materials);
 									var data0 = [];
 									for(var val in materials){
@@ -293,12 +317,15 @@
 												}
 											]
 										]
-									});
+									});*/
 								},
 								content: 'new_material.html',
 								zIndex: layer.zIndex //重点1
 									,
 								success: function(layero, index) {
+									var metrics_id = layero.find('iframe').contents().find("#metrics_id");
+									metrics_id.val($('#id').val());
+									console.log(metrics_id);
 									layer.setTop(layero); //重点2
 								} 
 							});

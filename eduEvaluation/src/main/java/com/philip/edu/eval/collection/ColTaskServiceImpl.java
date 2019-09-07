@@ -112,7 +112,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 				school.setProcess_status(EvalConstants.PROCESS_STATUS_NOT_INPUT);
 			}
 			dao.insertColSchool(schools);
-			logger.info("sucessfully insert schools.");
+			//logger.info("sucessfully insert schools.");
 
 			// 3.insert task-major:
 			// 3.1 default school majors:
@@ -171,7 +171,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 					school_id2[index++] = tempId2[0];
 				}
 				dao.deleteTaskOldSchools(school_id2);
-				logger.info("successfully delete nonchose Schools");
+				//logger.info("successfully delete nonchose Schools");
 
 				for (int i = 0; i < majors.size(); i++) {
 					ColTaskMajor inputMajor = (ColTaskMajor) majors.get(i);
@@ -203,7 +203,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 						material.setForm_performance_id(pf1.getId());
 						dao.insertRelateMaterial(material);
-						logger.info("successfully insert one material");
+						//logger.info("successfully insert one material");
 					}
 					pf1.setMetrics_id(this.METRICS_SELF_EVAL_ID);
 					dao.insertPerformanceForm(pf1);
@@ -216,9 +216,9 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 						material.setForm_performance_id(pf1.getId());
 						dao.insertRelateMaterial(material);
-						logger.info("successfully insert one material");
+						//logger.info("successfully insert one material");
 					}
-					logger.info("successfully insert basic form");
+					//logger.info("successfully insert basic form");
 
 					// 5.insert form 2:
 					// 5.1 insert forms;
@@ -236,7 +236,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 						pf.setMetrics_id(metric.getId());
 						pf.setUnit(metric.getUnit());
 						dao.insertPerformanceForm(pf);
-						logger.info("successfully insert one performance form");
+						//logger.info("successfully insert one performance form");
 
 						// 5.2 insert materials:
 						materials = dao.getMaterialMetrics(metric.getId());
@@ -248,7 +248,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 							material.setForm_performance_id(pf.getId());
 							dao.insertRelateMaterial(material);
-							logger.info("successfully insert one material");
+							//logger.info("successfully insert one material");
 						}
 					}
 
@@ -303,13 +303,30 @@ public class ColTaskServiceImpl implements ColTaskService {
 					dao.insertPerformanceForm(pf2);
 					this.insertMaterials(pf2.getId(), this.template_capital_progress_form_id,
 							this.metrics_school_funding_internal_id);
-					logger.info("successfully insert capital progress.");
+					//logger.info("successfully insert capital progress.");
 				}
 			}
 		}
 
 		result = 1;
 
+		return result;
+	}
+	
+	public int insertMaterials(MetricsDetail metrics, PerformanceForm pf){
+		int result = 0;
+		List<Material> materials = dao.getMaterialMetrics(metrics.getId());
+		for (int k = 0; k < materials.size(); k++) {
+			Material material = (Material) materials.get(k);
+			material.setCreate_time(new Date());
+			material.setUpdate_time(new Date());
+			material.setIs_required(EvalConstants.MATERIAL_IS_REQUIRED);
+
+			material.setForm_performance_id(pf.getId());
+			result = dao.insertRelateMaterial(material);
+			//logger.info("successfully insert one material");
+		}
+		
 		return result;
 	}
 
@@ -573,7 +590,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 							material.setForm_performance_id(pf1.getId());
 							dao.insertRelateMaterial(material);
-							logger.info("successfully insert one material");
+							//logger.info("successfully insert one material");
 						}
 						pf1.setMetrics_id(this.METRICS_SELF_EVAL_ID);
 						dao.insertPerformanceForm(pf1);
@@ -586,7 +603,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 							material.setForm_performance_id(pf1.getId());
 							dao.insertRelateMaterial(material);
-							logger.info("successfully insert one material");
+							//logger.info("successfully insert one material");
 						}
 
 						// 5.insert form 2:
@@ -877,65 +894,84 @@ public class ColTaskServiceImpl implements ColTaskService {
 		use_properties(prop);
 		MetricsDetail metrics = new MetricsDetail();
 		metrics.setId(this.metrics_region_disbursement_amount_id);
-		metrics.setMetrics_name("自治区财政拨付额度");
-		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_disbursement_amount_id) + "项");
+		metrics.setMetrics_name("一、2018年自治区财政资助经费下达总额");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_region_disbursement_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_region_paid_hardware_amount_id);
-		metrics.setMetrics_name("     其中：硬件建设支出额度");
-		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_hardware_amount_id) + "项");
+		metrics.setMetrics_name("其中：硬件建设支出额度");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_region_paid_hardware_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_region_paid_internal_amount_id);
-		metrics.setMetrics_name("     其中：内涵建设支出额度");
+		metrics.setMetrics_name("    内涵建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_region_paid_internal_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_central_disbursement_amount_id);
-		metrics.setMetrics_name("中央财政拨付额度");
+		metrics.setMetrics_name("二、2018年中央财政资助经费下达总额");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_disbursement_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_central_paid_hardware_amount_id);
-		metrics.setMetrics_name("     其中：硬件建设支出额度");
+		metrics.setMetrics_name("其中：硬件建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_hardware_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_central_paid_internal_amount_id);
-		metrics.setMetrics_name("     其中：内涵建设支出额度");
+		metrics.setMetrics_name("    内涵建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_central_paid_internal_amount_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_school_funding_total_id);
-		metrics.setMetrics_name("学校配套经费额度");
+		metrics.setMetrics_name("三、学校配套经费额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_total_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_school_funding_hardware_id);
-		metrics.setMetrics_name("     其中：硬件建设支出额度");
+		metrics.setMetrics_name("其中：硬件建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_hardware_id) + "项");
 		metrics.setUnit("万元");
 		list.add(metrics);
 		
 		metrics = new MetricsDetail();
 		metrics.setId(this.metrics_school_funding_internal_id);
-		metrics.setMetrics_name("     其中：内涵建设支出额度");
+		metrics.setMetrics_name("   内涵建设支出额度");
 		metrics.setMaterial_num("要求" + dao.countMaterials(this.metrics_school_funding_internal_id) + "项");
 		metrics.setUnit("万元");
+		list.add(metrics);
+		
+		return list;
+	}
+	
+	public List<MetricsDetail> getBasicMetrics(Properties prop) {
+		List<MetricsDetail> list = new ArrayList();
+		// TODO Auto-generated method stub
+		use_properties(prop);
+		MetricsDetail metrics = new MetricsDetail();
+		metrics.setId(this.METRICS_MAJOR_BASIC_ID);
+		metrics.setMetrics_name("专业任务书");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.METRICS_MAJOR_BASIC_ID) + "项");
+		list.add(metrics);
+		
+		metrics = new MetricsDetail();
+		metrics.setId(this.METRICS_SELF_EVAL_ID);
+		metrics.setMetrics_name("专业自评报告");
+		metrics.setMaterial_num("要求" + dao.countMaterials(this.METRICS_SELF_EVAL_ID) + "项");
 		list.add(metrics);
 		
 		return list;
@@ -964,6 +1000,11 @@ public class ColTaskServiceImpl implements ColTaskService {
 	public int updateCapitalFormStatus(CapitalProgressForm cpf) {
 		// TODO Auto-generated method stub
 		return dao.updateCapitalFormStatus(cpf);
+	}
+
+	public int updateColTask(CollectionTask task) {
+		// TODO Auto-generated method stub
+		return dao.updateColTask(task);
 	}
 	
 	

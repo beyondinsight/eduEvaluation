@@ -9,26 +9,23 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<style >
-	.noborder td{
-	border:0;
-	text-align: right;
-	}
-	#main-tb span{
-	color:red;
-	}	
-	</style>
-	<body  style="background-color:white">
-	
-		<div class="layui-fluid" style="border: 0;">
-			<div class="layui-card-body" style="border: 0;">
-				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="col_task_form" style="border: 0;">
-				<input type="hidden" name="task_id" id="task_id"/>
-				<table class="layui-table" style="width:800px;border: 1px solid #e6e6e6;" id="main-tb">
-				 <tr class="noborder">
-					<td><span>*</span>专业填报任务名称：</td><td><input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input"></td>
-					<td><span>*</span>填报任务所属年度：</td><td style="text-align: left;">
-						<select name="year" id="year">
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form">
+					<div class="layui-form-item">
+						<input type="hidden" name="task_id" id="task_id"/>
+						<label class="layui-form-label" style="width: 120px;">专业填报任务名称</label>
+						<div class="layui-input-inline" style="width: 500px;">
+							<input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input">
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label" style="width: 120px;">填报任务所属年度</label>
+							<div class="layui-input-inline">
+								<select name="year" id="year">
 									<option value="2019">2019</option>
 									<option value="2020">2020</option>
 									<option value="2021">2021</option>
@@ -177,7 +174,42 @@
 
 				layui.data('editTask',null);
 
-		 
+				/*var itemTable = table.render({
+					elem: '#forms',
+					width: 615,
+					data: [{
+							"col_content": "专业基本情况"
+						}, {
+							"col_content": "绩效目标完成情况"
+						}, {
+							"col_content": "资金支出进度"
+						}]
+						//toolbar:'#toolbarDemo'
+						, 
+					page: false //开启分页
+						,
+					cols: [
+						[ //表头
+							{
+								type: 'numbers',
+								title: '编号',
+								align: 'center',
+								width: 80
+							}, {
+								field: 'col_content',
+								title: '填报内容',
+								width: 350,
+								align: 'center'
+							}, {
+								field: 'weight',
+								title: '权重',
+								width: 180,
+								templet: '#weight',
+								align: 'center'
+							}
+						]
+					]
+				});*/
 
 				schoolTable = table.render({
 					elem: '#LAY-app-content-list',
@@ -269,7 +301,7 @@
 						});
 						return ;
 					}
-					alert(schoolTable.config.data);
+					
 					task={
 						'name':$('#name').val(),
 						'year':$('#year').val(),

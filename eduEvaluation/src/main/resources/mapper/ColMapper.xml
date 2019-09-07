@@ -77,6 +77,9 @@
 		<result property="collection_major_id" column="collection_major_id" />
 		<result property="metrics_id" column="metrics_id" />
 		<result property="metrics_name" column="metric_name" />
+		<result property="metrics_level" column="level" />
+		<result property="metrics_pid" column="pid" />
+		<result property="metrics_order" column="morder"/>
 		<result property="unit" column="unit" />
 		<result property="current_value" column="current_value" />
 		<result property="target_value" column="target_value" />
@@ -131,6 +134,31 @@
     	insert into tbl_collection_tasks(task_name, task_year, start_time, end_time, status, use_metrics_system, form_basic_weight, form_performance_weight, form_capitalprogress_weight, create_time, update_time) 
     	values(#{task_name}, #{task_year}, #{start_time}, #{end_time}, #{status}, #{use_metrics_system}, #{form_basic_weight}, #{form_performance_weight}, #{form_capitalprogress_weight}, #{create_time}, #{update_time})
     </insert>
+    
+    <update id="updateColTask" parameterType="com.philip.edu.eval.bean.CollectionTask">
+    	 update tbl_collection_tasks
+    <set >
+      <if test="task_name != null" >
+        task_name = #{task_name,jdbcType=VARCHAR},
+      </if>
+      <if test="task_year != null" >
+        task_year = #{task_year,jdbcType=VARCHAR},
+      </if>
+      <if test="update_time != null" >
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="form_basic_weight != null" >
+        form_basic_weight = #{form_basic_weight,jdbcType=INTEGER},
+      </if>
+      <if test="form_performance_weight != null" >
+        form_performance_weight = #{form_performance_weight,jdbcType=INTEGER},
+      </if>
+      <if test="form_capitalprogress_weight != null" >
+        form_capitalprogress_weight = #{form_capitalprogress_weight,jdbcType=INTEGER},
+      </if>
+    </set>
+          where id = #{id,jdbcType=BIGINT}
+    </update>
     
     <insert id="insertTaskSchool" parameterType="com.philip.edu.eval.bean.ColTaskSchool" useGeneratedKeys="true" keyProperty="id" >
     	insert into tbl_collection_school(collection_task_id, school_id, process_status)
@@ -212,7 +240,7 @@
     
     <insert id="insertPerformanceForm" parameterType="com.philip.edu.eval.bean.PerformanceForm" useGeneratedKeys="true" keyProperty="id">
     	insert into tbl_form_performance(collection_major_id, metrics_id, unit, create_time, update_time, process_status, for_template)
-    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status}, for_template)
+    	values(#{collection_major_id}, #{metrics_id}, #{unit}, #{create_time}, #{update_time}, #{process_status}, #{for_template})
     </insert>
     
     <insert id="insertCapitalProgressForm" parameterType="com.philip.edu.eval.bean.CapitalProgressForm">
@@ -284,7 +312,7 @@
     </delete>
     
     <select id="getPerformanceForm" resultMap="performanceResultMap" >
-    	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
+    	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, m.level, m.pid, m.morder, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
     	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id} and for_template=#{for_template}
     </select>
     
