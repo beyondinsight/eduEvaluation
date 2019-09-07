@@ -486,7 +486,7 @@ public class ColTaskController {
 					MetricsDetail metrics = (MetricsDetail)metricsC.get(l);
 					metrics.setLevel1_name(metricsP.getMetrics_name());
 					metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
-					newList.add(metrics);
+					newList.add(metrics); 
 				}
 			}
 		}
@@ -737,6 +737,8 @@ public class ColTaskController {
 		// update all the status:
 		service.updatePerformanceStatus(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION,
 				Integer.parseInt(performance_id));
+		
+		//service.updateTaskStatus(id, process_status)
 
 		logger.info("update performance form success");
 

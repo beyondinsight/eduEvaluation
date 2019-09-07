@@ -10,8 +10,14 @@ public class MajorCollectionStatus {
 	private String template_type_string;
 	private String process_status;
 	private int collection_major_id;
+	private int process_status_key;
 	
-	
+	public int getProcess_status_key() {
+		return process_status_key;
+	}
+	public void setProcess_status_key(int process_status_key) {
+		this.process_status_key = process_status_key;
+	}
 	public int getCollection_major_id() {
 		return collection_major_id;
 	}

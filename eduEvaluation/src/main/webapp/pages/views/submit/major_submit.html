@@ -30,12 +30,20 @@
 				</div>
 
 				<div class="layui-card-body">
-					<input type="hidden" id="school" name="school"/>
-					<input type="hidden" id="major" name="major"/>
-					<input type="hidden" id="year" name="year"/>
+					<input type="hidden" id="school" name="school" />
+					<input type="hidden" id="major" name="major" />
+					<input type="hidden" id="year" name="year" />
 					<table id="major_list" lay-filter="major_list"></table>
 					<script type="text/html" id="major_list_operation_toolbar">
-						<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="open"><i class="layui-icon layui-icon-list"></i>打开清单</a>
+						<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="open"><i class="layui-icon layui-icon-list"></i>打开</a>
+						
+						{{#      if(d.major_status_key == "N" || d.major_status_key == "I" ||d.major_status_key == "C" ){        }}
+						
+						<a class="layui-btn layui-btn layui-btn-xs" lay-event="submit"><i class="layui-icon layui-icon-ok"></i>提交</a>
+						
+						 {{#      } else{       }}
+						 <a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="disabled"><i class="layui-icon layui-icon-ok"></i>提交</a>
+						 {{#  }    }}
 					</script>
 				</div>
 
@@ -66,13 +74,13 @@
 							admin = layui.admin;
 						var $ = layui.jquery,
 							layer = layui.layer;
-							
+
 						var userinfo = layui.data('userinfo');
 
 						table.render({
 							elem: '#major_list',
 							//height: 300,
-							width: 1000,
+							//width: 900,
 							//page: true, //开启分页
 							data: [],
 							cols: [
@@ -81,7 +89,7 @@
 										type: 'numbers',
 										title: '序号',
 										align: 'center',
-										width: 50
+										width: 60
 									},
 									{
 										field: 'school_name',
@@ -96,42 +104,23 @@
 									{
 										field: 'major_status',
 										title: '专业填报状态',
-										align: 'center',
-								    	templet: function(d) {
-								    		if(d.major_status == 'N'){
-								    			return  '未填报' ;
-								    		}else if(d.major_status == 'I'){
-								    			return  '填报中' ;		
-										    }else if(d.major_status == 'S'){
-								    			return  '已提交，待学校审核' ;		
-										    }else if(d.major_status == 'R'){
-								    			return  '学校退回，待重新填报' ;		
-										    }else if(d.major_status == 'G'){
-								    			return  '学校已审核,待教育厅审核' ;		
-										    }else if(d.major_status == 'E'){
-								    			return  '教育厅退回，待重新填报' ;		
-										    }else if(d.major_status == 'A'){
-										    	return '教育厅已审核入库';
-										    }else{
-											  return '';
-										 }
-										}
+										align: 'center'
 									},
 									{
 										field: 'update_time',
 										title: '状态更新时间',
 										align: 'center',
 										width: 180,
-										templet :function (row){
-								            return updateTime(row.update_time);
-								        }
+										templet: function(row) {
+											return updateTime(row.update_time);
+										}
 									},
 									{
 										fixed: 'right',
 										title: '操作',
 										toolbar: '#major_list_operation_toolbar',
 										align: 'center',
-										width: 120
+										width: 150
 									}
 								]
 							]
@@ -140,7 +129,6 @@
 						table.render({
 							elem: '#collection_list',
 							//height: 300,
-							width: 1000,
 							data: [],
 							//page: true, //开启分页
 							cols: [
@@ -149,18 +137,25 @@
 										type: 'numbers',
 										title: '序号',
 										align: 'center',
-										width: 50
+										width: 60
 									},
 									{
 										field: 'collection_template_name',
 										title: '填报内容',
-										align: 'center'
+										align: 'center',
+										width: 200
 									},
 									{
 										field: 'process_status',
 										title: '填报状态',
 										align: 'center',
 										width: 200
+									},
+									{
+										field: 'process_status_note',
+										title: '填报状态说明',
+										align: 'center',
+										width: 300
 									},
 									{
 										fixed: 'right',
@@ -178,7 +173,7 @@
 							url: '/eduEvaluation/userTask/userTaskList',
 							dataType: 'json',
 							data: {
-								'token' : userinfo['token']
+								'token': userinfo['token']
 							},
 							type: 'get',
 							success: function(res) {
@@ -199,7 +194,15 @@
 						form.on('select(userTaskSelect)', function(data) {
 							//alert(data.value);
 
-							if (data.value !=null && data.value!="") {
+							if (data.value != null && data.value != "") {
+
+								layui.sessionData("selectedTask", {
+									key: "task_id",
+									value: data.value
+								});
+
+								console.log("select task id:  " + layui.sessionData("selectedTask").task_id);
+
 								$.ajax({
 									url: '/eduEvaluation/userTask/userTaskByTaskID',
 									dataType: 'json',
@@ -247,63 +250,130 @@
 								});
 								$('#school').val(obj.data.school_name);
 								$('#major').val(obj.data.major_name);
+							} else if (obj.event == 'submit') {
+
+								$.ajax({
+									url: '/eduEvaluation/userTask/majorCollectionStatus',
+									dataType: 'json',
+									type: 'get',
+									data: {
+										task_id: obj.data.task_id,
+										school_id: obj.data.school_id,
+										major_id: obj.data.major_id
+									},
+									success: function(res) {
+										var readyToSubmit = 1;
+										//循环所有填报模板的状态,在所有模板的状态都为"填报完成"时,可以进行提交
+										for (var i in res.data) {
+											if (res.data[i].process_status_key != 25) {
+												readyToSubmit = 0;
+												break;
+											}
+										}
+
+										//测试提交时,临时使用,
+										readyToSubmit = 1;
+
+										if (readyToSubmit == 0) {
+											layer.msg("尚未完成全部模板的填报，不能提交");
+										} else if (readyToSubmit == 1) {
+											layer.confirm('确认提交？', {
+												closeBtn: 0,
+												btn: ['确定', '取消'],
+												btn1: function() {
+													//layer.msg('按钮1');
+
+													$.ajax({
+
+														url: '/eduEvaluation/userTask/updateMajorStatus',
+														dataType: 'json',
+														type: 'post',
+														data: {
+															collection_school_id: obj.data.collection_school_id,
+															major_id: obj.data.major_id
+														},
+														success: function(update_res) {
+															layer.msg(update_res.msg);
+
+
+															table.reload('major_list', {
+																url: '/eduEvaluation/userTask/majorStatus',
+																where: {
+																	task_id: layui.sessionData("selectedTask").task_id,
+																	'token': userinfo['token']
+																}
+															});
+
+														},
+														error: function(update_res) {
+															layer.msg(update_res.msg);
+														}
+													});
+												},
+											});
+										}
+									}
+								});
 							}
 						});
-						
+
+
+
+
 						table.on('tool(collection_list)', function(obj) {
 							var data = obj.data;
-							console.log("id:" + data.collection_major_id); 
+							console.log("id:" + data.collection_major_id);
 							if (obj.event == 'set') {
 								console.log("entering set");
-								layui.data('collection',{
-									key:'collection_major_id',
-									value:data.collection_major_id
+								layui.data('collection', {
+									key: 'collection_major_id',
+									value: data.collection_major_id
 								});
-								
+
 								var a = $('#userTaskSelect').find("option:selected").text();
 								console.log("value: " + a);
-								
-								layui.data('info',{
-									key:'basic_info',
-									value:{
-										'task_name':$('#userTaskSelect').find("option:selected").text(),
-										'task_year':$('#year').val(),
-										'school':$('#school').val(),
-										'major':$('#major').val()
+
+								layui.data('info', {
+									key: 'basic_info',
+									value: {
+										'task_name': $('#userTaskSelect').find("option:selected").text(),
+										'task_year': $('#year').val(),
+										'school': $('#school').val(),
+										'major': $('#major').val()
 									}
 								})
-								
+
 								console.log("template:" + data.template_type_string);
-								if( data.template_type_string=="major_performance"){
+								if (data.template_type_string == "major_performance") {
 									console.log("to open performance page");
 									parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
-								} else if( data.template_type_string == "major_capital_process"){
+								} else if (data.template_type_string == "major_capital_process") {
 									console.log("to open capital page");
 									parent.layui.index.openTabsPage("collection/capital_progress_collection.html", "资金支出进度填报");
-								} else if( data.template_type_string == "major_basic_info"){
+								} else if (data.template_type_string == "major_basic_info") {
 									console.log("entering basic info");
-									parent.layui.index.openTabsPage("template/caller.html", "专业数据填报"); 
+									parent.layui.index.openTabsPage("template/caller.html", "专业数据填报");
 								}
-							} 
+							}
 						});
 
 					});
-			
-			 
-			   function updateTime(v){
-					var date = new Date(v);
-				    var y = date.getFullYear();
-				    var m = date.getMonth()+1;
-				    m = m<10?'0'+m:m;
-				    var d = date.getDate();
-				    d = d<10?("0"+d):d;
-				    var h = date.getHours();
-				    h = h<10?("0"+h):h;
-				    var M = date.getMinutes();
-				    M = M<10?("0"+M):M;
-				    var str = y+"-"+m+"-"+d+" "+h+":"+M;
-				    return str;
-			   }
+
+
+			function updateTime(v) {
+				var date = new Date(v);
+				var y = date.getFullYear();
+				var m = date.getMonth() + 1;
+				m = m < 10 ? '0' + m : m;
+				var d = date.getDate();
+				d = d < 10 ? ("0" + d) : d;
+				var h = date.getHours();
+				h = h < 10 ? ("0" + h) : h;
+				var M = date.getMinutes();
+				M = M < 10 ? ("0" + M) : M;
+				var str = y + "-" + m + "-" + d + " " + h + ":" + M;
+				return str;
+			}
 		</script>
 	</body>
 </html>

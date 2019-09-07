@@ -24,4 +24,5 @@ public interface UserTaskService {
 	
 	public List<MajorTask> searchTaskList(int task_id, int school_id, int major_id, char process_status);
 	
+	public int updateMajorStatus( int collection_school_id,  int major_id);
 }

@@ -86,4 +86,6 @@ public interface ColMapper {
 	public List<MajorStatus> getMajorStatusByTask(@Param("user_id") int user_id, @Param("task_id") int task_id);
 	
 	public List<MajorCollectionStatus> getMajorCollectionStatus(@Param("task_id") int task_id, @Param("school_id") int school_id, @Param("major_id") int major_id);
+	
+	public int updateMajorStatus( @Param("collection_school_id") int collection_school_id, @Param("major_id") int major_id);
 } 

@@ -155,17 +155,17 @@ public class UserTaskController {
 			process_status = '-';
 
 		ArrayList taskList = (ArrayList) userTaskService.searchTaskList(task_id, school_id, major_id, process_status);
-   
+
 		logger.info("successfully get major task list");
 
 		data.setMsg("已获取所有专业的任务情况");
 		data.setCode(0);
 		data.setData(taskList);
 		data.setCount(taskList.size());
-		// BackendData data = new BackendData();   
+		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
-	} 
+	}
 
 	@RequestMapping(value = "/userTaskByTaskID", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getUserTaskByTaskID(HttpServletRequest request) {
@@ -273,6 +273,30 @@ public class UserTaskController {
 		data.setData(tempList);
 		data.setCount(tempList.size());
 		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/updateMajorStatus", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> updateMajorStatus(HttpServletRequest request) {
+		int collection_school_id = Integer.parseInt(request.getParameter("collection_school_id"));
+		int major_id = Integer.parseInt(request.getParameter("major_id"));
+
+		logger.info(
+				"Try to update major status. collection_school_id " + collection_school_id + " major_id" + major_id);
+		int returnCode = 1;
+		String msg = "提交失败";
+
+		if (userTaskService.updateMajorStatus(collection_school_id, major_id) == 1) {
+			logger.info("successfully update major status. collection_school_id " + collection_school_id + " major_id"
+					+ major_id);
+			msg = "已成功提交";
+			returnCode = 0;
+		}
+
+		BackendData data = new BackendData();
+		data.setMsg(msg);
+		data.setCode(returnCode);
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}

@@ -845,7 +845,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 		info.setItem_name("basic_info");
 		pf_id = ((Integer)al.get(0)).intValue();
 		info.setPerformance_id(pf_id);
-		String materials_num = "要求1项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		String materials_num = "要求" + dao.countMaterials(this.METRICS_MAJOR_BASIC_ID) +"项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		info.setMaterials_num(materials_num);
 		result.add(info);
 		
@@ -854,7 +854,7 @@ public class ColTaskServiceImpl implements ColTaskService {
 		info.setItem_name("self_eval");
 		pf_id = ((Integer)al.get(0)).intValue();
 		info.setPerformance_id(pf_id);
-		materials_num = "要求1项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
+		materials_num = "要求" + dao.countMaterials(this.METRICS_SELF_EVAL_ID) +"项,已提交" + dao.countUploadedMaterial(pf_id) + "项";
 		info.setMaterials_num(materials_num);
 		result.add(info);
 		

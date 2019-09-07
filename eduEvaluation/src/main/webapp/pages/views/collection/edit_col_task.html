@@ -9,55 +9,33 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
+	<style >
+	.noborder td{
+	border:0;
+	text-align: right;
+	}
+	#main-tb span{
+	color:red;
+	}	
+	</style>
 	<body>
 
-		<div class="layui-fluid">
-			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form">
-					<div class="layui-form-item">
-						<input type="hidden" name="task_id" id="task_id"/>
-						<label class="layui-form-label" style="width: 120px;">专业填报任务名称</label>
-						<div class="layui-input-inline" style="width: 500px;">
-							<input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input">
-						</div>
-					</div>
-					<div class="layui-form-item">
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 120px;">填报任务所属年度</label>
-							<div class="layui-input-inline">
-								<select name="year" id="year">
+		<div class="layui-fluid"   style="border: 0;">
+			<div class="layui-card-body"  style="border: 0;">
+				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="col_task_form" style="border: 0;">
+				<input type="hidden" name="task_id" id="task_id"/>
+				<table class="layui-table" style="width:800px;border: 1px solid #e6e6e6;" id="main-tb">
+				 <tr class="noborder">
+					<td><span>*</span>专业填报任务名称：</td><td><input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+					<td><span>*</span>填报任务所属年度：</td><td style="text-align: left;">
+						<select name="year" id="year">
+									<option value="2018">2018</option>
 									<option value="2019">2019</option>
 									<option value="2020">2020</option>
 									<option value="2021">2021</option>
 									<option value="2022">2022</option>
 									<option value="2023">2023</option>
-									<option value="2024">2024</option>
-									<option value="2025">2025</option>
-									<option value="2026">2026</option>
-									<option value="2027">2027</option>
-									<option value="2028">2028</option>
-									<option value="2029">2029</option>
-									<option value="2030">2030</option>
-									<option value="2031">2031</option>
-									<option value="2032">2032</option>
-									<option value="2033">2033</option>
-									<option value="2034">2034</option>
-									<option value="2035">2035</option>
-									<option value="2036">2036</option>
-									<option value="2037">2037</option>
-									<option value="2038">2038</option>
-									<option value="2039">2039</option>
-									<option value="2040">2040</option>
-									<option value="2041">2041</option>
-									<option value="2042">2042</option>
-									<option value="2043">2043</option>
-									<option value="2044">2044</option>
-									<option value="2045">2045</option>
-									<option value="2046">2046</option>
-									<option value="2047">2047</option>
-									<option value="2048">2048</option>
-									<option value="2049">2049</option>
-									<option value="2050">2050</option>
+									<option value="2024">2024</option>									
 								</select>
 					</td>
 				 </tr>
@@ -96,8 +74,9 @@
 				</div>
 				</div>
 
+
 				 
-				<div class="layui-card-body" >
+					<div class="layui-card-body" >
 					<div style="padding-bottom: 10px;">
 						<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 为任务分配院校</button>
 						<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
@@ -118,7 +97,8 @@
 					</div>
 				</div>
 			
-		</div>
+			</div>
+		 
 
 		<script src="../../layuiadmin/layui/layui.js"></script>
 		<script src="../util/Constants.js"></script>
@@ -137,16 +117,16 @@
 					projectBase = Class.getURL();
 				
 				numinp.init({
-					    // 123：123键置顶, 789：789键置顶
-					    topBtns: 123,
-					    // 右侧功能按钮
-					    rightBtns: false,
-					    // 监听键盘事件
-					    listening: false,
-					    // 批量配置默认小数精确度
-					    defaultPrec: '0'
-					  });
-				 
+				    // 123：123键置顶, 789：789键置顶
+				    topBtns: 123,
+				    // 右侧功能按钮
+				    rightBtns: false,
+				    // 监听键盘事件
+				    listening: false,
+				    // 批量配置默认小数精确度
+				    defaultPrec: '0'
+				  });
+				
 				var data0, schoolTable;
 				
 				var data = layui.data('editTask');
@@ -294,15 +274,15 @@
 					
 					var total = parseInt($('#weighting1').val()) + parseInt($('#weighting2').val()) + parseInt($('#weighting3').val());
 					console.log(total);
-
 					if( total != 100){
 						layer.msg('权重相加不等于100!', function(){
 						  //layer.msg('权重相加不等于100!');
 						});
-						return ;
+						return false;
 					}
 					
 					task={
+						'task_id':$('#task_id').val(),
 						'name':$('#name').val(),
 						'year':$('#year').val(),
 						'startDate':test1,
@@ -316,7 +296,7 @@
 
 					
 					$.ajax({
-						url: projectBase + '/collection/createTask',
+						url: projectBase + '/collection/editTask',
 						dataType: 'json',
 						data: task,
 						type: 'POST',
@@ -324,7 +304,7 @@
 						success: function(res){
 							//data0 = JSON.parse(res.data);
 							/*if(res.code==1){*/
-								layer.msg("填报任务创建成功!");
+								layer.msg("填报任务修改成功!");
 								setTimeout(function(){
 									//console.log(parent.layui.admin.events);
 									//parent.index.refreshAndCloseTabs();
@@ -343,12 +323,30 @@
 				});
 
 				//监听行单击事件（单击事件为：rowDouble）
-				/* table.on('row(LAY-app-content-list)', function(obj) {
+				table.on('row(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
-			
+
+					/*layer.alert(JSON.stringify(data), {
+					  title: '当前行数据：'
+					});*/
+ 
+					/*$.ajax({
+						url: projectBase + '/dictionary/chosenMajorInfo',
+						dataType: 'json',
+						data: {
+							"school_id": data.id
+						},
+						type: 'GET',
+						async: false,
+						success: function(res) {
+							//data0 = JSON.parse(res.data);
+							data0 = res.data;
+						}
+					});*/
+					/* 
 					table.render({
 						elem: '#major-list',
-						width: 800,
+						width: 680,
 						height: 320,
 						url: projectBase + "/collection/chosenMajor?collection_school_id=" + data.collection_school_id,
 							//toolbar:'#toolbarDemo'
@@ -357,29 +355,23 @@
 						cols: [
 							[ //表头
 								{
-									field: 'school_code',
-									title: '院校代码',
-									align: 'center' 
-								}, {
-									field: 'school_name',
-									title: '院校名称',
-									align: 'center' 
-								},{
 									field: 'major_code',
 									title: '专业代码',
-									align: 'center' 
+									align: 'center',
+									width: 230
 								}, {
 									field: 'major_name',
 									title: '专业名称',
-									align: 'center' 
+									align: 'center',
+									width: 450
 								}
 							]
 						]
-					});
+					}); */
 
 					//标注选中样式
 					//obj.tr.addClass('layui-table-click').siblings().removeClass('layui-table-click');
-				}); */
+				});
 
 				table.on('tool(LAY-app-content-list)', function(obj) {
 					var data = obj.data;
@@ -426,11 +418,11 @@
 											},{
 												field: 'major_code',
 												title: '专业代码',
-												align: 'center' 
+												align: 'center'
 											}, {
 												field: 'major_name',
 												title: '专业名称',
-												align: 'center' 
+												align: 'center'
 											}
 										]
 									]
