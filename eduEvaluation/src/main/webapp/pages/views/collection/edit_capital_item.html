@@ -13,17 +13,17 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="metrics_form">
+				<div class="layui-form   layuiadmin-card-header-auto"  >
 					
 					<div class="layui-card-body">
 						<div style="padding-bottom: 10px;">
-							<input type="hidden" id="metrics_id" name="metrics_id"/>
+							<input  id="metrics_id" name="metrics_id"/>
 							<button class="layui-btn layuiadmin-btn-list" data-type="add"><i class="layui-icon layui-icon-add-1"></i> 添加</button>
 							<!--<button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i> 移除</button>-->
 						</div>
 						<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
-						  <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i></button>
+						  <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</button>
 						</script>
 					</div>
 					
@@ -87,11 +87,11 @@
 
 				//监听搜索
 				form.on('submit(metrics_form)', function(data) {
-										
+									
 					var data0 = layui.data('materials');
 										
 					var metrics={
-						'id':$('#id').val(),
+						'id':$('#metrics_id').val(),
 						'level':$('#level').val(),
 						'metrics_code':$('#metrics_code').val(),
 						'unit':$('#unit').val(),
@@ -108,23 +108,28 @@
 						data: metrics,
 						type: 'POST',
 						success: function(res){
+							alert(33);
 							if(res.code==1){
-								layer.msg("指标修改成功!");
+								parent.layer.msg("指标修改成功!");
 								setTimeout(function(){
 									parent.layui.table.reload('LAY-app-content-list'); //重载表格
 									var index = parent.layer.getFrameIndex(window.name);
 									parent.layer.close(index); //再执行关闭   
 									},1200);
 							} else {
-								layer.msg("指标修改失败!", function(){
+								parent.layer.msg("指标修改失败!", function(){
 									});
 							}
-						} 
-					});
-					
-					
+							parent.layer.close(index);
+						} ,error:function (data) {
+							alert(999);
+							parent.layer.close(index);
+			    		}  
+					}); 
+				
+					 parent.layer.close(index); 
 				});
-
+				
 				//监听行单击事件（单击事件为：rowDouble）
 
 				table.on('tool(LAY-app-content-list)', function(obj) {
@@ -148,7 +153,10 @@
 									layer.msg("指标修改失败!", function(){
 										});
 								}
-							} 
+							},error:function (data) {
+								
+								 
+			    			}   
 						});
 						
 						table.reload('LAY-app-content-list');

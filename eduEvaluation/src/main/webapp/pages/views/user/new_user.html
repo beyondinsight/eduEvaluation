@@ -196,23 +196,7 @@ color:red;
       var field = data.field; //获取提交的字段
       var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
       //提交 Ajax 成功后，关闭当前ajax弹层并重载表格
-      //$.ajax({});
-      
- 
-		  /* var uname = field.userName;
-		  alert(uname);
-		  //用户名验证
-		    username_regExp = /^[a-zA-Z0-9_-]{4,9}$/;
-		    //密码
-		    password_regExp = /^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*]+$)[\da-zA-Z!#$%^&*]{6,20}$/;
-		    //真实姓名
-		    fullname_regExp = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/;
-		   
-		    var user_name = username_regExp.test(field.userName);
-	        var pass_word = password_regExp.test(field.password);
-		    var full_name = fullname_regExp.test(field.chineseName); */
-		    
-		    
+	    
     
 	  $.ajax({
 		  type: 'POST',

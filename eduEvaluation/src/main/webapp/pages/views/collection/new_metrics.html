@@ -9,14 +9,14 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<body>
+	<body style="background-color: white;">
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="metrics_form">
+				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="metrics_form">
 					<div class="layui-form-item">
 						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 70px;">指标级别<span style="color: red;">* </span></label>
+							<label class="layui-form-label" style="width: 80px;"><span style="color: red;">* </span>指标级别：</label>
 							<div class="layui-input-inline" style="width: 120px">
 								<select name="level" id="level">
 									<option value="1">一级指标</option>
@@ -25,31 +25,31 @@
 							</div>
 						</div>
 						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 70px;">指标编号<span style="color: red;">* </span></label>
+							<label class="layui-form-label" style="width: 80px;"><span style="color: red;">* </span>指标编号：</label>
 							<div class="layui-input-inline" style="width: 120px;">
-								<input type="text" name="metrics_code" id="metrics_code" required lay-verify="required" autocomplete="off"
+								<input type="text" name="metrics_code" id="metrics_code" placeholder="必填项" required lay-verify="required" autocomplete="off"
 								 class="layui-input">
 							</div>
 						</div>
-						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 60px;">单位<span style="color: red;">* </span></label>
-							<div class="layui-input-inline" style="width: 120px;">
-								<input type="text" name="unit" id="unit" required lay-verify="required" autocomplete="off" class="layui-input">
+						<div class="layui-inline" style="right:-5px;">
+							<label class="layui-form-label" style="width: 60px;"><span style="color: red;">* </span>单位：</label>
+							<div class="layui-input-inline" style="width: 115px;">
+								<input type="text" name="unit" id="unit" required lay-verify="required" placeholder="必填项" autocomplete="off" class="layui-input"  >
 							</div>
 						</div>
 					</div>					
 					
 					<div class="layui-form-item">
-						<label class="layui-form-label" style="width: 70px;">指标名称<span style="color: red;">* </span></label>
-						<div class="layui-input-inline" style="width: 600px;">
+						<label class="layui-form-label" style="width: 80px;"><span style="color: red;">* </span>指标名称：</label>
+						<div class="layui-input-inline" style="width: 610px;">
 							<input type="text" name="name" id="name" placeholder="请输入指标名称" required lay-verify="required" autocomplete="off" class="layui-input">
 						</div>
 					</div>
 					
 					<div class="layui-form-item">
-						<label class="layui-form-label" style="width: 70px;">备注</label>
+						<label class="layui-form-label" style="width: 80px;">备注：</label>
 						<div class="layui-input-inline" style="width: 610px;">
-							<textarea name="memo" style="width: 600px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
+							<textarea name="memo" style="width: 610px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
 					</div>
 					
@@ -96,7 +96,7 @@
 
 				schoolTable = table.render({
 					elem: '#LAY-app-content-list',
-					width: 685,
+					width: 705,
 					height: 320,
 					data: []
 						//toolbar:'#toolbarDemo'
@@ -109,7 +109,7 @@
 								field: 'material_name',
 								title: '支撑材料',
 								align: 'center',
-								width: 190
+								width: 250
 							}, {
 								field: 'memo',
 								title: '备注',
@@ -239,7 +239,7 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '添加材料',
-								area: ['60%', '60%'],
+								area: ['460px', '313px'],
 								//shade: 0,
 								maxmin: true,
 								/* offset: [ //为了演示，随机坐标
@@ -277,7 +277,8 @@
 												{
 													field: 'material_name',
 													title: '支撑材料',
-													align: 'center' 
+													align: 'center',
+													width: 250 
 												}, {
 													field: 'memo',
 													title: '备注',
@@ -285,7 +286,8 @@
 												}, {
 													title: '操作',
 													toolbar: '#test-table-toolbar-barDemo',
-													align: 'center' 
+													align: 'center',
+													width: 80 
 												}
 											]
 										]

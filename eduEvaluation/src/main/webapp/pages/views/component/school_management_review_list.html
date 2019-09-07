@@ -51,11 +51,25 @@ text-align: left;
      	    	</tr>
      	    </table>		        
             <table  id="demo" class="layui-table"  ></table>
-            <script type="text/html" id="test-table-toolbar-barDemo">
-       	
-    	 
- 					 
-       		</script>
+             <script type="text/html" id="test-table-toolbar-barDemo">
+ 			  {{#  if(d.process_status == 'N' ){ }}
+ 					             
+              {{#  } else if(d.process_status == 'I' ) { }}
+           		
+              {{#  } else if(d.process_status == 'S' ) { }}
+					 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+					 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+              		 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit"><i class="layui-icon layui-icon-delete"></i>提交</a>
+			  {{#  } else if(d.process_status == 'R' ) { }}
+
+ 			  {{#  } else if(d.process_status == 'G' ) { }}
+			        <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+ 			  {{#  } else if(d.process_status == 'E' ) { }}
+
+ 			  {{#  } else if(d.process_status == 'A' ) { }}
+					 <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+			  {{#  } }}
+            </script>
 	        </div>
     
         </div>      
@@ -94,7 +108,7 @@ text-align: left;
 				   ,{field: 'major_name', title: '专业', align:'center'}
 				   ,{field: 'status_msg', title: '专业填报状态', align:'center'}
 				   //,{field: 'counts', title: '状态更新时间', align:'center'}
-				    ,{field: 'process_status', title: '填报状态码', align:'center'}
+				   /*  ,{field: 'process_status', title: '填报状态码', align:'center'} */
 				   ,{fixed: 'right', title:'操作',   toolbar: '#test-table-toolbar-barDemo', align:'center'} 
 			  ]]
 			});  

@@ -9,11 +9,11 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<body>
+	<body  style="background: white;">
 
-		<div class="layui-fluid">
-			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form" id="col_task_form">
+		<div class="layui-fluid"  >
+			<div class="layui-card" >
+				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="col_task_form" id="col_task_form"   >
 	
 					<!--<div class="layui-form-item">
 					<div style="padding-right: 150px;">
@@ -75,40 +75,45 @@
 					url: projectBase + '/collection/getMetrics',
 					page: true, //开启分页
 					height: 500	,
+					width:1700,
 					cols: [
 						[ //表头
 							{
 								field: 'pid',
 								title: '一级指标编号',
-								align: 'center' 
+								align: 'center',
+								width: 150 
 							}, {
 								field: 'level1_name',
 								title: '一级指标',
-								align: 'center' 
+								align: 'center',
+								width: 200 
 							},{
 								field: 'metrics_code',
 								title: '二级指标编号',
-								align: 'center' 
+								align: 'center',
+								width: 150
+								
 							}, {
 								field: 'metrics_name',
 								title: '二级指标',
 								align: 'center',
-								width: 250
+								width: 200
 							}, {
 								field: 'unit',
 								title: '单位',
 								align: 'center',
-								width: 60
+								width: 80
 							}, {
 								field: '',
 								title: '立项时数值',
 								align: 'center',
-								width: 80
+								width: 120
 							},  {
 								field: '',
 								title: '2018年目标值',
 								align: 'center',
-								width: 80
+								width: 120
 							},  {
 								field: '',
 								title: '实际完成值',
@@ -337,7 +342,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '修改指标定义',
-							area: ['50%', '70%'],
+							area: ['780px', '70%'],
 							//shade: 0,
 							maxmin: true,
 							btn: ['确认', '取消'],
@@ -402,7 +407,7 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '指标定义',
-								area: ['800px', '90%'],
+								area: ['780px', '70%'],
 								//shade: 0,
 								maxmin: true,
 							 

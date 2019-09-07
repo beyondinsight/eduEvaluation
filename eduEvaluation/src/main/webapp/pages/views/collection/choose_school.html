@@ -8,6 +8,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 </head>
+<style>
+#schoolChose li{
+text-align: left;
+}
+</style>
 <body>
   <div align="center" class="layui-form" lay-filter="layuiadmin-app-form-list" id="layuiadmin-app-form-list" style="padding: 20px 30px 0 0;">
 	<div class="layui-form-item layui-hide">
@@ -68,6 +73,7 @@
 	  value: temp,
 	  width: 270
       ,title: ['备选院校列表', '已选院校列表']
+      ,align: ['left','left']
       ,showSearch: true,
 	  id: 'keyChosen'
     });

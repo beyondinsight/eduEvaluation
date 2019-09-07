@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -107,9 +108,10 @@ public class UsersController {
 
 		// get user id:
 		String username = user_name_claim.asString();
+		System.out.println("*******"+username);
 		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
 		ArrayList usersList  = new ArrayList();
-		if(user_mes.getRoleId()==1) {
+		if(user_mes.getRoleId()!= null && user_mes.getRoleId()==1) {
 			 usersList = (ArrayList) service.getUsersList(user_mes.getId());
 			 data.setData(usersList);
 			 data.setCount(usersList.size());
@@ -118,7 +120,13 @@ public class UsersController {
 				usersList = (ArrayList) service.getUsersListByFiled(user_mes);
 				data.setData(usersList);
 				data.setCount(usersList.size());
-			}			
+			}	else {
+				data.setMsg("您的用户没有分配角色");
+				data.setCode(20);
+				// BackendData data = new BackendData();
+
+				return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+			}		
 		}
 		
 		logger.info("successfully get the users list");
@@ -817,13 +825,18 @@ public class UsersController {
 		boolean isdown = exportExcel(list, file_path);
 
 		File f = new File(file_path);
-		if (!f.exists() || !isdown) {
-			response.sendError(404, "File not found!");
+		if (!f.exists() ) {
+			//response.sendError(404, "File not found!");
+			System.out.println("下载文件不存在");
+			return;
+		}
+		if(!isdown) {
+			System.out.println("下载失败");
 			return;
 		}
 		String fileName = f.getName();
-		fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
-
+		fileName = URLEncoder.encode(fileName, "utf-8");
+		//fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
 		BufferedInputStream br = new BufferedInputStream(new FileInputStream(f));
 		byte[] buf = new byte[1024];
 		int len = 0;

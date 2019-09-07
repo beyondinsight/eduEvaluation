@@ -40,6 +40,8 @@
   <script src="../util/Constants.js"></script>  
   <script>
   var projectBase = Class.getURL();
+  var userinfo = layui.data('userinfo');
+  
   
   layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
@@ -92,7 +94,7 @@
 		  $("#selectRoleId").val(data.id);
 	  
 		  table.reload('demo2', {
-		        where: {"roleId":$("#selectRoleId").val()}
+		        where: {"roleId":$("#selectRoleId").val(),'token' : userinfo['token']}
 		      });
 		  
 		   /*   */

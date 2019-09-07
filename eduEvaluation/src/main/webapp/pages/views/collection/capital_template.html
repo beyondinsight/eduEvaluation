@@ -68,7 +68,7 @@
 				table.render({
 					elem: '#LAY-app-content-list',
 					url: projectBase + '/collection/getCapitalMetrics',
-					page: true, //开启分页
+					//page: true, //开启分页
 					height: 500	,
 					cols: [
 						[ //表头
@@ -174,18 +174,19 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '设置支撑材料',
-							area: ['70%', '80%'],
+							area: ['800px', '600px'],
 							//shade: 0,     
 							maxmin: true,
 							btn: ['确认', '取消'],
 							yes: function(index, layero) {
 								//点击确认触发 iframe 内容中的按钮提交
-								//var submit = layero.find('iframe').contents().find("#metrics_form");
-								//submit.click();
+								var submit = layero.find('iframe').contents().find("#metrics_form");
+								submit.click();
 								
-								//table.reload('LAY-app-content-list');
+								table.reload('LAY-app-content-list');
 								var index = parent.layer.getFrameIndex(window.name);
 								parent.layer.close(index); //再执行关闭   
+								
 							},
 							content: 'edit_capital_item.html',
 							zIndex: layer.zIndex //重点1

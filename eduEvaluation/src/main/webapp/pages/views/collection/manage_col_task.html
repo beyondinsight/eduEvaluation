@@ -16,8 +16,8 @@
  
       <div class="layui-card-body">
         <div style="padding-bottom: 10px;">
-		  <button class="layui-btn layuiadmin-btn-list" lay-href="collection/new_col_task.html"> <i class="layui-icon layui-icon-add-1"></i>新建<span style="font-size:0;">填报任务</span></button>
-		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm" data-type="edit"> <i class="layui-icon layui-icon-edit"></i>编辑<span style="font-size:0;">填报任务</span></button>
+		  <button class="layui-btn layuiadmin-btn-list" lay-href="collection/new_col_task.html"> <i class="layui-icon layui-icon-add-1"></i>新建<span style="display: none;">填报任务</span></button>
+		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm" data-type="edit"> <i class="layui-icon layui-icon-edit"></i>编辑<span style="display: none;">填报任务</span></button>
 		  <button class="layui-btn layuiadmin-btn-list layui-btn-checked" data-type="start"> <i class="layui-icon layui-icon-ok-circle"></i>启用</button>
 		  <button class="layui-btn layuiadmin-btn-list layui-btn-warm" data-type="stop"> <i class="layui-icon layui-icon-pause"></i>禁用</button>
           <button class="layui-btn layuiadmin-btn-list layui-btn-danger" data-type="batchdel"><i class="layui-icon layui-icon-delete"></i>删除</button>
@@ -59,7 +59,7 @@
     
 	table.render({
 	  elem: '#demo'
-	  ,height: 400
+	  ,height: 600
 	  ,width:1000
 	  ,url: projectBase + '/collection/colTask'//数据接口
 	  //toolbar:'#toolbarDemo'
@@ -155,17 +155,17 @@
 							async: false,
 							success:function(res){
 											if(res.code==1){       
-							                        layer.msg('成功启动任务!');
+							                        layer.msg('成功启用任务!');
 													table.reload('demo');
 							                } else {          
-							                        layer.msg('启动任务失败!', function(){
+							                        layer.msg('启用任务失败!', function(){
 																	//layer.msg('删除院校失败!');
 															  });   
 							                }
 							},             
 							 error:function(data){
-														layer.msg('启动任务的过程中出现错误!', function(){
-															layer.msg('启动任务的过程中出现错误!');
+														layer.msg('启用任务的过程中出现错误!', function(){
+															layer.msg('启用任务的过程中出现错误!');
 														});  
 							  }     
 						});

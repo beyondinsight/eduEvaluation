@@ -72,7 +72,7 @@
 						table.render({
 							elem: '#major_list',
 							//height: 300,
-							//width: 900,
+							width: 1000,
 							//page: true, //开启分页
 							data: [],
 							cols: [
@@ -81,7 +81,7 @@
 										type: 'numbers',
 										title: '序号',
 										align: 'center',
-										width: 60
+										width: 50
 									},
 									{
 										field: 'school_name',
@@ -96,7 +96,26 @@
 									{
 										field: 'major_status',
 										title: '专业填报状态',
-										align: 'center'
+										align: 'center',
+								    	templet: function(d) {
+								    		if(d.major_status == 'N'){
+								    			return  '未填报' ;
+								    		}else if(d.major_status == 'I'){
+								    			return  '填报中' ;		
+										    }else if(d.major_status == 'S'){
+								    			return  '已提交，待学校审核' ;		
+										    }else if(d.major_status == 'R'){
+								    			return  '学校退回，待重新填报' ;		
+										    }else if(d.major_status == 'G'){
+								    			return  '学校已审核,待教育厅审核' ;		
+										    }else if(d.major_status == 'E'){
+								    			return  '教育厅退回，待重新填报' ;		
+										    }else if(d.major_status == 'A'){
+										    	return '教育厅已审核入库';
+										    }else{
+											  return '';
+										 }
+										}
 									},
 									{
 										field: 'update_time',
@@ -121,7 +140,7 @@
 						table.render({
 							elem: '#collection_list',
 							//height: 300,
-							width: 800,
+							width: 1000,
 							data: [],
 							//page: true, //开启分页
 							cols: [
@@ -130,7 +149,7 @@
 										type: 'numbers',
 										title: '序号',
 										align: 'center',
-										width: 60
+										width: 50
 									},
 									{
 										field: 'collection_template_name',

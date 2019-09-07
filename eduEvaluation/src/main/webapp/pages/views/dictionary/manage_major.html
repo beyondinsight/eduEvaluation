@@ -50,7 +50,7 @@
     
 	table.render({
 	  elem: '#demo'
-	  ,height: 400
+	  ,height: 600
 	  ,url: projectBase + '/dictionary/major'//数据接口
 	  //toolbar:'#toolbarDemo'
 	  ,page: true //开启分页
@@ -61,7 +61,17 @@
 	    ,{field: 'majorName', title: '专业名称', width:200, align:'center' }
 	    ,{field: 'mainLecture', title: '所属一级学科', width:200, align:'center'}
 	    ,{field: 'majorClass', title: '学科门类', width: 200, align:'center'}
-	    ,{field: 'isFirstClass', title: '是否一流学科相关', width: 200, align:'center'}
+	    ,{field: 'isFirstClass', title: '是否一流学科相关', width: 200, align:'center',
+	    	templet: function(d) {
+	    		if(d.isFirstClass == '0'){
+	    			return  '否' ;
+	    		}else if(d.isFirstClass == '1'){
+	    			return  '是' ;		
+			}else{
+				return '';
+			 }
+			}
+	      }
 	    ,{field: 'memo', title: '备注', align:'center'}
 		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo', width:160, align:'center'}
 	  ]]
@@ -101,7 +111,7 @@
 	    layer.open({
 	        type: 2 //此处以iframe举例
 	        ,title: '修改专业'
-	        ,area: ['50%', '70%']
+	        ,area: ['750px', '60%']
 	        //,shade: 0
 	        ,maxmin: true
 	       /*  ,offset: [ //为了演示，随机坐标
@@ -200,7 +210,7 @@
           ,title: '新建专业'
           ,content: 'new_major.html'
           ,maxmin: true
-          ,area: ['50%', '70%']
+          ,area: ['750px', '60%']
           ,btn: ['确认', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
