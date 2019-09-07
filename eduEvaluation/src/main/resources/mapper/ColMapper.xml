@@ -587,4 +587,9 @@
 		update tbl_form_basic set process_status=#{process_status}, update_time=#{update_time} where collection_major_id=#{collection_major_id}
 	</update>
 	
+	<update id="updateTaskStatus">
+		update tbl_collection_major set process_status=#{process_status}, update_time=now()
+		where id=#{id}
+	</update>
+	
 </mapper>

@@ -1006,6 +1006,11 @@ public class ColTaskServiceImpl implements ColTaskService {
 		// TODO Auto-generated method stub
 		return dao.updateColTask(task);
 	}
+
+	public int updateTaskStatus(int id, char process_status) {
+		// TODO Auto-generated method stub
+		return dao.updateTaskStatus(id, process_status);
+	}
 	
 	
 }
