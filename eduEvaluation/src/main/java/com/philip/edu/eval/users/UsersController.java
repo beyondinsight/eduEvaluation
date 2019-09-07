@@ -574,7 +574,7 @@ public class UsersController {
 	 */
 	public static boolean checkPwd(String pwd) {
 
-		String regExp = "(^[\\S]{6,12}$)";
+		String regExp = "(^[\\S]{6,20}$)";
 		if (pwd.matches(regExp)) {
 			return true;
 		} else {
@@ -668,7 +668,7 @@ public class UsersController {
 			TblUsers u = new TblUsers();
 			if(!checkName(users[0])) {
 				 data.setCode(3);
-				 data.setMsg("这个‘"+users[2]+"’用户名不合法，用户名必须为4-10位字母,数字");
+				 data.setMsg("这个‘"+users[2]+"’用户名不合法，用户名必须为4-9位字母,数字");
 				return data;
 			}
 			u.setUserName(users[0]);
