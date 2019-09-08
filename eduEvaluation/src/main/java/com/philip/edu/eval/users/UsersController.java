@@ -52,6 +52,7 @@ import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.dictionary.DictService;
 import com.philip.edu.eval.util.Code;
 import com.philip.edu.eval.util.EvalConstants;
+import com.philip.edu.eval.util.PageUtil;
 //import com.philip.edu.eval.util.PasswordUtil;
 import com.philip.edu.eval.role.RolesService;
 import com.philip.edu.eval.util.Code;
@@ -78,7 +79,7 @@ public class UsersController {
 	private RolesService role_service;
 	@Autowired
 	private DictService dict_service;
-	
+
 	@RequestMapping(value = "/users", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> users(HttpServletRequest request) {
 
@@ -108,32 +109,40 @@ public class UsersController {
 
 		// get user id:
 		String username = user_name_claim.asString();
-		System.out.println("*******"+username);
 		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
-		ArrayList usersList  = new ArrayList();
-		if(user_mes.getRoleId()!= null && user_mes.getRoleId()==1) {
-			 usersList = (ArrayList) service.getUsersList(user_mes.getId());
-			 data.setData(usersList);
-			 data.setCount(usersList.size());
-		}else {
-			if(user_mes.getId() != null && user_mes.getRoleId() != null && user_mes.getSchoolId() != null) {				 
+		ArrayList usersList = new ArrayList();
+
+		PageUtil pu = new PageUtil();
+		int page = 0;
+		int limit = 0;
+		page = Integer.parseInt(request.getParameter("page"));
+		limit = Integer.parseInt(request.getParameter("limit"));
+
+		if (user_mes.getRoleId() != null && user_mes.getRoleId() == 1) {
+			usersList = (ArrayList) service.getUsersList(user_mes.getId());
+			ArrayList pagelist = pu.batchList(usersList, page, limit);
+			data.setData(pagelist);
+			data.setCount(usersList.size());
+		} else {
+			if (user_mes.getId() != null && user_mes.getRoleId() != null && user_mes.getSchoolId() != null) {
 				usersList = (ArrayList) service.getUsersListByFiled(user_mes);
-				data.setData(usersList);
+				ArrayList pagelist = pu.batchList(usersList, page, limit);
+				data.setData(pagelist);
 				data.setCount(usersList.size());
-			}	else {
+			} else {
 				data.setMsg("您的用户没有分配角色");
 				data.setCode(20);
 				// BackendData data = new BackendData();
 
 				return new ResponseEntity<BackendData>(data, HttpStatus.OK);
-			}		
+			}
 		}
-		
+
 		logger.info("successfully get the users list");
 
 		data.setMsg("");
 		data.setCode(0);
-		
+
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
@@ -173,19 +182,23 @@ public class UsersController {
 
 		logger.info("successfully get the users list");
 
-		
-		 if(usersschool == null || usersschool.getSchoolId() == null) {
-			 data.setCode(-1); }else { data.setCode(usersschool.getSchoolId());
-		 }
-		  
-		 if(user_mes.getRoleId() == null) { data.setCount(99); }else {
-			 data.setCount(user_mes.getRoleId()); 
-		 }
-		 
-		 if(user_mes.getId() == null) { data.setMsg(""); }else {
-			 data.setMsg(user_mes.getId().toString());
-		 }
-		 
+		if (usersschool == null || usersschool.getSchoolId() == null) {
+			data.setCode(-1);
+		} else {
+			data.setCode(usersschool.getSchoolId());
+		}
+
+		if (user_mes.getRoleId() == null) {
+			data.setCount(99);
+		} else {
+			data.setCount(user_mes.getRoleId());
+		}
+
+		if (user_mes.getId() == null) {
+			data.setMsg("");
+		} else {
+			data.setMsg(user_mes.getId().toString());
+		}
 
 		// BackendData data = new BackendData();
 
@@ -221,29 +234,24 @@ public class UsersController {
 			msg = "用户名已存在";
 			return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);
 		}
-/*
-		if (!checkName(userName)) {
-			code = 3;
-			msg = "非法用户名：" + userName;
-			return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);
-		}
-
-		if (!checkPwd(password)) {
-			code = 4;
-			msg = "非法密码：" + password;
-			return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);
-		}*/
+		/*
+		 * if (!checkName(userName)) { code = 3; msg = "非法用户名：" + userName; return new
+		 * ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK); }
+		 * 
+		 * if (!checkPwd(password)) { code = 4; msg = "非法密码：" + password; return new
+		 * ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK); }
+		 */
 
 		users.setChineseName(chineseName);
 		users.setCreateTime(new Date());
 
 		if (creator != null && !creator.equals("")) {
-			try{
+			try {
 				users.setCreator(Integer.parseInt(creator));
-			}catch(Exception e) {
+			} catch (Exception e) {
 				users.setCreator(0);
 			}
-			
+
 		}
 
 		users.setEmail(email);
@@ -258,8 +266,8 @@ public class UsersController {
 		users.setStatus(status);
 		users.setUpdateTime(new Date());
 		users.setUserName(userName);
-		
-		//set password MD5 twice:
+
+		// set password MD5 twice:
 		String tempPassword = SecurityUtil.md5Hex(password);
 		password = SecurityUtil.md5Hex(userName + tempPassword + users.getSalt());
 		users.setPassword(password);
@@ -326,11 +334,10 @@ public class UsersController {
 			users.setCreator(Integer.parseInt(creator));
 		}
 
-		/*if (!checkPwd(password)) {
-			code = 4;
-			msg = "非法密码：" + password;
-			return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);
-		}*/
+		/*
+		 * if (!checkPwd(password)) { code = 4; msg = "非法密码：" + password; return new
+		 * ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK); }
+		 */
 
 		users.setEmail(email);
 		users.setFixPhone(fixPhone);
@@ -389,7 +396,7 @@ public class UsersController {
 
 		return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST, produces = "application/json")
 	public ResponseEntity<BackendData> changePassword(HttpServletRequest request) {
 
@@ -420,7 +427,7 @@ public class UsersController {
 
 			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 		}
-		
+
 		// get user id:
 		String username = user_name_claim.asString();
 		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
@@ -429,7 +436,7 @@ public class UsersController {
 
 		logger.info("successfully get the users list");
 
-		//int result = service.deleteUsers(Integer.parseInt(id));
+		// int result = service.deleteUsers(Integer.parseInt(id));
 
 		if (result != 0) {
 			code = 0;
@@ -520,7 +527,7 @@ public class UsersController {
 		// get user id:
 		String username = user_name_claim.asString();
 		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
-		
+
 		JSONObject object = new JSONObject();
 		List<String> name_list = new ArrayList<String>();
 		// 检查文件
@@ -590,18 +597,17 @@ public class UsersController {
 				}
 			}
 		}
-		
-        String schoolname="";
-		int schoolid=0;
-		if(user_mes.getSchoolId() != null) {
-			schoolid=user_mes.getSchoolId();
-		}
-		if(user_mes.getSchoolName() != null) {
-			schoolname =user_mes.getSchoolName();
-		}
-		
-	   data = addUsersList(list, name_list, user_mes.getId(),user_mes.getRoleId(),schoolid,schoolname);
 
+		String schoolname = "";
+		int schoolid = 0;
+		if (user_mes.getSchoolId() != null) {
+			schoolid = user_mes.getSchoolId();
+		}
+		if (user_mes.getSchoolName() != null) {
+			schoolname = user_mes.getSchoolName();
+		}
+
+		data = addUsersList(list, name_list, user_mes.getId(), user_mes.getRoleId(), schoolid, schoolname);
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
@@ -687,11 +693,11 @@ public class UsersController {
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 
-	private BackendData  addUsersList(List<String[]> list, List<String> name_list,int userid,int roleid,int schoolid,String schoolname) {
+	private BackendData addUsersList(List<String[]> list, List<String> name_list, int userid, int roleid, int schoolid,
+			String schoolname) {
 
 		BackendData data = new BackendData();
 
-		 
 		List<TblUsers> all_list = service.getUsersList(0);
 		List<TblRoles> roles_list = role_service.getRolenameRoles();
 		List<School> school_list = dict_service.getSchoolList();
@@ -703,7 +709,7 @@ public class UsersController {
 			role_id.add(trole.getId());
 			role_name.add(trole.getRoleName());
 		}
-		
+
 		for (School tschool : school_list) {
 			school_id.add(tschool.getId());
 			school_name.add(tschool.getSchool_name());
@@ -712,8 +718,8 @@ public class UsersController {
 		for (TblUsers user : all_list) {
 
 			if (name_list.contains(user.getUserName())) {
-				 data.setCode(2);
-				 data.setMsg("文件存在重复用户名");
+				data.setCode(2);
+				data.setMsg("文件存在重复用户名");
 				return data;
 			}
 		}
@@ -721,30 +727,30 @@ public class UsersController {
 		List usersList = new ArrayList<TblUsers>();
 		for (String[] users : list) {
 			TblUsers u = new TblUsers();
-			if(!checkName(users[0])) {
-				 data.setCode(3);
-				 data.setMsg("这个‘"+users[2]+"’用户名不合法，用户名必须为4-9位字母,数字");
+			if (!checkName(users[0])) {
+				data.setCode(3);
+				data.setMsg("这个‘" + users[2] + "’用户名不合法，用户名必须为4-9位字母,数字");
 				return data;
 			}
 			u.setUserName(users[0]);
-			
+
 			u.setChineseName(users[1]);
 			if (users[2] != null && !users[2].equals("") && role_name.contains(users[2])) {
-				if(role_name.indexOf((Object)users[2])<roleid ) {
-					 data.setCode(4);
-					 data.setMsg("这个‘"+users[2]+"’角色不可以通过上传创建，不能创建跟你权限相等或者比你权限大的用户");
-					 return data;
-				}
-				
-				if(role_id.get(role_name.indexOf((Object)users[2])) == 1) {
-					 data.setCode(4);
-					 data.setMsg("这个‘"+users[2]+"’角色不可以通过上传创建");
+				if (role_name.indexOf((Object) users[2]) < roleid) {
+					data.setCode(4);
+					data.setMsg("这个‘" + users[2] + "’角色不可以通过上传创建，不能创建跟你权限相等或者比你权限大的用户");
 					return data;
 				}
-				u.setRoleId(role_id.get(role_name.indexOf((Object)users[2])));
-			}else {
-				 data.setCode(1);
-				 data.setMsg("角色不能为空值");
+
+				if (role_id.get(role_name.indexOf((Object) users[2])) == 1) {
+					data.setCode(4);
+					data.setMsg("这个‘" + users[2] + "’角色不可以通过上传创建");
+					return data;
+				}
+				u.setRoleId(role_id.get(role_name.indexOf((Object) users[2])));
+			} else {
+				data.setCode(1);
+				data.setMsg("角色不能为空值");
 				return data;
 			}
 			u.setRoleName(users[2]);
@@ -752,21 +758,21 @@ public class UsersController {
 			u.setInstitution(users[4]);
 			if (users[4] != null && !users[4].equals("") && school_name.contains(users[4])) {
 
-				if(school_id.get(school_name.indexOf((Object)users[4])) != schoolid  ) {
-					if(  roleid == 1) { 
-						u.setSchoolId(school_id.get(school_name.indexOf((Object)users[4])));					
-					}else {
-						 data.setCode(4);
-						 data.setMsg("这个‘"+users[4]+"’学校不能通过校验，只能上传自己的学校");
-						 return data;
+				if (school_id.get(school_name.indexOf((Object) users[4])) != schoolid) {
+					if (roleid == 1) {
+						u.setSchoolId(school_id.get(school_name.indexOf((Object) users[4])));
+					} else {
+						data.setCode(4);
+						data.setMsg("这个‘" + users[4] + "’学校不能通过校验，只能上传自己的学校");
+						return data;
 					}
-				}else {
-					u.setSchoolId(school_id.get(school_name.indexOf((Object)users[4])));
+				} else {
+					u.setSchoolId(school_id.get(school_name.indexOf((Object) users[4])));
 				}
-				 
-			}else {
-				 data.setCode(1);
-				 data.setMsg("学校不能为空值或者"+users[4]+"没有被计入系统");
+
+			} else {
+				data.setCode(1);
+				data.setMsg("学校不能为空值或者" + users[4] + "没有被计入系统");
 				return data;
 			}
 			u.setMobilePhone(users[5]);
@@ -774,7 +780,7 @@ public class UsersController {
 			u.setMemo(users[7]);
 			u.setCreator(userid);
 			u.setSalt(SecurityUtil.createSalt().toString());
-		    String	password = SecurityUtil.md5Hex(users[0] + propConfig.getProperty("user_password") + u.getSalt());
+			String password = SecurityUtil.md5Hex(users[0] + propConfig.getProperty("user_password") + u.getSalt());
 			u.setPassword(password);
 
 			service.createUsers(u);
@@ -782,10 +788,10 @@ public class UsersController {
 			service.createUserSchool(u);
 			// usersList.add(u);
 		}
-		 data.setCode(0);
-		 data.setMsg("上传成功");
+		data.setCode(0);
+		data.setMsg("上传成功");
 		return data;
-	
+
 	}
 
 	public static void checkFile(MultipartFile file) throws IOException {
@@ -880,18 +886,18 @@ public class UsersController {
 		boolean isdown = exportExcel(list, file_path);
 
 		File f = new File(file_path);
-		if (!f.exists() ) {
-			//response.sendError(404, "File not found!");
+		if (!f.exists()) {
+			// response.sendError(404, "File not found!");
 			System.out.println("下载文件不存在");
 			return;
 		}
-		if(!isdown) {
+		if (!isdown) {
 			System.out.println("下载失败");
 			return;
 		}
 		String fileName = f.getName();
 		fileName = URLEncoder.encode(fileName, "utf-8");
-		//fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+		// fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
 		BufferedInputStream br = new BufferedInputStream(new FileInputStream(f));
 		byte[] buf = new byte[1024];
 		int len = 0;

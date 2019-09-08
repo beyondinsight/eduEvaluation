@@ -13,12 +13,12 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="metrics_form">
+				<div class="layui-form  layuiadmin-card-header-auto" lay-filter="metrics_form">
 					<div class="layui-form-item">
 						<input type="hidden" name="id" id="id">
 						<div class="layui-inline">
 							<input type="hidden" id="level_temp" name="level_temp"/>
-							<label class="layui-form-label" style="width: 80px;"><span style="color: red;">* </span>指标级别：</label>
+							<label class="layui-form-label" style="width: 70px;">指标级别<span style="color: red;">* </span></label>
 							<div class="layui-input-inline" style="width: 120px">
 								<select name="level" id="level" lay-search="" placeholder="必选项" lay-filter="level" lay-verify="level">
 									<option value="1">一级指标</option>
@@ -27,29 +27,36 @@
 							</div>
 						</div>
 						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 80px;"><span style="color: red;">* </span>指标编号：</label>
+							<label class="layui-form-label" style="width: 70px;">指标编号<span style="color: red;">* </span></label>
 							<div class="layui-input-inline" style="width: 120px;">
-								<input type="text" name="metrics_code" id="metrics_code" placeholder="必填项" required lay-verify="required" autocomplete="off"
+								<input type="text" name="metrics_code" id="metrics_code" required lay-verify="required" autocomplete="off"
 								 class="layui-input">
 							</div>
 						</div>
+
 						<div class="layui-inline" style="right:-5px;">
 							<label class="layui-form-label" style="width: 60px;"><span id="isRed" style="color: red;"  hidden="hidden">*</span>单位：</label>
 							<div class="layui-input-inline" style="width: 115px;">
 								<input type="text" name="unit" id="unit"   autocomplete="off" class="layui-input">
+
+						<div class="layui-inline">
+							<label class="layui-form-label" style="width: 70px;">单位<span style="color: red;">* </span></label>
+							<div class="layui-input-inline" style="width: 120px;">
+								<input type="text" name="unit" id="unit" required lay-verify="required" autocomplete="off" class="layui-input">
+
 							</div>
 						</div>
 					</div>					
 					
-					<div class="layui-form-item" >
-						<label class="layui-form-label" style="width: 80px;"><span style="color: red;">* </span>指标名称：</label>
+					<div class="layui-form-item">
+						<label class="layui-form-label" style="width: 70px;">指标名称<span style="color: red;">* </span></label>
 						<div class="layui-input-inline" style="width: 610px;">
-							<input type="text" name="name" id="name" placeholder="必填项" required lay-verify="required" autocomplete="off" class="layui-input">
+							<input type="text" name="name" id="name" placeholder="请输入指标名称" required lay-verify="required" autocomplete="off" class="layui-input">
 						</div>
 					</div>
 					
-					<div class="layui-form-item" >
-						<label class="layui-form-label" style="width: 80px;">备注：</label>
+					<div class="layui-form-item">
+						<label class="layui-form-label" style="width: 70px;">备注</label>
 						<div class="layui-input-inline" style="width: 610px;">
 							<textarea name="memo" id="memo" style="width: 610px; height: 150px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
@@ -62,7 +69,7 @@
 						</div>
 						<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
-						  <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</button>
+						  <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i></button>
 						</script>
 					</div>
 					
@@ -103,7 +110,7 @@
 
 				schoolTable = table.render({
 					elem: '#LAY-app-content-list',
-					width: 705,
+					width: 680,
 					height: 320,
 					url: projectBase + "/collection/getMaterials",
 					where: {'metrics_id':$('#id').val()},
@@ -115,16 +122,17 @@
 								field: 'material_name',
 								title: '支撑材料',
 								align: 'center',
-								width: 250
+								width: 190
 							}, {
 								field: 'memo',
 								title: '备注',
-								align: 'center'
+								align: 'center',
+								width: 350
 							}, {
 								title: '操作',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
-								width: 80 
+								width: 140
 							}
 						]
 					]
@@ -285,7 +293,7 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '添加材料',
-								area: ['460px', '313px'],
+								area: ['500px', '300px'],
 								//shade: 0,
 								maxmin: true,
 								/* offset: [ //为了演示，随机坐标
@@ -312,7 +320,7 @@
 
 									table.render({
 										elem: '#LAY-app-content-list',
-										width: 705,
+										width: 680,
 										height: 320,
 										data: data0
 											//toolbar:'#toolbarDemo'
@@ -325,16 +333,17 @@
 													field: 'material_name',
 													title: '支撑材料',
 													align: 'center',
-													width: 250
+													width: 190
 												}, {
 													field: 'memo',
 													title: '备注',
-													align: 'center' 
+													align: 'center',
+													width: 350
 												}, {
 													title: '操作',
 													toolbar: '#test-table-toolbar-barDemo',
 													align: 'center',
-													width: 80
+													width: 140
 												}
 											]
 										]

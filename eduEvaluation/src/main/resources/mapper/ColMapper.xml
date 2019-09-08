@@ -470,7 +470,7 @@
 		AND
 		major_status.key_string = v_task_school_major.major_status
 		and
-		major_status.config_type = 'collection_status'
+		major_status.config_type = 'major_status'
 
 	</select>
 
@@ -568,7 +568,7 @@
 	</select>
 	
 	<select id="selectStatusList" resultMap="statusResultMap">
-		select key_int, config_value, key_string from tbl_config where config_type='collection_status' 
+		select key_int, config_value, key_string from tbl_config where config_type='major_status' 
 	</select>
 	
 	<select id="selectSchoolTaskList" resultMap="SchoolTaskResultMap">

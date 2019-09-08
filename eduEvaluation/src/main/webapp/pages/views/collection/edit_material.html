@@ -9,10 +9,12 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<body style="background:white">
+	<body>
 
-		<div class="layui-fluid layui-form" style="background:white">
-			 <div class="layui-form-item">
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="material_form">
+					<div class="layui-form-item">
 						<input type="hidden" name="metrics_id" id="metrics_id">
 						<div class="layui-inline">
 							<label class="layui-form-label" style="width: 70px;">材料名称<span style="color: red;">* </span></label>
@@ -35,9 +37,16 @@
 					<div class="layui-form-item layui-hide">
 					  <input type="button" lay-submit lay-filter="material_form" id="material_form" value="确认添加">
 					</div>
-			 
+					<!--<div class="layui-form-item">
+					<div style="padding-right: 150px;">
+						<div align="right">
+							<button class="layui-btn layui-btn-normal" lay-submit lay-filter="col_task_form" id="form-submit"><i class="layui-icon layui-icon-file-b"></i> 创建</button>
+						</div>
+					</div>
+					</div>-->
 				</div>
-		 
+			</div>
+		</div>
 
 		<script src="../../layuiadmin/layui/layui.js"></script>
 		<script src="../util/Constants.js"></script>

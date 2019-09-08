@@ -14,7 +14,7 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" align="left">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto" align="left" style="border: 0;">
 					<div class="layui-form-item">
 						<div class="layui-inline" align="left">
 							<div class="layui-input-inline" style="width: 300px">
@@ -80,7 +80,7 @@
 						table.render({
 							elem: '#major_list',
 							//height: 300,
-							//width: 900,
+							width: 900,
 							//page: true, //开启分页
 							data: [],
 							cols: [
@@ -102,9 +102,28 @@
 										align: 'center'
 									},
 									{
-										field: 'major_status',
+										//field: 'major_status',
 										title: '专业填报状态',
-										align: 'center'
+										align: 'center',
+								    	templet: function(d) {
+								    		if(d.major_status == 'N'){
+								    			return  '未填报' ;
+								    		}else if(d.major_status == 'I'){
+								    			return  '填报中' ;		
+										    }else if(d.major_status == 'S'){
+								    			return  '已提交，待学校审核' ;		
+										    }else if(d.major_status == 'R'){
+								    			return  '学校退回，待重新填报' ;		
+										    }else if(d.major_status == 'G'){
+								    			return  '学校已审核,待教育厅审核' ;		
+										    }else if(d.major_status == 'E'){
+								    			return  '教育厅退回，待重新填报' ;		
+										    }else if(d.major_status == 'A'){
+										    	return '教育厅已审核入库';
+										    }else{
+											  return '';
+										 }
+										}
 									},
 									{
 										field: 'update_time',
@@ -128,7 +147,7 @@
 
 						table.render({
 							elem: '#collection_list',
-							//height: 300,
+							width:900,
 							data: [],
 							//page: true, //开启分页
 							cols: [
@@ -142,8 +161,7 @@
 									{
 										field: 'collection_template_name',
 										title: '填报内容',
-										align: 'center',
-										width: 200
+										align: 'center'
 									},
 									{
 										field: 'process_status',
@@ -155,7 +173,7 @@
 										field: 'process_status_note',
 										title: '填报状态说明',
 										align: 'center',
-										width: 300
+										width: 200
 									},
 									{
 										fixed: 'right',
@@ -346,13 +364,13 @@
 								console.log("template:" + data.template_type_string);
 								if (data.template_type_string == "major_performance") {
 									console.log("to open performance page");
-									parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
+									parent.layui.index.openTabsPage("collection/performance_collection.html", "绩效目标完成情况");
 								} else if (data.template_type_string == "major_capital_process") {
 									console.log("to open capital page");
 									parent.layui.index.openTabsPage("collection/capital_progress_collection.html", "资金支出进度填报");
 								} else if (data.template_type_string == "major_basic_info") {
 									console.log("entering basic info");
-									parent.layui.index.openTabsPage("template/caller.html", "专业数据填报");
+									parent.layui.index.openTabsPage("template/caller.html", "专业基本情况");
 								}
 							}
 						});

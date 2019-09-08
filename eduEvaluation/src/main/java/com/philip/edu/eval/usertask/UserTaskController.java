@@ -256,22 +256,22 @@ public class UserTaskController {
 				(new Integer(task_id)).intValue(), (new Integer(school_id)).intValue(),
 				(new Integer(major_id)).intValue());
 
-		ArrayList tempList = new ArrayList();
+		/*ArrayList tempList = new ArrayList();
 		if (lMajorCollectionStatus != null && lMajorCollectionStatus.size() != 0) {
 			MajorCollectionStatus performance = (MajorCollectionStatus) lMajorCollectionStatus.get(0);
 			MajorCollectionStatus basic = (MajorCollectionStatus) lMajorCollectionStatus.get(1);
 			tempList.add(basic);
 			tempList.add(performance);
 			tempList.add(lMajorCollectionStatus.get(2));
-		}
+		}*/
 
 		logger.info("successfully get major status by task id: " + task_id);
 
 		BackendData data = new BackendData();
 		data.setMsg("");
 		data.setCode(0);
-		data.setData(tempList);
-		data.setCount(tempList.size());
+		data.setData(lMajorCollectionStatus);
+		data.setCount(lMajorCollectionStatus.size());
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);

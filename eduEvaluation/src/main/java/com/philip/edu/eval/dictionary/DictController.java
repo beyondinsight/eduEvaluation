@@ -26,6 +26,7 @@ import com.philip.edu.eval.bean.BackendDataJSON;
 import com.philip.edu.eval.bean.School;
 import com.philip.edu.eval.bean.ShuttleBoxInfo;
 import com.philip.edu.eval.bean.TblMajor;
+import com.philip.edu.eval.util.PageUtil;
 @RestController
 @EnableWebMvc
 @RequestMapping(value = "/dictionary")
@@ -37,7 +38,7 @@ public class DictController {
 	private DictService service;
 	
 	@RequestMapping(value = "/school", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> school(){
+	public ResponseEntity<BackendData> school(HttpServletRequest request){
 		//ApplicationContext context = request.getAttribute(DispatcherServlet.WEB_APPLICATION_CONTEXT_ATTRIBUTE);
 		//ApplicationContext context = ApplicationContextRegister.getApplicationContext();
 		//HelloService service = (HelloService)context.getBean("service_test");
@@ -47,12 +48,20 @@ public class DictController {
 		ArrayList schoolList = (ArrayList) service.getSchoolList();
 		logger.info("successfully get the school list");
 		
+
+		PageUtil pu = new PageUtil();
+		int page =0;
+		int limit =0;
+        page =Integer.parseInt(request.getParameter("page"));
+        limit =Integer.parseInt(request.getParameter("limit"));
+        ArrayList   pagelist =  pu.batchList(schoolList, page, limit);
+		
+		
 		BackendData data = new BackendData();
 		data.setMsg("");
 		data.setCode(0); 
-		data.setData(schoolList);
+		data.setData(pagelist);
 		data.setCount(schoolList.size());
-		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
@@ -244,16 +253,22 @@ public class DictController {
 	}
 	
 	@RequestMapping(value = "/major", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<BackendData> major(){
+	public ResponseEntity<BackendData> major(HttpServletRequest request){
 		
 		ArrayList majorList = (ArrayList) service.getMajorList();
 		logger.info("successfully get the major list");
 		BackendData data = new BackendData();
+		PageUtil pu = new PageUtil();
+		int page =0;
+		int limit =0;
+        page =Integer.parseInt(request.getParameter("page"));
+        limit =Integer.parseInt(request.getParameter("limit"));
+        ArrayList   pagelist =  pu.batchList(majorList, page, limit);
+
 		data.setMsg("");
 		data.setCode(0); 
-		data.setData(majorList);
+		data.setData(pagelist);
 		data.setCount(majorList.size());
-		//BackendData data = new BackendData();
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
