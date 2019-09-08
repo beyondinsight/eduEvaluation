@@ -20,7 +20,7 @@ border:0;
   <div class="layui-fluid">
     <div class="layui-card">
       <div class="layui-card-body">
-		<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_capital_form">
+		<div class="layui-form  layuiadmin-card-header-auto" lay-filter="edit_capital_form">
 		   <div class="layui-form-item" >
 			<input type="hidden" id="form_performance_id" name="form_performance_id"/>
 			<input type="hidden" id="edit_type" name="edit_type"/>
@@ -65,12 +65,14 @@ border:0;
 	  ,url: projectBase + '/collection/getRelateMaterials'//数据接口
 	  ,where: {'form_performance_id':$('#form_performance_id').val()} 
 	  //toolbar:'#toolbarDemo'
-	  ,page: true //开启分页
+	  //,page: true //开启分页
 	  ,cols: [[ //表头	
 	    {field: 'material_name', title: '支撑材料', align:'center'}
 	    ,{field: 'doc', title: '文件名' , align:'center'}
 	    ,{field: 'docsize', title: '文件大小', align:'center'} 
-	    ,{field: 'updateTime', title: '上传时间', align:'center'}	    
+	    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
+            return updateTime(row.updateTime);
+        } }	    
 		,{fixed: 'right', title:'操作', align:'center', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
 	});

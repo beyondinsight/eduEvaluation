@@ -21,11 +21,11 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_performance_form">
+				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="edit_performance_form">
 					<div class="layui-form-item">
 						<input type="hidden" name="metrics_id" id="metrics_id">
 						<input type="hidden" name="performance_id" id="performance_id">
-						
+						<div class="layui-card-body" style="margin-left: -15px;">
 						<table class="layui-table" style="width:900px;">
 							<tr class="noborder">
 								<td>当前值</td><td><input type="number"   name="current_value" id="current_value" autocomplete="off" readonly="true" class="layui-input"/></td><td style="text-align: left;">(万元)</td>
@@ -45,7 +45,7 @@
 							</tr>
 						</table>
 					
-					<div class="layui-card-body" style="margin-left: -15px;">
+					
 						<table id="materials_table" lay-filter="materials_table"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
 							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
@@ -91,13 +91,15 @@
 				  }
 				  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
 				  //toolbar:'#toolbarDemo'
-				  ,page: true //开启分页
+				  //,page: true //开启分页
 				  ,cols: [[ //表头
 					{type: 'numbers', title: '序号', align:'center'}
 				    ,{field: 'materialname', title: '支撑材料', align:'center'}
 				    ,{field: 'file_name', title: '文件名' , align:'center'}
 				    ,{field: 'doc_size', title: '文件大小', align:'center'} 
-				    ,{field: 'updateTime', title: '上传时间', align:'center'}	    
+				    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
+			            return updateTime(row.updateTime);
+			        } }	    
 					,{fixed: 'right', title:'操作', align:'center', toolbar: '#test-table-toolbar-barDemo'} 
 				  ]]
 				});

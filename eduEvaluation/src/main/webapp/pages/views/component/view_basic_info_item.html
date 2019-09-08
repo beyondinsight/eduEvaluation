@@ -14,7 +14,7 @@
   <div class="layui-fluid">
     <div class="layui-card">
 
-      <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="basic_form">
+      <div class="layui-form  layuiadmin-card-header-auto" lay-filter="basic_form">
        	<input type="text" hidden="hidden"    id="upload_id" name="upload_id">
 		<input type="hidden" id="form_performance_id" name="form_performance_id">
         <table  id="demo"  lay-filter="demo"></table> 
@@ -50,13 +50,13 @@
 	table.render({
 	  elem: '#demo'
 	  ,height: 400
-	  ,width:1400
+	  //,width:1400
 	  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
 	  ,where: {'form_performance_id':$('#form_performance_id').val()}
 	  ,page: true //开启分页
 	  ,cols: [[ //表头
-		{type: 'checkbox', align:'center'}
-		,{type: 'numbers', title: '序号', align:'center'}
+		//{type: 'checkbox', align:'center'},
+		 {type: 'numbers', title: '序号', align:'center'}
 	    ,{field: 'materialname', title: '支撑材料', align:'center'}
 	    ,{field: 'doc', title: '文件名', align:'center' }
 	    ,{field: 'docsize', title: '文件大小', align:'center',templet :function (row){

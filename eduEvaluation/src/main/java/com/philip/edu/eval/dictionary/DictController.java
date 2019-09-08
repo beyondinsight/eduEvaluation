@@ -44,10 +44,19 @@ public class DictController {
 		//HelloService service = (HelloService)context.getBean("service_test");
 		//String password = service.getPwByUserNm(name);
 		logger.info("Entering [school] method.");
-		
+		BackendData data = new BackendData();
 		ArrayList schoolList = (ArrayList) service.getSchoolList();
 		logger.info("successfully get the school list");
 		
+		if(request.getParameter("page") == null || request.getParameter("limit") == null) {
+
+			data.setMsg("");
+			data.setCode(0); 
+			data.setData(schoolList);
+			data.setCount(schoolList.size());
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
 
 		PageUtil pu = new PageUtil();
 		int page =0;
@@ -57,7 +66,7 @@ public class DictController {
         ArrayList   pagelist =  pu.batchList(schoolList, page, limit);
 		
 		
-		BackendData data = new BackendData();
+		
 		data.setMsg("");
 		data.setCode(0); 
 		data.setData(pagelist);
@@ -258,6 +267,16 @@ public class DictController {
 		ArrayList majorList = (ArrayList) service.getMajorList();
 		logger.info("successfully get the major list");
 		BackendData data = new BackendData();
+		
+		if(request.getParameter("page") == null || request.getParameter("limit") == null) {
+
+			data.setMsg("");
+			data.setCode(0); 
+			data.setData(majorList);
+			data.setCount(majorList.size());
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
 		PageUtil pu = new PageUtil();
 		int page =0;
 		int limit =0;
