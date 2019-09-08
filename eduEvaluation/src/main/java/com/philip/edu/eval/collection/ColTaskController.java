@@ -52,6 +52,8 @@ public class ColTaskController {
 	private Properties propConfig = PropertiesUtil.getProperty("config");
 
 	private int template_form_performance_id = Integer.parseInt(propConfig.getProperty("template_performance_form_id"));
+	private int template_basic_form_id = Integer.parseInt(propConfig.getProperty("template_basic_form_id"));
+	private int template_capital_progress_id = Integer.parseInt(propConfig.getProperty("template_capital_progress_form_id"));
 
 	@Autowired
 	private ColTaskService service;
@@ -762,7 +764,7 @@ public class ColTaskController {
 		
 		//service.updateTaskStatus(id, process_status)
 		service.updateTaskStatus(service.getCollectionIdByPerformance(Integer.parseInt(performance_id)), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION,null);
-
+ 
 		logger.info("update performance form success");
 
 		BackendData data = new BackendData();
@@ -1105,6 +1107,16 @@ public class ColTaskController {
 		int result = 0;
 
 		if (collection_major_id != null && !"".equals(collection_major_id)) {
+			//check whether is all filled:
+			boolean checked = service.checkMaterialUploaded(Integer.parseInt(collection_major_id), this.template_basic_form_id);
+			
+			//update status:
+			if(!checked){
+				data.setMsg("要求的材料未完全上传！");
+				data.setCode(10);
+				
+				return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+			}
 			BasicForm bf = new BasicForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
 			bf.setProcess_status(EvalConstants.FORM_STATUS_COMPLETE);
@@ -1130,6 +1142,20 @@ public class ColTaskController {
 		int result = 0;
 
 		if (collection_major_id != null && !"".equals(collection_major_id)) {
+			//first check:
+			String message = service.checkCapitalForm(Integer.parseInt(collection_major_id), this.template_capital_progress_id);
+			
+			if("SUCCESS".equals(message)){
+				//then update status:
+				result = service.updatePerformanceFormStatus(EvalConstants.FORM_STATUS_COMPLETE,
+						Integer.parseInt(collection_major_id));
+			} else {
+				data.setMsg(message);
+				data.setCode(99);
+				
+				return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+			}	
+			//second submit:
 			CapitalProgressForm bf = new CapitalProgressForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
 			bf.setProcess_status(EvalConstants.FORM_STATUS_COMPLETE);
@@ -1152,11 +1178,23 @@ public class ColTaskController {
 
 		BackendData data = new BackendData();
 		String collection_major_id = request.getParameter("collection_major_id");
-		int result = 0;
+		int result = 0; 
 
 		if (collection_major_id != null && !"".equals(collection_major_id)) {
-			result = service.updatePerformanceFormStatus(EvalConstants.FORM_STATUS_COMPLETE,
-					Integer.parseInt(collection_major_id));
+			//first check:
+			String message = service.checkPerformanceForm(Integer.parseInt(collection_major_id), this.template_form_performance_id);
+			
+			if("SUCCESS".equals(message)){
+				//then update status:
+				result = service.updatePerformanceFormStatus(EvalConstants.FORM_STATUS_COMPLETE,
+						Integer.parseInt(collection_major_id));
+			} else {
+				data.setMsg(message);
+				data.setCode(99);
+				
+				return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+			}		
+			
 		}
 		logger.info("successfully update the performance form");
 

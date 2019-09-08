@@ -11,7 +11,15 @@ public class MajorCollectionStatus {
 	private String process_status;
 	private int collection_major_id;
 	private int process_status_key;
+	private String process_status_note;
 	
+	
+	public String getProcess_status_note() {
+		return process_status_note;
+	}
+	public void setProcess_status_note(String process_status_note) {
+		this.process_status_note = process_status_note;
+	}
 	public int getProcess_status_key() {
 		return process_status_key;
 	}

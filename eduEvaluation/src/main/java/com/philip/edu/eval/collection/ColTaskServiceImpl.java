@@ -1134,10 +1134,129 @@ public class ColTaskServiceImpl implements ColTaskService {
 
 	public int getCollectionIdByPerformance(int performance_id) {
 		// TODO Auto-generated method stub
-		int[] test = dao.getCollectionIdByPerformance(performance_id);
-		return test[0];
+		ArrayList test = dao.getCollectionIdByPerformance(performance_id);
+		return ((Integer)test.get(0)).intValue();
 	}
 
-	
+	public boolean checkMaterialUploaded(int collection_major_id, int for_template) {
+		// TODO Auto-generated method stub
+		boolean success = true;
+		
+		ArrayList materials = (ArrayList)dao.selectRequiredMaterial(collection_major_id, for_template);
+		for(int i=0; i<materials.size(); i++){
+			Material m = (Material)materials.get(i);
+			if(m.getDoc_size()==0){
+				success = false;
+				break;
+			}
+		}
+		
+		return success;
+	}
+
+	public String checkPerformanceForm(int collection_major_id, int for_template) {
+		// TODO Auto-generated method stub
+		String message = "SUCCESS";
+		
+		ArrayList temp = (ArrayList)dao.selectTaskByCollectionMajorId(collection_major_id);
+		CollectionTask task = (CollectionTask)temp.get(0);
+		
+		//1、all fields filled:
+		ArrayList performance = (ArrayList)dao.getPerformanceForm(collection_major_id, for_template);
+		for(int i=0; i<performance.size(); i++){
+			PerformanceForm p = (PerformanceForm)performance.get(i);
+			if(p.getMetrics_level()==1)continue;
+			if(p.getCurrent_value()==0){
+				message = "指标【" + p.getMetrics_name() + "】的" + "(立项时数值)" + "未填写！";
+				return message;
+			}
+			if(p.getTarget_value()==0){
+				message = "指标【" + p.getMetrics_name() + "】的(" + task.getTask_year() + "年目标值)" + "未填写！";
+				return message;
+			}
+			if(p.getIs_complete()==null||"".equals(p.getIs_complete())){
+				message = "指标【" + p.getMetrics_name() + "】的" + "(已完成/未完成)" + "未填写！";
+				return message;
+			}
+			if(p.getActual_value()==0){
+				message = "指标【" + p.getMetrics_name() + "】的(" + task.getTask_year() + "年完成值)" + "未填写!";
+				return message;
+			}
+			if(p.getScore()==0){
+				message = "指标【" + p.getMetrics_name() + "】的" + "(分值)" + "未填写!";
+				return message;
+			}
+			if(p.getSelf_evaluate()==0){
+				message = "指标【" + p.getMetrics_name() + "】的" + "(自评分)" + "未填写!";
+				return message;
+			}
+			if(p.getSelf_introduction()==null || "".equals(p.getSelf_introduction())){
+				message = "指标【" + p.getMetrics_name() + "】的" + "(自评说明)" + "未填写!";
+				return message;
+			}
+			
+		}
+		//2、all doc uploaded:
+		ArrayList materials = (ArrayList)dao.selectRequiredMaterial(collection_major_id, for_template);
+		
+		for(int i=0; i<materials.size(); i++){
+			Material material = (Material)materials.get(i);
+			if(material.getDoc_size()==0)return "有必须提交的材料没有上传!";
+		}
+		
+		return message;
+	}
+
+	public String checkCapitalForm(int collection_major_id, int for_template) {
+		// TODO Auto-generated method stub
+		//1、all fields filled:
+		String message = "SUCCESS";
+		
+		ArrayList temp = (ArrayList) dao.selectCapitalProgress(collection_major_id);
+		CapitalProgressForm cpf = (CapitalProgressForm)temp.get(0);
+		if(cpf.getRegion_disbursement_amount()==0){
+			message = "【2018年自治区财政资助经费下达总额】未填写!";
+			return message;
+		}
+		if(cpf.getRegion_paid_hardware_amount()==0){
+			message = "【自治区硬件建设支出额度】未填写!";
+			return message;
+		}
+		if(cpf.getRegion_paid_internal_amount()==0){
+			message = "【自治区内涵建设支出额度】未填写!";
+			return message;
+		}
+		if(cpf.getCentral_disbursement_amount()==0){
+			message = "【2018年中央财政资助经费下达总额】未填写!";
+			return message;
+		}
+		if(cpf.getCentral_paid_hardware_amount()==0){
+			message = "【中央硬件建设支出额度】未填写!";
+			return message;
+		}
+		if(cpf.getCentral_paid_internal_amount()==0){
+			message = "【中央内涵建设支出额度】未填写!";
+			return message;
+		}
+		if(cpf.getSchool_funding_total()==0){
+			message = "【学校配套经费总额度】未填写!";
+		}
+		if(cpf.getCentral_paid_hardware_amount()==0){
+			message = "【学校硬件建设支出额度】未填写!";
+			return message;
+		}
+		if(cpf.getCentral_paid_internal_amount()==0){
+			message = "【学校内涵建设支出额度】未填写!";
+			return message;
+		}
+		
+		ArrayList materials = (ArrayList)dao.selectRequiredMaterial(collection_major_id, for_template);
+		
+		for(int i=0; i<materials.size(); i++){
+			Material material = (Material)materials.get(i);
+			if(material.getDoc_size()==0)return "有必须提交的材料没有上传!";
+		}
+		return message;
+	}
 	
 }

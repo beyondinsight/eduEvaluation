@@ -14,8 +14,15 @@ public class MajorTask {
 	private int task_id;
 	private String task_name;
 	private String task_year;
+	private String process_status_note;
 	
 	
+	public String getProcess_status_note() {
+		return process_status_note;
+	}
+	public void setProcess_status_note(String process_status_note) {
+		this.process_status_note = process_status_note;
+	}
 	public String getTask_name() {
 		return task_name;
 	}

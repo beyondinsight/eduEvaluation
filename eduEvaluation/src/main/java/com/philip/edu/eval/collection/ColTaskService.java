@@ -62,4 +62,8 @@ public interface ColTaskService {
 	public int updateTaskStatus(int id, char process_status, String memo);
 	public int getCollectionIdByPerformance(int performance_id);
 	public ArrayList setCapitalProgressMaterialsNumAndPerformanceId(CapitalProgressForm cpf, Properties prop);
+	public boolean checkMaterialUploaded(int collection_major_id, int for_template);
+	//public boolean checkBasicForm(int collection_major_id);
+	public String checkPerformanceForm(int collection_major_id, int for_template);
+	public String checkCapitalForm(int collection_major_id, int for_template);
 }

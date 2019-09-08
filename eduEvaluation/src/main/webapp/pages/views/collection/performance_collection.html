@@ -105,21 +105,28 @@
 								width: 100
 							}, {
 								field: 'current_value',
-								title: '当前值',
+								title: '立项时数值',
 								templet: function(d){ if(d.current_value==0)return "";
 													  else return d.current_value;},
 								align: 'center',
 								width: 80
 							},  {
 								field: 'target_value',
-								title: '目标值',
+								title: data0['basic_info']['task_year'] + '年目标值',
 								templet: function(d){ if(d.target_value==0)return "";
 													  else return d.target_value;},
 								align: 'center',
 								width: 80
 							},  {
-								field: 'actual_value',
-								title: '实际完成值',
+								field: 'is_complete',
+								title: '已完成/未完成',
+								templet: function(d){ if(d.is_complete==null)return "";
+													  else return d.is_complete;},
+								align: 'center',
+								width: 80
+							},  {
+								field: data0['basic_info']['task_year'] + 'actual_value',
+								title: '完成值',
 								align: 'center',
 								templet: function(d){ if(d.actual_value==0)return "";
 													  else return d.actual_value;},
@@ -468,8 +475,13 @@
 						success: function(res){
 							if(res.code==0){
 								layer.msg("报表完成并提交!");
+								setTimeout(function(){
+									//console.log(parent.layui.admin.events);
+									parent.index.refreshAndCloseTabs();
+									parent.layui.admin.events.closeThisTabs();
+									},800);
 							} else {
-								layer.msg("报表提交过程中遇到错误!", function(){
+								layer.msg(res.msg, function(){
 									});
 							}
 						} 

@@ -26,6 +26,10 @@
 		<id property="id" column="id"/>
 	</resultMap>
 	
+	<resultMap id="MajorTaskIdMap" type="int">
+		<id property="collection_major_id" column="collection_major_id"/>
+	</resultMap>
+	
 	<resultMap id="colTaskListResultMap" type="com.philip.edu.eval.bean.CollectionTask">
 		<id property="id" column="id"/>
 		<result property="task_name" column="task_name"/>
@@ -58,6 +62,7 @@
 		<result property="major_id" column="major_id"/>
 		<result property="major_name" column="major_name"/>
 		<result property="process_status" column="process_status"/>
+		<result property="process_status_note" column="process_status_note"/>
 		<result property="status_msg" column="config_value"/>
 		<result property="update_time" column="update_time"/>
 	</resultMap>
@@ -621,7 +626,7 @@
 		where id=#{id}
 	</update>
 	
-	<select id="getCollectionIdByPerformance" resultType="int[]">
+	<select id="getCollectionIdByPerformance" resultMap="MajorTaskIdMap">
 		select collection_major_id from tbl_form_performance where id=#{id}
 	</select>
 	
@@ -632,4 +637,15 @@
 	  and major_id = #{major_id}
 	</update>
 	
+	<select id="selectRequiredMaterial" resultMap="materialResultMap">
+		select * from tbl_collection_material cm,tbl_form_performance fp where cm.form_performance_id=fp.id and required='Y' and fp.collection_major_id=#{collection_major_id} and for_template=#{for_template}
+	</select>
+	
+	<select id="selectTaskByCollectionMajorId" resultMap="colTaskListResultMap">
+		select task_name, task_year from tbl_collection_major m, tbl_collection_school s, tbl_collection_tasks t where m.collection_school_id = s.id and s.collection_task_id = t.id and m.id = #{collection_major_id}
+	</select>
+	
+	<select id="selectCapitalProgressForm" resultMap="capitalResultMap">
+		select * from tbl_form_capitalprogress where collection_major_id=#{collection_major_id}
+	</select>
 </mapper>

@@ -26,9 +26,15 @@ public class PerformanceForm {
 	private String material_num;
 	private int for_template;
 	private String level1_name;
+	private String is_complete;
 	
 	
-	
+	public String getIs_complete() {
+		return is_complete;
+	}
+	public void setIs_complete(String is_complete) {
+		this.is_complete = is_complete;
+	}
 	public String getLevel1_name() {
 		return level1_name;
 	}

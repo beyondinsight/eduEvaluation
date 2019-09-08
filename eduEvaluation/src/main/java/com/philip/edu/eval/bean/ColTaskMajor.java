@@ -12,6 +12,15 @@ public class ColTaskMajor {
 	private Date create_time;
 	private Date update_time;
 	private char process_status;
+	private String process_status_note;
+	
+	
+	public String getProcess_status_note() {
+		return process_status_note;
+	}
+	public void setProcess_status_note(String process_status_note) {
+		this.process_status_note = process_status_note;
+	}
 	public int getId() {
 		return id;
 	}

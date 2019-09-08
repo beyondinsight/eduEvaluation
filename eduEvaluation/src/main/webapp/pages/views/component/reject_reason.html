@@ -68,8 +68,8 @@
 								async: false,
 								success:function(res){
 												if(res.code==1){  
+												   	layer.msg('该项填报已退回');
 												     setTimeout(function(){
-   														layer.msg('该项填报已退回');
 														
 																			var index = parent.layer.getFrameIndex(window.name);
 																			parent.layer.close(index);

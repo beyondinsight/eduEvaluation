@@ -77,8 +77,11 @@ public interface ColMapper {
 	public int updateCapitalFormStatus(CapitalProgressForm cpf);
 	public int updateColTask(CollectionTask task);
 	public int updateTaskStatus(@Param("id")int id, @Param("process_status")char process_status, @Param("memo")String memo);
-	public int[] getCollectionIdByPerformance(int performance_id);
+	public ArrayList getCollectionIdByPerformance(int performance_id);
 	public List<SchoolTask> selectAllTaskList();
+	public List<Material> selectRequiredMaterial(@Param("collection_major_id")int collection_major_id, @Param("for_template")int for_template);
+	public List<CollectionTask> selectTaskByCollectionMajorId(int collection_major_id);
+	public List<CapitalProgressForm> selectCapitalProgressForm(int collection_major_id);
 	 
 	//add by xiewei
 	public List<UserTask> getUserTaskList(@Param("user_id") int user_id);

@@ -237,7 +237,12 @@ layui.config({
 				type: 'POST',
 				success: function(res){
 					if(res.code==0){
-						layer.msg("报表完成并提交!");
+						layer.msg("报表校验通过并提交!");
+						setTimeout(function(){
+							//console.log(parent.layui.admin.events);
+							parent.index.refreshAndCloseTabs();
+							parent.layui.admin.events.closeThisTabs();
+							},800);
 					} else {
 						layer.msg("报表提交过程中遇到错误!", function(){
 							});
