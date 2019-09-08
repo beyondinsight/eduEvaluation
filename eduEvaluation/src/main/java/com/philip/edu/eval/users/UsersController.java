@@ -120,12 +120,32 @@ public class UsersController {
 
 		if (user_mes.getRoleId() != null && user_mes.getRoleId() == 1) {
 			usersList = (ArrayList) service.getUsersList(user_mes.getId());
+
+			if(request.getParameter("page") == null || request.getParameter("limit") == null) {
+
+				data.setMsg("");
+				data.setCode(0); 
+				data.setData(usersList);
+				data.setCount(usersList.size());
+				
+				return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+			}
 			ArrayList pagelist = pu.batchList(usersList, page, limit);
 			data.setData(pagelist);
 			data.setCount(usersList.size());
 		} else {
 			if (user_mes.getId() != null && user_mes.getRoleId() != null && user_mes.getSchoolId() != null) {
 				usersList = (ArrayList) service.getUsersListByFiled(user_mes);
+
+				if(request.getParameter("page") == null || request.getParameter("limit") == null) {
+
+					data.setMsg("");
+					data.setCode(0); 
+					data.setData(usersList);
+					data.setCount(usersList.size());
+					
+					return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+				}
 				ArrayList pagelist = pu.batchList(usersList, page, limit);
 				data.setData(pagelist);
 				data.setCount(usersList.size());

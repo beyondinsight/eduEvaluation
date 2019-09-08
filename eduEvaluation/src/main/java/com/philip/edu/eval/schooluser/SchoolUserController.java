@@ -71,6 +71,15 @@ public class SchoolUserController {
 		ArrayList usersList = (ArrayList) service.getNameSchoolUser(Integer.parseInt(roleId));
 		logger.info("successfully get the roles list");
 		
+		if(request.getParameter("page") == null || request.getParameter("limit") == null) {
+
+			data.setMsg("");
+			data.setCode(0); 
+			data.setData(usersList);
+			data.setCount(usersList.size());
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
 		PageUtil pu = new PageUtil();
 		int page =0;
 		int limit =0;
@@ -257,7 +266,16 @@ public class SchoolUserController {
 	    	tsu.setSchoolId(schoolId);
     		usersList = (ArrayList) service.getRolenameSchoolMajorBySchool(tsu);			 
 	    }
- 
+	    
+	    if(request.getParameter("page") == null || request.getParameter("limit") == null) {
+
+			data.setMsg("");
+			data.setCode(0); 
+			data.setData(usersList);
+			data.setCount(usersList.size());
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
 		logger.info("successfully get the roles list");
 
 		PageUtil pu = new PageUtil();

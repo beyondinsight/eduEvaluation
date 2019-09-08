@@ -176,6 +176,14 @@ public class UserTaskController {
 
 		data.setMsg("已获取所有专业的任务情况");
 		data.setCode(0);
+
+		if(request.getParameter("page") == null || request.getParameter("limit") == null) {
+ 
+			data.setData(taskList);
+			data.setCount(taskList.size());
+			
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
 		ArrayList pagelist = pu.batchList(taskList, page, limit);
 		data.setData(pagelist);
 		data.setCount(taskList.size());

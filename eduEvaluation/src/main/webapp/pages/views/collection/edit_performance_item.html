@@ -21,11 +21,12 @@
 
 		<div class="layui-fluid">
 			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_performance_form">
+				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="edit_performance_form">
 					<div class="layui-form-item">
 						<input type="hidden" name="metrics_id" id="metrics_id">
 						<input type="hidden" name="performance_id" id="performance_id">
-						
+						<button type="button" class="layui-btn layui-btn-normal" id="upload_self"  style="display: none;" >上传文件</button> 
+						<input type="text" hidden="hidden"    id="upload_id" name="upload_id">
 						<table class="layui-table" style="width:900px;">
 							<tr class="noborder">
 								<td>当前值：</td><td><input type="number"   name="current_value" id="current_value" autocomplete="off" class="layui-input"/></td><td style="text-align: left;">(万元)</td>
@@ -52,9 +53,9 @@
 						</div>
 						<table id="materials_table" lay-filter="materials_table"></table>
 						<script type="text/html" id="test-table-toolbar-barDemo">
-							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-upload"></i>上传</a>
-							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
-						   <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-download-circle"></i>删除</a>
+							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-upload-circle"></i>上传</a>
+							<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
+						    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
 						</script> 
 					</div>
 					
@@ -69,18 +70,19 @@
 		<script src="../../layuiadmin/layui/layui.js"></script>
 		<script src="../util/Constants.js"></script>
 		<script>
+		var projectBase = Class.getURL();
+		
 			layui.config({
 				base: '../../layuiadmin/' //静态资源所在路径
 			}).extend({
 				index: 'lib/index' //主入口模块
-			}).use(['index', 'contlist', 'table', 'laydate', 'form', 'transfer', 'admin'], function() {
+			}).use(['laydate', 'laypage','element','index', 'contlist', 'table', 'layer','admin','upload'], function() {
 				var $ = layui.$,
 				    table = layui.table,
 					form = layui.form,
 					laydate = layui.laydate,
 					transfer = layui.transfer,
-					admin = layui.admin,
-					projectBase = Class.getURL();
+					admin = layui.admin;
 				var data0, schoolTable;
 
 				form.render();
@@ -90,21 +92,28 @@
 				
 				table.render({
 				  elem: '#materials_table'
-				  ,width: 680,
+				  ,width: 900,
 					height: 320
 				  ,where: {
 					  'form_performance_id':$('#performance_id').val()
 				  }
 				  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
 				  //toolbar:'#toolbarDemo'
-				  ,page: true //开启分页
+				  //,page: true //开启分页
 				  ,cols: [[ //表头
-					{type: 'numbers', title: '序号'}
-				    ,{field: 'materialname', title: '支撑材料'}
-				    ,{field: 'file_name', title: '文件名' }
-				    ,{field: 'doc_size', title: '文件大小'} 
-				    ,{field: 'updateTime', title: '上传时间'}	    
-					,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
+					{type: 'numbers', title: '序号', align:'center'}
+				    ,{field: 'materialname', title: '支撑材料', align:'center'}
+				    ,{field: 'file_name', title: '文件名', align:'center' }
+				    ,{field: 'doc_size', title: '文件大小', align:'center'} 
+				    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
+				    	if(row.updateTime == ''){
+				    		return '';
+				    	}else{
+				    		 return updateTime(row.updateTime);
+				    	}
+			           
+			        } }	    
+					,{fixed: 'right', title:'操作', width: 220, align:'center', toolbar: '#test-table-toolbar-barDemo'} 
 				  ]]
 				});
 
@@ -213,7 +222,7 @@
 								  layer.msg('已成功删除!');
 								  });
 					} else if(obj.event === 'upload') {
-						layer.open({
+						/* layer.open({
 						    type: 2 //此处以iframe举例
 						    ,title: '上传文件'
 						    ,area: ['50%', '70%']
@@ -223,12 +232,16 @@
 						    ,content: 'caller_upload.html'
 							,zIndex: layer.zIndex //重点1
 						    ,success: function(layero, index){
-							  var pf_id = layero.find('iframe').contents().find("#form_performance_id");
-							  $(pf_id).val(data.id);
+							  
 							  
 						      layer.setTop(layero); //重点2
 						    }
-						  });
+						  }); */
+						 // var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+						  //$(pf_id).val(data.id);
+						 
+						   $('#upload_id').val(data.id);
+						   $("#upload_self").click();
 					} else if (obj.event === 'download'){			
 							window.location.href= projectBase + "/collectionMaterial/downloadMaterial?doc="+data.doc;	     
 					}  
@@ -262,7 +275,7 @@
 								type: 2 //此处以iframe举例
 									,
 								title: '添加材料',
-								area: ['50%', '70%'],
+								area: ['460px', '320px'],
 								//shade: 0,
 								maxmin: true,
 								btn: ['确认', '取消'],
@@ -285,7 +298,7 @@
 
 									table.render({
 										elem: '#materials_table',
-										width: 680,
+										width: 900,
 										height: 320,
 										data: data0
 											//toolbar:'#toolbarDemo'
@@ -294,23 +307,21 @@
 											,
 										cols: [
 											[ //表头
-												{
-													field: 'material_name',
-													title: '支撑材料',
-													align: 'center',
-													width: 190
-												}, {
-													field: 'memo',
-													title: '备注',
-													align: 'center',
-													width: 350
-												}, {
-													title: '操作',
-													toolbar: '#test-table-toolbar-barDemo',
-													align: 'center',
-													width: 140
-												}
-											]
+												{type: 'numbers', title: '序号', align:'center'}
+											    ,{field: 'materialname', title: '支撑材料', align:'center'}
+											    ,{field: 'file_name', title: '文件名', align:'center' }
+											    ,{field: 'doc_size', title: '文件大小', align:'center'} 
+											    /* ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
+											    	if(row.updateTime == ''){
+											    		return '';
+											    	}else{
+											    		 
+											    		 return updateTime(row.updateTime);
+											    	}
+										           
+										        } } */	    
+												,{fixed: 'right', title:'操作', width: 220, align:'center', toolbar: '#test-table-toolbar-barDemo'} 
+											  ]
 										]
 									});
 								},
@@ -330,6 +341,54 @@
 				});
 
 			});
+			 
+			 layui.use('upload', function(){
+			  	  var $ = layui.jquery
+			  	  ,upload = layui.upload;
+			  	  //var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+			  	  //指定允许上传的文件类型
+			  	  upload.render({
+			  	      elem: '#upload_self'
+			  	      ,url: projectBase + '/collectionMaterial/uploadCollectionmaterial'
+			  	      ,accept: 'file' //普通文件 
+			  	      ,before: function(obj){ 
+			  	    	layer.load(); //上传loading
+			  	    	this.data={"upload_id":$('#upload_id').val()};
+			  	    	} 
+			  	      ,done: function(res){
+			  	    	  if(res.code == 0){
+				  	    	  layer.closeAll();
+				  	    	  layer.msg('上传成功');
+			  	    	  }else{
+			  	    		layer.closeAll();
+			  	    		 layer.msg('上传失败');
+			  	    	  }
+			  	    	  layui.table.reload('demo'); //重载表格
+			  	      } ,error:function(data){ 
+			  	    	  layer.closeAll();
+			  	    	  parent.layer.msg('上传失败');
+			  	      },
+			  	    
+			  	    });  
+			  	 
+			    });
+			 
+			   function updateTime(v){
+					var date = new Date(v);
+				    var y = date.getFullYear();
+				    var m = date.getMonth()+1;
+				    m = m<10?'0'+m:m;
+				    var d = date.getDate();
+				    d = d<10?("0"+d):d;
+				    var h = date.getHours();
+				    h = h<10?("0"+h):h;
+				    var M = date.getMinutes();
+				    M = M<10?("0"+M):M;
+				    var str = y+"-"+m+"-"+d+" "+h+":"+M;
+				    return str;
+			   }
+			  
 		</script>
 	</body>
 </html>
