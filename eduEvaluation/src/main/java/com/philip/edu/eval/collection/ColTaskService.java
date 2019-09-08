@@ -66,4 +66,6 @@ public interface ColTaskService {
 	//public boolean checkBasicForm(int collection_major_id);
 	public String checkPerformanceForm(int collection_major_id, int for_template);
 	public String checkCapitalForm(int collection_major_id, int for_template);
+	public int insertRelateMaterial(Material material);
+	public List<Material> selectUserMaterials(int form_performance_id);
 }

@@ -91,30 +91,32 @@
 				console.log("metrics_id:" + metric_id);
 				
 				table.render({
-				  elem: '#materials_table'
-				  ,width: 900,
-					height: 320
-				  ,where: {
-					  'form_performance_id':$('#performance_id').val()
-				  }
-				  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
-				  //toolbar:'#toolbarDemo'
-				  //,page: true //开启分页
-				  ,cols: [[ //表头
-					{type: 'numbers', title: '序号', align:'center'}
-				    ,{field: 'materialname', title: '支撑材料', align:'center'}
-				    ,{field: 'file_name', title: '文件名', align:'center' }
-				    ,{field: 'doc_size', title: '文件大小', align:'center'} 
-				    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
-				    	if(row.updateTime == ''){
-				    		return '';
-				    	}else{
-				    		 return updateTime(row.updateTime);
-				    	}
-			           
-			        } }	    
-					,{fixed: 'right', title:'操作', width: 220, align:'center', toolbar: '#test-table-toolbar-barDemo'} 
-				  ]]
+					elem: '#materials_table',
+					width: 900,
+					height: 320,
+					url: projectBase + '/collection/getRelateMaterials'
+						//toolbar:'#toolbarDemo'
+						,
+					where: {'form_performance_id':$('#performance_id').val()},
+					page: true //开启分页
+						,
+					cols: [
+						[ //表头
+						    {field: 'material_name', title: '支撑材料', align:'center'}
+						    ,{field: 'file_name', title: '文件名', align:'center' }
+						    ,{field: 'doc_size', title: '文件大小', align:'center'} 
+						    /* ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
+						    	if(row.updateTime == ''){
+						    		return '';
+						    	}else{
+						    		 
+						    		 return updateTime(row.updateTime);
+						    	}
+					           
+					        } } */	    
+							,{fixed: 'right', title:'操作', width: 220, align:'center', toolbar: '#test-table-toolbar-barDemo'} 
+						  ]
+					]
 				});
 
 				/*table.render({
@@ -285,7 +287,7 @@
 									console.log(submit);
 									submit.click();
 									
-									var materials = layui.data('materials');
+									/*var materials = layui.data('materials');
 									console.log(materials);
 									var data0 = [];
 									for(var val in materials){
@@ -294,41 +296,18 @@
 											'memo':materials[val]
 										}
 										data0.push(material);
-									}
+									}*/
 
-									table.render({
-										elem: '#materials_table',
-										width: 900,
-										height: 320,
-										data: data0
-											//toolbar:'#toolbarDemo'
-											,
-										page: true //开启分页
-											,
-										cols: [
-											[ //表头
-												{type: 'numbers', title: '序号', align:'center'}
-											    ,{field: 'materialname', title: '支撑材料', align:'center'}
-											    ,{field: 'file_name', title: '文件名', align:'center' }
-											    ,{field: 'doc_size', title: '文件大小', align:'center'} 
-											    /* ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
-											    	if(row.updateTime == ''){
-											    		return '';
-											    	}else{
-											    		 
-											    		 return updateTime(row.updateTime);
-											    	}
-										           
-										        } } */	    
-												,{fixed: 'right', title:'操作', width: 220, align:'center', toolbar: '#test-table-toolbar-barDemo'} 
-											  ]
-										]
-									});
+									table.reload('materials_table');
 								},
-								content: 'new_material.html',
+								content: 'new_material_col.html',
 								zIndex: layer.zIndex //重点1
 									,
 								success: function(layero, index) {
+									var performance_id = layero.find('iframe').contents().find("#form_performance_id");
+									$(performance_id).val($('#performance_id').val());
+									var metrics_id = layero.find('iframe').contents().find("#metrics_id");
+									$(metrics_id).val($('#metrics_id').val());
 									layer.setTop(layero); //重点2
 								} 
 							});

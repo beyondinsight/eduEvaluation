@@ -52,6 +52,7 @@ public interface ColMapper {
 	public List<Material> getRelateMaterials(@Param("pf_id")int pf_id, @Param("metrics_id")int metrics_id);
 	public int insertPerformanceForm(PerformanceForm pf);
 	public int insertRelateMaterial(Material material);
+	public List<Material> selectUserMaterials(int form_peformance_id);
 	public List<Material> getMaterialMetrics(int pf_id);
 	public List<CapitalProgressForm> selectCapitalProgress(@Param("collection_major_id")int collection_major_id);
 	public int countUploadedMaterial(int form_performance_id);

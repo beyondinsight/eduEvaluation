@@ -94,8 +94,11 @@ public class DictServiceImpl implements DictService {
 	@Transactional("txManager")
 	public int saveChosenMajor(int school_id, int[] majors) {
 		// TODO Auto-generated method stub
+		int n = 0;
 		dao.deleteChosenMajor(school_id);
-		int n = dao.saveChosenMajor(school_id, majors);
+		if(majors!=null){
+			n = dao.saveChosenMajor(school_id, majors);
+		}
 		return n;
 	}
 

@@ -125,8 +125,8 @@
 								align: 'center',
 								width: 80
 							},  {
-								field: data0['basic_info']['task_year'] + 'actual_value',
-								title: '完成值',
+								field: 'actual_value',
+								title: data0['basic_info']['task_year'] + '完成值',
 								align: 'center',
 								templet: function(d){ if(d.actual_value==0)return "";
 													  else return d.actual_value;},
@@ -396,7 +396,7 @@
 							success: function(layero, index) {
 								//console.log(data.id);
 								var metrics_id = layero.find('iframe').contents().find("#metrics_id");
-								$(metrics_id).val("?metrics_id=" + data.metrics_id + "&form_performance_id=" + data.id );
+								$(metrics_id).val(data.metrics_id);
 								var performance_id = layero.find('iframe').contents().find("#performance_id");
 								$(performance_id).val(data.id);
 								

@@ -821,7 +821,7 @@ public class UsersController {
 			u.setMemo(users[7]);
 			u.setCreator(userid);
 			u.setSalt(SecurityUtil.createSalt().toString());
-			String password = SecurityUtil.md5Hex(users[0] + propConfig.getProperty("user_password") + u.getSalt());
+			String password = SecurityUtil.md5Hex(users[0] + SecurityUtil.md5Hex(propConfig.getProperty("user_password")) + u.getSalt());
 			u.setPassword(password);
 
 			service.createUsers(u);

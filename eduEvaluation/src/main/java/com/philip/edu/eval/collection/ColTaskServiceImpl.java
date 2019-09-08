@@ -1258,5 +1258,15 @@ public class ColTaskServiceImpl implements ColTaskService {
 		}
 		return message;
 	}
+
+	public int insertRelateMaterial(Material material) {
+		// TODO Auto-generated method stub
+		return dao.insertRelateMaterial(material);
+	}
+
+	public List<Material> selectUserMaterials(int form_performance_id) {
+		// TODO Auto-generated method stub
+		return dao.selectUserMaterials(form_performance_id);
+	}
 	
 }

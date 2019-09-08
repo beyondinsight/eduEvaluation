@@ -325,6 +325,10 @@
     	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id} and for_template=#{for_template} order by m.pid, m.morder
     </select>
     
+    <select id="selectUserMaterials" resultMap = "materialResultMap">
+    	select * from tbl_collection_material where form_performance_id=#{pf_id}
+    </select>
+    
     <select id="getRelateMaterials" resultMap="materialResultMap">
     	 select cm.id, material_id, sm.material_name, cm.update_time, cm.doc, doc_size, sm.metrics_id
 		 from  tbl_support_material sm, tbl_collection_material cm

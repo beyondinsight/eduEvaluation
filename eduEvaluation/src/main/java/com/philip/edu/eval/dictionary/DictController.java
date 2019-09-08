@@ -470,11 +470,16 @@ public class DictController {
 		
 		String sSchool = request.getParameter("school_id");
 		String[] sMajor = request.getParameterValues("majors");
+		int[] majors; 
 		
 		int school_id = Integer.parseInt(sSchool);
-		int[] majors = new int[sMajor.length];
+		if(sMajor==null || sMajor.length == 0){
+			majors = null;
+		} else {
+		majors = new int[sMajor.length];
 		for(int i=0; i<majors.length; i++){
 			majors[i] = Integer.parseInt(sMajor[i]);
+		}
 		}
 		
 		int n = service.saveChosenMajor(school_id, majors);

@@ -106,34 +106,35 @@
 									<a lay-href="user/major_user.html">专业分配</a>
 								</dd>
 							</dl></li>
-
-						<li id="collection" data-name="major_report"
-							class="layui-nav-item"><a href="javascript:;"
-							lay-tips="专业填报" lay-direction="2"> <i
-								class="layui-icon layui-icon-survey"></i> <cite>填报管理</cite>
+							
+						<li id="template" data-name="temp" class="layui-nav-item"><a
+							href="javascript:;" lay-tips="专业填报" lay-direction="2"> <i
+								class="layui-icon layui-icon-user"></i> <cite>填报模板维护</cite>
 						</a>
 							<dl class="layui-nav-child">
-								<dd>
-									<a id="temp_m" href="javascript:;">填报模板维护</a>
-									<dl class="layui-nav-child">
-										<dd data-name="list">
-											<a lay-href="collection/performance_template.html">绩效目标完成</a>
-										</dd>
-										<dd data-name="mobile">
-											<a lay-href="collection/capital_template.html">资金支出进度</a>
-										</dd>
-									</dl>
+								<dd id="basic_form" data-name="basic">
+									<a lay-href="collection/basicform_template.html">专业基本情况</a>
 								</dd>
-								<dd>
-									<a id="task_m" lay-href="collection/manage_col_task.html">填报任务管理</a>
+								<dd id="performance" data-name="perf">
+									<a lay-href="collection/performance_template.html">绩效目标完成</a>
+								</dd>
+								<dd id="capital" data-name="cap">
+									<a lay-href="collection/capital_progress_collection.html">资金支出进度</a>
 								</dd>
 							</dl></li>
-						<li id="report_c" data-name="report_c" class="layui-nav-item">
-							<a lay-href="submit/major_submit.html" lay-tips="专业数据填报"
-							lay-direction="2"> <i class="layui-icon layui-icon-survey"></i>
-								<cite>专业数据填报</cite>
+
+						<li id="task_m" data-name="mTask"
+							class="layui-nav-item"><a lay-href="collection/manage_col_task.html"
+							lay-tips="任务管理" lay-direction="2"> <i
+								class="layui-icon layui-icon-survey"></i> <cite>填报任务管理</cite>
 						</a>
 						</li>
+						
+						<li id="report_c" data-name="report_c" class="layui-nav-item">
+													<a lay-href="submit/major_submit.html" lay-tips="专业数据填报"
+													lay-direction="2"> <i class="layui-icon layui-icon-survey"></i>
+														<cite>专业数据填报</cite>
+												</a>
 						<li id="audit" data-name="report_audit" class="layui-nav-item">
 							<a href="javascript:;" lay-tips="填报数据审核" lay-direction="2"> <i
 								class="layui-icon layui-icon-templeate-1"></i> <cite>填报数据审核</cite>
@@ -149,36 +150,6 @@
 								</dd>
 							</dl>
 						</li>
-						<li id="evaluate" data-name="expert_eval" class="layui-nav-item">
-							<a href="javascript:;" lay-tips="专家评估" lay-direction="2"> <i
-								class="layui-icon layui-icon-tabs"></i> <cite>专家评估</cite>
-						</a>
-							<dl class="layui-nav-child">
-								<dd>
-									<a layadmin-event="expert_task">专家评估任务</a>
-								</dd>
-							</dl>
-							<dl class="layui-nav-child">
-								<dd>
-									<a layadmin-event="evaluation">专家评估</a>
-								</dd>
-							</dl>
-						</li>
-						<li id="report" data-name="report" class="layui-nav-item"><a
-							href="javascript:;" lay-tips="报表输出" lay-direction="2"> <i
-								class="layui-icon layui-icon-chart-screen"></i> <cite>报表输出</cite>
-						</a>
-							<dl class="layui-nav-child">
-								<dd>
-									<a lay-href="user/user/list.html">绩效目标完成情况--明细表</a>
-								</dd>
-								<dd>
-									<a lay-href="user/administrators/list.html">绩效目标完成情况--专业汇总表</a>
-								</dd>
-								<dd>
-									<a lay-href="user/administrators/role.html">资金支出进度表</a>
-								</dd>
-							</dl></li>
 					</ul>
 				</div>
 			</div>
@@ -274,25 +245,25 @@
 							if (role == 2) {
 								$('#dictionary').css('display', 'none');
 								$('#school_m').css('display', 'none');
-								$('#collection').css('display', 'none');
-								$('#evaluate').css('display', 'none');
-								$('#government_mrl').css('display', 'none');
+								//$('#collection').css('display', 'none');
+								$('#task_m').css('display', 'none');
+								$('#template').css('display', 'none');
 								$('#report_c').css('display', 'none');
-								$('#report').css('display', 'none');
+								$('#government_mrl').css('display', 'none');
 							} else if (role == 3) {
 								$('#dictionary').css('display', 'none');
 								$('#user').css('display', 'none');
-								$('#collection').css('display', 'none');
+								//$('#collection').css('display', 'none');
+								$('#task_m').css('display', 'none');
+								$('#template').css('display', 'none');
 								$('#audit').css('display', 'none');
-								$('#evaluate').css('display', 'none');
-								$('#report').css('display', 'none');
 							} else if (role == 4) {
 								$('#dictionary').css('display', 'none');
 								$('#user').css('display', 'none');
-								$('#collection').css('display', 'none');
+								$('#template').css('display', 'none');
 								$('#report_c').css('display', 'none');
+								$('#task_m').css('display', 'none');
 								$('#audit').css('display', 'none');
-								$('#report').css('display', 'none');
 							}
 
 							var userinfo = layui.data('userinfo');

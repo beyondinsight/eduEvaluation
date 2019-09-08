@@ -264,7 +264,9 @@ input {
 										}, {
 											field: 'actural_num',
 											title: '实际值',
-											align: 'center' 
+											align: 'center' ,
+											templet: function(d){ if(d.actural_num==0)return "";
+																  else return d.actural_num;}
 										}, {
 											field: 'materials_num',
 											title: '支撑材料',
@@ -416,6 +418,7 @@ input {
 									//console.log("form performance:" + da[0].rda_pf_id);
 									$(pf_id).val(data.performance_id);
 									var actural_value = layero.find('iframe').contents().find("#actural_value");
+									if(data.actural_num!=0)
 									$(actural_value).val(data.actural_num);
 								}
 							});

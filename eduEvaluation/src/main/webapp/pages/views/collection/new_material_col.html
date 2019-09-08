@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>支撑材料</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+	</head>
+	<body>
+
+		<div class="layui-fluid layui-form " style="background:white">			 
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<input type="hidden" id="form_performance_id" name="form_performance_id"/>
+							<input type="hidden" id="metrics_id" name="metrics_id"/>
+							<label class="layui-form-label" style="width: 90px;"><span style="color: red;">* </span>材料名称：</label>
+							<div class="layui-input-inline" style="width: 220px;">
+								<input type="text" name="material_name" id="material_name" placeholder="必填项" required lay-verify="required" autocomplete="off"
+								 class="layui-input">
+							</div>
+						</div>
+					</div>					
+					
+					
+					<div class="layui-form-item">
+						<label class="layui-form-label" style="width: 90px;">备注：</label>
+						<div class="layui-input-inline" style="width: 220px;">
+							<textarea name="memo" id="memo" style="width: 220px; height: 110px;" autocomplete="off" class="layui-textarea"></textarea>
+						</div>
+					</div>
+
+					
+					<div class="layui-form-item layui-hide">
+					  <input type="button" lay-submit lay-filter="material_form" id="material_form" value="确认添加">
+					</div>
+		</div>
+
+		<script src="../../layuiadmin/layui/layui.js"></script>
+		<script src="../util/Constants.js"></script>
+		<script>
+			layui.config({
+				base: '../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', 'contlist', 'table', 'laydate', 'form', 'transfer', 'admin'], function() {
+				var $ = layui.$,
+				    table = layui.table,
+					form = layui.form,
+					laydate = layui.laydate,
+					transfer = layui.transfer,
+					admin = layui.admin,
+					projectBase = Class.getURL();
+				var data0;
+
+				form.render();
+
+				//监听搜索
+				form.on('submit(material_form)', function(data) {
+					console.log("metrics_id:" + $('#metrics_id').val());
+					console.log("form_performance_id:" + $('#form_performance_id').val());
+					
+					$.ajax({
+						url: projectBase + '/collection/addMaterialPer',
+						dataType: 'json',
+						data: data.field,
+						type: 'POST',
+						success: function(res){
+							if(res.code==1){
+								layer.msg("成功添加材料!");
+								setTimeout(function(){
+									parent.layui.table.reload('LAY-app-content-list'); //重载表格
+									var index = parent.layer.getFrameIndex(window.name);
+									parent.layer.close(index); //再执行关闭   
+									},600);
+							} else {
+								layer.msg("添加材料失败!", function(){
+									});
+							}
+						} 
+					});
+					/*layui.data('materials',{
+						key: $(material_name).val(),
+						value: $(memo).val()
+					});*/
+					
+					
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+				});
+			});
+		</script>
+	</body>
+</html>

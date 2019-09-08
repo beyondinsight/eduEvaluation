@@ -631,7 +631,7 @@ public class ColTaskController {
 				for(int l=0; l<metricsC.size(); l++){
 					PerformanceForm metrics = (PerformanceForm)metricsC.get(l);
 					metrics.setLevel1_name(metricsP.getMetrics_name());
-					metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
+					//metrics.setMaterial_num("要求" + service.countMaterials(metrics.getId()) + "项");
 					newList.add(metrics);
 				}
 			}
@@ -653,11 +653,11 @@ public class ColTaskController {
 	@RequestMapping(value = "/getRelateMaterials", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getRelateMaterials(HttpServletRequest request) {
 
-		String pf_id = request.getParameter("form_performance_id");
+		String form_performance_id = request.getParameter("form_performance_id");
 		// String metrics_id = request.getParameter("metrics_id");
 		String metrics_id = null;
-
-		ArrayList materials = (ArrayList) service.getRelateMaterials(Integer.parseInt(pf_id), 0);
+ 
+		ArrayList materials = (ArrayList) service.selectUserMaterials(Integer.parseInt(form_performance_id));
 		logger.info("successfully get materials list");
 
 		BackendData data = new BackendData();
@@ -857,6 +857,39 @@ public class ColTaskController {
 		ArrayList materials = new ArrayList();
 		materials.add(material);
 		int result = service.insertMaterials(materials);
+
+		logger.info("successfully insert material.");
+
+		BackendData data = new BackendData();
+		data.setMsg("成功添加材料");
+		data.setCode(0);
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/addMaterialPer", method = RequestMethod.POST, produces = "application/json")
+	public ResponseEntity<BackendData> addMaterialPer(HttpServletRequest request) {
+
+		String form_performance_id = request.getParameter("form_performance_id");
+		String metrics_id = request.getParameter("metrics_id");
+		// logger.info("metrics_id:" + metric);
+		String material_name = request.getParameter("material_name");
+		String memo = request.getParameter("memo");
+
+		Material material = new Material();
+		if (form_performance_id!=null&&!"".equals(form_performance_id))
+			material.setForm_performance_id(Integer.parseInt(form_performance_id));
+		if (metrics_id != null && !"".equals(metrics_id))
+			material.setMetrics_id(Integer.parseInt(metrics_id));
+		if (material_name != null && !"".equals(material_name))
+			material.setMaterial_name(material_name);
+		if (memo != null && !"".equals(memo))
+			material.setMemo(memo);
+
+		//ArrayList materials = new ArrayList();
+		//materials.add(material);
+		int result = service.insertRelateMaterial(material);
 
 		logger.info("successfully insert material.");
 
