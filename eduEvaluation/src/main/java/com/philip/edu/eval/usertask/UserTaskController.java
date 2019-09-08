@@ -115,10 +115,17 @@ public class UserTaskController {
 
 		// get user id:
 		String username = user_name_claim.asString();
-		int user_id = ((TblUsers) usersService.getUsers(username).get(0)).getId();
-
-		ArrayList lUserTask = (ArrayList) userTaskService.getSchoolTaskList(user_id);
-
+		TblUsers user = usersService.getUsers(username).get(0);
+		int user_id = user.getId();
+		int role_id = user.getRoleId();
+		ArrayList lUserTask = null;
+		
+		if(role_id == EvalConstants.ROLE_GOVERNMENT_MANAGEMENT){
+			lUserTask = (ArrayList) userTaskService.getAllTaskList();
+		} else if(role_id == EvalConstants.ROLE_SCHOOL_MANAGEMENT){
+			lUserTask = (ArrayList) userTaskService.getSchoolTaskList(user_id);
+		}
+	
 		logger.info("successfully get school task list");
 
 		data.setMsg("");
@@ -153,14 +160,14 @@ public class UserTaskController {
 			process_status = sProcess_status.charAt(0);
 		else
 			process_status = '-';
-
+ 
 		ArrayList taskList = (ArrayList) userTaskService.searchTaskList(task_id, school_id, major_id, process_status);
 
-		logger.info("successfully get major task list"); 
+ 		logger.info("successfully get major task list");   
 
 		data.setMsg("已获取所有专业的任务情况");
 		data.setCode(0);
-		data.setData(taskList);
+		data.setData(taskList); 
 		data.setCount(taskList.size());
 		// BackendData data = new BackendData();
 

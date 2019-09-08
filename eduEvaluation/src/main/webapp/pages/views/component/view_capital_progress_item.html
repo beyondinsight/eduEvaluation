@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>填报详情</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<style>
+.noborder td{
+border:0;
+}
+
+</style>
+<body>
+
+  <div class="layui-fluid">
+    <div class="layui-card">
+      <div class="layui-card-body">
+		<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_capital_form">
+		   <div class="layui-form-item" >
+			<input type="hidden" id="form_performance_id" name="form_performance_id"/>
+			<input type="hidden" id="edit_type" name="edit_type"/>
+			<table class="layui-table" style="width: 60%;">
+				<tr class="noborder"><td style="width: 80px;">实际值</td><td><input id="actural_value" name="actural_value" type="number" class="layui-input" style="width:50%;"></td></tr>
+			</table> 
+		  	      
+		        <table id="demo" lay-filter="demo"  style="margin-left:15px;"></table> 
+		        <script type="text/html" id="test-table-toolbar-barDemo">
+ 
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
+  
+       		 </script>
+			 </div>
+		   </div>
+		<div class="layui-form-item layui-hide">
+		  <input type="button" lay-submit lay-filter="edit_capital_form" id="edit_capital_form" value="确认添加">
+		</div>
+		</div>
+      </div>
+    </div>
+
+  <script src="../../layuiadmin/layui/layui.js"></script> 
+  <script src="../util/Constants.js"></script> 
+  <script>
+  var projectBase = Class.getURL();
+  layui.config({
+    base: '../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['index', 'contlist', 'table', 'layer','admin','upload','jquery'], function(){
+    var table = layui.table
+    ,form = layui.form
+	,admin = layui.admin
+	,upload=layui.upload
+	,$ = layui.$;    
+		
+	console.log("pf_id:" + $("#form_performance_id").val());
+	table.render({
+	  elem: '#demo'
+	  ,height: 380
+	  ,url: projectBase + '/collection/getRelateMaterials'//数据接口
+	  ,where: {'form_performance_id':$('#form_performance_id').val()} 
+	  //toolbar:'#toolbarDemo'
+	  ,page: true //开启分页
+	  ,cols: [[ //表头	
+	    {field: 'material_name', title: '支撑材料', align:'center'}
+	    ,{field: 'doc', title: '文件名' , align:'center'}
+	    ,{field: 'docsize', title: '文件大小', align:'center'} 
+	    ,{field: 'updateTime', title: '上传时间', align:'center'}	    
+		,{fixed: 'right', title:'操作', align:'center', toolbar: '#test-table-toolbar-barDemo'} 
+	  ]]
+	});
+	
+	//监听行工具事件
+	table.on('tool(demo)', function(obj){
+	  var data = obj.data;
+	  if(obj.event === 'del'){
+	    layer.confirm('确定删除这文件吗？', function(index){
+	    		$.ajax({
+	    					type:'POST',
+	    					url: projectBase + '/collectionmaterial/deletecollectionmaterial',
+	    					data:data,
+	    					dataType:'json',
+							async: false,
+	    					done:function(res){
+	    									if(res.code='0'){       
+	    					                        layer.msg('删除文件成功!');
+	    					                } else {          
+	    					                        layer.msg('删除文件失败!', function(){
+	    															layer.msg('删除文件失败!');
+	    													  });   
+	    					                }
+							},             
+	    					 error:function(data){
+	    												layer.msg('删除文件的过程中出现错误!', function(){
+	    													layer.msg('删除文件的过程中出现错误!');
+	    												});  
+	    					  }     
+	    				});
+	      obj.del();
+	      layer.close(index);
+		  layer.msg('已成功删除!');
+		  });
+	  } else if(obj.event === 'upload'){
+	    layer.open({
+	        type: 2 //此处以iframe举例
+	        ,title: '上传文件'
+	        ,area: ['50%', '70%']
+	        ,maxmin: true	        
+	        ,content: 'caller_upload.html'
+	    	,zIndex: layer.zIndex //重点1
+	        ,success: function(layero, index){
+	    	  var body = layer.getChildFrame('body',index);
+	    	  var inputList = body.find('input');
+	    	  $(inputList[0]).val(data.materialname);
+	    	  $(inputList[1]).val(data.doc);
+	    	  $(inputList[2]).val(data.docsize);
+	    	  $(inputList[3]).val(data.updateTime);
+	    	  var areaList = body.find('textarea');
+	    	  $(areaList[0]).val(data.memo);
+	    	  
+	          layer.setTop(layero); //重点2
+	        }
+	      });
+	  } 
+	  else if (obj.event === 'download'){		   
+				
+		  window.location.href= projectBase + "/collectionmaterial/downloadmaterial?doc="+data.doc;	     
+		
+	  }  
+	});
+	
+	
+    //监听搜索
+    form.on('submit(edit_capital_form)', function(data){
+      var field = data.field;
+      
+	  console.log("performance_id:" + $('#form_performance_id').val());
+      //执行重载
+
+      var index = parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index); //再执行关闭 
+    });
+    
+    var $ = layui.$, active = {
+      batchdel: function(){
+        var checkStatus = table.checkStatus('demo')
+        ,checkData = checkStatus.data
+		,id=[]; //得到选中的数据
+
+        if(checkData.length === 0){
+          return layer.msg('请选择文件');
+        }
+		
+		if(checkData.length > 0){
+			for (var i in checkData){
+				id.push(checkData[i].id);
+			}
+		}
+      
+        layer.confirm('确定删除这些文件吗？', function(index) {
+          $.ajax({
+          			type:'POST',
+          			url:'/deletecollectionmaterial',
+          			traditional: true,
+          			data:{id:id},
+          			dataType:'json',
+					async: false,
+          			success:function(res){
+          							if(res.code='0'){       
+          			                        layer.msg('删除文件成功!');
+          			                } else {          
+          			                        layer.msg('删除文件失败!', function(){
+          													layer.msg('删除文件失败!');
+          											  });   
+          			                }
+          			},             
+          			 error:function(data){
+          										layer.msg('删除文件的过程中出现错误!', function(){
+          											layer.msg('删除文件的过程中出现错误!');
+          										});  
+          			  },       
+          		});
+          //执行 Ajax 后重载
+          /*
+          admin.req({
+            url: 'xxx'
+            //,……
+          });
+          */
+          table.reload('demo');
+          layer.msg('已成功删除!');
+        });
+      },
+      add: function(){
+        layer.open({
+          type: 2
+          ,title: '支撑材料'
+          ,content: 'caller_new.html'
+          ,maxmin: true
+          ,area: ['50%', '70%']
+          ,btn: ['确认添加', '取消']
+          ,yes: function(index, layero){
+            //点击确认触发 iframe 内容中的按钮提交
+            var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+            submit.click();
+          }
+        }); 
+      }
+    }; 
+    
+
+    $('.layui-btn.layuiadmin-btn-list').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+  });
+  
+  
+  
+  </script>
+</body>
+</html>

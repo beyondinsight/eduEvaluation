@@ -12,9 +12,22 @@ public class MajorTask {
 	private String status_msg;
 	private Date update_time;
 	private int task_id;
+	private String task_name;
+	private String task_year;
 	
 	
-	
+	public String getTask_name() {
+		return task_name;
+	}
+	public void setTask_name(String task_name) {
+		this.task_name = task_name;
+	}
+	public String getTask_year() {
+		return task_year;
+	}
+	public void setTask_year(String task_year) {
+		this.task_year = task_year;
+	}
 	public int getTask_id() {
 		return task_id;
 	}

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>填报详情</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+  <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+</head>
+<body onload="goPage(1,10)">
+
+  <div class="layui-fluid">
+    <div class="layui-card">
+
+      <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="basic_form">
+       	<input type="text" hidden="hidden"    id="upload_id" name="upload_id">
+		<input type="hidden" id="form_performance_id" name="form_performance_id">
+        <table  id="demo"  lay-filter="demo"></table> 
+        <script type="text/html" id="test-table-toolbar-barDemo">
+          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
+        </script> 
+		
+		<div class="layui-form-item layui-hide">
+		  <input type="button" lay-submit lay-filter="basic_form" id="basic_form" value="确认添加">
+		</div>
+      </div>  
+   <!--      <table class="layui-table" id="zdheader">	
+        <tr><td>1</td></tr>	
+         <tr><td>1</td></tr>
+          <tr><td>1</td></tr>
+           <tr><td>1</td></tr>
+            <tr><td>1</td></tr>
+             <tr><td>1</td></tr>
+              <tr><td>1</td></tr>
+               <tr><td>1</td></tr>
+                <tr><td>1</td></tr>
+                 <tr><td>1</td></tr>
+                  <tr><td>1</td></tr>
+                   <tr><td>1</td></tr>
+                    <tr><td>1</td></tr>
+                     <tr><td>1</td></tr>
+                      <tr><td>1</td></tr>
+                       <tr><td>1</td></tr>
+                        <tr><td>1</td></tr>
+                         <tr><td>1</td></tr>
+            				 		
+		</table> 
+	 	 <div id="barcon" name="barcon"></div> -->
+    		
+      </div>
+    </div>
+
+  <script src="../../layuiadmin/layui/layui.js"></script> 
+  <script src="../util/Constants.js"></script> 
+  <script>
+  var projectBase = Class.getURL();
+
+    layui.config({
+    base: '../../layuiadmin/' //静态资源所在路径
+  }).extend({
+    index: 'lib/index' //主入口模块
+  }).use(['laydate', 'laypage','element','index', 'contlist', 'table', 'layer','admin','upload'], function(){
+    var table = layui.table //表格
+    ,laypage = layui.laypage //分页
+    ,layer = layui.layer //弹层
+    ,form = layui.form
+	,admin = layui.admin
+	,upload=layui.upload,
+	$ = layui.$; 
+    
+	table.render({
+	  elem: '#demo'
+	  ,height: 400
+	  ,width:1400
+	  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
+	  ,where: {'form_performance_id':$('#form_performance_id').val()}
+	  ,page: true //开启分页
+	  ,cols: [[ //表头
+		{type: 'checkbox', align:'center'}
+		,{type: 'numbers', title: '序号', align:'center'}
+	    ,{field: 'materialname', title: '支撑材料', align:'center'}
+	    ,{field: 'doc', title: '文件名', align:'center' }
+	    ,{field: 'docsize', title: '文件大小', align:'center',templet :function (row){
+	    	if(row.docsize != null){
+	    		 return row.docsize+' KB';
+	    	}else{
+	    		 return '';
+	    	}
+           
+        } } 
+	    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
+            return updateTime(row.updateTime);
+        } }	 
+		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
+	  ]]
+	 ,limits: [10,20,50]
+     ,limit: 10 //每页默认显示的数量
+	});
+	
+	//监听行工具事件
+	table.on('tool(demo)', function(obj){
+	  var data = obj.data;
+	  if(obj.event === 'del'){
+				if(data.required == 'Y')return layer.msg('这是必填文件，不能删除!',function(){
+					
+				}); 
+	    layer.confirm('确定删除这文件吗？', function(index){
+	    	
+	    		$.ajax({
+	    					type:'POST',
+	    					url: projectBase + '/collectionMaterial/deleteCollectionMaterial',
+	    					data:data,
+	    					dataType:'json',
+							async: false,
+	    					done:function(res){
+	    									if(res.code='0'){       
+	    					                        layer.msg('删除文件成功!');
+	    					                } else {          
+	    					                        layer.msg('删除文件失败!', function(){
+	    															layer.msg('删除文件失败!');
+	    													  });   
+	    					                }
+							},             
+	    					 error:function(data){
+	    												layer.msg('删除文件的过程中出现错误!', function(){
+	    													layer.msg('删除文件的过程中出现错误!');
+	    												});  
+	    					  }     
+	    				});
+	      obj.del();
+	      layer.close(index);
+		  layer.msg('已成功删除!');
+		  });
+	  } else if(obj.event === 'upload'){
+		  //alert(data.docsize);
+		   $('#upload_id').val(data.id);
+		   $("#upload").click();
+ 
+	  } 
+	  else if (obj.event == 'download'){			
+		  window.location.href= projectBase + "/collectionMaterial/downloadMaterial?doc="+data.doc;	     
+		
+	  }  
+	});
+	
+	
+    //监听搜索
+    form.on('submit(basic_form)', function(data){
+      var field = data.field;
+      //执行重载
+      var index = parent.layer.getFrameIndex(window.name);
+      parent.layer.close(index); //再执行关闭 
+    });
+    
+    var $ = layui.$, active = {
+      batchdel: function(){
+        var checkStatus = table.checkStatus('demo')
+        ,checkData = checkStatus.data
+		,id=[]; //得到选中的数据
+
+        if(checkData.length === 0){
+          return layer.msg('请选择文件');
+        }
+		
+		if(checkData.length > 0){
+			for (var i in checkData){
+				id.push(checkData[i].id);
+			}
+		}
+      
+        layer.confirm('确定删除这些文件吗？', function(index) {
+          $.ajax({
+          			type:'POST',
+          			url:'/deletecollectionmaterial',
+          			traditional: true,
+          			data:{id:id},
+          			dataType:'json',
+					async: false,
+          			success:function(res){
+          							if(res.code==0){       
+          			                        layer.msg('删除文件成功!');
+          			                } else {          
+          			                        layer.msg('删除文件失败!', function(){
+          													layer.msg('删除文件失败!');
+          											  });   
+          			                }
+          			},             
+          			 error:function(data){
+          										layer.msg('删除文件的过程中出现错误!', function(){
+          											layer.msg('删除文件的过程中出现错误!');
+          										});  
+          			  },       
+          		});
+          table.reload('demo');
+          layer.msg('已成功删除!');
+        });
+      },
+      add: function(){
+        layer.open({
+          type: 2
+          ,title: '支撑材料'
+          ,content: 'caller_new.html'
+          ,maxmin: true
+          ,area: ['500px', '300px']
+          ,btn: ['确认', '取消']
+          ,yes: function(index, layero){
+            //点击确认触发 iframe 内容中的按钮提交
+            var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+            submit.click();
+          },
+		  success: function(layero, index) {
+      			var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+      			$(pf_id).val($('#form_performance_id').val());
+      			layer.setTop(layero); //重点2
+      		}
+        }); 
+      }
+    }; 
+    
+
+    $('.layui-btn.layuiadmin-btn-list').on('click', function(){
+      var type = $(this).data('type');
+      active[type] ? active[type].call(this) : '';
+    });
+
+  });
+   
+
+    layui.use('upload', function(){
+  	  var $ = layui.jquery
+  	  ,upload = layui.upload;
+  	  var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
+
+  	  //指定允许上传的文件类型
+  	  upload.render({
+  	      elem: '#upload'
+  	      ,url: projectBase + '/collectionMaterial/uploadCollectionmaterial'
+  	      ,accept: 'file' //普通文件 
+  	      ,before: function(obj){ 
+  	    	layer.load(); //上传loading
+  	    	this.data={"upload_id":$('#upload_id').val()};
+  	    	}
+  	      ,done: function(res){
+  	    	  if(res.code == 0){
+	  	    	  layer.closeAll()
+	  	    	  layer.msg('上传成功');
+  	    	  }else{
+  	    		layer.closeAll()
+  	    		 layer.msg('上传失败');
+  	    	  }
+  	    	  layui.table.reload('demo'); //重载表格
+  	      } ,error:function(data){ 
+  	    	  layer.closeAll();
+  	    	  parent.layer.msg('上传失败');
+  	      },
+  	    
+  	    });  
+  	 
+    });
+    
+   function goPage(pno,psize){
+	    var itable = document.getElementById("zdheader");
+	    var num = itable.rows.length;//表格所有行数(所有记录数)
+
+	    var totalPage = 0;//总页数
+	    var pageSize = psize;//每页显示行数
+	    //总共分几页 
+	    if((num/pageSize) > parseInt(num/pageSize)){   
+	            totalPage = parseInt(num/pageSize)+1;   
+	       }else{   
+	            totalPage = parseInt(num/pageSize);   
+	       }   
+	    var currentPage = pno;//当前页数
+	    var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
+	    var endRow = currentPage * pageSize;//结束显示的行   40
+	    endRow = (endRow > num)? num : endRow;//    40
+		
+	       //遍历显示数据实现分页
+	    for(var i=1;i<num+1;i++){    
+	        var irow = itable.rows[i-1];
+	        if(i>=startRow && i<=endRow){
+	        	irow.hidden="";
+	        }else{
+	        	irow.hidden="hidden";
+	        }
+	    }
+	    var pageEnd = document.getElementById("pageEnd");
+	    var tempStr = "共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页";
+	    if(currentPage>1){
+	        tempStr += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+")\">首页</a>";
+	        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\"><上一页</a>"
+	    }else{
+	        tempStr += "首页";
+	        tempStr += "<上一页";    
+	    }
+
+	    if(currentPage<totalPage){
+	        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage+1)+","+psize+")\">下一页></a>";
+	        tempStr += "<a href=\"#\" onClick=\"goPage("+(totalPage)+","+psize+")\">尾页</a>";
+	    }else{
+	        tempStr += "下一页>";
+	        tempStr += "尾页";    
+	    }
+
+	    document.getElementById("barcon").innerHTML = tempStr;
+	}
+   
+   
+   function updateTime(v){
+		var date = new Date(v);
+	    var y = date.getFullYear();
+	    var m = date.getMonth()+1;
+	    m = m<10?'0'+m:m;
+	    var d = date.getDate();
+	    d = d<10?("0"+d):d;
+	    var h = date.getHours();
+	    h = h<10?("0"+h):h;
+	    var M = date.getMinutes();
+	    M = M<10?("0"+M):M;
+	    var str = y+"-"+m+"-"+d+" "+h+":"+M;
+	    return str;
+   }
+  
+  </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 package com.philip.edu.eval.usertask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -25,4 +26,6 @@ public interface UserTaskService {
 	public List<MajorTask> searchTaskList(int task_id, int school_id, int major_id, char process_status);
 	
 	public int updateMajorStatus( int collection_school_id,  int major_id);
+	
+	public List<SchoolTask> getAllTaskList();
 }

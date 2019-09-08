@@ -51,4 +51,9 @@ public class UserTaskServiceImpl implements UserTaskService {
 	public int updateMajorStatus( int collection_school_id,  int major_id) {
 		return collectionDAO.updateMajorStatus(collection_school_id, major_id);
 	}
+
+	public List<SchoolTask> getAllTaskList() {
+		// TODO Auto-generated method stub
+		return collectionDAO.selectAllTaskList();
+	}
 }

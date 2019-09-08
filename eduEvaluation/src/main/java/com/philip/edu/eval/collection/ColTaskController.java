@@ -456,7 +456,7 @@ public class ColTaskController {
 				break;
 			}
 		}
-		
+		   
 		int index = 0;
 		for (int j = i; j<metricsList.size(); j++){
 			MetricsDetail metrics = (MetricsDetail) metricsList.get(j);
@@ -688,6 +688,28 @@ public class ColTaskController {
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/getCapitalProgressDetail", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<BackendData> getCapitalProgressDetail(HttpServletRequest request) {
+
+		String collection_major_id = request.getParameter("collection_major_id");
+
+		ArrayList cpf = (ArrayList) service.selectCapitalProgress(Integer.parseInt(collection_major_id));
+		CapitalProgressForm cpform = (CapitalProgressForm) cpf.get(0);
+
+		ArrayList newList = service.setCapitalProgressMaterialsNumAndPerformanceId(cpform, propConfig);
+
+		logger.info("successfully get capitalProgress form");
+
+		BackendData data = new BackendData();
+		data.setMsg("成功获取资金支出表格");
+		data.setCode(0);
+		data.setData(newList);
+		data.setCount(newList.size());
+		// BackendData data = new BackendData();
+
+		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+	}
 
 	@RequestMapping(value = "/getBasicForm", method = RequestMethod.GET, produces = "application/json")
 	public ResponseEntity<BackendData> getBasicForm(HttpServletRequest request) {
@@ -696,7 +718,7 @@ public class ColTaskController {
 
 		ArrayList pfs = service.setBasicForm(Integer.parseInt(collection_major_id), propConfig);
 
-		BackendData data = new BackendData();
+		BackendData data = new BackendData(); 
 		data.setMsg("成功基本信息表格");
 		data.setCode(0);
 		data.setData(pfs);
@@ -735,10 +757,11 @@ public class ColTaskController {
 		int result = service.updatePerformanceForm(pf);
 
 		// update all the status:
-		service.updatePerformanceStatus(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION,
+		service.updatePerformanceStatus(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN,
 				Integer.parseInt(performance_id));
 		
 		//service.updateTaskStatus(id, process_status)
+		service.updateTaskStatus(service.getCollectionIdByPerformance(Integer.parseInt(performance_id)), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
 
 		logger.info("update performance form success");
 
@@ -790,10 +813,12 @@ public class ColTaskController {
 				cpf.setSchool_funding_internal(Double.parseDouble(actural_value));
 			}
 			cpf.setUpdate_time(new Date());
-			cpf.setProcess_status(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
+			cpf.setProcess_status(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN);
 		}
 
 		int result = service.updateCapitalProgressForm(cpf);
+		
+		service.updateTaskStatus(service.getCollectionIdByPerformance(Integer.parseInt(performance_id)), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
 
 		logger.info("update capital progress ");
 
@@ -1034,9 +1059,11 @@ public class ColTaskController {
 		if (collection_major_id != null && !"".equals(collection_major_id)) {
 			BasicForm bf = new BasicForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
-			bf.setProcess_status(EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
+			bf.setProcess_status(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN);
 			bf.setUpdate_time(new Date());
 			result = service.updateBasicForm(bf);
+			
+			service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
 		}
 		logger.info("successfully save the basic form");
 
@@ -1080,7 +1107,7 @@ public class ColTaskController {
 		if (collection_major_id != null && !"".equals(collection_major_id)) {
 			BasicForm bf = new BasicForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
-			bf.setProcess_status(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY);
+			bf.setProcess_status(EvalConstants.FORM_STATUS_COMPLETE);
 			bf.setUpdate_time(new Date());
 			result = service.updateBasicForm(bf);
 		}
@@ -1105,7 +1132,7 @@ public class ColTaskController {
 		if (collection_major_id != null && !"".equals(collection_major_id)) {
 			CapitalProgressForm bf = new CapitalProgressForm();
 			bf.setCollection_major_id(Integer.parseInt(collection_major_id));
-			bf.setProcess_status(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY);
+			bf.setProcess_status(EvalConstants.FORM_STATUS_COMPLETE);
 			bf.setUpdate_time(new Date());
 			result = service.updateCapitalFormStatus(bf);
 		}
@@ -1128,7 +1155,7 @@ public class ColTaskController {
 		int result = 0;
 
 		if (collection_major_id != null && !"".equals(collection_major_id)) {
-			result = service.updatePerformanceFormStatus(EvalConstants.PROCESS_STATUS_SCHOOL_VERIFY,
+			result = service.updatePerformanceFormStatus(EvalConstants.FORM_STATUS_COMPLETE,
 					Integer.parseInt(collection_major_id));
 		}
 		logger.info("successfully update the performance form");
@@ -1156,18 +1183,51 @@ public class ColTaskController {
 				result = service.updateTaskStatus(Integer.parseInt(collection_major_id),EvalConstants.PROCESS_STATUS_GOVERNMENT_VERIFY);
 			} else if("REJECT".equals(operation)) {
 				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_SCHOOL_REJECT);
+				
+				BasicForm bf = new BasicForm();
+				bf.setCollection_major_id(Integer.parseInt(collection_major_id));
+				bf.setProcess_status(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN);
+				bf.setUpdate_time(new Date());
+				service.updateBasicForm(bf);
+				
+				PerformanceForm pf = new PerformanceForm();
+				service.updatePerformanceFormStatus(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN, Integer.parseInt(collection_major_id));
+				
+				CapitalProgressForm cpf = new CapitalProgressForm();
+				cpf.setCollection_major_id(Integer.parseInt(collection_major_id));
+				cpf.setProcess_status(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN);
+				cpf.setUpdate_time(new Date());
+				service.updateCapitalFormStatus(cpf);
 			}
 		} else if("GOVERNMENT".equals(role)){
 			if("APPROVE".equals(operation)){
 				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GORVERNMENT_APPROVE);
 			} else if("REJECT".equals(operation)) {
 				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GOVERNMENT_REJECT);
+				
+				BasicForm bf = new BasicForm();
+				bf.setCollection_major_id(Integer.parseInt(collection_major_id));
+				bf.setProcess_status(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN);
+				bf.setUpdate_time(new Date());
+				service.updateBasicForm(bf);
+				
+				PerformanceForm pf = new PerformanceForm();
+				service.updatePerformanceFormStatus(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN, Integer.parseInt(collection_major_id));
+				
+				CapitalProgressForm cpf = new CapitalProgressForm();
+				cpf.setCollection_major_id(Integer.parseInt(collection_major_id));
+				cpf.setProcess_status(EvalConstants.FORM_STATUS_INPUTING_INFORMATIN);
+				cpf.setUpdate_time(new Date());
+				service.updateCapitalFormStatus(cpf);
 			}
 		}
 		
 		if (result != 0) {
 			data.setMsg("成功完成审批");
-			data.setCode(0);
+			data.setCode(1);
+		} else {
+			data.setMsg("审批失败");
+			data.setCode(99);
 		}
 		
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);

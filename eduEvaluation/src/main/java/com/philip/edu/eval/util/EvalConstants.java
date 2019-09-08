@@ -17,6 +17,10 @@ public class EvalConstants {
 	public static final String PROCESS_STATUS_DISPLAY_GOVERNMENT_REJECT = "教育厅退回，待重新填报";
 	public static final String PROCESS_STATUS_DISPLAY_GOVERNMENT_APPROVE = "教育厅已审核入库";
 	
+	public static final char FORM_STATUS_NOT_INPUT = 'N';
+	public static final char FORM_STATUS_INPUTING_INFORMATIN = 'I';
+	public static final char FORM_STATUS_COMPLETE = 'C';
+	
 	public static final int DEFAULT_METRICS_SYSTEM_ID = 1;
 	
 	public static final int TEMPLATE_PERFORMANCE_FORM_ID = 1;
@@ -39,4 +43,9 @@ public class EvalConstants {
 	
 	public static final char MATERIAL_IS_REQUIRED = 'Y';
 	public static final char MATERIAL_IS_REQUIRED_NO = 'N';
+	
+	public static final int ROLE_GOVERNMENT_MANAGEMENT = 1;
+	public static final int ROLE_SCHOOL_MANAGEMENT = 2;
+	public static final int ROLE_MAJOR_REPORTER = 3;
+	public static final int ROLE_EVALUATOR = 4;
 }

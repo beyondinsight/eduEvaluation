@@ -49,8 +49,10 @@
 	</resultMap>
 	
 	<resultMap id="MajorTaskResultMap" type="com.philip.edu.eval.bean.MajorTask">
-		<id property="collection_major_id" column="colletion_major_id"/>
+		<result property="collection_major_id" column="m_colletion_major_id"/>
 		<result property="task_id" column="task_id"/>
+		<result property="task_name" column="task_name"/>
+		<result property="task_year" column="task_year"/>
 		<result property="school_id" column="school_id"/>
 		<result property="school_name" column="school_name"/>
 		<result property="major_id" column="major_id"/>
@@ -97,6 +99,7 @@
 		<result property="material_name" column="material_name" />
 		<result property="update_time" column="update_time" />
 		<result property="doc_size" column="doc_size" />
+		<result property="doc" column="doc" />
  	</resultMap>
  	
  	<resultMap id="capitalResultMap" type="com.philip.edu.eval.bean.CapitalProgressForm">
@@ -314,11 +317,11 @@
     
     <select id="getPerformanceForm" resultMap="performanceResultMap" >
     	select pf.id,collection_major_id, metrics_id, metric_name, m.unit, m.level, m.pid, m.morder, current_value, target_value, actual_value, score, self_evaluate, self_introduction, process_status
-    	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id} and for_template=#{for_template}
+    	from tbl_form_performance pf left join tbl_metrics_detail m on pf.metrics_id = m.id where collection_major_id = #{collection_major_id} and for_template=#{for_template} order by m.pid, m.morder
     </select>
     
     <select id="getRelateMaterials" resultMap="materialResultMap">
-    	 select cm.id, material_id, sm.material_name, cm.update_time, doc_size, sm.metrics_id
+    	 select cm.id, material_id, sm.material_name, cm.update_time, cm.doc, doc_size, sm.metrics_id
 		 from  tbl_support_material sm, tbl_collection_material cm
 		 where cm.material_id=sm.id and cm.form_performance_id=#{pf_id}
     </select>
@@ -578,8 +581,14 @@
 		where t.id = s.collection_task_id and s.school_id = u.school_id and user_id=#{user_id} and t.status='A';
 	</select>
 	
+	<select id="selectAllTaskList" resultMap="SchoolTaskResultMap">
+		select t.id, t.task_name, t.task_year, t.start_time, t.end_time
+		FROM tbl_collection_tasks t
+		where t.status='A'
+	</select>
+	
 	<select id="searchTaskList" resultMap="MajorTaskResultMap">
-		select t.id as task_id, m.id as collection_major_id, s.school_id, s1.school_name, m.major_id, m1.major_name, m.process_status, c.config_value, m.update_time  
+		select t.id as task_id,t.task_name,t.task_year, m.id as m_colletion_major_id, s.school_id, s1.school_name, m.major_id, m1.major_name, m.process_status, c.config_value, m.update_time  
 		from tbl_collection_tasks t, tbl_collection_school s, tbl_collection_major m, tbl_school s1, tbl_major m1, tbl_config c 
 		where t.id = s.collection_task_id and s.id = m.collection_school_id and s1.id = s.school_id and m1.id = m.major_id and c.key_string = m.process_status
 		<if test="task_id!=0">
@@ -604,6 +613,10 @@
 		update tbl_collection_major set process_status=#{process_status}, update_time=now()
 		where id=#{id}
 	</update>
+	
+	<select id="getCollectionIdByPerformance" resultType="int[]">
+		select collection_major_id from tbl_form_performance where id=#{id}
+	</select>
 	
 	<update id="updateMajorStatus">
 	  update tbl_collection_major set

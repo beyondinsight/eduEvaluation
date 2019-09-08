@@ -4,8 +4,15 @@ public class BasicFormInfo {
 	private String item_name;
 	private int performance_id;
 	private String materials_num;
+	private String metrics_name;
 	
 	
+	public String getMetrics_name() {
+		return metrics_name;
+	}
+	public void setMetrics_name(String metrics_name) {
+		this.metrics_name = metrics_name;
+	}
 	public String getMaterials_num() {
 		return materials_num;
 	}

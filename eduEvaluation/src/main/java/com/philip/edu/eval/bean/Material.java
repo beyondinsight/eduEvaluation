@@ -14,7 +14,15 @@ public class Material {
 	private int material_id;
 	private char is_required;
 	private int form_performance_id;
+	private String doc;
 	
+	
+	public String getDoc() {
+		return doc;
+	}
+	public void setDoc(String doc) {
+		this.doc = doc;
+	}
 	public int getForm_performance_id() {
 		return form_performance_id;
 	}
