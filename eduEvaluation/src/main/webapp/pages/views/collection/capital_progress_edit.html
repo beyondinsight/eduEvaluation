@@ -22,7 +22,7 @@ border:0;
       <div class="layui-card-body">
 		<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_capital_form">
 		   <div class="layui-form-item" >
-			<input   id="form_performance_id" name="form_performance_id"/>
+			<input  hidden="hidden" id="form_performance_id" name="form_performance_id"/>
 			<input type="hidden" id="edit_type" name="edit_type"/>
 			<table class="layui-table" style="width: 60%;">
 				<tr class="noborder"><td style="width: 80px;text-align: left;">实际值：</td><td><input id="actural_value" name="actural_value" type="number" class="layui-input" style="width:50%;"></td></tr>
@@ -183,7 +183,7 @@ border:0;
           ,title: '支撑材料'
           ,content: 'caller_new.html'
           ,maxmin: true
-          ,area: ['500px', '400px']
+          ,area: ['500px', '420px']
           ,btn: ['确认', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交

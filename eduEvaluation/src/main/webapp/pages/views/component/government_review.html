@@ -43,20 +43,19 @@ input {
 								<td style="width:160px;"><input type="text" id="school_name" readonly="readonly" /></td>
 								<td style="width:40px;">专业：</td>
 								<td style="width:160px;"><input type="text" id="major_name" readonly="readonly" /></td>
-							</tr>
-							<tr class="noborder">
-								<td colspan="6" style="text-align: right;"><button class="layui-btn layuiadmin-btn-list layui-btn-danger" id="reject_btn"><i class="layui-icon layui-icon-close"></i>退回</button>
-								<button class="layui-btn layuiadmin-btn-list layui-btn-checked" id="approve_btn" > <i class="layui-icon layui-icon-ok-circle"></i>审核通过</button>
-								</td>
-							</tr>
+							</tr> 
 						</table>
+						<div style="position:relative;right: 0;text-align: right;">
+						       <button class="layui-btn layuiadmin-btn-list layui-btn-danger" id="reject_btn"><i class="layui-icon layui-icon-close"></i>退回</button>
+								<button class="layui-btn layuiadmin-btn-list layui-btn-checked" id="approve_btn" > <i class="layui-icon layui-icon-ok-circle"></i>审核通过</button>
+						 </div>
 						<table id="template" class="layui-table" style="width:70%;" lay-filter="template"></table>
 						<script type="text/html" id="collection_list_operation_toolbar">
-							<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><i class="layui-icon layui-icon-edit"></i>查看</a>
+							<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#ffffff"></path></svg>查看</a>
        		</script>
 						<table id="result" class="layui-table" style="width:70%;" lay-filter="result"></table>
 						<script type="text/html" id="ItemDetails">
-							<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+							<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><svg t="1567675191751" class="icon" style="margin-top:5px;height:12px;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2377" width="15" height="15"><path d="M512.3328 206.554112c-303.401984 0-459.177984 305.772544-459.177984 305.772544s117.551104 305.814528 459.177984 305.814528c309.380096 0 459.162624-304.621568 459.162624-304.621568S820.52096 206.554112 512.3328 206.554112zM513.025024 703.459328c-110.930944 0-191.125504-83.627008-191.125504-191.133696 0-107.521024 80.19456-191.118336 191.125504-191.118336 110.926848 0 191.121408 83.596288 191.121408 191.118336C704.146432 619.83232 623.951872 703.459328 513.025024 703.459328zM513.025024 397.6448c-63.398912 0.137216-114.676736 53.246976-114.676736 114.680832 0 61.395968 51.277824 114.680832 114.676736 114.680832 63.398912 0 114.669568-53.284864 114.669568-114.680832C627.694592 450.876416 576.423936 397.522944 513.025024 397.6448z" p-id="2378" fill="#ffffff"></path></svg>查看</a>
 			</script>
 					</div>
 
@@ -103,7 +102,7 @@ input {
 				//console.log("task_id:" + data2.task_id);
 				table.render({
 					elem: '#template',
-					//height: 300,
+					width: 400,
 					url: projectBase + '/userTask/majorCollectionStatus',
 					where: {
 						task_id: data2.task_id,
@@ -122,8 +121,7 @@ input {
 							{
 								field: 'collection_template_name',
 								title: '待审核内容',
-								align: 'center',
-								width: 200
+								align: 'center'
 							},
 							{
 								fixed: 'right',
@@ -328,7 +326,7 @@ input {
 								type: 2 //此处以iframe举例
 									,
 								title: '查看详情',
-								area: ['70%', '80%'],
+								area: ['1000px', '80%'],
 								//shade: 0,
 								maxmin: true,
 								btn: ['确定', '取消'],
@@ -373,7 +371,7 @@ input {
 								type: 2 //此处以iframe举例
 									,
 								title: '查看详情',
-								area: ['60%', '70%'],
+								area: ['1000px', '70%'],
 								//shade: 0,
 								maxmin: true,
 								btn: ['确定', '取消'],
@@ -396,7 +394,7 @@ input {
 								type: 2 //此处以iframe举例
 									,
 								title: '查看详情',
-								area: ['60%', '70%'],
+								area: ['1000px', '70%'],
 								//shade: 0,
 								maxmin: true,
 								btn: ['确定', '取消'],
@@ -515,7 +513,7 @@ input {
 						type: 2 //此处以iframe举例
 							,
 						title: '退回并填写退回理由',
-						area: ['60%', '70%'],
+						area: ['430px', '300px'],
 						//shade: 0,
 						maxmin: true,
 						btn: ['退回', '取消'],
@@ -558,15 +556,13 @@ input {
 															parent.layui.admin.events.refresh();
 															parent.layui.admin.events.closeThisTabs(); 
 									                } else {          
-									                        layer.msg('通过失败!', function(){
-																			
-																	  });   
+									                        layer.msg('通过失败!');   
 									                }
 									},             
 									 error:function(data){
-																layer.msg('通过任务的过程中出现错误!', function(){
-																	layer.msg('通过任务的过程中出现错误!');
-																});  
+																
+											layer.msg('通过任务的过程中出现错误!');
+															
 									  }      
 								});
 						});

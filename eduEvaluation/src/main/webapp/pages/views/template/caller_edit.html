@@ -95,15 +95,15 @@
 	    									if(res.code==0){       
 	    					                        layer.msg('删除文件成功!');
 	    					                } else {          
-	    					                        layer.msg('删除文件失败!', function(){
+	    					                      
 	    															layer.msg('删除文件失败!');
-	    													  });   
+	    													
 	    					                }
 							},             
 	    					 error:function(data){
-	    												layer.msg('删除文件的过程中出现错误!', function(){
+	    									
 	    													layer.msg('删除文件的过程中出现错误!');
-	    												});  
+	    										
 	    					  }     
 	    				});
 	      obj.del();
@@ -161,15 +161,15 @@
           							if(res.code==0){       
           			                        layer.msg('删除文件成功!');
           			                } else {          
-          			                        layer.msg('删除文件失败!', function(){
+          			                   
           													layer.msg('删除文件失败!');
-          											  });   
+          											
           			                }
           			},             
           			 error:function(data){
-          										layer.msg('删除文件的过程中出现错误!', function(){
+          									
           											layer.msg('删除文件的过程中出现错误!');
-          										});  
+          								 
           			  },       
           		});
           table.reload('demo');

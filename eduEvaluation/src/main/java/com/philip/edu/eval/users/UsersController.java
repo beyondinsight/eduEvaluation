@@ -427,16 +427,16 @@ public class UsersController {
 
 			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 		}
-
+		
 		// save new password:
-		TblUsers user = new TblUsers();
+		/*TblUsers user = new TblUsers();
 		String newPassword = request.getParameter("password");
-		String newTempPassword = SecurityUtil.md5Hex(user_mes.getUserName() + newPassword + user_mes.getSalt());
+		String newTempPassword = SecurityUtil.md5Hex(user_name_claim.getUserName() + newPassword + user_mes.getSalt());
 		user.setPassword(newTempPassword);
 		user.setUpdateTime(new Date());
 		user.setId(user_mes.getId());
 		
-		result = service.updateUsers(user);
+		result = service.updateUsers(user);*/
 
 		logger.info("successfully get the users list");
 
