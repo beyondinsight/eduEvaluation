@@ -511,35 +511,33 @@ input {
 				}
 				
 				$('#reject_btn').on('click', function() {
-					layer.confirm('确定将该项填报退回吗？', function(index) {
-						$.ajax({
-									type:'POST',
-									url: projectBase + '/collection/auditReport',
-									data:{
-										'collection_major_id':data2.collection_major_id,
-										'role':'GOVERNMENT',
-										'operation':'REJECT'
-									},
-									dataType:'json',
-									async: false,
-									success:function(res){
-													if(res.code==1){       
-									                        layer.msg('该项填报已退回');
-															parent.layui.admin.events.refresh();
-															parent.layui.admin.events.closeThisTabs(); 
-									                } else {          
-									                        layer.msg('退回失败!', function(){
-																			
-																	  });   
-									                }
-									},             
-									 error:function(data){
-																layer.msg('退回任务的过程中出现错误!', function(){
-																	layer.msg('退回任务的过程中出现错误!');
-																});  
-									  }      
-								});
-						});
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '退回并填写退回理由',
+						area: ['60%', '70%'],
+						//shade: 0,
+						maxmin: true,
+						btn: ['退回', '取消'],
+						yes: function(index, layero) {
+							console.log("start to submit.");
+							var submit = layero.find('iframe').contents().find("#reject_form");
+							submit.click();
+							
+							parent.layer.close(index); //再执行关闭  
+						},
+						content: 'reject_reason.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							var c_major_id = layero.find('iframe').contents().find("#collection_major_id");
+							$(c_major_id).val(data2.collection_major_id);
+							var submit = layero.find('iframe').contents().find("#material_form");
+							submit.click();
+							layer.setTop(layero); //重点2
+							
+						}
+					});
 				});
 				
 				$('#approve_btn').on('click', function() {

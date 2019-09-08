@@ -761,7 +761,7 @@ public class ColTaskController {
 				Integer.parseInt(performance_id));
 		
 		//service.updateTaskStatus(id, process_status)
-		service.updateTaskStatus(service.getCollectionIdByPerformance(Integer.parseInt(performance_id)), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
+		service.updateTaskStatus(service.getCollectionIdByPerformance(Integer.parseInt(performance_id)), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION,null);
 
 		logger.info("update performance form success");
 
@@ -818,7 +818,7 @@ public class ColTaskController {
 
 		int result = service.updateCapitalProgressForm(cpf);
 		
-		service.updateTaskStatus(service.getCollectionIdByPerformance(Integer.parseInt(performance_id)), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
+		service.updateTaskStatus(service.getCollectionIdByPerformance(Integer.parseInt(performance_id)), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION, null);
 
 		logger.info("update capital progress ");
 
@@ -1063,7 +1063,7 @@ public class ColTaskController {
 			bf.setUpdate_time(new Date());
 			result = service.updateBasicForm(bf);
 			
-			service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION);
+			service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_INPUTING_INFORMATION, null);
 		}
 		logger.info("successfully save the basic form");
 
@@ -1176,13 +1176,14 @@ public class ColTaskController {
 		BackendData data = new BackendData();
 		String collection_major_id = request.getParameter("collection_major_id");
 		String role = request.getParameter("role");
-		String operation = request.getParameter("operation");		
+		String operation = request.getParameter("operation");	
+		String memo = request.getParameter("memo");
 		
 		if("SCHOOL".equals(role)){
 			if("APPROVE".equals(operation)){
-				result = service.updateTaskStatus(Integer.parseInt(collection_major_id),EvalConstants.PROCESS_STATUS_GOVERNMENT_VERIFY);
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id),EvalConstants.PROCESS_STATUS_GOVERNMENT_VERIFY, memo);
 			} else if("REJECT".equals(operation)) {
-				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_SCHOOL_REJECT);
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_SCHOOL_REJECT, memo);
 				
 				BasicForm bf = new BasicForm();
 				bf.setCollection_major_id(Integer.parseInt(collection_major_id));
@@ -1201,9 +1202,10 @@ public class ColTaskController {
 			}
 		} else if("GOVERNMENT".equals(role)){
 			if("APPROVE".equals(operation)){
-				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GORVERNMENT_APPROVE);
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GORVERNMENT_APPROVE,memo);
 			} else if("REJECT".equals(operation)) {
-				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GOVERNMENT_REJECT);
+				
+				result = service.updateTaskStatus(Integer.parseInt(collection_major_id), EvalConstants.PROCESS_STATUS_GOVERNMENT_REJECT, memo);
 				
 				BasicForm bf = new BasicForm();
 				bf.setCollection_major_id(Integer.parseInt(collection_major_id));
