@@ -170,7 +170,7 @@
 								url: projectBase + '/user/login',
 								data: {
 									username: $("#loginname").val(),
-									password: $("#password").val()
+									password: $.md5($("#password").val())
 								},
 								dataType: 'json',
 								//async: false,

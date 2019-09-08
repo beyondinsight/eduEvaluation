@@ -48,9 +48,11 @@ public class SecurityUtil {
 	}
 
 	public static String createToken(String user_name) throws Exception {
+		Properties prop = PropertiesUtil.getProperty("config");
+		Integer iSessionTime = new Integer(prop.getProperty("session_timeout"));
 		Date iatDate = new Date();
 		Calendar nowTime = Calendar.getInstance();
-		nowTime.add(Calendar.DATE, 10);
+		nowTime.add(Calendar.DATE, iSessionTime.intValue());
 		Date expiresDate = nowTime.getTime();
 
 		String secret_key = propConfig.getProperty("secret_key");
@@ -78,7 +80,7 @@ public class SecurityUtil {
 	}
 
 	public static void main(String[] args) {
-		try {
+		/*try {
 			String token = SecurityUtil.createToken("candy");
 			System.out.println(token);
 
@@ -93,6 +95,8 @@ public class SecurityUtil {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
+		
+		System.out.println(SecurityUtil.md5Hex("123456"));
 	}
 }

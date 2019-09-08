@@ -268,8 +268,7 @@ public class UsersController {
 		users.setUserName(userName);
 
 		// set password MD5 twice:
-		String tempPassword = SecurityUtil.md5Hex(password);
-		password = SecurityUtil.md5Hex(userName + tempPassword + users.getSalt());
+		password = SecurityUtil.md5Hex(userName + password + users.getSalt());
 		users.setPassword(password);
 
 		if (roleId != null && !roleId.equals("")) {
@@ -428,15 +427,33 @@ public class UsersController {
 			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 		}
 		
+		// check old password:
+	
+		// get user id:
+		String username = user_name_claim.asString();
+		TblUsers user_mes = (TblUsers) service.getUsers(username).get(0);
+		
+		// check old password:
+		String oldPassword = request.getParameter("oldPassword");
+		String tempPassword = SecurityUtil.md5Hex(user_mes.getUserName() + oldPassword + user_mes.getSalt());
+		if(!tempPassword.equals(user_mes.getPassword())){
+			data.setMsg("您的旧密码不正确！");
+			data.setCode(30);
+			// BackendData data = new BackendData();
+
+			return new ResponseEntity<BackendData>(data, HttpStatus.OK);
+		}
+		
+		
 		// save new password:
-		/*TblUsers user = new TblUsers();
+		TblUsers user = new TblUsers();
 		String newPassword = request.getParameter("password");
-		String newTempPassword = SecurityUtil.md5Hex(user_name_claim.getUserName() + newPassword + user_mes.getSalt());
+		String newTempPassword = SecurityUtil.md5Hex(username + newPassword + user_mes.getSalt());
 		user.setPassword(newTempPassword);
 		user.setUpdateTime(new Date());
 		user.setId(user_mes.getId());
 		
-		result = service.updateUsers(user);*/
+		result = service.updateUsers(user);
 
 		logger.info("successfully get the users list");
 
@@ -444,10 +461,10 @@ public class UsersController {
 
 		if (result != 0) {
 			code = 0;
-			msg = "用户删除成功";
+			msg = "修改密码成功！";
 		} else {
 			code = 99;
-			msg = "用户删除失败";
+			msg = "修改密码失败";
 		}
 
 		return new ResponseEntity<BackendData>(mes(code, msg), HttpStatus.OK);

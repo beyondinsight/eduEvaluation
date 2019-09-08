@@ -25,7 +25,7 @@ color:red;
    <table class="layui-table">
    		<tr  class="noborder">
    			<td><span>*</span>用户账号:</td><td><input type="text" name="userName"   lay-verify="required|user_exp" placeholder="必填项" autocomplete="off" class="layui-input"></td>
-   			<td><span>*</span>登录密码:</td><td> <input type="password" name="password"   lay-verify="required|pass_exp" placeholder="必填项" autocomplete="off" class="layui-input"></td>
+   			<td><span>*</span>登录密码:</td><td> <input type="password" name="password" id="password"   lay-verify="required|pass_exp" placeholder="必填项" autocomplete="off" class="layui-input"></td>
    		</tr>
    		
    		<tr  class="noborder">  			
@@ -67,6 +67,9 @@ color:red;
 
   <script src="../../layuiadmin/layui/layui.js"></script>
   <script src="../util/Constants.js"></script>
+  <script type="text/javascript" src="../../login/js/jquery-1.7.2.js"></script>
+  <script type="text/javascript" src="../../login/js/jQuery.md5.js"></script>
+  
   <script>
   var projectBase = Class.getURL();
   var userinfo = layui.data('userinfo');
@@ -76,7 +79,7 @@ color:red;
   }).extend({
     index: 'lib/index' ,//主入口模块
 	//autocomplete: 'autocomplete'
-  }).use(['index', 'form', 'admin'], function(){
+  }).use(['index', 'form', 'admin', 'user', 'jquery'], function(){
     var $ = layui.$
     ,form = layui.form
 	,admin = layui.admin;
@@ -196,8 +199,9 @@ color:red;
       var field = data.field; //获取提交的字段
       var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引  
       //提交 Ajax 成功后，关闭当前ajax弹层并重载表格
-	    
-    
+	  
+	  console.log("password:" + $.md5($("#password").val()));
+	  field.password = $.md5($("#password").val());
 	  $.ajax({
 		  type: 'POST',
 		  url: projectBase + '/user/addUsers',

@@ -553,8 +553,12 @@ input {
 									success:function(res){
 													if(res.code==1){       
 									                        layer.msg('该项填报已审核通过');
-															parent.layui.admin.events.refresh();
-															parent.layui.admin.events.closeThisTabs(); 
+															setTimeout(function(){
+																
+																parent.layui.admin.events.closeThisTabs();
+																//var index = parent.layer.getFrameIndex(window.name);
+																//parent.layer.close(index); //再执行关闭   
+																},800);
 									                } else {          
 									                        layer.msg('通过失败!');   
 									                }

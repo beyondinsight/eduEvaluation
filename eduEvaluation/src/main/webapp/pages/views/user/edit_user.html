@@ -27,7 +27,7 @@ color:red;
    <table class="layui-table">
    		<tr  class="noborder">
    			<td><span>*</span>用户账号:</td><td><input type="text" name="userName"   lay-verify="required|user_exp" placeholder="必填项" autocomplete="off" class="layui-input" readonly="readonly"></td>
-   			<td>登录密码:</td><td> <input type="password" name="password"   lay-verify="pass_exp"   autocomplete="off" class="layui-input"></td>
+   			<td>登录密码:</td><td> <input type="password" name="password" id="password"  lay-verify="pass_exp"   autocomplete="off" class="layui-input"></td>
    		</tr>
    		
    		<tr  class="noborder">  			
@@ -209,6 +209,7 @@ color:red;
 
       //提交 Ajax 成功后，关闭当前弹层并重载表格
       //$.ajax({});
+	  field.password = $.md5($("#password").val());
 	  admin.req({
 		  type: 'POST',
 		  url: projectBase + '/user/updateUsers',
