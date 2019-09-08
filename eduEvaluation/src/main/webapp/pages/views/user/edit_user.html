@@ -45,7 +45,7 @@ color:red;
    			<td><span id="isRed"  hidden="hidden">*</span>所属院校:</td><td style="text-align: left;"> 		   		
 		   			<input  hidden="hidden" id="schoolId_hidden"/>
 		   								<select name="schoolId" id="schoolId" lay-search=""  lay-filter="schoolId" >
-											<option value="">直接选择或搜索选择</option>
+											<option value=""></option>
 										</select>
    			</td>
    		</tr>
@@ -147,7 +147,7 @@ color:red;
     	    user_exp: function(value, item){ //value：表单的值、item：表单的DOM对象
 
     	    if(!(/^[a-zA-Z0-9_-]{4,9}$/.test(value))){
-    	      return '用户名必须为4-10位字母,数字';
+    	      return '用户名必须为4-9位字母,数字';
     	    }
     	   
     	  },
@@ -156,7 +156,7 @@ color:red;
     	  //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
     	  pass_exp:function(value, item){
     		  if(value !="" && value != null && !(/^[\S]{6,12}$/.test(value))){
-    			  return "密码必须6到12位，且不能出现空格";
+    			  return "密码必须6到20位，且不能出现空格";
     	 		 }
     	  },chinese_exp :[
     		/^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,8}$/

@@ -40,6 +40,7 @@ import com.philip.edu.eval.bean.TblUserRole;
 import com.philip.edu.eval.bean.TblUsers;
 import com.philip.edu.eval.role.RolesService;
 import com.philip.edu.eval.users.UsersService;
+import com.philip.edu.eval.util.PageUtil;
 import com.philip.edu.eval.util.SecurityUtil;
 
 
@@ -70,9 +71,16 @@ public class SchoolUserController {
 		ArrayList usersList = (ArrayList) service.getNameSchoolUser(Integer.parseInt(roleId));
 		logger.info("successfully get the roles list");
 		
+		PageUtil pu = new PageUtil();
+		int page =0;
+		int limit =0;
+        page =Integer.parseInt(request.getParameter("page"));
+        limit =Integer.parseInt(request.getParameter("limit"));
+        ArrayList   pagelist =  pu.batchList(usersList, page, limit);
+		
 		data.setMsg("");
 		data.setCode(0); 
-		data.setData(usersList);
+		data.setData(pagelist);
 		data.setCount(usersList.size());
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
@@ -251,10 +259,19 @@ public class SchoolUserController {
 	    }
  
 		logger.info("successfully get the roles list");
+
+		PageUtil pu = new PageUtil();
+		int page =0;
+		int limit =0;
+        page =Integer.parseInt(request.getParameter("page"));
+        limit =Integer.parseInt(request.getParameter("limit"));
+        ArrayList   pagelist =  pu.batchList(usersList, page, limit);
+		
+		
 		
 		data.setMsg("");
 		data.setCode(0); 
-		data.setData(usersList);
+		data.setData(pagelist);
 		data.setCount(usersList.size());
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);

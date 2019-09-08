@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html style="background-color: white;">
 	<head>
 		<meta charset="utf-8">
 		<title>数据填报模板定义 - 资金支出进度</title>
@@ -9,10 +9,10 @@
 		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
 		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 	</head>
-	<body>
+	<body style="background-color: white;">
 
-		<div class="layui-fluid">
-			<div class="layui-card">
+		<div class="layui-fluid" style="background-color: white;">
+			<div class="layui-card" style="background-color: white;">
 				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form" id="col_task_form">
 	
 					<!--<div class="layui-form-item">
@@ -69,17 +69,20 @@
 					elem: '#LAY-app-content-list',
 					url: projectBase + '/collection/getCapitalMetrics',
 					//page: true, //开启分页
+					width:1000,
 					height: 500	,
 					cols: [
 						[ //表头
 							{
 								field: 'metrics_name',
 								title: '资金支出进度',
-								align: 'left' 
+								align: 'left',
+								width:350
 							}, { 
 								field: 'unit',
 								title: '单位',
-								align: 'center' 
+								align: 'center',
+								width:100 
 							},{
 								field: 'value',
 								title: '实际值',
@@ -92,7 +95,7 @@
 								title: '操作',
 								toolbar: '#test-table-toolbar-barDemo',
 								align: 'center',
-								width: 160
+								width: 80
 							}
 						]
 					]
@@ -172,7 +175,7 @@
 							type: 2 //此处以iframe举例
 								,
 							title: '设置支撑材料',
-							area: ['800px', '600px'],
+							area: ['720px', '500px'],
 							//shade: 0,     
 							maxmin: true,
 							btn: ['确认', '取消'],

@@ -26,6 +26,7 @@ import com.philip.edu.eval.collection.ColTaskService;
 import com.philip.edu.eval.user_role.UserService;
 import com.philip.edu.eval.users.UsersService;
 import com.philip.edu.eval.util.EvalConstants;
+import com.philip.edu.eval.util.PageUtil;
 import com.philip.edu.eval.util.SecurityUtil;
 import com.philip.edu.eval.bean.TblUsers;
 
@@ -145,6 +146,14 @@ public class UserTaskController {
 		String sSchool_id = request.getParameter("school_id");
 		String sMajor_id = request.getParameter("major_id");
 		String sProcess_status = request.getParameter("process_status");
+		
+		PageUtil pu = new PageUtil();
+		int page = 0;
+		int limit = 0;
+		page = Integer.parseInt(request.getParameter("page"));
+		limit = Integer.parseInt(request.getParameter("limit"));
+		
+		
 		int task_id = 0;
 		int school_id = 0;
 		int major_id = 0;
@@ -167,7 +176,8 @@ public class UserTaskController {
 
 		data.setMsg("已获取所有专业的任务情况");
 		data.setCode(0);
-		data.setData(taskList); 
+		ArrayList pagelist = pu.batchList(taskList, page, limit);
+		data.setData(pagelist);
 		data.setCount(taskList.size());
 		// BackendData data = new BackendData();
 
@@ -263,22 +273,22 @@ public class UserTaskController {
 				(new Integer(task_id)).intValue(), (new Integer(school_id)).intValue(),
 				(new Integer(major_id)).intValue());
 
-		ArrayList tempList = new ArrayList();
+		/*ArrayList tempList = new ArrayList();
 		if (lMajorCollectionStatus != null && lMajorCollectionStatus.size() != 0) {
 			MajorCollectionStatus performance = (MajorCollectionStatus) lMajorCollectionStatus.get(0);
 			MajorCollectionStatus basic = (MajorCollectionStatus) lMajorCollectionStatus.get(1);
 			tempList.add(basic);
 			tempList.add(performance);
 			tempList.add(lMajorCollectionStatus.get(2));
-		}
+		}*/
 
 		logger.info("successfully get major status by task id: " + task_id);
 
 		BackendData data = new BackendData();
 		data.setMsg("");
 		data.setCode(0);
-		data.setData(tempList);
-		data.setCount(tempList.size());
+		data.setData(lMajorCollectionStatus);
+		data.setCount(lMajorCollectionStatus.size());
 		// BackendData data = new BackendData();
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);

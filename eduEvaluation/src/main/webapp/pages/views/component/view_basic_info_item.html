@@ -25,30 +25,7 @@
 		<div class="layui-form-item layui-hide">
 		  <input type="button" lay-submit lay-filter="basic_form" id="basic_form" value="确认添加">
 		</div>
-      </div>  
-   <!--      <table class="layui-table" id="zdheader">	
-        <tr><td>1</td></tr>	
-         <tr><td>1</td></tr>
-          <tr><td>1</td></tr>
-           <tr><td>1</td></tr>
-            <tr><td>1</td></tr>
-             <tr><td>1</td></tr>
-              <tr><td>1</td></tr>
-               <tr><td>1</td></tr>
-                <tr><td>1</td></tr>
-                 <tr><td>1</td></tr>
-                  <tr><td>1</td></tr>
-                   <tr><td>1</td></tr>
-                    <tr><td>1</td></tr>
-                     <tr><td>1</td></tr>
-                      <tr><td>1</td></tr>
-                       <tr><td>1</td></tr>
-                        <tr><td>1</td></tr>
-                         <tr><td>1</td></tr>
-            				 		
-		</table> 
-	 	 <div id="barcon" name="barcon"></div> -->
-    		
+      </div>     		
       </div>
     </div>
 
@@ -93,7 +70,7 @@
 	    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
             return updateTime(row.updateTime);
         } }	 
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
+		,{fixed: 'right', title:'操作', align:'center', toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
 	 ,limits: [10,20,50]
      ,limit: 10 //每页默认显示的数量

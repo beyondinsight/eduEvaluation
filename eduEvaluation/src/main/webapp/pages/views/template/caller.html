@@ -20,7 +20,10 @@ width:600px;
 .table-center thead tr th{
  text-align: center;
 }
+input{
 
+background-color: white;
+}
 
 </style>
 <body>
@@ -32,14 +35,14 @@ width:600px;
         <div class="layui-card">
          
           <div class="layui-card-body">
-          <div  style="font-size:1em;margin:15px 0 0px 15px;">
+          <div   style="margin:15px 0 0px 0px;font-size: 14px;">
           			  <input type="hidden" id="collection_major_id" name="collection_major_id"/>
           	     	  <div style="float: left;">填报任务：<input type="text" id="task_name" style="border:0;background-color: none;"   readonly="readonly" value=""/></div>
           	     	  <div style="float: left;">填报任务所属年度：<input type="text" id="task_year" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
           	     	  <div style="float: left;">院校：<input type="text" id="school" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
           	     	  <div style="float: left;">专业：<input type="text" id="major" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
           	     	  <br/>
-          	     	  <button class="layui-btn layuiadmin-btn-list" type="button" id="verify_btn" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
+          	     	  <button class="layui-btn layuiadmin-btn-list" type="button" id="verify_btn" style="margin:10px 0 10px 0;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
           </div>
             <table class="layui-table table-center">
               <colgroup>
@@ -59,12 +62,12 @@ width:600px;
                               <tr>
                                 <td>专业任务书</td>
                                 <td><div id="basic_form_num"></div></td>
-                                <td><button id="basic_form_btn" type="button" class="layui-btn layui-btn-warm layuiadmin-btn-list layui-btn-xs"  style="font-size: 0;"><i class="layui-icon">&#xe642;</i>填报</button></td>                  
+                                <td><button id="basic_form_btn" type="button" class="layui-btn layui-btn-warm layuiadmin-btn-list layui-btn-xs"  style=""><i class="layui-icon">&#xe642;</i>填报</button></td>                  
                               </tr>
                               <tr>
                                 <td>专业自评报告</td>
                                 <td><div id="self_eval_num"></div></td>
-                                <td><button id="self_eval_btn" type="button" class="layui-btn layui-btn-warm layuiadmin-btn-list layui-btn-xs"  style="font-size: 0;"><i class="layui-icon">&#xe642;</i>填报</button></td>              
+                                <td><button id="self_eval_btn" type="button" class="layui-btn layui-btn-warm layuiadmin-btn-list layui-btn-xs"  style=""><i class="layui-icon">&#xe642;</i>填报</button></td>              
                               </tr>   
                             </tbody>
                           </table>
@@ -127,7 +130,7 @@ layui.config({
       			type: 2 //此处以iframe举例
       				,
       			title: '填报专业任务书',
-      			area: ['60%', '70%'],
+      			area: ['1100px', '650px'],
       			//shade: 0,
       			maxmin: true,
       			btn: ['保存', '取消'],
@@ -152,8 +155,7 @@ layui.config({
 								layer.msg("成功保存基础情况表");
 								obj.del();
 							} else {
-								layer.msg("保存基础情况表失败!", function(){
-									});
+								layer.msg("保存基础情况表失败!");
 							}
 						},             
 						 error:function(data){
@@ -180,7 +182,7 @@ layui.config({
 				type: 2 //此处以iframe举例
 					,
 				title: '填报专业任务书',
-				area: ['60%', '70%'],
+				area: ['1100px', '650px'],
 				//shade: 0,
 				maxmin: true,
 				btn: ['保存', '取消'],
@@ -204,8 +206,7 @@ layui.config({
 								layer.msg("成功保存基础情况表");
 								obj.del();
 							} else {
-								layer.msg("保存基础情况表失败!", function(){
-									});
+								layer.msg("保存基础情况表失败!");
 							}
 						},             
 						 error:function(data){
@@ -244,8 +245,7 @@ layui.config({
 							parent.layui.admin.events.closeThisTabs();
 							},800);
 					} else {
-						layer.msg("报表提交过程中遇到错误!", function(){
-							});
+						layer.msg("报表提交过程中遇到错误!");
 					}
 				} 
 			});

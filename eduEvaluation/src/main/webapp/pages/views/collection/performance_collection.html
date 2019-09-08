@@ -15,12 +15,12 @@
 			<div class="layui-card">
 				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="col_task_form" id="col_task_form">
 	
-					<div  style="font-size:1em;margin:15px 0 0px 15px;">
+					<div  style="font-size:14px;margin:15px 0 0px 15px;">
 								  <input type="hidden" id="collection_major_id" name="collection_major_id"/>
-						     	  <div style="float: left;">填报任务：<input type="text" id="task_name" style="border:0;background-color: none;"   readonly="readonly" value=""/></div>
-						     	  <div style="float: left;">填报任务所属年度：<input type="text" id="task_year" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
-						     	  <div style="float: left;">院校：<input type="text" id="school" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
-						     	  <div style="float: left;">专业：<input type="text" id="major" style="border:0;background-color: none;"  readonly="readonly" value=""/></div>
+						     	  <div style="float: left;">填报任务：<input type="text" id="task_name" style="border:0;background-color: white;"   readonly="readonly" value=""/></div>
+						     	  <div style="float: left;">填报任务所属年度：<input type="text" id="task_year" style="border:0;background-color: white;"  readonly="readonly" value=""/></div>
+						     	  <div style="float: left;">院校：<input type="text" id="school" style="border:0;background-color: white;"  readonly="readonly" value=""/></div>
+						     	  <div style="float: left;">专业：<input type="text" id="major" style="border:0;background-color: white;"  readonly="readonly" value=""/></div>
 						     	  <br/>
 					</div>
 				</div>
@@ -84,7 +84,7 @@
 					where: {
 						'collection_major_id':data['collection_major_id']
 					},
-					page: true, //开启分页
+					//page: true, //开启分页
 					height: 500	, 
 					cols: [
 						[ //表头

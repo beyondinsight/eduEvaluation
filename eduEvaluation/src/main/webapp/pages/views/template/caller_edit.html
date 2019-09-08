@@ -9,14 +9,14 @@
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
-<body onload="goPage(1,10)">
+<body>
 
   <div class="layui-fluid">
     <div class="layui-card">
 
-      <div class="layui-card-body">
-		  <button class="layui-btn layuiadmin-btn-list" data-type="add"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>     
-        </div>
+        <div class="layui-card-body">
+		 <button class="layui-btn layuiadmin-btn-list" data-type="add" style="margin-bottom: 10px;"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>     
+       
         <button type="button" class="layui-btn layui-btn-normal" id="upload"  style="display: none;" >上传文件</button> 
        	<input type="text" hidden="hidden"    id="upload_id" name="upload_id">
 		<input type="hidden" id="form_performance_id" name="form_performance_id">
@@ -26,30 +26,7 @@
           <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-download-circle"></i>下载</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
         </script> 
-        
-   <!--      <table class="layui-table" id="zdheader">	
-        <tr><td>1</td></tr>	
-         <tr><td>1</td></tr>
-          <tr><td>1</td></tr>
-           <tr><td>1</td></tr>
-            <tr><td>1</td></tr>
-             <tr><td>1</td></tr>
-              <tr><td>1</td></tr>
-               <tr><td>1</td></tr>
-                <tr><td>1</td></tr>
-                 <tr><td>1</td></tr>
-                  <tr><td>1</td></tr>
-                   <tr><td>1</td></tr>
-                    <tr><td>1</td></tr>
-                     <tr><td>1</td></tr>
-                      <tr><td>1</td></tr>
-                       <tr><td>1</td></tr>
-                        <tr><td>1</td></tr>
-                         <tr><td>1</td></tr>
-            				 		
-		</table> 
-	 	 <div id="barcon" name="barcon"></div> -->
-    		
+         </div>		
       </div>
     </div>
 
@@ -58,7 +35,7 @@
   <script>
   var projectBase = Class.getURL();
 
-    layui.config({
+  layui.config({
     base: '../../layuiadmin/' //静态资源所在路径
   }).extend({
     index: 'lib/index' //主入口模块
@@ -73,16 +50,15 @@
     
 	table.render({
 	  elem: '#demo'
-	  ,height: 400
-	  ,width:1400
+	  ,height: 450
 	  ,url: projectBase + '/collectionMaterial/getCollectionMaterial'//数据接口
 	  ,where: {'form_performance_id':$('#form_performance_id').val()}
-	  ,page: true //开启分页
+	  //,page: true //开启分页
 	  ,cols: [[ //表头
-		{type: 'checkbox', align:'center'}
+		 {type: 'checkbox', align:'center'}
 		,{type: 'numbers', title: '序号', align:'center'}
-	    ,{field: 'materialname', title: '支撑材料', align:'center'}
-	    ,{field: 'doc', title: '文件名', align:'center' }
+	    ,{field: 'materialname', title: '支撑材料', align:'center',width:230}
+	    ,{field: 'file_name', title: '文件名', align:'center',width:230 }
 	    ,{field: 'docsize', title: '文件大小', align:'center',templet :function (row){
 	    	if(row.docsize != null){
 	    		 return row.docsize+' KB';
@@ -94,10 +70,10 @@
 	    ,{field: 'updateTime', title: '上传时间', align:'center',templet :function (row){
             return updateTime(row.updateTime);
         } }	 
-		,{fixed: 'right', title:'操作', toolbar: '#test-table-toolbar-barDemo'} 
+		,{fixed: 'right', title:'操作', align:'center',width:230, toolbar: '#test-table-toolbar-barDemo'} 
 	  ]]
-	 ,limits: [10,20,50]
-     ,limit: 10 //每页默认显示的数量
+	 //,limits: [10,20,50]
+     //,limit: 10 //每页默认显示的数量
 	});
 	
 	//监听行工具事件
@@ -116,18 +92,18 @@
 	    					dataType:'json',
 							async: false,
 	    					done:function(res){
-	    									if(res.code='0'){       
+	    									if(res.code==0){       
 	    					                        layer.msg('删除文件成功!');
 	    					                } else {          
-	    					                        layer.msg('删除文件失败!', function(){
+	    					                      
 	    															layer.msg('删除文件失败!');
-	    													  });   
+	    													
 	    					                }
 							},             
 	    					 error:function(data){
-	    												layer.msg('删除文件的过程中出现错误!', function(){
+	    									
 	    													layer.msg('删除文件的过程中出现错误!');
-	    												});  
+	    										
 	    					  }     
 	    				});
 	      obj.del();
@@ -140,9 +116,10 @@
 		   $("#upload").click();
  
 	  } 
-	  else if (obj.event == 'download'){			
+	  else if (obj.event == 'download'){
+		  layer.load(); //上传loading
 		  window.location.href= projectBase + "/collectionMaterial/downloadMaterial?doc="+data.doc;	     
-		
+		  layer.closeAll();
 	  }  
 	});
 	
@@ -184,15 +161,15 @@
           							if(res.code==0){       
           			                        layer.msg('删除文件成功!');
           			                } else {          
-          			                        layer.msg('删除文件失败!', function(){
+          			                   
           													layer.msg('删除文件失败!');
-          											  });   
+          											
           			                }
           			},             
           			 error:function(data){
-          										layer.msg('删除文件的过程中出现错误!', function(){
+          									
           											layer.msg('删除文件的过程中出现错误!');
-          										});  
+          								 
           			  },       
           		});
           table.reload('demo');
@@ -205,7 +182,7 @@
           ,title: '支撑材料'
           ,content: 'caller_new.html'
           ,maxmin: true
-          ,area: ['500px', '300px']
+          ,area: ['500px', '400px']
           ,btn: ['确认', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
@@ -246,10 +223,10 @@
   	    	}
   	      ,done: function(res){
   	    	  if(res.code == 0){
-	  	    	  layer.closeAll()
+	  	    	  layer.closeAll();
 	  	    	  layer.msg('上传成功');
   	    	  }else{
-  	    		layer.closeAll()
+  	    		layer.closeAll();
   	    		 layer.msg('上传失败');
   	    	  }
   	    	  layui.table.reload('demo'); //重载表格
@@ -261,54 +238,6 @@
   	    });  
   	 
     });
-    
-   function goPage(pno,psize){
-	    var itable = document.getElementById("zdheader");
-	    var num = itable.rows.length;//表格所有行数(所有记录数)
-
-	    var totalPage = 0;//总页数
-	    var pageSize = psize;//每页显示行数
-	    //总共分几页 
-	    if((num/pageSize) > parseInt(num/pageSize)){   
-	            totalPage = parseInt(num/pageSize)+1;   
-	       }else{   
-	            totalPage = parseInt(num/pageSize);   
-	       }   
-	    var currentPage = pno;//当前页数
-	    var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
-	    var endRow = currentPage * pageSize;//结束显示的行   40
-	    endRow = (endRow > num)? num : endRow;//    40
-		
-	       //遍历显示数据实现分页
-	    for(var i=1;i<num+1;i++){    
-	        var irow = itable.rows[i-1];
-	        if(i>=startRow && i<=endRow){
-	        	irow.hidden="";
-	        }else{
-	        	irow.hidden="hidden";
-	        }
-	    }
-	    var pageEnd = document.getElementById("pageEnd");
-	    var tempStr = "共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页";
-	    if(currentPage>1){
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(1)+","+psize+")\">首页</a>";
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage-1)+","+psize+")\"><上一页</a>"
-	    }else{
-	        tempStr += "首页";
-	        tempStr += "<上一页";    
-	    }
-
-	    if(currentPage<totalPage){
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(currentPage+1)+","+psize+")\">下一页></a>";
-	        tempStr += "<a href=\"#\" onClick=\"goPage("+(totalPage)+","+psize+")\">尾页</a>";
-	    }else{
-	        tempStr += "下一页>";
-	        tempStr += "尾页";    
-	    }
-
-	    document.getElementById("barcon").innerHTML = tempStr;
-	}
-   
    
    function updateTime(v){
 		var date = new Date(v);

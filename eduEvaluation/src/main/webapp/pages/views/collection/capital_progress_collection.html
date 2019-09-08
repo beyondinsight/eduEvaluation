@@ -9,7 +9,17 @@
   <link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
   <link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
 </head>
-
+<style>
+input{
+background: white;
+}
+#demo th{
+text-align: center;
+}
+#demo div{
+text-align: center;
+}
+</style>
 <body>
 
   <div class="layui-fluid">
@@ -26,13 +36,13 @@
 	     	  <button class="layui-btn layuiadmin-btn-list" type="button" id="verify_btn" style="margin-top:10px;"> <i class="layui-icon layui-icon-add-1"></i>校验并完成填报</button>         
      	  </div>			
        		<div class="layui-card-body">  		        
-            <table class="layui-table" id="demo">      
+            <table class="layui-table" id="demo" style="width: 900px;">      
 	             <thead>
 	               <tr>
-	                 <th style="text-align: center;">资金支出进度</th>
-	                 <th style="text-align: center;">实际值（万元）</th>
-	                 <th style="text-align: center;">支撑材料</th>
-                 	   <th style="text-align: center;">操作	</th>                            
+	                 <th>资金支出进度</th>
+	                 <th>实际值（万元）</th>
+	                 <th>支撑材料</th>
+                 	 <th style="width: 50px;" >操作	</th>                            
 	               </tr> 
 	             </thead>
 	             <tbody>
@@ -40,55 +50,55 @@
 	                 <td>一、2018年自治区财政资助经费下达总额</td>
 	                 <td><div id="rda_amount"></div></td>
 	                 <td><div id="region_disbursement"></div></td>
-	                 <td><button id="rda_btn" type="button" class="layui-btn layui-btn-danger layuiadmin-btn-list layui-btn-xs"  style="font-size: 0;"><i class="layui-icon">&#xe642;</i></button></td>                  
+	                 <td><button id="rda_btn" type="button" class="layui-btn layui-btn-warm layuiadmin-btn-list layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>                  
 	               </tr>
 	               <tr>
 	                 <td>其中：硬件建设支出额度</td>
 	                 <td><div id="rpha_amount"></div></td>
 	                 <td><div id="region_hardware"></div></td>
-	                 <td><button id="rpha_btn" class="layui-btn layui-btn-danger layui-btn-xs" style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="rpha_btn" class="layui-btn layui-btn-warm layui-btn-xs" ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>
 	               <tr>
 	                 <td>     内涵建设支出额度</td>
 	                 <td><div id="rpia_amount"></div></td>
 	                 <td><div id="region_internal"></div></td>
-	                 <td><button id="rpia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="rpia_btn" class="layui-btn layui-btn-warm layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>
 	               <tr>
 	                 <td>二、2018年中央财政资助经费下达总额</td>
 	                 <td><div id="cda_amount"></div></td>
 	                 <td><div id="central_disbursement"></div></td>
-	                 <td><button id="cda_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">中央财政拨付额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="cda_btn" class="layui-btn layui-btn-warm layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>  
 	               <tr>
 	                 <td>其中：硬件建设支出额度</td>
 	                 <td><div id="cpha_amount"></div></td>
 	                 <td><div id="central_hardware"></div></td>
-	                 <td><button id="cpha_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="cpha_btn" class="layui-btn layui-btn-warm layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>
 	               <tr>
 	                 <td>      内涵建设支出额度</td>
 	                 <td><div id="cpia_amount"></div></td>
 	                 <td><div id="central_internal"></div></td>
-	                 <td><button id="cpia_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="cpia_btn" class="layui-btn layui-btn-warm layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>
 	               <tr>
 	                 <td>三、学校配套经费额度</td>
 	                 <td><div id="sft_amount"></div></td>
 	                 <td><div id="school_total"></div></td>
-	                 <td><button id="sft_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">学校配套经费额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="sft_btn" class="layui-btn layui-btn-warm layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>  
 	               <tr>
 	                 <td>其中：硬件建设支出额度</td>
 	                 <td><div id="sfh_amount"></div></td>
 	                 <td><div id="school_hardware"></div></td>
-	                 <td><button id="sfh_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">硬件建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="sfh_btn" class="layui-btn layui-btn-warm layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>
 	               <tr>
 	                 <td>     内涵建设支出额度</td>
 	                 <td><div id="sfi_amount"></div></td>
 	                 <td><div id="school_internal"></div></td>
-	                 <td><button id="sfi_btn" class="layui-btn layui-btn-danger layui-btn-xs"  style="font-size: 0;">内涵建设支出额度<i class="layui-icon">&#xe642;</i></button></td>              
+	                 <td><button id="sfi_btn" class="layui-btn layui-btn-warm layui-btn-xs"  ><i class="layui-icon">&#xe642;</i>编辑</button></td>              
 	               </tr>  
 	             </tbody>
 	           </table>

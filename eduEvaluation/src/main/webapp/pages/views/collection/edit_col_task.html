@@ -21,12 +21,12 @@
 	<body>
 
 		<div class="layui-fluid"   style="border: 0;">
-			<div class="layui-card-body"  style="border: 0;">
+			<div class="layui-card"  style="border: 0;">
 				<div class="layui-form   layuiadmin-card-header-auto" lay-filter="col_task_form" style="border: 0;">
 				<input type="hidden" name="task_id" id="task_id"/>
 				<table class="layui-table" style="width:800px;border: 1px solid #e6e6e6;" id="main-tb">
 				 <tr class="noborder">
-					<td><span>*</span>专业填报任务名称：</td><td><input type="text" name="name" id="name" placeholder="请输入填报任务名称" required lay-verify="required" autocomplete="off" class="layui-input"></td>
+					<td><span>*</span>专业填报任务名称：</td><td><input type="text" name="name" id="name" placeholder="必填项" required lay-verify="required" autocomplete="off" class="layui-input"></td>
 					<td><span>*</span>填报任务所属年度：</td><td style="text-align: left;">
 						<select name="year" id="year">
 									<option value="2018">2018</option>
@@ -62,7 +62,7 @@
 					    <tr>
 					      <td>2</td>
 					      <td>绩效目标完成情况</td>
-					      <td><input   name="weighting2" required value="60" lay-verify="required" id="weighting2"   class="layui-input layui-input-number" min="0" max="100" step="1" data-prec="0"></td>
+					      <td><input   name="weighting2"  value="60" lay-verify="required" id="weighting2"   class="layui-input layui-input-number" min="0" max="100" step="1" data-prec="0"></td>
 					    </tr>
 					    <tr>
 					      <td>3</td>
@@ -122,7 +122,7 @@
 				    // 右侧功能按钮
 				    rightBtns: false,
 				    // 监听键盘事件
-				    listening: false,
+				    listening: true,
 				    // 批量配置默认小数精确度
 				    defaultPrec: '0'
 				  });

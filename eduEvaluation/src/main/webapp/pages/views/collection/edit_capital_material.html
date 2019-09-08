@@ -11,15 +11,15 @@
 	</head>
 	<body>
 
-		<div class="layui-fluid">
-			<div class="layui-card">
-				<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="material_form">
+		<div class="layui-fluid  layui-card ">
+		
+				<div class="layui-form layuiadmin-card-header-auto" lay-filter="material_form" >
 					<div class="layui-form-item">
 						<input type="hidden" name="metrics_id" id="metrics_id">
 						<div class="layui-inline">
-							<label class="layui-form-label" style="width: 70px;">材料名称<span style="color: red;">* </span></label>
-							<div class="layui-input-inline" style="width: 200px;">
-								<input type="text" name="material_name" id="material_name" required lay-verify="required" autocomplete="off"
+							<label class="layui-form-label" style="width: 90px;"><span style="color: red;">* </span>材料名称：</label>
+							<div class="layui-input-inline" style="width: 300px;">
+								<input type="text" name="material_name" id="material_name"  placeholder="必填项" required lay-verify="required" autocomplete="off"
 								 class="layui-input">
 							</div> 
 						</div>
@@ -27,7 +27,7 @@
 					   
 					
 					<div class="layui-form-item">
-						<label class="layui-form-label" style="width: 70px;">备注</label>
+						<label class="layui-form-label" style="width: 90px;">备注：</label>
 						<div class="layui-input-inline" style="width: 300px;">
 							<textarea name="memo" id="memo" style="width: 300px; height: 100px;" autocomplete="off" class="layui-textarea"></textarea>
 						</div>
@@ -45,7 +45,7 @@
 					</div>
 					</div>-->
 				</div>
-			</div>
+			
 		</div>
 
 		<script src="../../layuiadmin/layui/layui.js"></script>

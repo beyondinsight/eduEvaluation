@@ -22,19 +22,19 @@ border:0;
       <div class="layui-card-body">
 		<div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="edit_capital_form">
 		   <div class="layui-form-item" >
-			<input type="hidden" id="form_performance_id" name="form_performance_id"/>
+			<input  hidden="hidden" id="form_performance_id" name="form_performance_id"/>
 			<input type="hidden" id="edit_type" name="edit_type"/>
 			<table class="layui-table" style="width: 60%;">
-				<tr class="noborder"><td style="width: 80px;">实际值</td><td><input id="actural_value" name="actural_value" type="number" class="layui-input" style="width:50%;"></td></tr>
+				<tr class="noborder"><td style="width: 80px;text-align: left;">实际值：</td><td><input id="actural_value" name="actural_value" type="number" class="layui-input" style="width:50%;"></td></tr>
 			</table> 
 		  
 			<button class="layui-btn layuiadmin-btn-list" data-type="add" style="margin-bottom: 20px;"> <i class="layui-icon layui-icon-add-1"></i> 加入支撑材料</button>
 		      
 		        <table id="demo" lay-filter="demo"  style="margin-left:15px;"></table> 
 		        <script type="text/html" id="test-table-toolbar-barDemo">
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-edit"></i>上传</a>
-          <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
-          <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+         		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="upload"><i class="layui-icon layui-icon-edit"></i>上传</a>
+        		  <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="download"><i class="layui-icon layui-icon-edit"></i>下载</a>
+        		  <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
        		 </script>
 			 </div>
 		   </div>
@@ -85,28 +85,24 @@ border:0;
 	    layer.confirm('确定删除这文件吗？', function(index){
 	    		$.ajax({
 	    					type:'POST',
-	    					url: projectBase + '/collectionmaterial/deletecollectionmaterial',
+	    					url: projectBase + '/collectionmaterial/deleteCollectionMaterial',
 	    					data:data,
 	    					dataType:'json',
 							async: false,
 	    					done:function(res){
-	    									if(res.code='0'){       
+	    									if(res.code==1){       
 	    					                        layer.msg('删除文件成功!');
 	    					                } else {          
-	    					                        layer.msg('删除文件失败!', function(){
-	    															layer.msg('删除文件失败!');
-	    													  });   
+	    											layer.msg('删除文件失败!');	    												  
 	    					                }
 							},             
-	    					 error:function(data){
-	    												layer.msg('删除文件的过程中出现错误!', function(){
-	    													layer.msg('删除文件的过程中出现错误!');
-	    												});  
+	    					 error:function(data){	    												 
+	    									layer.msg('删除文件的过程中出现错误!');
+								  
 	    					  }     
 	    				});
 	      obj.del();
 	      layer.close(index);
-		  layer.msg('已成功删除!');
 		  });
 	  } else if(obj.event === 'upload'){
 	    layer.open({
@@ -180,68 +176,26 @@ border:0;
     });
     
     var $ = layui.$, active = {
-      batchdel: function(){
-        var checkStatus = table.checkStatus('demo')
-        ,checkData = checkStatus.data
-		,id=[]; //得到选中的数据
-
-        if(checkData.length === 0){
-          return layer.msg('请选择文件');
-        }
-		
-		if(checkData.length > 0){
-			for (var i in checkData){
-				id.push(checkData[i].id);
-			}
-		}
-      
-        layer.confirm('确定删除这些文件吗？', function(index) {
-          $.ajax({
-          			type:'POST',
-          			url:'/deletecollectionmaterial',
-          			traditional: true,
-          			data:{id:id},
-          			dataType:'json',
-					async: false,
-          			success:function(res){
-          							if(res.code='0'){       
-          			                        layer.msg('删除文件成功!');
-          			                } else {          
-          			                        layer.msg('删除文件失败!', function(){
-          													layer.msg('删除文件失败!');
-          											  });   
-          			                }
-          			},             
-          			 error:function(data){
-          										layer.msg('删除文件的过程中出现错误!', function(){
-          											layer.msg('删除文件的过程中出现错误!');
-          										});  
-          			  },       
-          		});
-          //执行 Ajax 后重载
-          /*
-          admin.req({
-            url: 'xxx'
-            //,……
-          });
-          */
-          table.reload('demo');
-          layer.msg('已成功删除!');
-        });
-      },
+     
       add: function(){
         layer.open({
           type: 2
           ,title: '支撑材料'
           ,content: 'caller_new.html'
           ,maxmin: true
-          ,area: ['50%', '70%']
-          ,btn: ['确认添加', '取消']
+          ,area: ['500px', '420px']
+          ,btn: ['确认', '取消']
           ,yes: function(index, layero){
             //点击确认触发 iframe 内容中的按钮提交
             var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
             submit.click();
-          }
+          },zIndex: layer.zIndex //重点1
+	       ,success: function(layero, index){
+		    	  var body = layer.getChildFrame('body',index);
+		    	  var inputList = body.find('input');	    	
+		    	  $(inputList[0]).val($("#form_performance_id").val()); 	
+		          layer.setTop(layero); //重点2
+		        }
         }); 
       }
     }; 

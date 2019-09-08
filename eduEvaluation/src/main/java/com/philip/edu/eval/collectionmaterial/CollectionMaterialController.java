@@ -87,10 +87,11 @@ public class CollectionMaterialController {
 		material.setDescription(memo);
 
 		int result = service.createMaterial(material);
+		 
 
 		BackendData data = new BackendData();
 		data.setMsg("");
-		data.setCode(0);
+		data.setCode(result);
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
 
@@ -134,10 +135,10 @@ public class CollectionMaterialController {
 		int result = service.updateMaterial(material);
 		BackendData data = new BackendData();
 		if(result != 0) {
-			data.setMsg("失败");
+			data.setMsg("成功");
 			data.setCode(0);
 		}else {
-			data.setMsg("成功");
+			data.setMsg("失败");
 			data.setCode(1);
 		}
 		
@@ -207,11 +208,10 @@ public class CollectionMaterialController {
 		String id = request.getParameter("id");
 
 		int result = service.deleteMaterial(Integer.parseInt(id));
-		JSONObject object = new JSONObject();
 
 		BackendData data = new BackendData();
 		data.setMsg("");
-		data.setCode(0);
+		data.setCode(result);
 
 		return new ResponseEntity<BackendData>(data, HttpStatus.OK);
 	}
