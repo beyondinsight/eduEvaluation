@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>省厅审核详情</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+	</head>
+	<style>
+		.noborder td{
+ border:0;
+text-align: left;
+}
+input{
+width: 100%;
+height: 100%;
+border: 0;
+}
+input {
+	background-color: white;
+}
+</style>
+	<body>
+
+		<div class="layui-fluid">
+			<div class="layui-card">
+
+				<div class="layui-form">
+
+					<div class="layui-card-body">
+						<table style="width:1200px;">
+							<tr class="noborder">
+								<td style="width:70px;">填报任务：</td>
+								<td style="width:200px;">
+									<input type="text" id="task_name" readonly="readonly" />
+								</td>
+								<td style="width:120px;">填报任务所属年度：</td>
+								<td style="width:100px;"><input type="text" id="year" readonly="readonly" /></td>
+								<td style="width:40px;">院校：</td>
+								<td style="width:160px;"><input type="text" id="school_name" readonly="readonly" /></td>
+								<td style="width:40px;">专业：</td>
+								<td style="width:160px;"><input type="text" id="major_name" readonly="readonly" /></td>
+							</tr>
+							<tr class="noborder">
+								<td colspan="6" style="text-align: right;"><button class="layui-btn layuiadmin-btn-list layui-btn-danger" id="reject_btn"><i class="layui-icon layui-icon-close"></i>退回</button>
+								<button class="layui-btn layuiadmin-btn-list layui-btn-checked" id="approve_btn" > <i class="layui-icon layui-icon-ok-circle"></i>审核通过</button>
+								</td>
+							</tr>
+						</table>
+						<table id="template" class="layui-table" style="width:70%;" lay-filter="template"></table>
+						<script type="text/html" id="collection_list_operation_toolbar">
+							<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="set"><i class="layui-icon layui-icon-edit"></i>查看</a>
+       		</script>
+						<table id="result" class="layui-table" style="width:70%;" lay-filter="result"></table>
+						<script type="text/html" id="ItemDetails">
+							<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="view"><i class="layui-icon layui-icon-edit"></i>查看</a>
+			</script>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+
+
+
+		<script src="../../layuiadmin/layui/layui.js"></script>
+		<script src="../util/Constants.js"></script>
+		<script>
+			var projectBase = Class.getURL();
+			var userinfo = layui.data('userinfo');
+
+			layui.config({
+				base: '../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', 'contlist', 'element', 'table', 'layer', 'admin', 'jquery'], function() {
+				var table = layui.table,
+					form = layui.form,
+					admin = layui.admin,
+					$ = layui.jquery,
+					layer = layui.layer,
+					projectBase = Class.getURL();
+
+				//头部信息
+				var data1 = layui.data('viewTask_top')['taskInfo'];
+				//表格信息
+				var data2 = layui.data('viewTask_bot')['taskInfo'];
+				var type;
+
+				$("#task_id").val(data1.task_id);
+				$("#task_name").val(data2.task_name);
+				console.log("task_year:" + data2.task_year);
+				$("#year").val(data2.task_year);
+				$("#school_name").val(data2.school_name);
+				$("#major_name").val(data2.major_name);
+
+				var data_temp = layui.data('viewTask_bot');
+				//console.log("school_name:" + data2.school_name);
+				//console.log("task_id:" + data2.task_id);
+				table.render({
+					elem: '#template',
+					//height: 300,
+					url: projectBase + '/userTask/majorCollectionStatus',
+					where: {
+						task_id: data2.task_id,
+						school_id: data2.school_id,
+						major_id: data2.major_id
+					},
+					//page: true, //开启分页
+					cols: [
+						[ //表头
+							{
+								type: 'numbers',
+								title: '序号',
+								align: 'center',
+								width: 60
+							},
+							{
+								field: 'collection_template_name',
+								title: '待审核内容',
+								align: 'center',
+								width: 200
+							},
+							{
+								fixed: 'right',
+								title: '操作',
+								toolbar: '#collection_list_operation_toolbar',
+								align: 'center',
+								width: 100
+							}
+						]
+					]
+				});
+
+				table.on('tool(template)', function(obj) {
+					console.log("entering view");
+					var data = obj.data;
+					console.log("id:" + data.collection_major_id);
+					if (obj.event == 'set') {
+
+						if (data.template_type_string == "major_performance") {
+							console.log("to open performance page");
+							type = "major_performance";
+							table.render({
+								elem: '#result',
+								url: projectBase + '/collection/getPerformanceForm',
+								where: {
+									'collection_major_id': data2.collection_major_id
+								},
+								page: true, //开启分页
+								height: 500,
+								cols: [
+									[ //表头
+										{
+											field: 'level1_name',
+											title: '一级指标',
+											align: 'center',
+											width: 160
+										}, {
+											field: 'metrics_name',
+											title: '二级指标',
+											align: 'center',
+											width: 300
+										}, {
+											field: 'unit',
+											title: '单位',
+											align: 'center',
+											width: 100
+										}, {
+											field: 'current_value',
+											title: '当前值',
+											templet: function(d) {
+												if (d.current_value == 0) return "";
+												else return d.current_value;
+											},
+											align: 'center',
+											width: 80
+										}, {
+											field: 'target_value',
+											title: '目标值',
+											templet: function(d) {
+												if (d.target_value == 0) return "";
+												else return d.target_value;
+											},
+											align: 'center',
+											width: 80
+										}, {
+											field: 'actual_value',
+											title: '实际完成值',
+											align: 'center',
+											templet: function(d) {
+												if (d.actual_value == 0) return "";
+												else return d.actual_value;
+											},
+											width: 120
+										}, {
+											field: 'score',
+											title: '分值',
+											align: 'center',
+											templet: function(d) {
+												if (d.score == 0) return "";
+												else return d.score;
+											},
+											width: 80
+										}, {
+											field: 'self_evaluate',
+											title: '自评分',
+											align: 'center',
+											templet: function(d) {
+												if (d.self_evaluate == 0) return "";
+												else return d.self_evaluate;
+											},
+											width: 80
+										}, {
+											field: 'self_introduction',
+											title: '自评说明',
+											align: 'center',
+											templet: function(d) {
+												var data = d.self_introduction;
+												console.log("data:" + data);
+												if (data == null) return "共0字";
+												console.log(data.length);
+												var str = "共" + data.length + "字";
+												return str
+											},
+											width: 100
+										}, {
+											field: 'material_num',
+											title: '支撑材料',
+											align: 'center'
+										}, {
+											title: '操作',
+											fixed: 'right',
+											toolbar: '#ItemDetails',
+											align: 'center',
+											width: 100
+										}
+									]
+								],
+								done: function(res) {
+									alarmTableRowSpan('level1_name', 1);
+									//merge(res);
+								}
+							});
+							//parent.layui.index.openTabsPage("collection/performance_collection.html", "业绩完成情况填报");
+						} else if (data.template_type_string == "major_capital_process") {
+							console.log("to open capital page");
+							type = "major_capital_process";
+							
+							table.render({
+								elem: '#result',
+								url: projectBase + '/collection/getCapitalProgressDetail',
+								//page: true, //开启分页
+								where:{"collection_major_id":data2.collection_major_id},
+								height: 500	,
+								cols: [
+									[ //表头
+										{
+											field: 'metrics_name',
+											title: '资金支出进度',
+											align: 'left' 
+										}, {
+											field: 'actural_num',
+											title: '实际值',
+											align: 'center' 
+										}, {
+											field: 'materials_num',
+											title: '支撑材料',
+											align: 'center' 
+										},{
+											title: '操作',
+											toolbar: '#ItemDetails',
+											align: 'center',
+											width: 160
+										}
+									]
+								]
+							});
+							
+							//parent.layui.index.openTabsPage("collection/capital_progress_collection.html", "资金支出进度填报");
+						} else if (data.template_type_string == "major_basic_info") {
+							console.log("entering basic info");
+							type="major_basic_info";
+							console.log("collection_major:" + data2.collection_major_id);
+							
+							table.render({
+								elem: '#result',
+								url: projectBase + '/collection/getBasicForm',
+								page: true, //开启分页
+								height: 500	,
+								where: {
+									'collection_major_id':data2.collection_major_id
+								},
+								cols: [
+									[ //表头
+										{
+											field: 'metrics_name',
+											title: '专业基本情况',
+											align: 'left' 
+										}, {
+											field: 'materials_num',
+											title: '支撑材料',
+											align: 'center' 
+										},{
+											title: '操作',
+											toolbar: '#ItemDetails',
+											align: 'center',
+											width: 160
+										}
+									]
+								]
+							});
+							//parent.layui.index.openTabsPage("template/caller.html", "专业数据填报");
+						}
+					}
+				});
+
+				table.on('tool(result)', function(obj) {
+					var data = obj.data;
+					if (obj.event == 'view') {
+						console.log("entering result");
+						if (type == "major_performance") {
+							layer.open({
+								type: 2 //此处以iframe举例
+									,
+								title: '查看详情',
+								area: ['70%', '80%'],
+								//shade: 0,
+								maxmin: true,
+								btn: ['确定', '取消'],
+								yes: function(index, layero) {
+									//点击确认触发 iframe 内容中的按钮提交
+									var submit = layero.find('iframe').contents().find("#edit_performance_form");
+									submit.click();
+								},
+								content: 'view_performance_item.html',
+								zIndex: layer.zIndex //重点1
+									,
+								success: function(layero, index) {
+									var performance_id = layero.find('iframe').contents().find("#performance_id");
+									$(performance_id).val(data.id);
+									var metrics_id = layero.find('iframe').contents().find("#metrics_id");
+									$(metrics_id).val(data.metrics_id);
+									var current_value = layero.find('iframe').contents().find("#current_value");
+									console.log("set data");
+									if (data.current_value != 0)
+										$(current_value).val(data.current_value);
+									var target_value = layero.find('iframe').contents().find("#target_value");
+									if (data.target_value != 0)
+										$(target_value).val(data.target_value);
+									var actual_value = layero.find('iframe').contents().find("#actual_value");
+									if (data.actual_value != 0)
+										$(actual_value).val(data.actual_value);
+									var score = layero.find('iframe').contents().find("#score");
+									if (data.score != 0)
+										$(score).val(data.score);
+									var self_evaluate = layero.find('iframe').contents().find("#self_evaluate");
+									if (data.self_evaluate != 0)
+										$(self_evaluate).val(data.self_evluate);
+									var self_introduction = layero.find('iframe').contents().find("#self_introduction");
+									$(self_introduction).val(data.self_introduction);
+
+									layer.setTop(layero); //重点2
+								}
+							});
+						} else if (type == "major_basic_info") {
+							console.log("entering basic info");
+							layer.open({
+								type: 2 //此处以iframe举例
+									,
+								title: '查看详情',
+								area: ['60%', '70%'],
+								//shade: 0,
+								maxmin: true,
+								btn: ['确定', '取消'],
+								yes: function(index, layero) {
+									var submit = layero.find('iframe').contents().find("#edit_capital_form");
+									submit.click();
+								},
+								content: 'view_basic_info_item.html',
+								zIndex: layer.zIndex //重点1
+									,
+								success: function(layero, index) {
+									var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+									$(pf_id).val(data.performance_id);
+									layer.setTop(layero); //重点2
+								}
+							});
+						} else if (type == "major_capital_process") {
+							console.log("entering capital process");
+							layer.open({
+								type: 2 //此处以iframe举例
+									,
+								title: '查看详情',
+								area: ['60%', '70%'],
+								//shade: 0,
+								maxmin: true,
+								btn: ['确定', '取消'],
+								yes: function(index, layero) {
+									var submit = layero.find('iframe').contents().find("#edit_capital_form");
+									submit.click();
+									
+									parent.layer.close(index); //再执行关闭  
+								},
+								content: 'view_capital_progress_item.html',
+								zIndex: layer.zIndex //重点1
+									,
+								success: function(layero, index) {
+									var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+									$(pf_id).val(data.performance_id);
+									layer.setTop(layero); //重点2
+									
+									var pf_id = layero.find('iframe').contents().find("#form_performance_id");
+									//console.log("form performance:" + da[0].rda_pf_id);
+									$(pf_id).val(data.performance_id);
+									var actural_value = layero.find('iframe').contents().find("#actural_value");
+									$(actural_value).val(data.actural_num);
+								}
+							});
+						}
+					}
+				});
+
+				function layuiRowspan(fieldName, index) {
+					// 左侧列为冻结的情况
+					var tbodyNode = document.getElementsByClassName("layui-table-fixed-l")[index - 1];
+					var child = tbodyNode.getElementsByTagName("td");
+					var childFilterArr = [];
+					// 获取data-field属性为fieldName的td
+					for (var i = 0; i < child.length; i++) {
+						if (child[i].getAttribute("data-field") == fieldName) {
+							childFilterArr.push(child[i]);
+						}
+					}
+					// 获取td的个数和种类
+					var childFilterTextObj = {};
+					for (var i = 0; i < childFilterArr.length; i++) {
+						var childText = childFilterArr[i].textContent;
+						if (childFilterTextObj[childText] == undefined) {
+							childFilterTextObj[childText] = 1;
+						} else {
+							var num = childFilterTextObj[childText];
+							childFilterTextObj[childText] = num * 1 + 1;
+						}
+					}
+					// 给获取到的td设置合并单元格属性
+					for (var key in childFilterTextObj) {
+						var tdNum = childFilterTextObj[key];
+						var canRowspan = true;
+						for (var i = 0; i < childFilterArr.length; i++) {
+							if (childFilterArr[i].getAttribute("data-content") == key) {
+								if (canRowspan) {
+									childFilterArr[i].setAttribute("rowspan", tdNum);
+									canRowspan = false;
+								} else {
+									childFilterArr[i].style.display = "none";
+								}
+							}
+						}
+					}
+				}
+				/**
+				 * name layui合并tbody中单元格的方法
+				 * @param fieldName  要合并列的field属性值
+				 * @param index 表格的索引值 从1开始
+				 * @desc 此方式适用于没有列冻结的单元格合并
+				 */
+				function alarmTableRowSpan(fieldName, index) {
+					var fixedNode = document.getElementsByClassName("layui-table-body")[index - 1];
+					if (!fixedNode) {
+						return false;
+					}
+					var child = fixedNode.getElementsByTagName("td");
+					var childFilterArr = [];
+					// 获取data-field属性为fieldName的td
+					for (var i = 0; i < child.length; i++) {
+						if (child[i].getAttribute("data-field") == fieldName) {
+							childFilterArr.push(child[i]);
+						}
+					}
+					// 获取td的个数和种类
+					var childFilterTextObj = {};
+					for (var i = 0; i < childFilterArr.length; i++) {
+						var childText = childFilterArr[i].textContent;
+						if (childFilterTextObj[childText] == undefined) {
+							childFilterTextObj[childText] = 1;
+						} else {
+							var num = childFilterTextObj[childText];
+							childFilterTextObj[childText] = num * 1 + 1;
+						}
+					}
+					// 给获取到的td设置合并单元格属性
+					for (var key in childFilterTextObj) {
+						var tdNum = childFilterTextObj[key];
+						var canRowSpan = true;
+						for (var i = 0; i < childFilterArr.length; i++) {
+							if (childFilterArr[i].textContent == key) {
+								if (canRowSpan) {
+									childFilterArr[i].setAttribute("rowspan", tdNum);
+									canRowSpan = false;
+								} else {
+									childFilterArr[i].style.display = "none";
+								}
+							}
+						}
+					}
+				}
+				
+				$('#reject_btn').on('click', function() {
+					layer.open({
+						type: 2 //此处以iframe举例
+							,
+						title: '退回并填写退回理由',
+						area: ['60%', '70%'],
+						//shade: 0,
+						maxmin: true,
+						btn: ['退回', '取消'],
+						yes: function(index, layero) {
+							console.log("start to submit.");
+							var submit = layero.find('iframe').contents().find("#reject_form");
+							submit.click();
+							
+							parent.layer.close(index); //再执行关闭  
+						},
+						content: 'reject_reason.html',
+						zIndex: layer.zIndex //重点1
+							,
+						success: function(layero, index) {
+							var c_major_id = layero.find('iframe').contents().find("#collection_major_id");
+							$(c_major_id).val(data2.collection_major_id);
+							var submit = layero.find('iframe').contents().find("#material_form");
+							submit.click();
+							layer.setTop(layero); //重点2
+							
+						}
+					});
+				});
+				
+				$('#approve_btn').on('click', function() {
+					layer.confirm('审核通过后将入库，确定通过吗？', function(index) {
+						$.ajax({
+									type:'POST',
+									url: projectBase + '/collection/auditReport',
+									data:{
+										'collection_major_id':data2.collection_major_id,
+										'role':'GOVERNMENT',
+										'operation':'APPROVE'
+									},
+									dataType:'json',
+									async: false,
+									success:function(res){
+													if(res.code==1){       
+									                        layer.msg('该项填报已审核通过');
+															parent.layui.admin.events.refresh();
+															parent.layui.admin.events.closeThisTabs(); 
+									                } else {          
+									                        layer.msg('通过失败!', function(){
+																			
+																	  });   
+									                }
+									},             
+									 error:function(data){
+																layer.msg('通过任务的过程中出现错误!', function(){
+																	layer.msg('通过任务的过程中出现错误!');
+																});  
+									  }      
+								});
+						});
+				});
+			});
+		</script>
+	</body>
+</html>

@@ -132,7 +132,7 @@ text-align: left;
 				  if(obj.event === 'view'){
 					     layui.data('viewTask_top',{
 						  key: "taskInfo",
-						  value:{"task_id":$("#task_list").val(),"task_name":task_name,"year":$("#year").val(),"school_id":$("#school_list").val(),"major_id":$("#major_list").val()}
+						  value:{"task_id":$('#task_list').val(),"task_name":task_name,"year":$("#year").val(),"school_id":$("#school_list").val(),"major_id":$("#major_list").val()}
 						}); 
 					    
 					     layui.data('viewTask_bot',{
@@ -142,7 +142,7 @@ text-align: left;
 
 						   					  
 						//Tap跳转
-						parent.layui.index.openTabsPage("component/school_management_review.html", "修改填报任务");
+						parent.layui.index.openTabsPage("component/school_management_review.html", "查看填报任务");
 				  }
 					 
 		      });  

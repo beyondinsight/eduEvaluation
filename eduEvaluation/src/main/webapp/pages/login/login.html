@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<title>广西本科高校特色专业评估系统</title>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<link rel="shortcut icon" href="images/gx_icon.png" type="image/x-icon" />
+		<link rel="stylesheet" href="css/bootstrap.min.css" />
+		<link rel="stylesheet" href="css/camera.css" />
+		<link rel="stylesheet" href="css/bootstrap-responsive.min.css" />
+		<link rel="stylesheet" href="css/matrix-login.css?v=773999" />
+		<link rel="stylesheet" href="css/font-awesome.css" />
+
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/jquery-1.7.2.js"></script>
+		<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile.customized.min.js"></script>
+		<script type="text/javascript" src="js/camera.min.js"></script>
+		<script type="text/javascript" src="js/templatemo_script.js"></script>
+		<script type="text/javascript" src="js/ban.js"></script>
+		<script type="text/javascript" src="js/jQuery.md5.js"></script>
+		<script type="text/javascript" src="js/jquery.tips.js"></script>
+		<script type="text/javascript" src="js/jquery.cookie.js"></script>
+
+		<style type="text/css">
+			.cavs {
+				z-index: 1;
+				position: fixed;
+				width: 95%;
+				margin-left: 20px;
+				margin-right: 20px;
+			}
+		</style>
+		<script>
+			//window.setTimeout(showfh,3000); 
+	var timer;
+	function showfh() {
+		fhi = 1;
+		//关闭提示晃动屏幕，注释掉这句话即可
+		//timer = setInterval(xzfh2, 10); 
+	};
+	var current = 0;
+	function xzfh() {
+		current = (current) % 360;
+		document.body.style.transform = 'rotate(' + current + 'deg)';
+		current++;
+		if (current > 360) {
+			current = 0;
+		}
+	};
+	var fhi = 1;
+	var current2 = 1;
+	function xzfh2() {
+		if (fhi > 50) {
+			document.body.style.transform = 'rotate(0deg)';
+			clearInterval(timer);
+			return;
+		}
+		current = (current2) % 360;
+		document.body.style.transform = 'rotate(' + current + 'deg)';
+		current++;
+		if (current2 == 1) {
+			current2 = -1;
+		} else {
+			current2 = 1;
+		}
+		fhi++;
+	};
+</script>
+	</head>
+
+
+	<body>
+
+
+
+		<canvas class="cavs"></canvas>
+		<div style="width: 100%; text-align: center; margin: 0 auto; position: absolute;">
+			<!-- 登录 -->
+			<div id="windows1">
+				<div id="loginbox" style="width: 80%;">
+					<form action="" method="post" name="loginForm" id="loginForm">
+						<div class="control-group normal_text" style="padding-left: 5%;">
+							<h1>
+								<strong> 广西壮族自治区</strong>
+							</h1>
+							<br /> <br />
+							<font size="20"> <strong>
+									本科高校特色专业评估系统</strong></font>
+							<div style="padding-top: 5%;"></div>
+
+						</div>
+						<div class="control-group" style="padding-left: 30%; padding-right: 25%;">
+							<div class="controls">
+								<div class="main_input_box">
+									<span class="add-on bg_lg"> <i><img height="37s" src="images/user.png" /></i>
+									</span><input type="text" name="loginname" id="loginname" value="" placeholder="请输入用户名" />
+								</div>
+							</div>
+						</div>
+						<div class="control-group" style="padding-left: 30%; padding-right: 25%; padding-top: 2%;">
+							<div class="controls">
+								<div class="main_input_box">
+									<span class="add-on bg_ly"> <i><img height="37" src="images/lock.png" /></i>
+									</span><input type="password" name="password" id="password" placeholder="请输入密码" value="" />
+								</div>
+							</div>
+						</div>
+
+						<div class="form-actions">
+							<div style="width: 86%; padding-left: 19%;">
+								<span class="pull-right" style="padding-right: 57%;"><a class="flip-link btn btn-info" id="LoginBtn">&nbsp;&nbsp;&nbsp;登&nbsp;&nbsp;&nbsp;录&nbsp;&nbsp;&nbsp;</a></span>
+							</div>
+						</div>
+					</form>
+					<!-- <div class="controls">
+					<div class="main_input_box" style="padding-top: 10%;">
+						<font color="white"><span id="nameer">© 2019 上海必盈特软件系统有限公司</span></font>
+					</div>
+				</div> -->
+				</div>
+			</div>
+		</div>
+		<div data-src="images/gx1.jpg"></div>
+		<div id="templatemo_banner_slide" class="container_wapper">
+			<div class="camera_wrap camera_emboss" id="camera_slide">
+				<!-- 背景图片 -->
+				<div data-src="images/gx1.jpg"></div>
+				<div data-src="images/gx1.jpg"></div>
+				<div data-src="images/gx1.jpg"></div>
+				<div data-src="images/gx1.jpg"></div>
+			</div>
+			<!-- #camera_wrap_3 -->
+		</div>
+
+
+		<script src="../layuiadmin/layui/layui.js"></script>
+		<script src="../views/util/Constants.js"></script>
+		<script>
+			layui
+				.config({
+					base: '../layuiadmin/' //静态资源所在路径
+				})
+				.extend({
+					index: 'lib/index' //主入口模块
+				})
+				.use(
+					['index', 'user', 'jquery'],
+					function() {
+						var $ = layui.$,
+							setter = layui.setter,
+							admin = layui.admin,
+							//form = layui.form,
+							router = layui.router(),
+							search = router.search,
+							projectBase = Class
+							.getURL();
+
+
+						layui.data('userinfo', null);
+
+						var doLogin = function() {
+							console.log($("#loginname").val());
+							console.log($.md5($("#password").val()));
+
+							$.ajax({
+								type: 'GET',
+								url: projectBase + '/user/login',
+								data: {
+									username: $("#loginname").val(),
+									password: $("#password").val()
+								},
+								dataType: 'json',
+								//async: false,
+								//crossDomain: true,
+								success: function(res) {
+									if (res.code == 1) {
+										//layer.msg(res.msg);
+										//登入成功的提示与跳转
+										var data = res.data;
+										console.log(data);
+										layer.msg(res.msg, {
+											offset: '15px',
+											icon: 1,
+											time: 1000
+										}, function() {
+											location.href = '../views/index.html';
+											//window.location.hash = 'index.html/username=' + data[0].userName + '/chineseName=' + data[0].chineseName; //后台主页
+										});
+										//请求成功后，写入 access_token
+										var userinfo = {
+											'username': data[0].userName,
+											'chineseName': data[0].chineseName,
+											'role': data[0].roleId
+										};
+										layui.data('userinfo', {
+											key: 'user',
+											value: userinfo
+										});
+
+										var token = data[1];
+										//console.log(token);
+										layui.data('userinfo', {
+											key: 'token',
+											value: token
+										});
+
+										/*layui.data(setter.tableName, {
+														key: setter.request.tokenName
+														,value: res.data.access_token
+													  });*/
+									} else if (res.code == 2) {
+										return layer.msg(res.msg, function() {
+
+										});
+									} else if (res.code == 3) {
+										return layer.msg(res.msg, function() {
+
+										});
+									}
+								},
+								error: function(data) {
+									layer.msg('登录错误!', function() {
+										layer.msg('登录出现错误!');
+									});
+								}
+							});
+
+
+						};
+
+						$("#LoginBtn").click(
+							doLogin
+						);
+
+						document.onkeydown = function(e) {
+							if (event.keyCode == 13) {
+								//alert(typeof(doLogin));
+								doLogin();
+							}
+						};
+
+
+
+					});
+		</script>
+
+	</body>
+
+</html>

@@ -1,0 +1,26 @@
+download_users_path=C\:/TMP/
+download_path=C\:/TMP/
+user_password=123456
+code_key=tianma_shcim_api
+code_ivs=shanghai_tianma_
+upload_roleid=3
+secret_key="JKKLJOoasdlfj"
+
+
+#########FOR METRICS TEMPALTE USAGE#####################
+template_basic_form_id=2
+template_performance_form_id=1
+template_capital_progress_form_id=3
+
+metrics_major_basic_id=15
+metrics_self_eval_id=16
+
+metrics_region_disbursement_amount_id=20
+metrics_region_paid_hardware_amount_id=21
+metrics_region_paid_internal_amount_id=22
+metrics_central_disbursement_amount_id=17
+metrics_central_paid_hardware_amount_id=18
+metrics_central_paid_internal_amount_id=19
+metrics_school_funding_total_id=23
+metrics_school_funding_hardware_id=24
+metrics_school_funding_internal_id=25
