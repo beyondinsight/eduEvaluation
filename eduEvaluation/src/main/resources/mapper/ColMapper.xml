@@ -446,6 +446,7 @@
 		select
 		v_task_school_major.task_id,
 		v_task_school_major.task_name,
+		v_task_school_major.major_status_note,
 		task_status.config_value as task_status,
 		major_status.config_value as major_status,
 		major_status.key_string as major_status_key,
@@ -521,6 +522,7 @@
   <result property="major_status" column="major_status" />
   <result property="update_time" column="update_time" />
   <result property="collection_school_id" column="collection_school_id" />
+  <result property="major_status_note" column="major_status_note" />
  </resultMap>
 
 <resultMap id="majorCollectionStatusResultMap"

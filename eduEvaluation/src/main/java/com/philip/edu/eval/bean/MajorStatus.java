@@ -22,15 +22,15 @@ public class MajorStatus {
 
 	private String major_status;
 	private String major_status_key;
-	private String process_status_note;
 	
+	private String  major_status_note;
 	
-	public String getProcess_status_note() {
-		return process_status_note;
+	public String getMajor_status_note() {
+		return major_status_note;
 	}
 
-	public void setProcess_status_note(String process_status_note) {
-		this.process_status_note = process_status_note;
+	public void setMajor_status_note(String major_status_note) {
+		this.major_status_note = major_status_note;
 	}
 
 	public String getMajor_status_key() {
